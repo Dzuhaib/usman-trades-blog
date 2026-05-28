@@ -13,11 +13,14 @@ export default function LotSizeCalculator() {
   const [riskAmount, setRiskAmount] = useState<number>(100);
   const [lotSize, setLotSize] = useState<number>(0.5);
   const [units, setUnits] = useState<number>(50000);
+  const [error, setError] = useState<string | null>(null);
 
   // Auto-set standard pip values based on selection
   useEffect(() => {
     if (instrument === 'forex-usd') {
       setCustomPipValue(10); // Standard lot 100k, 1 pip = $10 USD
+    } else if (instrument === 'forex-jpy') {
+      setCustomPipValue(6.45); // Approximate for JPY pairs at 155 USDJPY
     } else if (instrument === 'gold') {
       setCustomPipValue(10); // Standard lot 100oz, 1 pip ($0.10) = $10 USD
     } else if (instrument === 'btc') {
@@ -27,7 +30,31 @@ export default function LotSizeCalculator() {
 
   // Recalculate lot size instantly on input changes
   useEffect(() => {
-    if (balance <= 0 || riskPercent <= 0 || stopLossPips <= 0 || customPipValue <= 0) {
+    setError(null);
+
+    if (balance <= 0) {
+      setError('Account balance must be greater than 0.');
+      setRiskAmount(0);
+      setLotSize(0);
+      setUnits(0);
+      return;
+    }
+    if (riskPercent <= 0 || riskPercent > 100) {
+      setError('Risk percentage must be between 0.1% and 100%.');
+      setRiskAmount(0);
+      setLotSize(0);
+      setUnits(0);
+      return;
+    }
+    if (stopLossPips <= 0) {
+      setError('Stop loss distance must be greater than 0.');
+      setRiskAmount(0);
+      setLotSize(0);
+      setUnits(0);
+      return;
+    }
+    if (customPipValue <= 0) {
+      setError('Pip value must be greater than 0.');
       setRiskAmount(0);
       setLotSize(0);
       setUnits(0);
@@ -39,28 +66,23 @@ export default function LotSizeCalculator() {
 
     let computedLotSize = 0;
     if (instrument === 'btc') {
-      // BTC lot size is simple: Risk Amount / Price difference
-      // Here, Stop Loss is entered as USD price difference
       computedLotSize = computedRiskAmount / stopLossPips;
     } else {
-      // Forex and Gold: Lot Size = Risk Amount / (Stop Loss in Pips * Pip Value per Standard Lot)
       computedLotSize = computedRiskAmount / (stopLossPips * customPipValue);
     }
 
-    // Round to 2 decimal places for standard lots
     const finalLotSize = Math.max(0, Math.round(computedLotSize * 100) / 100);
     setLotSize(finalLotSize);
 
-    // Calculate Units (1 standard lot = 100k units for Forex, 100oz for gold, 1 unit for crypto)
     let computedUnits = 0;
-    if (instrument === 'forex-usd') {
+    if (instrument === 'forex-usd' || instrument === 'forex-jpy') {
       computedUnits = finalLotSize * 100000;
     } else if (instrument === 'gold') {
       computedUnits = finalLotSize * 100;
     } else if (instrument === 'btc') {
       computedUnits = finalLotSize;
     } else {
-      computedUnits = finalLotSize * 100000; // Custom defaults to forex units
+      computedUnits = finalLotSize * 100000; 
     }
     setUnits(computedUnits);
   }, [balance, riskPercent, stopLossPips, instrument, customPipValue]);
@@ -120,7 +142,8 @@ export default function LotSizeCalculator() {
               value={instrument}
               onChange={(e) => setInstrument(e.target.value)}
             >
-              <option value="forex-usd">Forex (USD Base/Counter Pairs - EURUSD, GBPUSD)</option>
+              <option value="forex-usd">Forex USD Counter (EURUSD, GBPUSD, AUDUSD)</option>
+              <option value="forex-jpy">Forex JPY Counter (USDJPY, EURJPY, GBPJPY)</option>
               <option value="gold">Gold (XAUUSD)</option>
               <option value="btc">Bitcoin (BTCUSD)</option>
               <option value="custom">Custom Parameters (Advanced)</option>
@@ -142,7 +165,7 @@ export default function LotSizeCalculator() {
           </div>
 
           {/* Custom Pip Value (Only visible if advanced is selected) */}
-          {instrument === 'custom' && (
+          {(instrument === 'custom' || instrument === 'forex-jpy') && (
             <div>
               <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="pip-value">
                 Pip Value per Standard Lot (USD)
@@ -154,6 +177,9 @@ export default function LotSizeCalculator() {
                 onChange={(e) => setCustomPipValue(parseFloat(e.target.value) || 0)}
                 placeholder="e.g. 10"
               />
+              <p className="text-[10px] text-muted mt-1">
+                For JPY pairs, pip value varies with USDJPY exchange rate. Standard is approx $6.45.
+              </p>
             </div>
           )}
         </section>
@@ -161,6 +187,12 @@ export default function LotSizeCalculator() {
         {/* Right Hand side: Outputs */}
         <section className="space-y-6">
           <h2 className="text-lg font-bold text-primary mb-2">2. Calculated Risk Metrics</h2>
+
+          {error && (
+            <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-[4px] text-xs font-medium animate-pulse">
+              ⚠️ {error}
+            </div>
+          )}
 
           {/* Target Cash Loss */}
           <div className="border border-border p-5 rounded-[4px] bg-surface">

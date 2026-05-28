@@ -11,9 +11,13 @@ export default function PipCalculator() {
   const [pipValue, setPipValue] = useState<number>(10);
   const [miniValue, setMiniValue] = useState<number>(1);
   const [microValue, setMicroValue] = useState<number>(0.1);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    setError(null);
+
     if (lotSize <= 0) {
+      setError('Lot size must be greater than 0.');
       setPipValue(0);
       setMiniValue(0);
       setMicroValue(0);
@@ -25,17 +29,18 @@ export default function PipCalculator() {
     if (instrument === 'forex-usd') {
       calculatedStandardPip = 10;
     } else if (instrument === 'forex-jpy') {
-      // Formula for JPY crosses to USD: (0.01 / USDJPY) * 100,000
-      if (exchangeRate > 0) {
-        calculatedStandardPip = (0.01 / exchangeRate) * 100000;
-      } else {
-        calculatedStandardPip = 0;
+      if (exchangeRate <= 0) {
+        setError('Exchange rate must be greater than 0.');
+        setPipValue(0);
+        setMiniValue(0);
+        setMicroValue(0);
+        return;
       }
+      // Formula for JPY crosses to USD: (0.01 / USDJPY) * 100,000
+      calculatedStandardPip = (0.01 / exchangeRate) * 100000;
     } else if (instrument === 'gold') {
-      // 1 standard lot = 100oz. Pip ($0.10 movement) = $10 USD
       calculatedStandardPip = 10;
     } else if (instrument === 'btc') {
-      // 1 standard unit = 1 BTC. $1 movement = $1 USD value
       calculatedStandardPip = 1;
     }
 
@@ -113,6 +118,12 @@ export default function PipCalculator() {
         {/* Right Side: Outputs */}
         <section className="space-y-6">
           <h2 className="text-lg font-bold text-primary mb-2">2. Valuation Output</h2>
+
+          {error && (
+            <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-[4px] text-xs font-medium animate-pulse">
+              ⚠️ {error}
+            </div>
+          )}
 
           {/* Standard Pip Value Result */}
           <div className="border border-accent/20 border-l-accent border-l-4 p-5 rounded-[4px] bg-accent/5">

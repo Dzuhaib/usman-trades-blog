@@ -105,7 +105,7 @@ export async function getPexelsImages(query: string, count: number = 4): Promise
   
   const fallback = FALLBACK_IMAGES[fallbackKey] || FALLBACK_IMAGES.default;
 
-  if (!apiKey || apiKey === 'your_pexels_api_key_here') {
+  if (!apiKey) {
     // Return the single fallback image duplicated to meet the count requirement
     return Array(count).fill(fallback);
   }

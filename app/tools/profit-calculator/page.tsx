@@ -13,6 +13,7 @@ export default function ProfitCalculator() {
   const [grossProfit, setGrossProfit] = useState<number>(500);
   const [pipsGained, setPipsGained] = useState<number>(50);
   const [percentageGain, setPercentageGain] = useState<number>(0.46);
+  const [error, setError] = useState<string | null>(null);
 
   // Auto-set reasonable entries/stops on instrument changes
   useEffect(() => {
@@ -30,7 +31,24 @@ export default function ProfitCalculator() {
 
   // Recalculate profit/loss instantly
   useEffect(() => {
-    if (entryPrice <= 0 || exitPrice <= 0 || lotSize <= 0) {
+    setError(null);
+
+    if (entryPrice <= 0 || exitPrice <= 0) {
+      setError('Entry and Exit prices must be greater than 0.');
+      setGrossProfit(0);
+      setPipsGained(0);
+      setPercentageGain(0);
+      return;
+    }
+    if (lotSize <= 0) {
+      setError('Lot size must be greater than 0.');
+      setGrossProfit(0);
+      setPipsGained(0);
+      setPercentageGain(0);
+      return;
+    }
+    if (entryPrice === exitPrice) {
+      setError('Entry and Exit prices cannot be identical.');
       setGrossProfit(0);
       setPipsGained(0);
       setPercentageGain(0);
@@ -119,7 +137,7 @@ export default function ProfitCalculator() {
           {/* Planned Lot Size */}
           <div>
             <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="lot-size">
-              Lot Size Suggestions
+              Lot Size
             </label>
             <input
               id="lot-size"
@@ -165,6 +183,12 @@ export default function ProfitCalculator() {
         {/* Right Side: Outputs */}
         <section className="space-y-6">
           <h2 className="text-lg font-bold text-primary mb-2">2. Projections Summary</h2>
+
+          {error && (
+            <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-[4px] text-xs font-medium animate-pulse">
+              ⚠️ {error}
+            </div>
+          )}
 
           {/* Calculated Profit Output */}
           <div className={`border p-5 rounded-[4px] ${

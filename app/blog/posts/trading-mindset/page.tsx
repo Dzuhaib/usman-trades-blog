@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from "next/image";
 import { getPexelsImages } from '@/lib/pexels';
 
 export const metadata: Metadata = {
@@ -63,8 +64,8 @@ export default async function TradingMindsetPost() {
         </p>
       </header>
 
-      <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
-        <img src={images[0]?.url} alt={images[0]?.alt} className="w-full h-full object-cover" />
+      <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
+        <Image src={images[0].url} alt={images[0].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
       </div>
 
       <div className="article-content space-y-6 text-primary leading-relaxed">
@@ -76,8 +77,8 @@ export default async function TradingMindsetPost() {
           If you allow loss aversion to dictate your actions, your mathematical expectancy will collapse completely. You will consistently risk huge amounts of capital just to secure incredibly small returns. The only way to combat this biological flaw is to firmly establish your maximum acceptable loss before entering the market. We strongly advise utilizing our <Link href="/tools/lot-size-calculator" className="text-accent hover:underline">Lot Size Calculator</Link> to cement that boundary mathematically.
         </p>
 
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[1]?.url} alt={images[1]?.alt} className="w-full h-full object-cover" />
+        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
+          <Image src={images[1].url} alt={images[1].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">Combating Confirmation Bias</h2>
@@ -88,8 +89,8 @@ export default async function TradingMindsetPost() {
           To destroy confirmation bias, professional analysts utilize a procedure called inverse validation. Before you click the buy button, you must force yourself to write down three logical reasons why you should actually sell the asset instead. If you cannot objectively analyze the opposite perspective, you are not trading strategically. You are simply gambling based on an emotional hunch. Before taking any speculative action, ensure you understand the structural flow explained in our <Link href="/blog/posts/support-resistance" className="text-accent hover:underline">Technical Price Action Guide</Link>.
         </p>
 
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[2]?.url} alt={images[2]?.alt} className="w-full h-full object-cover" />
+        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
+          <Image src={images[2].url} alt={images[2].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">The Power of Routine and Discipline</h2>
@@ -100,8 +101,8 @@ export default async function TradingMindsetPost() {
           You must create your own personal trading checklist. It should include verifying your current mental state, checking the global economic calendar for sudden news events, and mathematically defining your exit parameters using a solid <Link href="/tools/profit-calculator" className="text-accent hover:underline">Profit Calculator</Link>. If a single item on your checklist is missing, you simply do not trade that day. The market will always be there tomorrow.
         </p>
 
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[3]?.url} alt={images[3]?.alt} className="w-full h-full object-cover" />
+        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
+          <Image src={images[3].url} alt={images[3].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">Accepting Random Outcomes</h2>

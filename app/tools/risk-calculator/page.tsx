@@ -14,6 +14,7 @@ export default function RiskCalculator() {
   const [priceDistance, setPriceDistance] = useState<number>(0.0030);
   const [pipDistance, setPipDistance] = useState<number>(30);
   const [suggestedLots, setSuggestedLots] = useState<number>(0.33);
+  const [error, setError] = useState<string | null>(null);
 
   // Auto-set reasonable entries/stops on instrument changes
   useEffect(() => {
@@ -31,7 +32,34 @@ export default function RiskCalculator() {
 
   // Perform instant calculations
   useEffect(() => {
-    if (balance <= 0 || riskPercent <= 0 || entryPrice <= 0 || stopPrice <= 0 || entryPrice === stopPrice) {
+    setError(null);
+
+    if (balance <= 0) {
+      setError('Account balance must be greater than 0.');
+      setRiskAmount(0);
+      setPriceDistance(0);
+      setPipDistance(0);
+      setSuggestedLots(0);
+      return;
+    }
+    if (riskPercent <= 0 || riskPercent > 100) {
+      setError('Risk percentage must be between 0.1% and 100%.');
+      setRiskAmount(0);
+      setPriceDistance(0);
+      setPipDistance(0);
+      setSuggestedLots(0);
+      return;
+    }
+    if (entryPrice <= 0 || stopPrice <= 0) {
+      setError('Entry and Stop prices must be greater than 0.');
+      setRiskAmount(0);
+      setPriceDistance(0);
+      setPipDistance(0);
+      setSuggestedLots(0);
+      return;
+    }
+    if (entryPrice === stopPrice) {
+      setError('Entry price and Stop price cannot be identical.');
       setRiskAmount(0);
       setPriceDistance(0);
       setPipDistance(0);
@@ -164,6 +192,12 @@ export default function RiskCalculator() {
         {/* Right Side: Outputs */}
         <section className="space-y-6">
           <h2 className="text-lg font-bold text-primary mb-2">2. Risk Exposure Summary</h2>
+
+          {error && (
+            <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-[4px] text-xs font-medium animate-pulse">
+              ⚠️ {error}
+            </div>
+          )}
 
           {/* Risk Target */}
           <div className="border border-border p-5 rounded-[4px] bg-surface">

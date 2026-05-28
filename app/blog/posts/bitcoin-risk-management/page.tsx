@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getPexelsImages } from '@/lib/pexels';
 
 export const metadata: Metadata = {
@@ -63,8 +64,14 @@ export default async function BitcoinRiskPost() {
         </p>
       </header>
 
-      <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
-        <img src={images[0]?.url} alt={images[0]?.alt} className="w-full h-full object-cover" />
+      <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden relative">
+        <Image
+          src={images[0]?.url}
+          alt={images[0]?.alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 720px"
+        />
       </div>
 
       <div className="article-content space-y-6 text-primary leading-relaxed">
@@ -76,8 +83,14 @@ export default async function BitcoinRiskPost() {
           You cannot apply standard forex leverage rules directly to cryptocurrency markets without making severe mathematical adjustments. If you attempt to hold a highly leveraged position during a sudden five thousand dollar drop in the price of Bitcoin, your account will be margin called almost instantly. You must utilize our specific <Link href="/tools/lot-size-calculator" className="text-accent hover:underline">Lot Size Calculator</Link> customized for Bitcoin entries to ensure mathematical survival.
         </p>
 
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[1]?.url} alt={images[1]?.alt} className="w-full h-full object-cover" />
+        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8 relative">
+          <Image
+            src={images[1]?.url}
+            alt={images[1]?.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 720px"
+          />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">Structural Drawdown Defense</h2>
@@ -88,9 +101,16 @@ export default async function BitcoinRiskPost() {
           Professional funds typically set an absolute maximum drawdown limit for their Bitcoin trading desks. For example, if a fund loses ten percent of its total equity, the algorithm automatically halts all new entries until market conditions stabilize. You must implement these exact same rigid boundaries in your personal trading business. Never allow a single bad week in the Bitcoin market to completely ruin months of disciplined execution and careful planning.
         </p>
 
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[2]?.url} alt={images[2]?.alt} className="w-full h-full object-cover" />
+        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8 relative">
+          <Image
+            src={images[2]?.url}
+            alt={images[2]?.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 720px"
+          />
         </div>
+
 
         <h2 className="text-2xl font-bold mt-8 mb-4">Analyzing Intraday Price Ranges</h2>
         <p>
@@ -100,9 +120,16 @@ export default async function BitcoinRiskPost() {
           Your stop loss must always be placed outside the zone of normal daily market noise. You need to identify logical structural invalidation points based on massive liquidity pools rather than arbitrary monetary fears. We highly recommend reviewing our comprehensive lesson on <Link href="/blog/posts/support-resistance" className="text-accent hover:underline">Technical Price Action</Link> to understand where these critical pools reside.
         </p>
 
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[3]?.url} alt={images[3]?.alt} className="w-full h-full object-cover" />
+        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8 relative">
+          <Image
+            src={images[3]?.url}
+            alt={images[3]?.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 720px"
+          />
         </div>
+
 
         <h2 className="text-2xl font-bold mt-8 mb-4">Mastering the Psychological Toll</h2>
         <p>

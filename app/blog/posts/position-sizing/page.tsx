@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getPexelsImages } from '@/lib/pexels';
 
 export const metadata: Metadata = {
@@ -65,8 +66,14 @@ export default async function PositionSizingPost() {
       </header>
 
       {/* Image 1: Main Cover */}
-      <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
-        <img src={images[0]?.url} alt={images[0]?.alt} className="w-full h-full object-cover" />
+      <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden relative">
+        <Image
+          src={images[0]?.url}
+          alt={images[0]?.alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 720px"
+        />
       </div>
 
       {/* Article Body */}
@@ -80,8 +87,14 @@ export default async function PositionSizingPost() {
         </p>
 
         {/* Image 2 */}
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[1]?.url} alt={images[1]?.alt} className="w-full h-full object-cover" />
+        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8 relative">
+          <Image
+            src={images[1]?.url}
+            alt={images[1]?.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 720px"
+          />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">The Universal Position Sizing Formula</h2>
@@ -93,8 +106,14 @@ export default async function PositionSizingPost() {
         </p>
 
         {/* Image 3 */}
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[2]?.url} alt={images[2]?.alt} className="w-full h-full object-cover" />
+        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8 relative">
+          <Image
+            src={images[2]?.url}
+            alt={images[2]?.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 720px"
+          />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">A Practical Forex Example</h2>
@@ -114,8 +133,14 @@ export default async function PositionSizingPost() {
         </p>
 
         {/* Image 4 */}
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[3]?.url} alt={images[3]?.alt} className="w-full h-full object-cover" />
+        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8 relative">
+          <Image
+            src={images[3]?.url}
+            alt={images[3]?.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 720px"
+          />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">The Institutional Conclusion</h2>

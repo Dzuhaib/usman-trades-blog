@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: "%s | Usman Trades",
   },
   description: "Usman Trades is a free trading education platform with professional calculators for Forex, Gold (XAUUSD), and Bitcoin. Learn position sizing, risk management, and technical analysis with simple guides written for real people.",
-  metadataBase: new URL("https://usmantrades.co.uk"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://usmantrades.co.uk"),
   alternates: {
     canonical: "/",
   },
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     "pip calculator",
     "risk calculator",
     "profit calculator",
-    "forex education",
+    "forex education blog",
     "gold trading guide",
     "XAUUSD analysis",
     "bitcoin risk management",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   creator: "Usman Trades",
   publisher: "Usman Trades",
   openGraph: {
-    title: "Usman Trades | Free Forex, Gold and Bitcoin Trading Tools and Education",
+    title: "Usman Trades | Free Forex Education, Gold and Bitcoin Trading Tools and Education",
     description: "Access free professional trading calculators and simple educational guides for Forex, Gold, and Bitcoin. Learn position sizing, risk management, and price action analysis.",
     url: "https://usmantrades.co.uk",
     siteName: "Usman Trades",
@@ -62,7 +62,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {},
+  verification: {
+    google: "TzW6oxoWedZLWUyLtbiNxONBmwfnrqGOrPtoKI5_zJY",
+  },
 };
 
 // JSON-LD Structured Data for the entire website
@@ -113,6 +115,7 @@ export default function RootLayout({
             width="100%" 
             height="85" 
             style={{ border: 'unset' }}
+            sandbox="allow-scripts allow-same-origin allow-popups"
           ></iframe>
           <div id="fx-pricing-widget-copyright" className="text-center text-[13px] font-sans my-2.5 text-[#9db2bd]">
             <span>Powered by </span>

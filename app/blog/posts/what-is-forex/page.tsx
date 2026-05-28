@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from "next/image";
 import { getPexelsImages } from '@/lib/pexels';
 
 export const metadata: Metadata = {
@@ -63,8 +64,8 @@ export default async function WhatIsForexPost() {
         </p>
       </header>
 
-      <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
-        <img src={images[0]?.url} alt={images[0]?.alt} className="w-full h-full object-cover" />
+      <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
+        <Image src={images[0].url} alt={images[0].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
       </div>
 
       <div className="article-content space-y-6 text-primary leading-relaxed">
@@ -76,8 +77,8 @@ export default async function WhatIsForexPost() {
           When you click buy or sell on your trading platform, your order does not go to a magical centralized server. Your retail broker must route your order to a liquidity provider. These liquidity providers are usually massive tier one banks like JPMorgan or Citigroup. Understanding this hierarchy is the first step to becoming a professional trader rather than a casual gambler. Before diving into the technical charts, ensure you know how to calculate your exposure using our <Link href="/tools/pip-calculator" className="text-accent hover:underline">Pip Value Estimator</Link>.
         </p>
 
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[1]?.url} alt={images[1]?.alt} className="w-full h-full object-cover" />
+        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
+          <Image src={images[1].url} alt={images[1].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">Major and Minor Currency Pairs</h2>
@@ -88,8 +89,8 @@ export default async function WhatIsForexPost() {
           Because these major pairs are traded in incredibly massive volumes, they offer the lowest transaction costs and the tightest spreads. Minor pairs involve major global currencies but they completely exclude the United States Dollar. Trading minor pairs can be highly profitable but they generally carry slightly higher execution costs due to lower overall liquidity in the order books.
         </p>
 
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[2]?.url} alt={images[2]?.alt} className="w-full h-full object-cover" />
+        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
+          <Image src={images[2].url} alt={images[2].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">Understanding Spreads and Execution Costs</h2>
@@ -100,8 +101,8 @@ export default async function WhatIsForexPost() {
           You must always factor the spread into your mathematical calculations when placing your stop loss. If you place a stop loss too tightly during a volatile news event, the widened spread alone can trigger your exit even if the actual market price never technically reached your level. We recommend using our <Link href="/tools/profit-calculator" className="text-accent hover:underline">Profit Calculator</Link> to model out your realistic net gains after factoring in these execution costs.
         </p>
 
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[3]?.url} alt={images[3]?.alt} className="w-full h-full object-cover" />
+        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
+          <Image src={images[3].url} alt={images[3].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">The Importance of Market Structure</h2>

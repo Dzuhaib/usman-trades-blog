@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { BLOG_POSTS, CATEGORIES } from '@/lib/blogData';
 import { getPexelsImage } from '@/lib/pexels';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Trading Education Blog | Free Guides for Forex, Gold and Bitcoin',
@@ -75,11 +76,12 @@ export default async function BlogIndex({ searchParams }: PageProps) {
               <div>
                 {/* Dynamic SEO Pexels cover image */}
                 <div className="relative aspect-[16/9] w-full bg-surface border-b border-border">
-                  <img
+                  <Image
                     src={post.image.url}
                     alt={post.image.alt}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
                 

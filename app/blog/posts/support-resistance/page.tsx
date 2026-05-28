@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getPexelsImages } from '@/lib/pexels';
 
 export const metadata: Metadata = {
@@ -63,8 +64,8 @@ export default async function SupportResistancePost() {
         </p>
       </header>
 
-      <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
-        <img src={images[0]?.url} alt={images[0]?.alt} className="w-full h-full object-cover" />
+      <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
+        <Image src={images[0]?.url} alt={images[0]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
       </div>
 
       <div className="article-content space-y-6 text-primary leading-relaxed">
@@ -76,8 +77,8 @@ export default async function SupportResistancePost() {
           Institutions do not care about a diagonal line drawn by a retail participant on a five minute chart. They care exclusively about finding enough liquidity to fill their massive volume requirements without moving the price too aggressively against themselves. Before you attempt to trade any technical structure, you must understand your baseline mathematical exposure by utilizing our specific <Link href="/tools/pip-calculator" className="text-accent hover:underline">Pip Value Estimator</Link> utility.
         </p>
 
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[1]?.url} alt={images[1]?.alt} className="w-full h-full object-cover" />
+        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
+          <Image src={images[1]?.url} alt={images[1]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">Understanding Horizontal Order Blocks</h2>
@@ -88,8 +89,8 @@ export default async function SupportResistancePost() {
           When the market eventually returns to that specific horizontal zone, there is a very high mathematical probability that the institution still has unfilled orders waiting at that exact price. By identifying these zones on higher timeframe charts, you align your small retail capital alongside the massive institutional footprint. If you want to dive deeper into how this impacts macro markets, please read our dedicated <Link href="/blog/posts/what-is-forex" className="text-accent hover:underline">Forex Architecture Guide</Link>.
         </p>
 
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[2]?.url} alt={images[2]?.alt} className="w-full h-full object-cover" />
+        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
+          <Image src={images[2]?.url} alt={images[2]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">The Mechanics of a Liquidity Grab</h2>
@@ -100,8 +101,8 @@ export default async function SupportResistancePost() {
           You have likely experienced this directly. You place your stop loss tightly under a very obvious support zone. The price spikes down, triggers your stop loss, completely removes you from the trade, and then immediately reverses exactly in your originally predicted direction. To avoid falling victim to this brutal institutional trap, you must calculate wider, mathematically sound buffers using our dedicated <Link href="/tools/lot-size-calculator" className="text-accent hover:underline">Lot Size Calculator</Link>.
         </p>
 
-        <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <img src={images[3]?.url} alt={images[3]?.alt} className="w-full h-full object-cover" />
+        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
+          <Image src={images[3]?.url} alt={images[3]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
         </div>
 
         <h2 className="text-2xl font-bold mt-8 mb-4">Building a Professional Strategy</h2>
