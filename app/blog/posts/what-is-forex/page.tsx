@@ -65,7 +65,7 @@ export default async function WhatIsForexPost() {
       </header>
 
       <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
-        <Image src={images[0].url} alt={images[0].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+        <Image src={images[0].url} alt={images[0].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" priority />
       </div>
 
       <div className="article-content space-y-6 text-primary leading-relaxed">

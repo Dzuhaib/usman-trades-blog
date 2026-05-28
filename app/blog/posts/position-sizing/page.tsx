@@ -73,6 +73,7 @@ export default async function PositionSizingPost() {
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 720px"
+          priority
         />
       </div>
 

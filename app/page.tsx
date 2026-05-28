@@ -102,8 +102,7 @@ export default async function Home() {
                 ★ EDITOR&apos;S LEAD ANALYSIS
               </span>
               <div className="relative aspect-[21/9] w-full mb-6 rounded bg-slate-100 overflow-hidden border border-slate-100">
-                <Image src={leadPost.image.url} alt={leadPost.image.alt} width={1280} height={720} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
-                
+                <Image src={leadPost.image.url} alt={leadPost.image.alt} width={1280} height={720} priority className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
               </div>
               <h2 className="text-2xl md:text-3xl font-bold font-serif text-slate-950 leading-tight mb-3">
                 <Link href={leadPost.route} className="text-slate-950 hover:text-accent no-underline transition-colors">

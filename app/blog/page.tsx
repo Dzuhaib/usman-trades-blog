@@ -68,7 +68,7 @@ export default async function BlogIndex({ searchParams }: PageProps) {
       {/* Blog Post List (Grid structure) */}
       {postsWithImages.length > 0 ? (
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          {postsWithImages.map((post) => (
+          {postsWithImages.map((post, index) => (
             <article
               key={post.slug}
               className="border border-border rounded-[4px] bg-white overflow-hidden flex flex-col justify-between hover:shadow-md hover:border-accent/30 hover:-translate-y-0.5 transition-all duration-300"
@@ -80,6 +80,7 @@ export default async function BlogIndex({ searchParams }: PageProps) {
                     src={post.image.url}
                     alt={post.image.alt}
                     fill
+                    priority={index < 2}
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
