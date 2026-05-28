@@ -29,7 +29,7 @@ export default function MiniRiskTerminal() {
     <div className="bg-slate-900 border border-slate-950 text-white rounded-lg p-6 shadow-md space-y-4">
       <div className="border-b border-slate-800 pb-3 flex items-center justify-between">
         <span className="text-xs font-bold font-mono tracking-widest text-accent uppercase">
-          RISK TERMINAL v1.0
+          QUICK POSITION SIZER
         </span>
         <span className="h-2 w-2 rounded-full bg-emerald-400"></span>
       </div>

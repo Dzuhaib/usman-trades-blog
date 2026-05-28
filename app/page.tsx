@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import LiveTicker from '@/components/LiveTicker';
+import MiniRiskTerminal from '@/components/MiniRiskTerminal';
 import { BLOG_POSTS } from '@/lib/blogData';
 import { getPexelsImage } from '@/lib/pexels';
 import { Calculator, ShieldAlert, BarChart3, TrendingUp } from 'lucide-react';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Usman Trades | Free Forex, Gold and Bitcoin Trading Tools and Education',
@@ -100,11 +102,8 @@ export default async function Home() {
                 ★ EDITOR&apos;S LEAD ANALYSIS
               </span>
               <div className="relative aspect-[21/9] w-full mb-6 rounded bg-slate-100 overflow-hidden border border-slate-100">
-                <img
-                  src={leadPost.image.url}
-                  alt={leadPost.image.alt}
-                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                />
+                <Image src={leadPost.image.url} alt={leadPost.image.alt} width={1280} height={720} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                
               </div>
               <h2 className="text-2xl md:text-3xl font-bold font-serif text-slate-950 leading-tight mb-3">
                 <Link href={leadPost.route} className="text-slate-950 hover:text-accent no-underline transition-colors">
@@ -137,11 +136,7 @@ export default async function Home() {
               {secondaryPosts.map((post) => (
                 <article key={post.slug} className="flex flex-col justify-between border border-slate-100 rounded-lg bg-slate-50/50 hover:border-slate-300 transition-all duration-200 overflow-hidden">
                   <div className="relative aspect-video w-full border-b border-slate-100 bg-slate-100 overflow-hidden">
-                    <img
-                      src={post.image.url}
-                      alt={post.image.alt}
-                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                    />
+                    <Image src={post.image.url} alt={post.image.alt} width={1280} height={720} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
                   </div>
                   <div className="p-5 flex flex-col flex-1">
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-2 font-mono">
@@ -170,6 +165,9 @@ export default async function Home() {
 
         {/* RIGHT COLUMN: Professional Finance Sidebar (4 Cols) */}
         <aside className="lg:col-span-4 space-y-8">
+          {/* Sidebar Widget 1: Quick Position Sizer Calculator */}
+          <MiniRiskTerminal />
+
           {/* Sidebar Widget 2: Educational Advisory Bulletin */}
           <div className="border border-slate-200 rounded-lg p-6 bg-slate-50/70 space-y-4">
             <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest border-b border-slate-200 pb-2 font-mono">
