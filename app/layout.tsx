@@ -62,7 +62,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {},
+  verification: {
+    google: "TzW6oxoWedZLWUyLtbiNxONBmwfnrqGOrPtoKI5_zJY",
+  },
 };
 
 // JSON-LD Structured Data for the entire website
