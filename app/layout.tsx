@@ -104,6 +104,11 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <head>
         <WebsiteJsonLd />
+        <script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9402118821539954"
+          crossOrigin="anonymous"
+        ></script>
       </head>
       <body className="min-h-full flex flex-col bg-white text-primary selection:bg-accent/15">
         <Header />
