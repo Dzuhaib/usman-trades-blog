@@ -1,0 +1,206 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+
+export default function LotSizeCalculator() {
+  const [balance, setBalance] = useState<number>(10000);
+  const [riskPercent, setRiskPercent] = useState<number>(1);
+  const [stopLossPips, setStopLossPips] = useState<number>(20);
+  const [instrument, setInstrument] = useState<string>('forex-usd'); // forex-usd, gold, btc, custom
+  const [customPipValue, setCustomPipValue] = useState<number>(10); // Default $10 for standard lot EURUSD
+
+  const [riskAmount, setRiskAmount] = useState<number>(100);
+  const [lotSize, setLotSize] = useState<number>(0.5);
+  const [units, setUnits] = useState<number>(50000);
+
+  // Auto-set standard pip values based on selection
+  useEffect(() => {
+    if (instrument === 'forex-usd') {
+      setCustomPipValue(10); // Standard lot 100k, 1 pip = $10 USD
+    } else if (instrument === 'gold') {
+      setCustomPipValue(10); // Standard lot 100oz, 1 pip ($0.10) = $10 USD
+    } else if (instrument === 'btc') {
+      setCustomPipValue(1); // Standard lot 1 BTC, $1 change = $1 USD
+    }
+  }, [instrument]);
+
+  // Recalculate lot size instantly on input changes
+  useEffect(() => {
+    if (balance <= 0 || riskPercent <= 0 || stopLossPips <= 0 || customPipValue <= 0) {
+      setRiskAmount(0);
+      setLotSize(0);
+      setUnits(0);
+      return;
+    }
+
+    const computedRiskAmount = balance * (riskPercent / 100);
+    setRiskAmount(computedRiskAmount);
+
+    let computedLotSize = 0;
+    if (instrument === 'btc') {
+      // BTC lot size is simple: Risk Amount / Price difference
+      // Here, Stop Loss is entered as USD price difference
+      computedLotSize = computedRiskAmount / stopLossPips;
+    } else {
+      // Forex and Gold: Lot Size = Risk Amount / (Stop Loss in Pips * Pip Value per Standard Lot)
+      computedLotSize = computedRiskAmount / (stopLossPips * customPipValue);
+    }
+
+    // Round to 2 decimal places for standard lots
+    const finalLotSize = Math.max(0, Math.round(computedLotSize * 100) / 100);
+    setLotSize(finalLotSize);
+
+    // Calculate Units (1 standard lot = 100k units for Forex, 100oz for gold, 1 unit for crypto)
+    let computedUnits = 0;
+    if (instrument === 'forex-usd') {
+      computedUnits = finalLotSize * 100000;
+    } else if (instrument === 'gold') {
+      computedUnits = finalLotSize * 100;
+    } else if (instrument === 'btc') {
+      computedUnits = finalLotSize;
+    } else {
+      computedUnits = finalLotSize * 100000; // Custom defaults to forex units
+    }
+    setUnits(computedUnits);
+  }, [balance, riskPercent, stopLossPips, instrument, customPipValue]);
+
+  return (
+    <article className="max-w-[680px] mx-auto space-y-8">
+      {/* Header */}
+      <header className="border-b border-border pb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <Link href="/tools" className="text-xs text-muted hover:text-primary no-underline">&larr; Back to Tools</Link>
+        </div>
+        <h1 className="text-3xl font-extrabold text-primary md:text-4xl">Lot Size Calculator</h1>
+        <p className="text-sm text-secondary">Calculate exact standard contracts or units to limit risk according to account balance parameters.</p>
+      </header>
+
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+        {/* Left Hand side: Form */}
+        <section className="space-y-4">
+          <h2 className="text-lg font-bold text-primary mb-2">1. Input Parameters</h2>
+
+          {/* Account Balance */}
+          <div>
+            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="balance">
+              Account Balance (USD)
+            </label>
+            <input
+              id="balance"
+              type="number"
+              value={balance || ''}
+              onChange={(e) => setBalance(parseFloat(e.target.value) || 0)}
+              placeholder="e.g. 10000"
+            />
+          </div>
+
+          {/* Risk Percentage */}
+          <div>
+            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="risk-percent">
+              Risk Percentage (%)
+            </label>
+            <input
+              id="risk-percent"
+              type="number"
+              step="0.1"
+              value={riskPercent || ''}
+              onChange={(e) => setRiskPercent(parseFloat(e.target.value) || 0)}
+              placeholder="e.g. 1"
+            />
+          </div>
+
+          {/* Instrument Selector */}
+          <div>
+            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="instrument">
+              Trading Instrument
+            </label>
+            <select
+              id="instrument"
+              value={instrument}
+              onChange={(e) => setInstrument(e.target.value)}
+            >
+              <option value="forex-usd">Forex (USD Base/Counter Pairs - EURUSD, GBPUSD)</option>
+              <option value="gold">Gold (XAUUSD)</option>
+              <option value="btc">Bitcoin (BTCUSD)</option>
+              <option value="custom">Custom Parameters (Advanced)</option>
+            </select>
+          </div>
+
+          {/* Stop Loss (Pips or USD depending on selection) */}
+          <div>
+            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="stop-loss">
+              {instrument === 'btc' ? 'Stop Loss (USD Price Distance)' : 'Stop Loss (Pips)'}
+            </label>
+            <input
+              id="stop-loss"
+              type="number"
+              value={stopLossPips || ''}
+              onChange={(e) => setStopLossPips(parseFloat(e.target.value) || 0)}
+              placeholder={instrument === 'btc' ? 'e.g. 500' : 'e.g. 20'}
+            />
+          </div>
+
+          {/* Custom Pip Value (Only visible if advanced is selected) */}
+          {instrument === 'custom' && (
+            <div>
+              <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="pip-value">
+                Pip Value per Standard Lot (USD)
+              </label>
+              <input
+                id="pip-value"
+                type="number"
+                value={customPipValue || ''}
+                onChange={(e) => setCustomPipValue(parseFloat(e.target.value) || 0)}
+                placeholder="e.g. 10"
+              />
+            </div>
+          )}
+        </section>
+
+        {/* Right Hand side: Outputs */}
+        <section className="space-y-6">
+          <h2 className="text-lg font-bold text-primary mb-2">2. Calculated Risk Metrics</h2>
+
+          {/* Target Cash Loss */}
+          <div className="border border-border p-5 rounded-[4px] bg-surface">
+            <span className="text-xs text-muted block mb-1">Max Cash Risk Allowed</span>
+            <span className="text-2xl font-bold text-primary block">${riskAmount.toFixed(2)} USD</span>
+            <span className="text-xs text-secondary mt-1 block">Exactly {riskPercent}% of account balance.</span>
+          </div>
+
+          {/* Calculated Lots */}
+          <div className="border border-accent/20 border-l-accent border-l-4 p-5 rounded-[4px] bg-accent/5">
+            <span className="text-xs text-accent font-semibold block mb-1">Calculated Lot Size</span>
+            <span className="text-3xl font-extrabold text-primary block">
+              {lotSize} {instrument === 'btc' ? 'BTC' : 'Lots'}
+            </span>
+            <span className="text-xs text-secondary mt-1 block">
+              Equivalent to: <strong>{units.toLocaleString()}</strong> {instrument === 'gold' ? 'ounces' : instrument === 'btc' ? 'units' : 'units of base currency'}
+            </span>
+          </div>
+
+          {/* Technical Note */}
+          <div className="bg-surface border border-border p-4 rounded-[4px] text-[11px] text-muted leading-relaxed">
+            <strong>Formula Applied:</strong> <br />
+            {instrument === 'btc' ? (
+              <code>BTC size = Risk Amount ($) / Invalidation Distance ($)</code>
+            ) : (
+              <code>Lot size = Risk Amount ($) / (Stop Loss in Pips &times; Pip Value per Standard Lot)</code>
+            )}
+            <br />
+            <span className="mt-2 block">
+              Verify your broker contract specification: standard lot size represents 100,000 currency units (Forex) or 100 ounces (Gold).
+            </span>
+          </div>
+        </section>
+      </div>
+
+      {/* Internal SEO links */}
+      <footer className="border-t border-border pt-6 flex justify-between items-center text-xs">
+        <Link href="/tools" className="text-secondary no-underline hover:text-primary">&larr; Back to Tools</Link>
+        <Link href="/tools/risk-calculator" className="text-accent no-underline hover:text-accent-dark">Open Risk Calculator &rarr;</Link>
+      </footer>
+    </article>
+  );
+}
