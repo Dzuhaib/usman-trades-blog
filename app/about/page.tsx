@@ -97,7 +97,7 @@ export default function About() {
       </div>
 
       <section className="bg-slate-900 text-white p-10 md:p-16 rounded-3xl space-y-6 text-center">
-        <h2 className="text-2xl font-bold font-serif">Have questions or feedback?</h2>
+        <h2 className="text-2xl font-bold font-serif text-white">Have questions or feedback?</h2>
         <p className="text-slate-400 text-sm max-w-[500px] mx-auto leading-relaxed">
           We want to make sure you fully understand our platform structure and mission. Feel free to reach out to us directly.
         </p>
