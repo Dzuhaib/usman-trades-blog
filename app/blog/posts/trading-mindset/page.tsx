@@ -1,30 +1,34 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import Image from "next/image";
+import Image from 'next/image';
 import { getPexelsImages } from '@/lib/pexels';
+import Breadcrumbs from '@/components/Breadcrumbs';
+import AuthorBio from '@/components/AuthorBio';
+import { BLOG_POSTS } from '@/lib/blogData';
 
 export const metadata: Metadata = {
-  title: 'Trading Psychology Guide | How to Overcome Cognitive Biases',
-  description: 'Master trading psychology by learning how to overcome loss aversion, confirmation bias, and emotional decision making. Build a disciplined, rules based trading mindset for consistent profitability.',
+  title: 'Trading Psychology Guide | How to Keep a Cool Head in the Market',
+  description: 'Master your emotions while trading. Learn how to overcome common mental mistakes and build a disciplined, rules-based approach to the markets.',
   alternates: {
     canonical: '/blog/posts/trading-mindset',
   },
 };
 
 export default async function TradingMindsetPost() {
+  const post = BLOG_POSTS.find(p => p.slug === 'trading-mindset')!;
   const images = await getPexelsImages('Trading psychology mindset', 4);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Trading Psychology Guide | How to Overcome Cognitive Biases",
-    "description": "Master trading psychology by learning how to overcome loss aversion, confirmation bias, and emotional decision making. Build a disciplined, rules based trading mindset for consistent profitability.",
+    "headline": post.title,
+    "description": post.excerpt,
     "image": images[0]?.url,
-    "datePublished": "2026-05-28T23:00:00+05:00",
-    "dateModified": "2026-05-28T23:00:00+05:00",
+    "datePublished": post.date,
+    "dateModified": post.updatedAt,
     "author": {
-      "@type": "Organization",
-      "name": "Usman Trades",
+      "@type": "Person",
+      "name": post.author.name,
       "url": "https://usmantrades.co.uk"
     },
     "publisher": {
@@ -37,7 +41,7 @@ export default async function TradingMindsetPost() {
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://usmantrades.co.uk/blog/posts/trading-mindset"
+      "@id": `https://usmantrades.co.uk${post.route}`
     }
   };
 
@@ -47,92 +51,124 @@ export default async function TradingMindsetPost() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <article className="max-w-[720px] mx-auto space-y-8">
-      <header className="border-b border-border pb-6 space-y-3">
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-semibold text-accent bg-accent/10 px-2.5 py-0.5 rounded-[4px]">
-            Trading Psychology
-          </span>
-          <span className="text-xs text-muted">Published May 28, 2026</span>
-          <span className="text-xs text-muted">&bull; 8 min read</span>
-        </div>
-        <h1 className="text-3xl font-extrabold text-primary md:text-4xl leading-tight">
-          Trading Psychology: Mitigating Cognitive Biases in Executions
-        </h1>
-        <p className="text-base text-secondary italic">
-          Explore prospect theory, loss aversion, and confirmation bias in active trading. Learn rules based procedures to permanently manage your behavioral risks.
-        </p>
-      </header>
+      <article className="max-w-[720px] mx-auto space-y-12 py-8">
+        <Breadcrumbs items={[
+          { label: 'Library', href: '/blog' },
+          { label: post.category, href: '/blog?category=' + post.category },
+          { label: post.title, href: post.route }
+        ]} />
 
-      <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
-        <Image src={images[0].url} alt={images[0].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" priority />
-      </div>
+        {/* Article Header */}
+        <header className="border-b border-border pb-8 space-y-4">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-semibold text-accent bg-accent/10 px-2.5 py-0.5 rounded-[4px]">
+              {post.category}
+            </span>
+            <span className="text-xs text-muted">Updated {post.updatedAt}</span>
+            <span className="text-xs text-muted">&bull; {post.readTime}</span>
+          </div>
+          <h1 className="text-3xl font-extrabold text-primary md:text-4xl leading-tight">
+            {post.title}
+          </h1>
+          <p className="text-lg text-secondary leading-relaxed">
+            {post.excerpt}
+          </p>
+        </header>
 
-      <div className="article-content space-y-6 text-primary leading-relaxed">
-        <h2 className="text-2xl font-bold mt-8 mb-4">The Danger of Loss Aversion</h2>
-        <p>
-          Human beings are biologically wired to feel the pain of a financial loss much more intensely than the pleasure of an equivalent financial gain. This biological reality is known in behavioral economics as loss aversion. In the trading arena, loss aversion causes retail participants to hold onto losing positions far too long while incredibly quick to close out winning trades for tiny profits.
-        </p>
-        <p>
-          If you allow loss aversion to dictate your actions, your mathematical expectancy will collapse completely. You will consistently risk huge amounts of capital just to secure incredibly small returns. The only way to combat this biological flaw is to firmly establish your maximum acceptable loss before entering the market. We strongly advise utilizing our <Link href="/tools/lot-size-calculator" className="text-accent hover:underline">Lot Size Calculator</Link> to cement that boundary mathematically.
-        </p>
-
-        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <Image src={images[1].url} alt={images[1].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+        {/* Image 1: Main Cover */}
+        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
+          <Image src={images[0].url} alt={images[0].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" priority />
         </div>
 
-        <h2 className="text-2xl font-bold mt-8 mb-4">Combating Confirmation Bias</h2>
-        <p>
-          Confirmation bias is the dangerous psychological tendency to selectively search for information that perfectly confirms your existing beliefs while completely ignoring data that contradicts you. When you buy a currency pair, you suddenly start finding hundreds of reasons why it should go up. You might start reading bullish news articles and entirely ignoring the bearish technical structures forming on the hourly chart.
-        </p>
-        <p>
-          To destroy confirmation bias, professional analysts utilize a procedure called inverse validation. Before you click the buy button, you must force yourself to write down three logical reasons why you should actually sell the asset instead. If you cannot objectively analyze the opposite perspective, you are not trading strategically. You are simply gambling based on an emotional hunch. Before taking any speculative action, ensure you understand the structural flow explained in our <Link href="/blog/posts/support-resistance" className="text-accent hover:underline">Technical Price Action Guide</Link>.
-        </p>
+        {/* Table of Contents */}
+        <nav className="bg-slate-50 border border-slate-100 p-6 rounded-xl space-y-4">
+          <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">In this guide:</h2>
+          <ul className="grid gap-2 text-sm font-medium text-slate-600">
+            <li><a href="#loss" className="hover:text-accent no-underline">1. Dealing with the Pain of Losing</a></li>
+            <li><a href="#bias" className="hover:text-accent no-underline">2. Avoiding the Trap of "Seeing What You Want to See"</a></li>
+            <li><a href="#discipline" className="hover:text-accent no-underline">3. The Importance of a Solid Routine</a></li>
+            <li><a href="#randomness" className="hover:text-accent no-underline">4. Accepting That You Can&apos;t Control Everything</a></li>
+          </ul>
+        </nav>
 
-        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <Image src={images[2].url} alt={images[2].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+        {/* Article Body */}
+        <div className="article-content space-y-8 text-primary leading-relaxed text-lg">
+          <section id="loss">
+            <h2 className="text-2xl font-bold mt-12 mb-6">Dealing with the Pain of Losing</h2>
+            <p>
+              It&apos;s a biological fact: losing money hurts much more than making money feels good. In trading, this often leads people to hold onto losing trades for way too long, hoping they&apos;ll turn around, while closing winning trades too early out of fear they&apos;ll disappear.
+            </p>
+            <p>
+              The only way to beat this is to know exactly how much you&apos;re willing to lose before you even enter a trade. Using our <Link href="/tools/lot-size-calculator" className="text-accent hover:underline">Lot Size Calculator</Link> lets you set that boundary mathematically, taking the guesswork and emotion out of the equation.
+            </p>
+          </section>
+
+          <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12">
+            <Image src={images[1].url} alt={images[1].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+          </div>
+
+          <section id="bias">
+            <h2 className="text-2xl font-bold mt-12 mb-6">Avoiding the Trap of &ldquo;Seeing What You Want to See&rdquo;</h2>
+            <p>
+              When you&apos;ve already decided to buy an asset, your brain starts looking for every reason why it will go up and ignores all the reasons why it might go down. This is called confirmation bias, and it&apos;s a major reason why traders stay in bad trades.
+            </p>
+            <p>
+              Try to look at the opposite side. Before you buy, ask yourself: &ldquo;What would have to happen for me to be wrong?&rdquo; If you can&apos;t answer that, you&apos;re trading on hope, not a plan. To understand the real market structure, take a look at our <Link href="/blog/posts/support-resistance" className="text-accent hover:underline">Technical Price Action Guide</Link>.
+            </p>
+          </section>
+
+          <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12">
+            <Image src={images[2].url} alt={images[2].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+          </div>
+
+          <section id="discipline">
+            <h2 className="text-2xl font-bold mt-12 mb-6">The Importance of a Solid Routine</h2>
+            <p>
+              Discipline is the only thing that will keep you going during a losing streak. Professional traders don&apos;t rely on how they feel; they rely on a checklist. If they haven&apos;t checked the news calendar or calculated their risk using a <Link href="/tools/profit-calculator" className="text-accent hover:underline">Profit Calculator</Link>, they don&apos;t trade.
+            </p>
+            <p>
+              Creating your own simple routine helps you treat trading like a business rather than a hobby. It keeps you from making impulsive decisions that you&apos;ll regret later.
+            </p>
+          </section>
+
+          <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12">
+            <Image src={images[3].url} alt={images[3].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+          </div>
+
+          <section id="randomness">
+            <h2 className="text-2xl font-bold mt-12 mb-6">Accepting That You Can&apos;t Control Everything</h2>
+            <p>
+              The hardest part of trading is accepting that even a perfect setup can fail. You can do everything right and still lose money on a single trade. The market is random in the short term, and that&apos;s okay.
+            </p>
+            <p>
+              Your goal isn&apos;t to win every trade, but to follow your plan flawlessly over 100 trades. When you stop worrying about the money on one trade and start focusing on your process, you&apos;ll find that trading becomes much calmer and more predictable.
+            </p>
+          </section>
         </div>
 
-        <h2 className="text-2xl font-bold mt-8 mb-4">The Power of Routine and Discipline</h2>
-        <p>
-          Motivation is a highly unreliable emotion that completely vanishes during a severe losing streak. Discipline is the only tool that remains. Professional funds do not rely on how their traders feel when they wake up in the morning. They rely on strict mechanical processes and highly structured checklists that must be completed prior to executing any market orders.
-        </p>
-        <p>
-          You must create your own personal trading checklist. It should include verifying your current mental state, checking the global economic calendar for sudden news events, and mathematically defining your exit parameters using a solid <Link href="/tools/profit-calculator" className="text-accent hover:underline">Profit Calculator</Link>. If a single item on your checklist is missing, you simply do not trade that day. The market will always be there tomorrow.
-        </p>
+        <AuthorBio author={post.author} updatedAt={post.updatedAt} />
 
-        <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-8">
-          <Image src={images[3].url} alt={images[3].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
-        </div>
+        {/* Internal Link CTA */}
+        <section className="bg-surface border border-border p-8 rounded-[4px] space-y-4 mt-12">
+          <h3 className="text-lg font-bold text-primary m-0">Remove Emotion with Hard Math</h3>
+          <p className="text-base text-secondary m-0">
+            The best defense against mental mistakes is using math to stay objective. Explore our free tool suite to make better decisions.
+          </p>
+          <Link href="/tools" className="text-sm font-bold text-accent uppercase tracking-wider no-underline block hover:text-accent-dark">
+            Open Utility Tools &rarr;
+          </Link>
+        </section>
 
-        <h2 className="text-2xl font-bold mt-8 mb-4">Accepting Random Outcomes</h2>
-        <p>
-          The absolute hardest concept for a new trader to accept is the fundamental randomness of any individual trade. You can execute a completely flawless strategy with perfect technical entry points and excellent economic backing, and the trade can still fail. Conversely, you can make a terrible emotional decision and get lucky with a massive profit.
-        </p>
-        <p>
-          You must detach your emotional state from the outcome of any single trade. Your only goal is to execute your mathematical strategy flawlessly over a series of one hundred trades. By focusing entirely on perfect execution rather than the immediate monetary outcome, you effectively neutralize the anxiety that destroys most amateur portfolios.
-        </p>
-      </div>
-
-      <section className="bg-surface border border-border p-6 rounded-[4px] space-y-3 mt-8">
-        <h3 className="text-base font-bold text-primary m-0">Remove Emotion with Hard Math</h3>
-        <p className="text-sm text-secondary m-0">
-          The best defense against psychological errors is strict mathematical execution. Use our suite of utility calculators to make objective financial decisions instead of relying on emotional guesses.
-        </p>
-        <Link href="/tools" className="text-xs font-bold text-accent uppercase tracking-wider no-underline block hover:text-accent-dark">
-          Open Utility Tools &rarr;
-        </Link>
-      </section>
-
-      <footer className="border-t border-border pt-6 flex justify-between items-center text-xs pb-12">
-        <Link href="/blog/posts/bitcoin-risk-management" className="text-secondary no-underline hover:text-primary">
-          &larr; Previous: Bitcoin Risk
-        </Link>
-        <Link href="/blog/posts/support-resistance" className="text-accent no-underline hover:text-accent-dark">
-          Next Post: Technical Structures &rarr;
-        </Link>
-      </footer>
-    </article>
+        {/* Footer Navigation */}
+        <footer className="border-t border-border pt-8 flex flex-col sm:flex-row sm:justify-between items-center gap-4 text-sm pb-12">
+          <Link href="/blog/posts/bitcoin-risk-management" className="text-secondary no-underline hover:text-primary transition-colors">
+            &larr; Previous: Bitcoin Risk
+          </Link>
+          <Link href="/blog/posts/support-resistance" className="text-accent font-medium no-underline hover:text-accent-dark transition-colors">
+            Next: Technical Structures &rarr;
+          </Link>
+        </footer>
+      </article>
     </>
   );
 }

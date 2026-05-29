@@ -1,15 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import LiveTicker from '@/components/LiveTicker';
 import MiniRiskTerminal from '@/components/MiniRiskTerminal';
 import { BLOG_POSTS } from '@/lib/blogData';
 import { getPexelsImage } from '@/lib/pexels';
-import { Calculator, ShieldAlert, BarChart3, TrendingUp } from 'lucide-react';
+import { Calculator, ShieldAlert, BarChart3, TrendingUp, BookOpen, CheckCircle2, ArrowRight, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
 
 export const metadata: Metadata = {
-  title: 'Usman Trades | Free Forex, Gold and Bitcoin Trading Tools and Education',
-  description: 'Usman Trades is a free professional trading education platform featuring mathematically precise calculators for Forex, Gold XAUUSD, and Bitcoin. Learn position sizing, risk management, and market architecture with clean, human-written guides.',
+  title: 'Usman Trades | Practical Trading Education & Risk Management Tools',
+  description: 'Master the financial markets with simple, evidence-based trading education. Access professional calculators for Forex, Gold, and Bitcoin designed for real-world risk management.',
   alternates: {
     canonical: '/',
   },
@@ -31,130 +30,100 @@ export default async function Home() {
   const leadPost = postsWithImages[0];
   const secondaryPosts = postsWithImages.slice(1);
 
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How do I calculate Forex lot size correctly?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "To calculate your correct lot size, divide your absolute cash risk (account balance multiplied by risk percentage) by the product of your stop loss distance in pips and the pip value of the currency pair. This calculation ensures that you lose exactly your targeted percentage if your stop loss is hit."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What is a safe risk percentage per trade?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "A standard professional risk threshold is between one percent and two percent of your total account equity per trade setup. Trading with higher risk percentages can lead to rapid drawdowns and emotional distress, preventing you from surviving natural market volatility sequences."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do central banks affect Gold prices (XAUUSD)?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Central banks accumulate physical gold bullion to diversify sovereign reserves away from the US Dollar. This massive institutional demand creates strong higher timeframe support zones. Additionally, gold holds an inverse relationship with US Treasury yields and real interest rates."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do I manage risk when trading Bitcoin?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Managing cryptocurrency risk requires wider stop loss levels and reduced leverage to accommodate higher intraday volatility. You must measure the average true range of the asset over a thirty day cycle and set strict, automated drawdown limits to preserve your core capital."
-        }
-      }
-    ]
-  };
-
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-      <div className="space-y-10">
-      {/* 2. WSJ Editorial Style Platform Header */}
-      <header className="border-b-4 border-double border-slate-900 pb-6 text-center md:text-left">
-        <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-4">
-          <div>
-            <span className="text-[11px] font-bold text-accent tracking-widest uppercase block mb-1">
-              Independent Technical Intelligence
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold font-serif text-slate-900 tracking-tight leading-none">
-              The Usman Trades Journal
-            </h1>
-          </div>
+    <div className="space-y-24 py-10 md:py-16">
+      {/* 1. Hero Section: Refined for Clarity & Human Touch */}
+      <header className="max-w-[800px] mx-auto text-center space-y-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[11px] font-bold uppercase tracking-widest">
+          <BookOpen className="w-3 h-3" />
+          Practical Trading Education
+        </div>
+        <h1 className="text-4xl md:text-6xl font-bold font-serif text-slate-900 tracking-tight leading-[1.1]">
+          Better Trading Starts with <span className="text-accent italic">Better Math.</span>
+        </h1>
+        <p className="text-lg text-slate-600 leading-relaxed max-w-[640px] mx-auto">
+          We provide clear, evidence-based guides and professional-grade tools to help you manage risk and understand market mechanics—without the hype.
+        </p>
+        <div className="flex flex-wrap justify-center gap-4 pt-4">
+          <Link href="/tools" className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm px-8 py-4 rounded-md transition-all shadow-lg shadow-slate-200">
+            Explore Trading Tools
+          </Link>
+          <Link href="/blog" className="bg-white border border-slate-200 hover:border-slate-300 text-slate-900 font-bold text-sm px-8 py-4 rounded-md transition-all">
+            Browse Learning Library
+          </Link>
         </div>
       </header>
 
-      {/* 3. Newspaper 2-Column Main Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* LEFT COLUMN: Main Articles Editorial Board (8 Cols) */}
-        <main className="lg:col-span-8 space-y-12">
-          {/* Main Lead Story */}
-          {leadPost && (
-            <article className="border border-slate-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 overflow-hidden">
-              <span className="text-xs font-bold text-accent uppercase tracking-widest block mb-4 font-mono">
-                ★ EDITOR&apos;S LEAD ANALYSIS
-              </span>
-              <div className="relative aspect-[21/9] w-full mb-6 rounded bg-slate-100 overflow-hidden border border-slate-100">
-                <Image src={leadPost.image.url} alt={leadPost.image.alt} width={1280} height={720} priority className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
-              </div>
-              <h2 className="text-2xl md:text-3xl font-bold font-serif text-slate-950 leading-tight mb-3">
-                <Link href={leadPost.route} className="text-slate-950 hover:text-accent no-underline transition-colors">
-                  {leadPost.title}
-                </Link>
-              </h2>
-              <p className="text-slate-600 text-sm leading-relaxed mb-4">
-                {leadPost.excerpt}
-              </p>
-              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 pt-4">
-                <span className="text-xs text-slate-500 font-serif">
-                  By <strong>Usman Trades Editorial Team</strong> • {leadPost.date}
-                </span>
-                <Link
-                  href={leadPost.route}
-                  className="bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs px-4 py-2.5 rounded transition-all duration-200"
-                >
-                  Read Full Paper &rarr;
-                </Link>
-              </div>
-            </article>
-          )}
+      {/* 2. Main Layout: 2-Column Editorial Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+        {/* LEFT COLUMN: Featured Guides (8 Cols) */}
+        <main className="lg:col-span-8 space-y-16">
+          <section className="space-y-8">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+              <h2 className="text-xs font-black text-slate-900 uppercase tracking-[0.2em]">Featured Education</h2>
+              <Link href="/blog" className="text-xs font-bold text-accent hover:underline">View All Guides &rarr;</Link>
+            </div>
 
-          {/* Secondary Sub-Stories Grid */}
-          <section className="space-y-6">
-            <h3 className="text-xs font-extrabold text-slate-950 uppercase tracking-widest border-b border-slate-900 pb-2">
-              LATEST RESEARCH PAPERS
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {secondaryPosts.map((post) => (
-                <article key={post.slug} className="flex flex-col justify-between border border-slate-100 rounded-lg bg-slate-50/50 hover:border-slate-300 transition-all duration-200 overflow-hidden">
-                  <div className="relative aspect-video w-full border-b border-slate-100 bg-slate-100 overflow-hidden">
-                    <Image src={post.image.url} alt={post.image.alt} width={1280} height={720} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+            {leadPost && (
+              <article className="group space-y-6">
+                <div className="relative aspect-[21/9] w-full rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
+                  <Image 
+                    src={leadPost.image.url} 
+                    alt={leadPost.image.alt} 
+                    fill
+                    priority 
+                    className="object-cover transition-transform duration-700 group-hover:scale-105" 
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="bg-white/90 backdrop-blur px-3 py-1 rounded text-[10px] font-bold text-slate-900 uppercase tracking-widest shadow-sm">
+                      {leadPost.category}
+                    </span>
                   </div>
-                  <div className="p-5 flex flex-col flex-1">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-2 font-mono">
+                </div>
+                <div className="space-y-3">
+                  <h3 className="text-3xl font-bold font-serif text-slate-950 leading-tight group-hover:text-accent transition-colors">
+                    <Link href={leadPost.route} className="no-underline">
+                      {leadPost.title}
+                    </Link>
+                  </h3>
+                  <p className="text-slate-600 text-base leading-relaxed line-clamp-2">
+                    {leadPost.excerpt}
+                  </p>
+                  <div className="flex items-center gap-4 pt-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-500">UA</div>
+                      <span className="text-xs text-slate-500 font-medium">By {leadPost.author.name}</span>
+                    </div>
+                    <span className="text-xs text-slate-300">&bull;</span>
+                    <span className="text-xs text-slate-400">{leadPost.date}</span>
+                  </div>
+                </div>
+              </article>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-4">
+              {secondaryPosts.map((post) => (
+                <article key={post.slug} className="group space-y-4">
+                  <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-slate-100 bg-slate-50">
+                    <Image 
+                      src={post.image.url} 
+                      alt={post.image.alt} 
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105" 
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold text-accent uppercase tracking-widest">
                       {post.category}
                     </span>
-                    <h4 className="text-lg font-bold font-serif text-slate-950 leading-snug mb-2">
-                      <Link href={post.route} className="text-slate-950 hover:text-accent no-underline">
+                    <h4 className="text-lg font-bold font-serif text-slate-950 leading-snug group-hover:text-accent transition-colors">
+                      <Link href={post.route} className="no-underline">
                         {post.title}
                       </Link>
                     </h4>
-                    <p className="text-slate-600 text-xs leading-relaxed mb-4 line-clamp-3 flex-1">
+                    <p className="text-slate-600 text-sm leading-relaxed line-clamp-2">
                       {post.excerpt}
                     </p>
-                    <div className="flex items-center justify-between border-t border-slate-200/60 pt-3 mt-auto">
-                      <span className="text-[10px] text-slate-500">{post.readTime}</span>
-                      <Link href={post.route} className="text-[11px] font-bold text-accent no-underline hover:text-accent-dark">
-                        Analyze &rarr;
-                      </Link>
-                    </div>
                   </div>
                 </article>
               ))}
@@ -162,132 +131,222 @@ export default async function Home() {
           </section>
         </main>
 
-        {/* RIGHT COLUMN: Professional Finance Sidebar (4 Cols) */}
-        <aside className="lg:col-span-4 space-y-8">
-          {/* Sidebar Widget 1: Quick Position Sizer Calculator */}
-          <MiniRiskTerminal />
-
-          {/* Sidebar Widget 2: Educational Advisory Bulletin */}
-          <div className="border border-slate-200 rounded-lg p-6 bg-slate-50/70 space-y-4">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest border-b border-slate-200 pb-2 font-mono">
-              EDITORIAL CHARTER
+        {/* RIGHT COLUMN: Sidebar (4 Cols) */}
+        <aside className="lg:col-span-4 space-y-12">
+          {/* Quick Tool Widget */}
+          <div className="space-y-4">
+            <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.2em] border-b border-slate-200 pb-4">
+              Quick Calculator
             </h3>
-            <p className="text-xs text-slate-600 leading-relaxed italic">
-              &ldquo;Usman Trades provides strict, mathematics-based technical modeling and interbank asset research. We represent a conflict-free informational publishing body. Under zero circumstances do we validate signals, promote external brokerage accounts, or promise speculative gains.&rdquo;
-            </p>
-            <p className="text-[10px] text-slate-500 font-serif">
-              — Usman Trades Ethics Board
+            <MiniRiskTerminal />
+            <p className="text-[11px] text-slate-500 text-center italic">
+              Use this widget for instant lot-size estimates based on 1% risk.
             </p>
           </div>
 
-          {/* Sidebar Widget 3: Quick Navigation Directory */}
-          <div className="border border-slate-200 rounded-lg p-6 bg-white space-y-4 shadow-sm">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest border-b border-slate-200 pb-2 font-mono">
-              UTILITY SUITE
+          {/* Founder Introduction / Trust Signal */}
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center text-white font-serif font-bold text-xl">U</div>
+              <div>
+                <span className="text-sm font-bold text-slate-900 block">Usman Ahmed</span>
+                <span className="text-xs text-slate-500">Founder & Lead Analyst</span>
+              </div>
+            </div>
+            <p className="text-xs text-slate-600 leading-relaxed italic">
+              &ldquo;I started Usman Trades because I was tired of the complexity and hype in the trading world. My goal is to give you the same mathematical frameworks used by pros, but in a way that actually makes sense.&rdquo;
+            </p>
+            <div className="pt-2">
+              <Link href="/about" className="text-[11px] font-bold text-accent hover:underline uppercase tracking-wider">Our Editorial Mission &rarr;</Link>
+            </div>
+          </div>
+
+          {/* Core Values / Human Touch */}
+          <div className="space-y-6">
+            <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.2em] border-b border-slate-200 pb-4">
+              Why We Are Different
             </h3>
-            <ul className="space-y-3 p-0 m-0 list-none text-xs">
-              <li className="flex items-center justify-between">
-                <Link href="/tools/lot-size-calculator" className="flex items-center gap-2 text-slate-700 hover:text-accent font-medium no-underline">
-                  <Calculator className="w-3.5 h-3.5" />
-                  Lot Size Calculator
-                </Link>
-                <span className="text-[10px] text-slate-400 font-mono">Risk Control</span>
-              </li>
-              <li className="flex items-center justify-between border-t border-slate-100 pt-2">
-                <Link href="/tools/risk-calculator" className="flex items-center gap-2 text-slate-700 hover:text-accent font-medium no-underline">
-                  <ShieldAlert className="w-3.5 h-3.5" />
-                  Risk & Position Limit
-                </Link>
-                <span className="text-[10px] text-slate-400 font-mono">Defense</span>
-              </li>
-              <li className="flex items-center justify-between border-t border-slate-100 pt-2">
-                <Link href="/tools/pip-calculator" className="flex items-center gap-2 text-slate-700 hover:text-accent font-medium no-underline">
-                  <BarChart3 className="w-3.5 h-3.5" />
-                  Pip Value Estimator
-                </Link>
-                <span className="text-[10px] text-slate-400 font-mono">Contract Math</span>
-              </li>
-              <li className="flex items-center justify-between border-t border-slate-100 pt-2">
-                <Link href="/tools/profit-calculator" className="flex items-center gap-2 text-slate-700 hover:text-accent font-medium no-underline">
-                  <TrendingUp className="w-3.5 h-3.5" />
-                  Profit & Loss Projection
-                </Link>
-                <span className="text-[10px] text-slate-400 font-mono">Valuation</span>
-              </li>
-            </ul>
+            <div className="space-y-4">
+              {[
+                { title: "No Signals", desc: "We teach you how to fish, we don't sell you the fish." },
+                { title: "Zero Hype", desc: "No lambos, no fake profits. Just market reality." },
+                { title: "Open Math", desc: "All our tools show you the logic behind the numbers." },
+              ].map((value, i) => (
+                <div key={i} className="flex gap-3">
+                  <CheckCircle2 className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-xs font-bold text-slate-900 block">{value.title}</span>
+                    <p className="text-[11px] text-slate-500">{value.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </aside>
       </div>
 
-      {/* 4. Core Trading Methodology */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-10 border-t border-b border-slate-200 py-12 my-12">
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold font-serif text-slate-900">Our Trading Philosophy</h2>
-          <p className="text-sm text-slate-600 leading-relaxed">
-            The vast majority of retail participants approach the financial markets completely backwards. They rely heavily on emotional decisions and fundamentally broken technical indicators. We reject that approach entirely. We believe that consistent profitability in Forex and Cryptocurrency markets requires a deeply mechanical mindset rooted entirely in mathematics. Our methodology focuses exclusively on capital preservation first and profit generation second. By strictly managing your absolute drawdown potential using our proprietary calculators, you completely remove the anxiety from your daily execution routine.
-          </p>
-        </div>
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold font-serif text-slate-900">Institutional Market Architecture</h2>
-          <p className="text-sm text-slate-600 leading-relaxed">
-            We analyze the markets precisely how massive financial institutions view them. We completely ignore arbitrary diagonal lines drawn on small timeframes. Instead we hunt for massive liquidity pools and deep horizontal order blocks where tier one banks execute their billions. When you align your retail strategies alongside these giant institutional footprints, your win rate improves dramatically. We provide you with the exact formulas and psychological frameworks necessary to survive the extreme volatility present in modern global asset classes.
-          </p>
+      {/* 3. Tools Showcase Section: Addressing Point 8 */}
+      <section className="bg-slate-50 border-y border-slate-100 py-20 overflow-hidden">
+        <div className="max-w-[1200px] mx-auto px-6 space-y-16">
+          <div className="max-w-[600px] space-y-4">
+            <h2 className="text-3xl md:text-4xl font-bold font-serif text-slate-900 tracking-tight">Professional Tools, Simplified.</h2>
+            <p className="text-lg text-slate-600">
+              Our calculators are designed to help you make objective decisions in seconds. No complex spreadsheets required.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-2xl border border-slate-200 space-y-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
+                <Calculator className="w-6 h-6" />
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-xl font-bold text-slate-900">Lot Size Calculator</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  The most important tool in your arsenal. Define your risk in dollars, and we tell you the exact position size to use.
+                </p>
+                <div className="pt-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  Example: $10,000 Acc + 1% Risk + 20 Pip SL = 0.5 Lots
+                </div>
+              </div>
+              <Link href="/tools/lot-size-calculator" className="inline-flex items-center gap-2 text-sm font-bold text-accent hover:underline">
+                Open Tool <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl border border-slate-200 space-y-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-xl font-bold text-slate-900">Risk Calculator</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Verify your stop loss logic and see how much of your account is at stake before you pull the trigger.
+                </p>
+                <div className="pt-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  Features: Invalidation levels, Drawdown defense
+                </div>
+              </div>
+              <Link href="/tools/risk-calculator" className="inline-flex items-center gap-2 text-sm font-bold text-accent hover:underline">
+                Open Tool <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl border border-slate-200 space-y-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
+                <TrendingUp className="w-6 h-6" />
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-xl font-bold text-slate-900">Profit Calculator</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Run the numbers on your trade ideas to see potential outcomes and reward-to-risk ratios.
+                </p>
+                <div className="pt-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  Metrics: R:R Ratio, P&L Projection
+                </div>
+              </div>
+              <Link href="/tools/profit-calculator" className="inline-flex items-center gap-2 text-sm font-bold text-accent hover:underline">
+                Open Tool <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 4.5 Frequently Asked Questions (AEO/FAQ) */}
-      <section className="border-t border-slate-200 pt-12 my-12 space-y-6">
-        <div className="text-center md:text-left">
-          <span className="text-[11px] font-bold text-accent tracking-widest uppercase block mb-1">
-            FAQ Desk
-          </span>
-          <h2 className="text-3xl font-bold font-serif text-slate-900">
-            Frequently Asked Questions
+      {/* 4. Methodology Section: Humanized Tone */}
+      <section className="py-20 px-6">
+        <div className="max-w-[1000px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold font-serif text-slate-900 tracking-tight">Focusing on Capital Preservation</h2>
+            <p className="text-base text-slate-600 leading-relaxed">
+              We believe that consistent trading isn&apos;t about catching every move; it&apos;s about staying in the game. Our philosophy is rooted in mathematical risk management. By using our calculators to define your risk before you enter a trade, you remove the emotional stress that leads to common mistakes. We focus on helping you understand your downside so you can capture the upside with confidence.
+            </p>
+          </div>
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold font-serif text-slate-900 tracking-tight">Understanding Market Logic</h2>
+            <p className="text-base text-slate-600 leading-relaxed">
+              Markets move based on liquidity and order flow, not just lines on a chart. We help you look past basic retail patterns to understand where the real activity is happening. Our guides break down complex concepts like institutional supply zones and market architecture into clear, actionable lessons. Whether you trade Forex, Gold, or Bitcoin, our goal is to help you see the market through a professional lens.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Editorial Mission Section: Point 7 */}
+      <section className="bg-slate-900 text-white p-12 md:p-24 rounded-[40px] overflow-hidden relative">
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent/20 blur-[120px] rounded-full translate-x-1/2 translate-y-1/2"></div>
+        <div className="max-w-[700px] relative z-10 space-y-8">
+          <div className="inline-flex items-center gap-2 text-accent font-bold text-xs uppercase tracking-[0.2em]">
+            <ShieldCheck className="w-4 h-4" />
+            Our Editorial Commitment
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold font-serif leading-tight tracking-tight">
+            Human-first trading education. <span className="text-slate-500 italic">No AI fluff.</span>
           </h2>
-          <p className="text-sm text-slate-500 max-w-[640px]">
-            Direct, mathematically precise answers to high-intent questions regarding Forex contract sizes, risk controls, and institutional layouts.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-          <div className="space-y-2">
-            <h3 className="text-base font-bold text-slate-900 font-serif">How do I calculate Forex lot size correctly?</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              To calculate your correct lot size, divide your absolute cash risk (account balance multiplied by risk percentage) by the product of your stop loss distance in pips and the pip value of the currency pair. This calculation ensures that you lose exactly your targeted percentage if your stop loss is hit.
+          <div className="space-y-6 text-slate-400 text-lg leading-relaxed">
+            <p>
+              In an era of AI-generated financial spam, we commit to publishing only high-integrity, human-written content. Every guide in our library is written by experienced analysts who have spent thousands of hours in the markets.
+            </p>
+            <p>
+              We don&apos;t chase trending keywords for the sake of traffic. We solve actual problems that traders face every day: how to size a position correctly, how to find logical entry zones, and how to manage the psychological toll of risk.
             </p>
           </div>
-          <div className="space-y-2">
-            <h3 className="text-base font-bold text-slate-900 font-serif">What is a safe risk percentage per trade?</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              A standard professional risk threshold is between one percent and two percent of your total account equity per trade setup. Trading with higher risk percentages can lead to rapid drawdowns and emotional distress, preventing you from surviving natural market volatility sequences.
-            </p>
-          </div>
-          <div className="space-y-2">
-            <h3 className="text-base font-bold text-slate-900 font-serif">How do central banks affect Gold prices (XAUUSD)?</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Central banks accumulate physical gold bullion to diversify sovereign reserves away from the US Dollar. This massive institutional demand creates strong higher timeframe support zones. Additionally, gold holds an inverse relationship with US Treasury yields and real interest rates.
-            </p>
-          </div>
-          <div className="space-y-2">
-            <h3 className="text-base font-bold text-slate-900 font-serif">How do I manage risk when trading Bitcoin?</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Managing cryptocurrency risk requires wider stop loss levels and reduced leverage to accommodate higher intraday volatility. You must measure the average true range of the asset over a thirty day cycle and set strict, automated drawdown limits to preserve your core capital.
-            </p>
+          <div className="pt-4">
+            <Link href="/about" className="bg-accent hover:bg-accent/90 text-white font-bold px-8 py-4 rounded-md transition-all inline-block">
+              Read Our Full Story
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* 5. Financial Integrity Advisory Disclaimer */}
-      <section className="bg-slate-50 border border-slate-200 p-8 rounded-lg text-center">
-        <span className="text-xs font-bold text-rose-800 uppercase tracking-widest block mb-2 font-mono">
-          ▲ STRICT RISK ADVISORY DIRECTIVE
-        </span>
-        <h2 className="text-base font-bold text-slate-950 mb-2 font-serif">Financial Markets Advisory Disclaimer</h2>
-        <p className="text-xs text-slate-650 max-w-[720px] mx-auto leading-relaxed">
-          The mathematical tools, leverage equations, position estimations, and macroeconomic research materials provided in the Usman Trades Journal are designed exclusively to serve educational and risk-modelling purposes. Leveraged trading (Forex, CFD Commodities, Cryptocurrencies) carries significant risk and can result in absolute loss of trading capital. Always execute independent verification and seek licensed broker validation before risking real assets in global order books.
-        </p>
+      {/* 6. FAQ Section: Clean & Readable */}
+      <section className="max-w-[900px] mx-auto space-y-12">
+        <div className="text-center space-y-2">
+          <h2 className="text-3xl font-bold font-serif text-slate-900">Common Questions</h2>
+          <p className="text-slate-500 max-w-[500px] mx-auto">
+            Practical answers to frequently asked questions about risk management and market mechanics.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+          {[
+            {
+              q: "How do I calculate Forex lot size correctly?",
+              a: "To find your correct size, divide your cash risk (balance × risk %) by your stop loss distance. This ensures you lose exactly what you planned if the trade doesn't go your way."
+            },
+            {
+              q: "What is a safe risk percentage per trade?",
+              a: "Most professional traders recommend risking 1% to 2% of your account per trade. This helps you survive a series of losses without causing significant damage to your capital."
+            },
+            {
+              q: "How do central banks affect Gold prices?",
+              a: "Gold often moves in response to US interest rates and Dollar strength. Central banks also hold gold as a reserve asset, which creates long-term demand zones."
+            },
+            {
+              q: "How do I manage risk when trading Bitcoin?",
+              a: "Because Bitcoin is more volatile, you often need wider stop losses and smaller position sizes compared to traditional forex pairs to stay within your risk limits."
+            }
+          ].map((item, idx) => (
+            <div key={idx} className="space-y-3 p-6 rounded-xl border border-slate-50 bg-slate-50/30">
+              <h3 className="text-lg font-bold text-slate-900 font-serif leading-snug">{item.q}</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">{item.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 7. Final Trust Banner */}
+      <section className="bg-white border border-slate-200 p-12 md:p-16 rounded-3xl text-center space-y-6 shadow-sm">
+        <div className="space-y-6">
+          <h2 className="text-3xl md:text-4xl font-bold font-serif tracking-tight text-slate-900">Ready to trade with <span className="text-accent italic">precision?</span></h2>
+          <p className="text-slate-500 max-w-[600px] mx-auto leading-relaxed">
+            Our tools and guides are designed to be your primary resource for understanding risk and market structure. Join thousands of traders using Usman Trades.
+          </p>
+          <div className="pt-4 flex flex-wrap justify-center gap-4">
+            <Link href="/blog" className="text-xs font-bold uppercase tracking-widest px-8 py-4 bg-slate-900 text-white rounded-md hover:bg-slate-800 transition-all">Start Reading</Link>
+            <Link href="/tools" className="text-xs font-bold uppercase tracking-widest px-8 py-4 border border-slate-200 text-slate-900 rounded-md hover:border-slate-300 transition-all">Explore Tools</Link>
+          </div>
+        </div>
       </section>
     </div>
-    </>
   );
 }

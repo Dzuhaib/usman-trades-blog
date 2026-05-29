@@ -4,64 +4,106 @@ export interface BlogPost {
   excerpt: string;
   category: 'Forex Education' | 'Gold (XAUUSD) Analysis' | 'Bitcoin Trading' | 'Risk Management' | 'Trading Psychology' | 'Technical Analysis';
   date: string;
+  updatedAt: string;
   readTime: string;
   route: string;
+  author: {
+    name: string;
+    role: string;
+    bio: string;
+  };
 }
 
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'position-sizing',
-    title: 'The Mathematics of Position Sizing in Leveraged Markets',
-    excerpt: 'Why standard lot sizing fails, and how to calculate mathematically perfect trades based on your account metrics and stop loss coordinates.',
+    title: 'Position Sizing Formula: How to Calculate Your Lot Size',
+    excerpt: 'Stop guessing your trade size. Learn the simple mathematical formula to calculate lot sizes for Forex, Gold, and Bitcoin based on your risk.',
     category: 'Risk Management',
     date: 'May 28, 2026',
+    updatedAt: 'May 29, 2026',
     readTime: '6 min read',
-    route: '/blog/posts/position-sizing'
+    route: '/blog/posts/position-sizing',
+    author: {
+      name: 'Usman Ahmed',
+      role: 'Head of Research',
+      bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
+    }
   },
   {
     slug: 'xauusd-guide',
-    title: 'Gold Trading Guide: Navigating Macro Liquidity & Sentiment',
-    excerpt: "Gold has a unique behavior in financial markets. We explore how macroeconomic indicators and treasury yields impact the physical metal's order book.",
+    title: 'Gold Trading Guide: How to Trade XAUUSD with Confidence',
+    excerpt: "Understand what actually moves the gold market. We explore central bank activity, US dollar correlation, and how to manage gold's volatility.",
     category: 'Gold (XAUUSD) Analysis',
     date: 'May 28, 2026',
+    updatedAt: 'May 29, 2026',
     readTime: '8 min read',
-    route: '/blog/posts/xauusd-guide'
+    route: '/blog/posts/xauusd-guide',
+    author: {
+      name: 'Usman Ahmed',
+      role: 'Head of Research',
+      bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
+    }
   },
   {
     slug: 'what-is-forex',
-    title: 'Forex Education: Core Market Architecture & Order Types',
-    excerpt: 'Understanding liquidity providers, major and minor pairs, and why order execution types like market, limit, and stop orders dictate your spreads.',
+    title: 'What is Forex Trading? A Simple Guide to the Global Market',
+    excerpt: 'Learn how the currency markets actually work. We break down liquidity, major pairs, and the hidden costs of trading in plain English.',
     category: 'Forex Education',
     date: 'May 28, 2026',
+    updatedAt: 'May 29, 2026',
     readTime: '7 min read',
-    route: '/blog/posts/what-is-forex'
+    route: '/blog/posts/what-is-forex',
+    author: {
+      name: 'Usman Ahmed',
+      role: 'Head of Research',
+      bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
+    }
   },
   {
     slug: 'bitcoin-risk-management',
-    title: 'Bitcoin Risk Management: Volatility Profiles & Drawdown Defense',
-    excerpt: 'A blueprint on handling cryptocurrency volatility. We explain standard deviations of intraday ranges and asset allocation bounds.',
+    title: 'Bitcoin Risk Management: How to Handle Crypto Volatility',
+    excerpt: 'Trading Bitcoin doesn&apos;t have to be a gamble. Learn how to protect your account from big swings and manage your crypto positions safely.',
     category: 'Bitcoin Trading',
     date: 'May 28, 2026',
+    updatedAt: 'May 29, 2026',
     readTime: '9 min read',
-    route: '/blog/posts/bitcoin-risk-management'
+    route: '/blog/posts/bitcoin-risk-management',
+    author: {
+      name: 'Usman Ahmed',
+      role: 'Head of Research',
+      bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
+    }
   },
   {
     slug: 'trading-mindset',
-    title: 'Trading Psychology: Mitigating Cognitive Biases in Executions',
-    excerpt: 'Explore prospect theory, loss aversion, and confirmation bias in active trading, and learn rules-based procedures to manage behavioral risks.',
+    title: 'Trading Psychology: How to Keep a Cool Head in the Market',
+    excerpt: 'Master your emotions while trading. Learn how to overcome common mental mistakes like fear and greed to build a disciplined approach.',
     category: 'Trading Psychology',
     date: 'May 28, 2026',
+    updatedAt: 'May 29, 2026',
     readTime: '5 min read',
-    route: '/blog/posts/trading-mindset'
+    route: '/blog/posts/trading-mindset',
+    author: {
+      name: 'Usman Ahmed',
+      role: 'Head of Research',
+      bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
+    }
   },
   {
     slug: 'support-resistance',
-    title: 'Technical Analysis: Support, Resistance, and Price Action Liquidity',
-    excerpt: 'Move past basic retail diagonal lines. Learn to map horizontal order blocks, liquidity voids, and institutional supply/demand pools.',
+    title: 'Technical Analysis: Finding High-Probability Entry Zones',
+    excerpt: 'Move past basic trendlines. Learn how to identify where large institutions are actually trading using supply, demand, and order blocks.',
     category: 'Technical Analysis',
     date: 'May 28, 2026',
+    updatedAt: 'May 29, 2026',
     readTime: '8 min read',
-    route: '/blog/posts/support-resistance'
+    route: '/blog/posts/support-resistance',
+    author: {
+      name: 'Usman Ahmed',
+      role: 'Head of Research',
+      bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
+    }
   }
 ];
 
