@@ -29,19 +29,19 @@ export default async function WhatIsForexPost() {
     "author": {
       "@type": "Person",
       "name": post.author.name,
-      "url": "https://usmantrades.co.uk"
+      "url": "https://www.usmantrades.uk"
     },
     "publisher": {
       "@type": "Organization",
       "name": "Usman Trades",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://usmantrades.co.uk/favicon.ico"
+        "url": "https://www.usmantrades.uk/favicon.ico"
       }
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `https://usmantrades.co.uk${post.route}`
+      "@id": `https://www.usmantrades.uk${post.route}`
     }
   };
 
