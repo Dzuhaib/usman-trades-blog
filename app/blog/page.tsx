@@ -167,7 +167,7 @@ export default async function BlogIndex({ searchParams }: PageProps) {
           {[
             {
               q: "Who writes these guides?",
-              a: "Every article in our library is written by Usman Ahmed, a trader with over a decade of experience in financial markets, focusing on data-driven risk management."
+              a: "Every article in our library is written by MUHAMMAD USMAN, a trader with over a decade of experience in financial markets, focusing on data-driven risk management."
             },
             {
               q: "How often is the content updated?",

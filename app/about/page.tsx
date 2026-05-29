@@ -33,7 +33,7 @@ export default function About() {
             <div className="w-16 h-16 rounded-full bg-slate-900 flex items-center justify-center text-white font-serif font-bold text-2xl">U</div>
             <div>
               <h2 className="text-xl font-bold text-slate-900">A Note from the Founder</h2>
-              <p className="text-sm text-slate-500">Usman Ahmed, Lead Analyst</p>
+              <p className="text-sm text-slate-500">MUHAMMAD USMAN, Lead Analyst</p>
             </div>
           </div>
           <div className="space-y-4 text-slate-600 leading-relaxed italic">

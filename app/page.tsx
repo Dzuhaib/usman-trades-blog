@@ -91,7 +91,7 @@ export default async function Home() {
                   </p>
                   <div className="flex items-center gap-4 pt-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-500">UA</div>
+                      <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-500">MU</div>
                       <span className="text-xs text-slate-500 font-medium">By {leadPost.author.name}</span>
                     </div>
                     <span className="text-xs text-slate-300">&bull;</span>
@@ -149,7 +149,7 @@ export default async function Home() {
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center text-white font-serif font-bold text-xl">U</div>
               <div>
-                <span className="text-sm font-bold text-slate-900 block">Usman Ahmed</span>
+                <span className="text-sm font-bold text-slate-900 block">MUHAMMAD USMAN</span>
                 <span className="text-xs text-slate-500">Founder & Lead Analyst</span>
               </div>
             </div>
@@ -279,7 +279,7 @@ export default async function Home() {
             <ShieldCheck className="w-4 h-4" />
             Our Editorial Commitment
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold font-serif leading-tight tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-bold font-serif leading-tight tracking-tight text-white">
             Human-first trading education. <span className="text-slate-500 italic">No AI fluff.</span>
           </h2>
           <div className="space-y-6 text-slate-400 text-lg leading-relaxed">

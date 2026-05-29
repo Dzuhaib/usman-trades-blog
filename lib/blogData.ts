@@ -25,7 +25,7 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: '6 min read',
     route: '/blog/posts/position-sizing',
     author: {
-      name: 'Usman Ahmed',
+      name: 'MUHAMMAD USMAN',
       role: 'Head of Research',
       bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
     }
@@ -40,7 +40,7 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: '8 min read',
     route: '/blog/posts/xauusd-guide',
     author: {
-      name: 'Usman Ahmed',
+      name: 'MUHAMMAD USMAN',
       role: 'Head of Research',
       bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
     }
@@ -55,7 +55,7 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: '7 min read',
     route: '/blog/posts/what-is-forex',
     author: {
-      name: 'Usman Ahmed',
+      name: 'MUHAMMAD USMAN',
       role: 'Head of Research',
       bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
     }
@@ -70,7 +70,7 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: '9 min read',
     route: '/blog/posts/bitcoin-risk-management',
     author: {
-      name: 'Usman Ahmed',
+      name: 'MUHAMMAD USMAN',
       role: 'Head of Research',
       bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
     }
@@ -85,7 +85,7 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: '5 min read',
     route: '/blog/posts/trading-mindset',
     author: {
-      name: 'Usman Ahmed',
+      name: 'MUHAMMAD USMAN',
       role: 'Head of Research',
       bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
     }
@@ -100,7 +100,7 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: '8 min read',
     route: '/blog/posts/support-resistance',
     author: {
-      name: 'Usman Ahmed',
+      name: 'MUHAMMAD USMAN',
       role: 'Head of Research',
       bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
     }
