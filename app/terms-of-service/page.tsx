@@ -19,7 +19,7 @@ export default function TermsOfService() {
       <section className="space-y-4 text-secondary leading-relaxed">
         <h2 className="text-xl font-bold text-primary">1. Agreement to Terms</h2>
         <p>
-          By accessing and using the website www.usmantrades.uk (the "Site"), you agree to comply with and be bound by these Terms of Service. If you do not agree to these terms, please do not use our utility tools or educational resources.
+          By accessing and using the website www.usmantrades.co.uk (the "Site"), you agree to comply with and be bound by these Terms of Service. If you do not agree to these terms, please do not use our utility tools or educational resources.
         </p>
       </section>
 

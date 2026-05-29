@@ -29,19 +29,19 @@ export default async function TradingMindsetPost() {
     "author": {
       "@type": "Person",
       "name": post.author.name,
-      "url": "https://www.usmantrades.uk"
+      "url": "https://www.usmantrades.co.uk"
     },
     "publisher": {
       "@type": "Organization",
       "name": "Usman Trades",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.usmantrades.uk/favicon.ico"
+        "url": "https://www.usmantrades.co.uk/favicon.ico"
       }
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `https://www.usmantrades.uk${post.route}`
+      "@id": `https://www.usmantrades.co.uk${post.route}`
     }
   };
 
