@@ -1,241 +1,94 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { Metadata } from 'next';
+import { getPexelsImage } from '@/lib/pexels';
+import RiskCalculator from './RiskCalculator';
 
-export default function RiskCalculator() {
-  const [balance, setBalance] = useState<number>(10000);
-  const [riskPercent, setRiskPercent] = useState<number>(1);
-  const [entryPrice, setEntryPrice] = useState<number>(1.0850);
-  const [stopPrice, setStopPrice] = useState<number>(1.0820);
-  const [instrument, setInstrument] = useState<string>('forex-usd'); // forex-usd, gold, btc
+export const metadata: Metadata = {
+  title: "Trading Risk Calculator | Stop Loss & Invalidation Logic",
+  description: "Verify absolute dollar-at-risk, pip spans, and position limits directly based on technical entries and stop price levels. Professional risk management for serious traders.",
+};
 
-  const [riskAmount, setRiskAmount] = useState<number>(100);
-  const [priceDistance, setPriceDistance] = useState<number>(0.0030);
-  const [pipDistance, setPipDistance] = useState<number>(30);
-  const [suggestedLots, setSuggestedLots] = useState<number>(0.33);
-  const [error, setError] = useState<string | null>(null);
-
-  // Auto-set reasonable entries/stops on instrument changes
-  useEffect(() => {
-    if (instrument === 'forex-usd') {
-      setEntryPrice(1.0850);
-      setStopPrice(1.0820);
-    } else if (instrument === 'gold') {
-      setEntryPrice(2350.00);
-      setStopPrice(2340.00);
-    } else if (instrument === 'btc') {
-      setEntryPrice(65000.00);
-      setStopPrice(64000.00);
-    }
-  }, [instrument]);
-
-  // Perform instant calculations
-  useEffect(() => {
-    setError(null);
-
-    if (balance <= 0) {
-      setError('Account balance must be greater than 0.');
-      setRiskAmount(0);
-      setPriceDistance(0);
-      setPipDistance(0);
-      setSuggestedLots(0);
-      return;
-    }
-    if (riskPercent <= 0 || riskPercent > 100) {
-      setError('Risk percentage must be between 0.1% and 100%.');
-      setRiskAmount(0);
-      setPriceDistance(0);
-      setPipDistance(0);
-      setSuggestedLots(0);
-      return;
-    }
-    if (entryPrice <= 0 || stopPrice <= 0) {
-      setError('Entry and Stop prices must be greater than 0.');
-      setRiskAmount(0);
-      setPriceDistance(0);
-      setPipDistance(0);
-      setSuggestedLots(0);
-      return;
-    }
-    if (entryPrice === stopPrice) {
-      setError('Entry price and Stop price cannot be identical.');
-      setRiskAmount(0);
-      setPriceDistance(0);
-      setPipDistance(0);
-      setSuggestedLots(0);
-      return;
-    }
-
-    const computedRiskAmount = balance * (riskPercent / 100);
-    setRiskAmount(computedRiskAmount);
-
-    const distance = Math.abs(entryPrice - stopPrice);
-    setPriceDistance(distance);
-
-    let calculatedPips = 0;
-    let calculatedLots = 0;
-
-    if (instrument === 'forex-usd') {
-      // 1 pip in 4-digit decimal = 0.0001
-      calculatedPips = Math.round(distance / 0.0001 * 10) / 10;
-      // Lot size = Risk Amount / (Pips * $10 per standard lot)
-      calculatedLots = computedRiskAmount / (calculatedPips * 10);
-    } else if (instrument === 'gold') {
-      // Gold 1 pip = $0.10 price change
-      calculatedPips = Math.round(distance / 0.1 * 10) / 10;
-      // Lot size = Risk Amount / (Pips * $10 per standard lot)
-      calculatedLots = computedRiskAmount / (calculatedPips * 10);
-    } else if (instrument === 'btc') {
-      // Bitcoin has no standard pips, we use absolute price distance
-      calculatedPips = Math.round(distance * 100) / 100;
-      // Suggested position size in whole units = Risk Amount / Price Distance
-      calculatedLots = computedRiskAmount / distance;
-    }
-
-    setPipDistance(calculatedPips);
-    setSuggestedLots(Math.max(0, Math.round(calculatedLots * 100) / 100));
-  }, [balance, riskPercent, entryPrice, stopPrice, instrument]);
+export default async function RiskCalculatorPage() {
+  const image1 = await getPexelsImage('risk management finance');
+  const image2 = await getPexelsImage('stock market volatility');
 
   return (
-    <article className="max-w-[680px] mx-auto space-y-8">
+    <article className="max-w-[800px] mx-auto space-y-12 py-8">
       {/* Header */}
-      <header className="border-b border-border pb-6">
-        <div className="flex items-center gap-2 mb-2">
-          <Link href="/tools" className="text-xs text-muted hover:text-primary no-underline">&larr; Back to Tools</Link>
+      <header className="border-b border-border pb-8">
+        <div className="flex items-center gap-2 mb-4">
+          <Link href="/tools" className="text-xs text-muted hover:text-primary no-underline uppercase tracking-wider font-semibold">&larr; Back to Tools</Link>
         </div>
-        <h1 className="text-3xl font-extrabold text-primary md:text-4xl">Risk & Stop Invalidation Calculator</h1>
-        <p className="text-sm text-secondary">Verify absolute dollar-at-risk, pip spans, and position limits directly based on technical entries and stop price levels.</p>
+        <h1 className="text-4xl font-black text-primary md:text-5xl mb-4 tracking-tight">Trading Risk & Invalidation Calculator</h1>
+        <p className="text-lg text-secondary leading-relaxed">
+          Successful trading is not about predicting the future; it is about managing the mathematical risk of being wrong. The Risk & Invalidation Calculator allows you to define your technical exit points and immediately see the monetary impact, ensuring your capital is protected by logic rather than emotion.
+        </p>
       </header>
 
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        {/* Left Side: Form */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-bold text-primary mb-2">1. Trade Entry Details</h2>
+      {/* Main Calculator Component */}
+      <section className="bg-surface border border-border rounded-xl p-6 md:p-8 shadow-sm">
+        <RiskCalculator />
+      </section>
 
-          {/* Account Balance */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="balance">
-              Account Balance (USD)
-            </label>
-            <input
-              id="balance"
-              type="number"
-              value={balance || ''}
-              onChange={(e) => setBalance(parseFloat(e.target.value) || 0)}
-              placeholder="e.g. 10000"
+      {/* Educational Content */}
+      <section className="prose prose-invert max-w-none space-y-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-primary">Technical vs. Monetary Invalidation</h2>
+            <p className="text-secondary leading-relaxed">
+              There are two types of stops: technical and monetary. A technical invalidation point is a price level where your trade thesis is proven wrong—perhaps a break of a structural low or a violation of a trendline. Monetary invalidation is the maximum dollar amount you are willing to lose.
+            </p>
+            <p className="text-secondary leading-relaxed">
+              Professional traders always prioritize technical invalidation first. They find the level where the market "speaks" and then use this calculator to adjust their position size to match their monetary risk tolerance. This ensures your stop is placed based on market structure, not just a random number.
+            </p>
+          </div>
+          <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-2xl">
+            <Image 
+              src={image1.url} 
+              alt={image1.alt} 
+              fill 
+              className="object-cover"
+              priority
             />
           </div>
+        </div>
 
-          {/* Risk Percent */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="risk-percent">
-              Desired Risk Percentage (%)
-            </label>
-            <input
-              id="risk-percent"
-              type="number"
-              step="0.1"
-              value={riskPercent || ''}
-              onChange={(e) => setRiskPercent(parseFloat(e.target.value) || 0)}
-              placeholder="e.g. 1"
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-primary">The Psychology of Risk-at-Entry</h2>
+          <p className="text-secondary leading-relaxed">
+            The moment you enter a trade, your cognitive biases begin to work against you. "Loss aversion" can make it difficult to close a losing position, often leading to "hope-based" trading. By calculating your exact risk-at-entry, you create a psychological "pre-commitment" to your plan.
+          </p>
+          <p className="text-secondary leading-relaxed">
+            Knowing that a stop-loss hit will only cost you a predetermined 1% of your account provides the mental clarity needed to let the trade play out. You are no longer gambling on an outcome; you are executing a statistically sound business operation with a known cost of doing business.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-4">
+          <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-2xl order-2 md:order-1">
+            <Image 
+              src={image2.url} 
+              alt={image2.alt} 
+              fill 
+              className="object-cover"
             />
           </div>
-
-          {/* Asset Selector */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="instrument">
-              Trading Asset
-            </label>
-            <select
-              id="instrument"
-              value={instrument}
-              onChange={(e) => setInstrument(e.target.value)}
-            >
-              <option value="forex-usd">Forex (EURUSD, GBPUSD etc.)</option>
-              <option value="gold">Gold (XAUUSD)</option>
-              <option value="btc">Bitcoin (BTCUSD)</option>
-            </select>
+          <div className="space-y-4 order-1 md:order-2">
+            <h2 className="text-2xl font-bold text-primary">Volatility-Adjusted Stop Placement</h2>
+            <p className="text-secondary leading-relaxed">
+              Static stop losses (e.g., always using a 20-pip stop) are often ineffective because they do not account for changing market volatility. During high-impact news events or volatile sessions, a narrow stop might be triggered by simple market "noise" rather than a true change in trend.
+            </p>
+            <p className="text-secondary leading-relaxed">
+              A better approach is to use technical levels or Average True Range (ATR) to determine your stop distance. This calculator then takes that volatility-adjusted distance and tells you exactly how much capital to allocate, ensuring your risk remains constant even as market conditions shift from quiet to explosive.
+            </p>
           </div>
+        </div>
+      </section>
 
-          {/* Entry Price */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="entry-price">
-              Planned Entry Price
-            </label>
-            <input
-              id="entry-price"
-              type="number"
-              step="0.0001"
-              value={entryPrice || ''}
-              onChange={(e) => setEntryPrice(parseFloat(e.target.value) || 0)}
-              placeholder="e.g. 1.0850"
-            />
-          </div>
-
-          {/* Stop Loss Price */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="stop-price">
-              Planned Stop Loss Price
-            </label>
-            <input
-              id="stop-price"
-              type="number"
-              step="0.0001"
-              value={stopPrice || ''}
-              onChange={(e) => setStopPrice(parseFloat(e.target.value) || 0)}
-              placeholder="e.g. 1.0820"
-            />
-          </div>
-        </section>
-
-        {/* Right Side: Outputs */}
-        <section className="space-y-6">
-          <h2 className="text-lg font-bold text-primary mb-2">2. Risk Exposure Summary</h2>
-
-          {error && (
-            <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-[4px] text-xs font-medium animate-pulse">
-              ⚠️ {error}
-            </div>
-          )}
-
-          {/* Risk Target */}
-          <div className="border border-border p-5 rounded-[4px] bg-surface">
-            <span className="text-xs text-muted block mb-1">Total Capital at Risk</span>
-            <span className="text-2xl font-bold text-primary block">${riskAmount.toFixed(2)} USD</span>
-            <span className="text-xs text-secondary mt-1 block">Exactly {riskPercent}% of account balance.</span>
-          </div>
-
-          {/* Pip distance */}
-          <div className="border border-border p-5 rounded-[4px] bg-surface">
-            <span className="text-xs text-muted block mb-1">
-              {instrument === 'btc' ? 'USD Invalidation Span' : 'Stop Loss Distance'}
-            </span>
-            <span className="text-2xl font-bold text-primary block">
-              {instrument === 'btc' ? `$${pipDistance.toLocaleString()}` : `${pipDistance} Pips`}
-            </span>
-            <span className="text-xs text-secondary mt-1 block">
-              Absolute price distance: <strong>{priceDistance.toFixed(instrument === 'forex-usd' ? 4 : 2)}</strong>
-            </span>
-          </div>
-
-          {/* Suggested Sizing */}
-          <div className="border border-accent/20 border-l-accent border-l-4 p-5 rounded-[4px] bg-accent/5">
-            <span className="text-xs text-accent font-semibold block mb-1">Suggested Capital Allocation</span>
-            <span className="text-3xl font-extrabold text-primary block">
-              {suggestedLots} {instrument === 'btc' ? 'BTC Units' : 'Lots'}
-            </span>
-            <span className="text-xs text-secondary mt-1 block">
-              Execute exactly {suggestedLots} lots to ensure hits to stop loss limit loss strictly to <strong>${riskAmount.toFixed(2)}</strong>.
-            </span>
-          </div>
-        </section>
-      </div>
-
-      {/* Disclaimers & Info */}
-      <footer className="border-t border-border pt-6 flex justify-between items-center text-xs">
-        <Link href="/tools" className="text-secondary no-underline hover:text-primary">&larr; Back to Tools</Link>
-        <Link href="/tools/pip-calculator" className="text-accent no-underline hover:text-accent-dark">Open Pip Calculator &rarr;</Link>
+      {/* Internal SEO links */}
+      <footer className="border-t border-border pt-8 flex justify-between items-center text-sm">
+        <Link href="/tools" className="text-secondary no-underline hover:text-primary font-medium transition-colors">&larr; Back to Tools</Link>
+        <Link href="/tools/pip-calculator" className="bg-accent/10 text-accent px-4 py-2 rounded-full no-underline hover:bg-accent hover:text-white transition-all font-bold">Open Pip Calculator &rarr;</Link>
       </footer>
     </article>
   );

@@ -1,171 +1,94 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { Metadata } from 'next';
+import { getPexelsImage } from '@/lib/pexels';
+import PipValueCalculator from './PipValueCalculator';
 
-export default function PipCalculator() {
-  const [lotSize, setLotSize] = useState<number>(1);
-  const [instrument, setInstrument] = useState<string>('forex-usd'); // forex-usd, forex-jpy, gold, btc
-  const [exchangeRate, setExchangeRate] = useState<number>(155.50); // Specifically for JPY pairs
+export const metadata: Metadata = {
+  title: "Pip Value Calculator | Contract Specifications for Forex & Gold",
+  description: "Verify the exact monetary value of single pip movements for standard, mini, and micro lots. Essential for accurate trade planning across different currency pairs.",
+};
 
-  const [pipValue, setPipValue] = useState<number>(10);
-  const [miniValue, setMiniValue] = useState<number>(1);
-  const [microValue, setMicroValue] = useState<number>(0.1);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setError(null);
-
-    if (lotSize <= 0) {
-      setError('Lot size must be greater than 0.');
-      setPipValue(0);
-      setMiniValue(0);
-      setMicroValue(0);
-      return;
-    }
-
-    let calculatedStandardPip = 10; // Default EURUSD $10
-
-    if (instrument === 'forex-usd') {
-      calculatedStandardPip = 10;
-    } else if (instrument === 'forex-jpy') {
-      if (exchangeRate <= 0) {
-        setError('Exchange rate must be greater than 0.');
-        setPipValue(0);
-        setMiniValue(0);
-        setMicroValue(0);
-        return;
-      }
-      // Formula for JPY crosses to USD: (0.01 / USDJPY) * 100,000
-      calculatedStandardPip = (0.01 / exchangeRate) * 100000;
-    } else if (instrument === 'gold') {
-      calculatedStandardPip = 10;
-    } else if (instrument === 'btc') {
-      calculatedStandardPip = 1;
-    }
-
-    setPipValue(Math.round(calculatedStandardPip * lotSize * 100) / 100);
-    setMiniValue(Math.round(calculatedStandardPip * 0.1 * 100) / 100);
-    setMicroValue(Math.round(calculatedStandardPip * 0.01 * 100) / 100);
-  }, [lotSize, instrument, exchangeRate]);
+export default async function PipValueCalculatorPage() {
+  const image1 = await getPexelsImage('currency exchange mathematics');
+  const image2 = await getPexelsImage('gold trading');
 
   return (
-    <article className="max-w-[680px] mx-auto space-y-8">
+    <article className="max-w-[800px] mx-auto space-y-12 py-8">
       {/* Header */}
-      <header className="border-b border-border pb-6">
-        <div className="flex items-center gap-2 mb-2">
-          <Link href="/tools" className="text-xs text-muted hover:text-primary no-underline">&larr; Back to Tools</Link>
+      <header className="border-b border-border pb-8">
+        <div className="flex items-center gap-2 mb-4">
+          <Link href="/tools" className="text-xs text-muted hover:text-primary no-underline uppercase tracking-wider font-semibold">&larr; Back to Tools</Link>
         </div>
-        <h1 className="text-3xl font-extrabold text-primary md:text-4xl">Pip Value Calculator</h1>
-        <p className="text-sm text-secondary">Verify the exact monetary value of single pip movements for standard, mini, and micro lots.</p>
+        <h1 className="text-4xl font-black text-primary md:text-5xl mb-4 tracking-tight">Pip Value Calculator</h1>
+        <p className="text-lg text-secondary leading-relaxed">
+          Understanding the monetary value of a single pip is the foundation of precise trade planning. Whether you are trading major forex pairs, precious metals like Gold, or volatile cryptocurrencies, this calculator provides an instant breakdown of your risk per tick across various lot sizes.
+        </p>
       </header>
 
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        {/* Left Side: Form */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-bold text-primary mb-2">1. Contract Parameters</h2>
+      {/* Main Calculator Component */}
+      <section className="bg-surface border border-border rounded-xl p-6 md:p-8 shadow-sm">
+        <PipValueCalculator />
+      </section>
 
-          {/* Instrument Selector */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="instrument">
-              Trading Instrument
-            </label>
-            <select
-              id="instrument"
-              value={instrument}
-              onChange={(e) => setInstrument(e.target.value)}
-            >
-              <option value="forex-usd">Forex USD Counter (EURUSD, GBPUSD, AUDUSD)</option>
-              <option value="forex-jpy">Forex JPY Counter (USDJPY, EURJPY, GBPJPY)</option>
-              <option value="gold">Gold (XAUUSD)</option>
-              <option value="btc">Bitcoin (BTCUSD)</option>
-            </select>
+      {/* Educational Content */}
+      <section className="prose prose-invert max-w-none space-y-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-primary">Understanding Contract Sizes</h2>
+            <p className="text-secondary leading-relaxed">
+              In the world of institutional finance, trading is conducted in "contracts" or "lots." A standard lot in Forex represents 100,000 units of the base currency. Because of this large volume, even a tiny 1-pip movement (0.0001) results in a $10 change on pairs like EUR/USD.
+            </p>
+            <p className="text-secondary leading-relaxed">
+              Mini lots (10,000 units) and micro lots (1,000 units) scale this value down to $1 and $0.10 respectively. Knowing your contract size is the first step in ensuring your account can handle the inherent leverage of the market.
+            </p>
           </div>
-
-          {/* Exchange Rate Input for JPY */}
-          {instrument === 'forex-jpy' && (
-            <div>
-              <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="exchange-rate">
-                Current USD/JPY Exchange Rate
-              </label>
-              <input
-                id="exchange-rate"
-                type="number"
-                step="0.01"
-                value={exchangeRate || ''}
-                onChange={(e) => setExchangeRate(parseFloat(e.target.value) || 0)}
-                placeholder="e.g. 155.50"
-              />
-            </div>
-          )}
-
-          {/* Planned Lot Size */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="lot-size">
-              Planned Lot Size
-            </label>
-            <input
-              id="lot-size"
-              type="number"
-              step="0.01"
-              value={lotSize || ''}
-              onChange={(e) => setLotSize(parseFloat(e.target.value) || 0)}
-              placeholder="e.g. 1.00"
+          <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-2xl">
+            <Image 
+              src={image1.url} 
+              alt={image1.alt} 
+              fill 
+              className="object-cover"
+              priority
             />
           </div>
-        </section>
+        </div>
 
-        {/* Right Side: Outputs */}
-        <section className="space-y-6">
-          <h2 className="text-lg font-bold text-primary mb-2">2. Valuation Output</h2>
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-primary">Why Pip Values Vary Across Pairs</h2>
+          <p className="text-secondary leading-relaxed">
+            A common point of confusion for new traders is why a pip on EUR/USD is worth exactly $10, while a pip on USD/JPY or GBP/CAD fluctuates. The reason lies in the "counter currency." If the counter currency (the second currency in the pair) is not USD, the pip value must be converted back into USD based on the current exchange rate.
+          </p>
+          <p className="text-secondary leading-relaxed">
+            For JPY pairs, the pip is the second decimal place (0.01). This tool handles the cross-currency mathematics automatically, ensuring your risk calculations are always accurate to the cent, regardless of which pair you are analyzing.
+          </p>
+        </div>
 
-          {error && (
-            <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-[4px] text-xs font-medium animate-pulse">
-              ⚠️ {error}
-            </div>
-          )}
-
-          {/* Standard Pip Value Result */}
-          <div className="border border-accent/20 border-l-accent border-l-4 p-5 rounded-[4px] bg-accent/5">
-            <span className="text-xs text-accent font-semibold block mb-1">
-              Pip Value for {lotSize} {instrument === 'btc' ? 'Units' : 'Lots'}
-            </span>
-            <span className="text-3xl font-extrabold text-primary block">
-              ${pipValue.toFixed(2)} USD
-            </span>
-            <span className="text-xs text-secondary mt-1 block">
-              Based on standard exchange contract parameters.
-            </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-4">
+          <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-2xl order-2 md:order-1">
+            <Image 
+              src={image2.url} 
+              alt={image2.alt} 
+              fill 
+              className="object-cover"
+            />
           </div>
-
-          {/* Standard scale grid */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="border border-border p-4 rounded-[4px] bg-surface text-center">
-              <span className="text-xs text-muted block mb-0.5">Mini Lot (0.10 Lots)</span>
-              <span className="text-base font-bold text-primary">${miniValue.toFixed(2)} USD</span>
-            </div>
-            <div className="border border-border p-4 rounded-[4px] bg-surface text-center">
-              <span className="text-xs text-muted block mb-0.5">Micro Lot (0.01 Lots)</span>
-              <span className="text-base font-bold text-primary">${microValue.toFixed(2)} USD</span>
-            </div>
+          <div className="space-y-4 order-1 md:order-2">
+            <h2 className="text-2xl font-bold text-primary">Cross-Currency Mathematics</h2>
+            <p className="text-secondary leading-relaxed">
+              For pairs that do not involve the US Dollar at all (known as "crosses"), the math becomes even more complex. For example, trading EUR/GBP requires knowing the GBP/USD exchange rate to find the dollar value of a pip.
+            </p>
+            <p className="text-secondary leading-relaxed">
+              By mastering these calculations, you gain a deeper understanding of how global capital flows affect your bottom line. This calculator simplifies the process, allowing for more sophisticated multi-asset portfolio management and helping you avoid unexpected exposure in non-USD pairs.
+            </p>
           </div>
+        </div>
+      </section>
 
-          {/* Technical definition box */}
-          <div className="bg-surface border border-border p-4 rounded-[4px] text-[11px] text-muted leading-relaxed">
-            <strong>Standard Contract Parameters Used:</strong>
-            <ul className="list-disc pl-4 mt-1.5 space-y-1">
-              <li><strong>Forex:</strong> 1 Standard Lot = 100,000 base units. Pip size = 0.0001 (or 0.01 for JPY).</li>
-              <li><strong>Gold:</strong> 1 Standard Lot = 100 troy ounces. Pip size = $0.10 price change.</li>
-              <li><strong>Bitcoin:</strong> 1 Standard Unit = 1 BTC. Pip size = $1.00 USD price change.</li>
-            </ul>
-          </div>
-        </section>
-      </div>
-
-      {/* Footer navigation */}
-      <footer className="border-t border-border pt-6 flex justify-between items-center text-xs">
-        <Link href="/tools" className="text-secondary no-underline hover:text-primary">&larr; Back to Tools</Link>
-        <Link href="/tools/profit-calculator" className="text-accent no-underline hover:text-accent-dark">Open Profit Calculator &rarr;</Link>
+      {/* Internal SEO links */}
+      <footer className="border-t border-border pt-8 flex justify-between items-center text-sm">
+        <Link href="/tools" className="text-secondary no-underline hover:text-primary font-medium transition-colors">&larr; Back to Tools</Link>
+        <Link href="/tools/profit-calculator" className="bg-accent/10 text-accent px-4 py-2 rounded-full no-underline hover:bg-accent hover:text-white transition-all font-bold">Open Profit Calculator &rarr;</Link>
       </footer>
     </article>
   );

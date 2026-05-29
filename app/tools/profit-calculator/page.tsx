@@ -1,240 +1,94 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { Metadata } from 'next';
+import { getPexelsImage } from '@/lib/pexels';
+import ProfitCalculator from './ProfitCalculator';
 
-export default function ProfitCalculator() {
-  const [instrument, setInstrument] = useState<string>('forex-usd'); // forex-usd, gold, btc
-  const [direction, setDirection] = useState<string>('buy'); // buy, sell
-  const [entryPrice, setEntryPrice] = useState<number>(1.0850);
-  const [exitPrice, setExitPrice] = useState<number>(1.0900);
-  const [lotSize, setLotSize] = useState<number>(1.00);
+export const metadata: Metadata = {
+  title: "Trading Profit & Loss Projection Tool | Reward-to-Risk Estimator",
+  description: "Calculate exact transaction outcomes and reward projections across Forex, Gold, and Cryptocurrencies. Visualize your potential gains before you trade.",
+};
 
-  const [grossProfit, setGrossProfit] = useState<number>(500);
-  const [pipsGained, setPipsGained] = useState<number>(50);
-  const [percentageGain, setPercentageGain] = useState<number>(0.46);
-  const [error, setError] = useState<string | null>(null);
-
-  // Auto-set reasonable entries/stops on instrument changes
-  useEffect(() => {
-    if (instrument === 'forex-usd') {
-      setEntryPrice(1.0850);
-      setExitPrice(1.0900);
-    } else if (instrument === 'gold') {
-      setEntryPrice(2350.00);
-      setExitPrice(2365.00);
-    } else if (instrument === 'btc') {
-      setEntryPrice(65000.00);
-      setExitPrice(66500.00);
-    }
-  }, [instrument]);
-
-  // Recalculate profit/loss instantly
-  useEffect(() => {
-    setError(null);
-
-    if (entryPrice <= 0 || exitPrice <= 0) {
-      setError('Entry and Exit prices must be greater than 0.');
-      setGrossProfit(0);
-      setPipsGained(0);
-      setPercentageGain(0);
-      return;
-    }
-    if (lotSize <= 0) {
-      setError('Lot size must be greater than 0.');
-      setGrossProfit(0);
-      setPipsGained(0);
-      setPercentageGain(0);
-      return;
-    }
-    if (entryPrice === exitPrice) {
-      setError('Entry and Exit prices cannot be identical.');
-      setGrossProfit(0);
-      setPipsGained(0);
-      setPercentageGain(0);
-      return;
-    }
-
-    let diff = exitPrice - entryPrice;
-    if (direction === 'sell') {
-      diff = entryPrice - exitPrice;
-    }
-
-    let calculatedProfit = 0;
-    let computedPips = 0;
-
-    if (instrument === 'forex-usd') {
-      // 1 standard lot = 100k units
-      calculatedProfit = diff * 100000 * lotSize;
-      // 1 pip = 0.0001
-      computedPips = Math.round(diff / 0.0001 * 10) / 10;
-    } else if (instrument === 'gold') {
-      // 1 standard lot = 100 ounces. Gold price represents 1 ounce.
-      calculatedProfit = diff * 100 * lotSize;
-      // 1 pip = $0.10 price movement
-      computedPips = Math.round(diff / 0.1 * 10) / 10;
-    } else if (instrument === 'btc') {
-      // 1 unit = 1 BTC. 
-      calculatedProfit = diff * lotSize;
-      // Volatility in absolute USD dollars
-      computedPips = Math.round(diff * 100) / 100;
-    }
-
-    const pct = (diff / entryPrice) * 100;
-
-    setGrossProfit(Math.round(calculatedProfit * 100) / 100);
-    setPipsGained(computedPips);
-    setPercentageGain(Math.round(pct * 100) / 100);
-  }, [instrument, direction, entryPrice, exitPrice, lotSize]);
+export default async function ProfitCalculatorPage() {
+  const image1 = await getPexelsImage('financial profit growth');
+  const image2 = await getPexelsImage('trader workspace');
 
   return (
-    <article className="max-w-[680px] mx-auto space-y-8">
+    <article className="max-w-[800px] mx-auto space-y-12 py-8">
       {/* Header */}
-      <header className="border-b border-border pb-6">
-        <div className="flex items-center gap-2 mb-2">
-          <Link href="/tools" className="text-xs text-muted hover:text-primary no-underline">&larr; Back to Tools</Link>
+      <header className="border-b border-border pb-8">
+        <div className="flex items-center gap-2 mb-4">
+          <Link href="/tools" className="text-xs text-muted hover:text-primary no-underline uppercase tracking-wider font-semibold">&larr; Back to Tools</Link>
         </div>
-        <h1 className="text-3xl font-extrabold text-primary md:text-4xl">Profit & Loss Calculator</h1>
-        <p className="text-sm text-secondary">Calculate exact transaction outcomes and reward projections across Forex, Gold, and Cryptocurrencies.</p>
+        <h1 className="text-4xl font-black text-primary md:text-5xl mb-4 tracking-tight">Profit & Loss Projection Tool</h1>
+        <p className="text-lg text-secondary leading-relaxed">
+          Proactively projecting your transaction outcomes is a hallmark of institutional-grade trading. The Profit & Loss Calculator allows you to visualize your potential gains and losses before committing capital, enabling you to align every trade with your broader financial objectives.
+        </p>
       </header>
 
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        {/* Left Side: Form */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-bold text-primary mb-2">1. Trade Setup Details</h2>
+      {/* Main Calculator Component */}
+      <section className="bg-surface border border-border rounded-xl p-6 md:p-8 shadow-sm">
+        <ProfitCalculator />
+      </section>
 
-          {/* Instrument Selector */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="instrument">
-              Trading Instrument
-            </label>
-            <select
-              id="instrument"
-              value={instrument}
-              onChange={(e) => setInstrument(e.target.value)}
-            >
-              <option value="forex-usd">Forex USD Counter (EURUSD, GBPUSD)</option>
-              <option value="gold">Gold (XAUUSD)</option>
-              <option value="btc">Bitcoin (BTCUSD)</option>
-            </select>
+      {/* Educational Content */}
+      <section className="prose prose-invert max-w-none space-y-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-primary">Projecting Probable Outcomes</h2>
+            <p className="text-secondary leading-relaxed">
+              Before clicking "buy" or "sell," you must have a clear exit strategy for both profit and loss. This tool helps you project those outcomes by calculating the exact dollar value of your price targets.
+            </p>
+            <p className="text-secondary leading-relaxed">
+              By understanding the potential return on a trade relative to its stop-loss distance, you can filter out "low-probability" setups and focus only on trades that offer a significant mathematical edge. Projections are not promises, but they are essential for rules-based execution.
+            </p>
           </div>
-
-          {/* Direction Buy/Sell */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="direction">
-              Trade Direction
-            </label>
-            <select
-              id="direction"
-              value={direction}
-              onChange={(e) => setDirection(e.target.value)}
-            >
-              <option value="buy">BUY / LONG (Profit on price rising)</option>
-              <option value="sell">SELL / SHORT (Profit on price falling)</option>
-            </select>
-          </div>
-
-          {/* Planned Lot Size */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="lot-size">
-              Lot Size
-            </label>
-            <input
-              id="lot-size"
-              type="number"
-              step="0.01"
-              value={lotSize || ''}
-              onChange={(e) => setLotSize(parseFloat(e.target.value) || 0)}
-              placeholder="e.g. 1.00"
+          <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-2xl">
+            <Image 
+              src={image1.url} 
+              alt={image1.alt} 
+              fill 
+              className="object-cover"
+              priority
             />
           </div>
+        </div>
 
-          {/* Entry Price */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="entry-price">
-              Position Entry Price
-            </label>
-            <input
-              id="entry-price"
-              type="number"
-              step="0.0001"
-              value={entryPrice || ''}
-              onChange={(e) => setEntryPrice(parseFloat(e.target.value) || 0)}
-              placeholder="e.g. 1.0850"
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-primary">Gross vs. Net Profit Logic</h2>
+          <p className="text-secondary leading-relaxed">
+            It is vital to distinguish between gross profit and net profit. Gross profit, which this calculator estimates, is the raw difference between your entry and exit price multiplied by your position size. Net profit, however, accounts for external costs such as broker commissions, bid-ask spreads, and overnight swap fees.
+          </p>
+          <p className="text-secondary leading-relaxed">
+            To be truly profitable, your gross gains must consistently exceed these operational costs. Always leave a "buffer" in your projections to account for these real-world trading expenses, ensuring your net bottom line remains positive over hundreds of trades.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-4">
+          <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-2xl order-2 md:order-1">
+            <Image 
+              src={image2.url} 
+              alt={image2.alt} 
+              fill 
+              className="object-cover"
             />
           </div>
-
-          {/* Exit Target Price */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5" htmlFor="exit-price">
-              Position Target Exit Price
-            </label>
-            <input
-              id="exit-price"
-              type="number"
-              step="0.0001"
-              value={exitPrice || ''}
-              onChange={(e) => setExitPrice(parseFloat(e.target.value) || 0)}
-              placeholder="e.g. 1.0900"
-            />
+          <div className="space-y-4 order-1 md:order-2">
+            <h2 className="text-2xl font-bold text-primary">Realistic Reward-to-Risk Targets</h2>
+            <p className="text-secondary leading-relaxed">
+              One of the most common mistakes in trading is aiming for unrealistic profit targets. While a 1:10 reward-to-risk ratio looks great on paper, it often has a very low win rate. Most professional traders find their "sweet spot" between 1:1.5 and 1:3.
+            </p>
+            <p className="text-secondary leading-relaxed">
+              Use this calculator to experiment with different price targets and see how they affect your potential bottom line. By setting realistic goals based on market structure and volatility, you ensure that your trading remains sustainable and less stressful over the long term.
+            </p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Right Side: Outputs */}
-        <section className="space-y-6">
-          <h2 className="text-lg font-bold text-primary mb-2">2. Projections Summary</h2>
-
-          {error && (
-            <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-[4px] text-xs font-medium animate-pulse">
-              ⚠️ {error}
-            </div>
-          )}
-
-          {/* Calculated Profit Output */}
-          <div className={`border p-5 rounded-[4px] ${
-            grossProfit >= 0
-              ? 'border-emerald-200 border-l-emerald-500 border-l-4 bg-emerald-50/30'
-              : 'border-rose-200 border-l-rose-500 border-l-4 bg-rose-50/30'
-          }`}>
-            <span className="text-xs text-muted block mb-1">
-              Estimated Transaction {grossProfit >= 0 ? 'Profit' : 'Loss'}
-            </span>
-            <span className={`text-3xl font-extrabold block ${
-              grossProfit >= 0 ? 'text-emerald-800' : 'text-rose-800'
-            }`}>
-              {grossProfit >= 0 ? '+' : ''}${grossProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
-            </span>
-            <span className="text-xs text-secondary mt-1 block font-medium">
-              Gross projection excluding commission spreads.
-            </span>
-          </div>
-
-          {/* Pip Value output */}
-          <div className="border border-border p-5 rounded-[4px] bg-surface">
-            <span className="text-xs text-muted block mb-1">
-              {instrument === 'btc' ? 'Net USD Shift' : 'Pips Captured'}
-            </span>
-            <span className="text-2xl font-bold text-primary block">
-              {grossProfit >= 0 ? '+' : ''}
-              {instrument === 'btc' ? `$${pipsGained.toLocaleString()}` : `${pipsGained} Pips`}
-            </span>
-            <span className="text-xs text-secondary mt-1 block">
-              Asset price ratio movement: <strong>{grossProfit >= 0 ? '+' : ''}{percentageGain}%</strong>
-            </span>
-          </div>
-
-          {/* Educational notice */}
-          <div className="bg-surface border border-border p-4 rounded-[4px] text-[11px] text-muted leading-relaxed">
-            <strong>Leveraged Trading Calculations Notice:</strong> <br />
-            These figures represents raw valuation based on standard contract limits: 1 Lot Forex represents 100k units of base currency; 1 Lot Gold represents 100oz of physical metal. Real outcomes might vary due to broker spread changes or slippage during fast market triggers.
-          </div>
-        </section>
-      </div>
-
-      {/* Footer navigation */}
-      <footer className="border-t border-border pt-6 flex justify-between items-center text-xs">
-        <Link href="/tools" className="text-secondary no-underline hover:text-primary">&larr; Back to Tools</Link>
-        <Link href="/tools/lot-size-calculator" className="text-accent no-underline hover:text-accent-dark">Open Lot Size Calculator &rarr;</Link>
+      {/* Internal SEO links */}
+      <footer className="border-t border-border pt-8 flex justify-between items-center text-sm">
+        <Link href="/tools" className="text-secondary no-underline hover:text-primary font-medium transition-colors">&larr; Back to Tools</Link>
+        <Link href="/tools/lot-size-calculator" className="bg-accent/10 text-accent px-4 py-2 rounded-full no-underline hover:bg-accent hover:text-white transition-all font-bold">Open Lot Size Calculator &rarr;</Link>
       </footer>
     </article>
   );
