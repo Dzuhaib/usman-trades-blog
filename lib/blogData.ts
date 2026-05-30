@@ -104,6 +104,21 @@ export const BLOG_POSTS: BlogPost[] = [
       role: 'Head of Research',
       bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
     }
+  },
+  {
+    slug: 'what-moves-gold',
+    title: 'What Moves Gold Prices Every Day? The 4 Core Drivers',
+    excerpt: 'Understand why gold prices fluctuate. We break down the relationship between interest rates, the US dollar, and central bank activity.',
+    category: 'Gold (XAUUSD) Analysis',
+    date: 'May 29, 2026',
+    updatedAt: 'May 29, 2026',
+    readTime: '10 min read',
+    route: '/blog/posts/what-moves-gold',
+    author: {
+      name: 'MUHAMMAD USMAN',
+      role: 'Head of Research',
+      bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
+    }
   }
 ];
 
