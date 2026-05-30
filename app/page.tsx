@@ -15,7 +15,9 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const featuredPosts = BLOG_POSTS.slice(0, 5);
+  const featuredPosts = [...BLOG_POSTS]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
 
   const postsWithImages = await Promise.all(
     featuredPosts.map(async (post) => {

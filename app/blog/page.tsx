@@ -22,9 +22,10 @@ export default async function BlogIndex({ searchParams }: PageProps) {
   const activeCategory = resolvedParams.category || 'All';
 
   // Filter posts based on active category
-  const filteredPosts = activeCategory === 'All'
-    ? BLOG_POSTS
-    : BLOG_POSTS.filter(post => post.category === activeCategory);
+  const filteredPosts = (activeCategory === 'All'
+    ? [...BLOG_POSTS]
+    : BLOG_POSTS.filter(post => post.category === activeCategory))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   // Fetch Pexels cover images
   const postsWithImages = await Promise.all(
