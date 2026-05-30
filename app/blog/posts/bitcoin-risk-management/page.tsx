@@ -77,7 +77,7 @@ export default async function BitcoinRiskPost() {
 
         {/* Image 1: Main Cover */}
         <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
-          <Image src={images[0]?.url} alt={images[0]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" priority />
+          <Image src={images[0]?.url} alt={post.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" priority />
         </div>
 
         {/* Table of Contents */}
@@ -105,7 +105,7 @@ export default async function BitcoinRiskPost() {
 
           {/* Image 2 */}
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12">
-            <Image src={images[1]?.url} alt={images[1]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[1]?.url} alt="The Reality of Bitcoin Volatility" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           <section id="drawdown">
@@ -120,7 +120,7 @@ export default async function BitcoinRiskPost() {
 
           {/* Image 3 */}
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12">
-            <Image src={images[2]?.url} alt={images[2]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[2]?.url} alt="Protecting Your Account from Big Drops" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           <section id="ranges">
@@ -135,7 +135,7 @@ export default async function BitcoinRiskPost() {
 
           {/* Image 4 */}
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12">
-            <Image src={images[3]?.url} alt={images[3]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[3]?.url} alt="Understanding Daily Price Swings" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           <section id="psychology">

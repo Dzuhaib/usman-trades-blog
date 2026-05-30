@@ -77,7 +77,7 @@ export default async function WhatMovesGoldPost() {
 
         {/* Image 1 */}
         <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-xl overflow-hidden">
-          <Image src={images[0]?.url} alt={images[0]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" priority />
+          <Image src={images[0]?.url} alt={post.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" priority />
         </div>
 
         {/* Table of Contents */}
@@ -116,7 +116,7 @@ export default async function WhatMovesGoldPost() {
 
           {/* Image 2 */}
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-xl overflow-hidden my-12">
-            <Image src={images[1]?.url} alt={images[1]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[1]?.url} alt="The Core Drivers of Gold Prices" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           <section>
@@ -127,7 +127,7 @@ export default async function WhatMovesGoldPost() {
 
           {/* Image 3 */}
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-xl overflow-hidden my-12">
-            <Image src={images[2]?.url} alt={images[2]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[2]?.url} alt="Geopolitical Tension and Central Bank Activity" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           {/* Practical Example */}
@@ -143,7 +143,7 @@ export default async function WhatMovesGoldPost() {
 
           {/* Image 4 */}
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-xl overflow-hidden my-12">
-            <Image src={images[3]?.url} alt={images[3]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[3]?.url} alt="Practical Example: The FOMC Move" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           {/* Common Mistakes */}
@@ -169,7 +169,7 @@ export default async function WhatMovesGoldPost() {
 
           {/* Image 5 */}
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-xl overflow-hidden my-12">
-            <Image src={images[4]?.url} alt={images[4]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[4]?.url} alt="Risk and Volatility Awareness" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           {/* FAQ */}

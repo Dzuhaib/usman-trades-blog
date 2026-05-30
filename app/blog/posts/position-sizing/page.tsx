@@ -79,7 +79,7 @@ export default async function PositionSizingPost() {
         <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden relative">
           <Image
             src={images[0]?.url}
-            alt={images[0]?.alt}
+            alt={post.title}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 720px"
@@ -114,7 +114,7 @@ export default async function PositionSizingPost() {
           <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12 relative">
             <Image
               src={images[1]?.url}
-              alt={images[1]?.alt}
+              alt="The Danger of Constant Lot Sizing"
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 720px"
@@ -140,7 +140,7 @@ export default async function PositionSizingPost() {
           <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12 relative">
             <Image
               src={images[2]?.url}
-              alt={images[2]?.alt}
+              alt="The Simple Position Sizing Formula"
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 720px"
@@ -171,7 +171,7 @@ export default async function PositionSizingPost() {
           <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12 relative">
             <Image
               src={images[3]?.url}
-              alt={images[3]?.alt}
+              alt="Trading Gold and Bitcoin"
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 720px"

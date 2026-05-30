@@ -69,7 +69,7 @@ export default async function Home() {
               <div className="relative aspect-[21/9] w-full rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
                 <Image
                   src={leadPost.image.url}
-                  alt={leadPost.image.alt}
+                  alt={leadPost.title}
                   fill
                   priority
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -116,7 +116,7 @@ export default async function Home() {
                   <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-slate-100 bg-slate-50">
                     <Image
                       src={post.image.url}
-                      alt={post.image.alt}
+                      alt={post.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />

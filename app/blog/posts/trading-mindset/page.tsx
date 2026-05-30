@@ -77,7 +77,7 @@ export default async function TradingMindsetPost() {
 
         {/* Image 1: Main Cover */}
         <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
-          <Image src={images[0].url} alt={images[0].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" priority />
+          <Image src={images[0].url} alt={post.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" priority />
         </div>
 
         {/* Table of Contents */}
@@ -104,7 +104,7 @@ export default async function TradingMindsetPost() {
           </section>
 
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12">
-            <Image src={images[1].url} alt={images[1].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[1].url} alt="Dealing with the Pain of Losing" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           <section id="bias">
@@ -118,7 +118,7 @@ export default async function TradingMindsetPost() {
           </section>
 
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12">
-            <Image src={images[2].url} alt={images[2].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[2].url} alt="Avoiding the Trap of 'Seeing What You Want to See'" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           <section id="discipline">
@@ -132,7 +132,7 @@ export default async function TradingMindsetPost() {
           </section>
 
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12">
-            <Image src={images[3].url} alt={images[3].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[3].url} alt="The Importance of a Solid Routine" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           <section id="randomness">

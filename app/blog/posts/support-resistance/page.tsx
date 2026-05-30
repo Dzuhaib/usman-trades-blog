@@ -77,7 +77,7 @@ export default async function SupportResistancePost() {
 
         {/* Image 1: Main Cover */}
         <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden">
-          <Image src={images[0].url} alt={images[0].alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" priority />
+          <Image src={images[0].url} alt={post.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" priority />
         </div>
 
         {/* Table of Contents */}
@@ -104,7 +104,7 @@ export default async function SupportResistancePost() {
           </section>
 
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12">
-            <Image src={images[1]?.url} alt={images[1]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[1]?.url} alt="The Problem with Basic Trendlines" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           <section id="orderblocks">
@@ -118,7 +118,7 @@ export default async function SupportResistancePost() {
           </section>
 
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12">
-            <Image src={images[2]?.url} alt={images[2]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[2]?.url} alt="Understanding Institutional Entry Zones" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           <section id="fakeouts">
@@ -132,7 +132,7 @@ export default async function SupportResistancePost() {
           </section>
 
           <div className="relative w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden my-12">
-            <Image src={images[3]?.url} alt={images[3]?.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
+            <Image src={images[3]?.url} alt="Why the Market Hits Your Stop Loss First" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
           </div>
 
           <section id="strategy">
