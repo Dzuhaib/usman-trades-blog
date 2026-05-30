@@ -90,7 +90,7 @@ export default function Header() {
                 </Link>
                 
                 {/* Mega Menu Dropdown */}
-                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[640px] bg-white border border-slate-100 rounded-3xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top translate-y-4 group-hover:translate-y-2 p-8">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[90vw] max-w-[640px] bg-white border border-slate-100 rounded-3xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top translate-y-4 group-hover:translate-y-2 p-6 md:p-8 overflow-hidden">
                   <div className="space-y-6">
                     <div className="flex items-center justify-between border-b border-slate-50 pb-4">
                       <div className="flex items-center gap-2">
