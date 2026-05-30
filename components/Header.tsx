@@ -95,8 +95,6 @@ export default function Header() {
                     <div className="flex items-center justify-between border-b border-slate-50 pb-4">
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">Utility Suite</span>
-                        <span className="text-[10px] text-slate-300">|</span>
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">10 Professional Calculators</span>
                       </div>
                       <Link href="/tools" className="text-[10px] font-bold text-slate-900 hover:text-accent no-underline uppercase flex items-center gap-1">
                         View All <ExternalLink className="w-2.5 h-2.5" />
