@@ -3,7 +3,22 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronDown, Calculator, ShieldCheck, BarChart3, TrendingUp, Menu, X } from 'lucide-react';
+import { 
+  ChevronDown, 
+  Calculator, 
+  ShieldCheck, 
+  BarChart3, 
+  TrendingUp, 
+  Menu, 
+  X, 
+  ArrowLeftRight, 
+  Coins, 
+  TrendingDown, 
+  Lock, 
+  Scale, 
+  Clock,
+  ExternalLink
+} from 'lucide-react';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -11,11 +26,18 @@ const navLinks = [
   { 
     href: '/tools', 
     label: 'Trading Tools',
+    isMega: true,
     submenu: [
-      { href: '/tools/lot-size-calculator', label: 'Lot Size Calculator', icon: Calculator },
-      { href: '/tools/risk-calculator', label: 'Risk & Invalidation', icon: ShieldCheck },
-      { href: '/tools/pip-calculator', label: 'Pip Value Estimator', icon: BarChart3 },
-      { href: '/tools/profit-calculator', label: 'Profit & Loss Projection', icon: TrendingUp },
+      { href: '/tools/lot-size-calculator', label: 'Lot Size Calculator', icon: Calculator, desc: 'Risk control sizing' },
+      { href: '/tools/risk-calculator', label: 'Risk & Invalidation', icon: ShieldCheck, desc: 'Cash exposure math' },
+      { href: '/tools/pip-calculator', label: 'Pip Value Estimator', icon: BarChart3, desc: 'Contract valuation' },
+      { href: '/tools/profit-calculator', label: 'Profit & Loss Projection', icon: TrendingUp, desc: 'Target ROI calculation' },
+      { href: '/tools/risk-reward-calculator', label: 'Risk Reward Ratio', icon: ArrowLeftRight, desc: 'Strategy validation' },
+      { href: '/tools/compound-growth-calculator', label: 'Compound Growth', icon: Coins, desc: 'Wealth projection' },
+      { href: '/tools/drawdown-calculator', label: 'Drawdown Math', icon: TrendingDown, desc: 'Recovery analysis' },
+      { href: '/tools/margin-calculator', label: 'Margin Calculator', icon: Lock, desc: 'Collateral requirement' },
+      { href: '/tools/spread-cost-calculator', label: 'Spread Cost Tool', icon: Scale, desc: 'Entry expense check' },
+      { href: '/tools/session-timer', label: 'Session Timer', icon: Clock, desc: 'Market hours tracking' },
     ]
   },
   { href: '/about', label: 'About' },
@@ -67,19 +89,59 @@ export default function Header() {
                   <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />
                 </Link>
                 
-                {/* Dropdown */}
-                <div className="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-white border border-slate-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top translate-y-2 group-hover:translate-y-0">
-                  <div className="p-3 space-y-1">
-                    {link.submenu!.map((sub) => (
-                      <Link
-                        key={sub.href}
-                        href={sub.href}
-                        className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-slate-50 text-[13px] font-bold text-slate-600 hover:text-accent transition-colors no-underline"
-                      >
-                        <sub.icon className="w-4 h-4 text-slate-400 group-hover:text-accent" />
-                        {sub.label}
+                {/* Mega Menu Dropdown */}
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[640px] bg-white border border-slate-100 rounded-3xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top translate-y-4 group-hover:translate-y-2 p-8">
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between border-b border-slate-50 pb-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">Utility Suite</span>
+                        <span className="text-[10px] text-slate-300">|</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">10 Professional Calculators</span>
+                      </div>
+                      <Link href="/tools" className="text-[10px] font-bold text-slate-900 hover:text-accent no-underline uppercase flex items-center gap-1">
+                        View All <ExternalLink className="w-2.5 h-2.5" />
                       </Link>
-                    ))}
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-x-12 gap-y-1">
+                      {/* Left Column (First 5) */}
+                      <div className="space-y-1">
+                        {link.submenu!.slice(0, 5).map((sub) => (
+                          <Link
+                            key={sub.href}
+                            href={sub.href}
+                            className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-slate-50 transition-all no-underline group/item"
+                          >
+                            <div className="p-2 bg-slate-50 rounded-lg group-hover/item:bg-accent/10 transition-colors">
+                              <sub.icon className="w-4 h-4 text-slate-400 group-hover/item:text-accent" />
+                            </div>
+                            <div>
+                              <span className="block text-[13px] font-bold text-slate-700 group-hover/item:text-accent transition-colors">{sub.label}</span>
+                              <span className="block text-[10px] text-slate-400 font-medium">{sub.desc}</span>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+
+                      {/* Right Column (Last 5) */}
+                      <div className="space-y-1">
+                        {link.submenu!.slice(5, 10).map((sub) => (
+                          <Link
+                            key={sub.href}
+                            href={sub.href}
+                            className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-slate-50 transition-all no-underline group/item"
+                          >
+                            <div className="p-2 bg-slate-50 rounded-lg group-hover/item:bg-accent/10 transition-colors">
+                              <sub.icon className="w-4 h-4 text-slate-400 group-hover/item:text-accent" />
+                            </div>
+                            <div>
+                              <span className="block text-[13px] font-bold text-slate-700 group-hover/item:text-accent transition-colors">{sub.label}</span>
+                              <span className="block text-[10px] text-slate-400 font-medium">{sub.desc}</span>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
