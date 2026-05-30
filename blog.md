@@ -14,6 +14,13 @@ The objective is to create the best answer available for the searcher's question
 
 ---
 
+# Core Constraints
+
+*   **Length:** Every article must be between **1200 and 1800 words**. This ensures sufficient depth for complex financial topics while maintaining reader engagement.
+*   **Formatting:** The use of **dashes (-)** in the article content is strictly prohibited. Use alternative punctuation or sentence structures to maintain clarity.
+
+---
+
 # Content Intent Requirements
 
 Every article must target informational search intent.
