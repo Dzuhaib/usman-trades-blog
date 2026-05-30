@@ -186,10 +186,10 @@ export default async function Home() {
             </h3>
             <ul className="space-y-4 p-0 m-0 list-none">
               {[
-                { href: "/tools/lot-size-calculator", label: "Lot Size Calculator", icon: Calculator, tag: "Risk Control" },
-                { href: "/tools/risk-calculator", label: "Risk & Invalidation", icon: ShieldCheck, tag: "Defense" },
-                { href: "/tools/pip-calculator", label: "Pip Value Estimator", icon: BarChart3, tag: "Valuation" },
-                { href: "/tools/profit-calculator", label: "Profit Projection", icon: TrendingUp, tag: "Analysis" },
+                { href: "/tools/lot-size-calculator", label: "Lot Size Calculator", icon: Calculator, tag: "Risk" },
+                { href: "/tools/risk-reward-calculator", label: "Risk Reward Ratio", icon: ArrowRight, tag: "Strategy" },
+                { href: "/tools/compound-growth-calculator", label: "Compound Growth", icon: TrendingUp, tag: "Wealth" },
+                { href: "/tools/margin-calculator", label: "Margin Calculator", icon: ShieldCheck, tag: "Collateral" },
               ].map((tool) => (
                 <li key={tool.href} className="group">
                   <Link href={tool.href} className="flex items-center justify-between no-underline">

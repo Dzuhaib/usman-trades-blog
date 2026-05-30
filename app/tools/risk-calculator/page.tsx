@@ -3,92 +3,123 @@ import Image from 'next/image';
 import { Metadata } from 'next';
 import { getPexelsImage } from '@/lib/pexels';
 import RiskCalculator from './RiskCalculator';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: "Trading Risk Calculator | Stop Loss & Invalidation Logic",
-  description: "Verify absolute dollar-at-risk, pip spans, and position limits directly based on technical entries and stop price levels. Professional risk management for serious traders.",
+  title: "Trading Risk Calculator | Calculate Your Monetary Risk",
+  description: "Find out exactly how much money you are risking on your next trade. Our free risk calculator helps you define your technical exit points and see the cash impact before you trade.",
+  alternates: {
+    canonical: '/tools/risk-calculator',
+  },
 };
 
 export default async function RiskCalculatorPage() {
-  const image1 = await getPexelsImage('risk management finance');
-  const image2 = await getPexelsImage('stock market volatility');
+  const image1 = await getPexelsImage('financial risk management');
+  const image2 = await getPexelsImage('stock market candles');
 
   return (
     <article className="max-w-[800px] mx-auto space-y-12 py-8">
-      {/* Header */}
-      <header className="border-b border-border pb-8">
-        <div className="flex items-center gap-2 mb-4">
-          <Link href="/tools" className="text-xs text-muted hover:text-primary no-underline uppercase tracking-wider font-semibold">&larr; Back to Tools</Link>
-        </div>
-        <h1 className="text-4xl font-black text-primary md:text-5xl mb-4 tracking-tight">Trading Risk & Invalidation Calculator</h1>
-        <p className="text-lg text-secondary leading-relaxed">
-          Successful trading is not about predicting the future; it is about managing the mathematical risk of being wrong. The Risk & Invalidation Calculator allows you to define your technical exit points and immediately see the monetary impact, ensuring your capital is protected by logic rather than emotion.
+      <Breadcrumbs items={[
+        { label: 'Tools', href: '/tools' },
+        { label: 'Risk Calculator', href: '/tools/risk-calculator' }
+      ]} />
+
+      <header className="border-b border-slate-100 pb-8 space-y-4">
+        <h1 className="text-4xl font-bold font-serif text-slate-900 md:text-5xl tracking-tight">Trading Risk Calculator</h1>
+        <p className="text-lg text-slate-600 leading-relaxed">
+          Successful trading is more about managing the risk of being wrong than it is about predicting the future. Professional traders focus on how much they could lose before they think about how much they could make. This tool shows you the cash impact of your stop loss levels instantly.
         </p>
       </header>
 
-      {/* Main Calculator Component */}
-      <section className="bg-surface border border-border rounded-xl p-6 md:p-8 shadow-sm">
+      <section className="bg-white border border-slate-200 rounded-2xl p-6 md:p-10 shadow-sm">
         <RiskCalculator />
       </section>
 
-      {/* Educational Content */}
-      <section className="prose prose-invert max-w-none space-y-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-primary">Technical vs. Monetary Invalidation</h2>
-            <p className="text-secondary leading-relaxed">
-              There are two types of stops: technical and monetary. A technical invalidation point is a price level where your trade thesis is proven wrong—perhaps a break of a structural low or a violation of a trendline. Monetary invalidation is the maximum dollar amount you are willing to lose.
-            </p>
-            <p className="text-secondary leading-relaxed">
-              Professional traders always prioritize technical invalidation first. They find the level where the market "speaks" and then use this calculator to adjust their position size to match their monetary risk tolerance. This ensures your stop is placed based on market structure, not just a random number.
-            </p>
-          </div>
-          <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-2xl">
+      <div className="article-content space-y-12 text-slate-700 leading-relaxed text-lg">
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">Technical vs Monetary Risk</h2>
+          <p>
+            When you plan a trade, you should have two types of exit points in mind. A technical exit is the price where your idea is no longer valid. For example, if you buy because price broke a specific level, your technical exit would be back below that level.
+          </p>
+          <p>
+            Monetary risk is the actual dollar amount you are comfortable losing if that technical level is hit. Professionals find the technical level first and then adjust their trade size to match their monetary limit. This calculator bridge the gap between where the market moves and how your account balance reacts.
+          </p>
+          <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
             <Image 
               src={image1.url} 
-              alt={image1.alt} 
+              alt="Professional risk management and financial calculation" 
               fill 
               className="object-cover"
-              priority
             />
           </div>
-        </div>
+        </section>
 
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-primary">The Psychology of Risk-at-Entry</h2>
-          <p className="text-secondary leading-relaxed">
-            The moment you enter a trade, your cognitive biases begin to work against you. "Loss aversion" can make it difficult to close a losing position, often leading to "hope-based" trading. By calculating your exact risk-at-entry, you create a psychological "pre-commitment" to your plan.
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">How to Use the Risk Calculator</h2>
+          <p>
+            Calculating your risk before you pull the trigger on a trade is a simple process that saves you from emotional stress later.
           </p>
-          <p className="text-secondary leading-relaxed">
-            Knowing that a stop-loss hit will only cost you a predetermined 1% of your account provides the mental clarity needed to let the trade play out. You are no longer gambling on an outcome; you are executing a statistically sound business operation with a known cost of doing business.
+          <div className="bg-slate-50 border border-slate-100 p-8 rounded-2xl space-y-4">
+            <h3 className="font-bold text-slate-900 text-xl">The 3 Step Calculation</h3>
+            <ol className="text-base space-y-4 list-decimal pl-5 text-slate-600">
+              <li><strong>Find your entry and exit:</strong> Decide where you want to enter the market and where you will admit you are wrong (your stop loss).</li>
+              <li><strong>Define your risk percent:</strong> Decide what portion of your account you are willing to lose, such as 1%.</li>
+              <li><strong>Calculate the distance:</strong> Measure the distance between your entry and stop loss. The tool will then tell you the monetary risk and recommended size.</li>
+            </ol>
+          </div>
+          <p>
+            For instance, if your entry is at 1.1000 and your stop loss is at 1.0950, your distance is 50 pips. If your account is $10,000 and you risk 1%, this tool will confirm that your loss will be exactly $100 if the market reaches your stop.
           </p>
-        </div>
+        </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-4">
-          <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-2xl order-2 md:order-1">
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">Why Risk Control Matters</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="p-6 border border-slate-100 rounded-xl bg-white space-y-3">
+              <h3 className="font-bold text-slate-900">Emotional Stability</h3>
+              <p className="text-sm text-slate-600">
+                When you know your exact loss amount before you enter, you remove the fear of the unknown. This helps you stick to your plan even when the market moves against you.
+              </p>
+            </div>
+            <div className="p-6 border border-slate-100 rounded-xl bg-white space-y-3">
+              <h3 className="font-bold text-slate-900">Account Longevity</h3>
+              <p className="text-sm text-slate-600">
+                Losing streaks are a normal part of trading. By keeping your risk small and controlled, you ensure that you stay in the game long enough for your winning trades to build your account.
+              </p>
+            </div>
+          </div>
+          <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
             <Image 
               src={image2.url} 
-              alt={image2.alt} 
+              alt="Stock market candles and technical analysis chart" 
               fill 
               className="object-cover"
             />
           </div>
-          <div className="space-y-4 order-1 md:order-2">
-            <h2 className="text-2xl font-bold text-primary">Volatility-Adjusted Stop Placement</h2>
-            <p className="text-secondary leading-relaxed">
-              Static stop losses (e.g., always using a 20-pip stop) are often ineffective because they do not account for changing market volatility. During high-impact news events or volatile sessions, a narrow stop might be triggered by simple market "noise" rather than a true change in trend.
-            </p>
-            <p className="text-secondary leading-relaxed">
-              A better approach is to use technical levels or Average True Range (ATR) to determine your stop distance. This calculator then takes that volatility-adjusted distance and tells you exactly how much capital to allocate, ensuring your risk remains constant even as market conditions shift from quiet to explosive.
-            </p>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Internal SEO links */}
-      <footer className="border-t border-border pt-8 flex justify-between items-center text-sm">
-        <Link href="/tools" className="text-secondary no-underline hover:text-primary font-medium transition-colors">&larr; Back to Tools</Link>
-        <Link href="/tools/pip-calculator" className="bg-accent/10 text-accent px-4 py-2 rounded-full no-underline hover:bg-accent hover:text-white transition-all font-bold">Open Pip Calculator &rarr;</Link>
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h3 className="font-bold text-slate-900">Should I risk the same amount on every trade?</h3>
+              <p className="text-base">Most experts suggest keeping your risk percentage the same for every trade. This creates a smooth equity curve and prevents one single loss from wiping out multiple wins.</p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-bold text-slate-900">What happens if I don&apos;t use a stop loss?</h3>
+              <p className="text-base">Trading without a stop loss means your risk is theoretically unlimited. This is the fastest way to lose an entire trading account. Always define your risk before you enter.</p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-bold text-slate-900">Does this tool work for Gold and Bitcoin?</h3>
+              <p className="text-base">Yes. The calculator adjusts for the specific price movements of Gold and Bitcoin, which are different than standard Forex pairs.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer className="border-t border-slate-100 pt-8 flex justify-between items-center text-sm">
+        <Link href="/tools" className="text-slate-500 no-underline hover:text-slate-900 font-bold uppercase tracking-widest">Back to Library</Link>
+        <Link href="/tools/pip-calculator" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest">Pip Calculator &rarr;</Link>
       </footer>
     </article>
   );

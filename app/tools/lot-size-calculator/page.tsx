@@ -3,95 +3,123 @@ import Image from 'next/image';
 import { Metadata } from 'next';
 import { getPexelsImage } from '@/lib/pexels';
 import LotSizeCalculator from './LotSizeCalculator';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: "Professional Forex Lot Size Calculator | Accurate Position Sizing",
-  description: "Calculate exact standard contracts or units to limit risk according to account balance parameters. Professional-grade position sizing tool for Forex, Gold, and Crypto.",
+  title: "Lot Size Calculator | How to Calculate Position Size Safely",
+  description: "Learn how to calculate your correct trade size for Forex, Gold, and Bitcoin. Our free tool helps you manage risk by defining exactly how many lots to trade based on your account balance.",
+  alternates: {
+    canonical: '/tools/lot-size-calculator',
+  },
 };
 
 export default async function LotSizeCalculatorPage() {
-  const image1 = await getPexelsImage('trading position sizing');
-  const image2 = await getPexelsImage('forex charts');
+  const image1 = await getPexelsImage('trading planning');
+  const image2 = await getPexelsImage('financial calculation');
 
   return (
     <article className="max-w-[800px] mx-auto space-y-12 py-8">
-      {/* Header */}
-      <header className="border-b border-border pb-8">
-        <div className="flex items-center gap-2 mb-4">
-          <Link href="/tools" className="text-xs text-muted hover:text-primary no-underline uppercase tracking-wider font-semibold">&larr; Back to Tools</Link>
-        </div>
-        <h1 className="text-4xl font-black text-primary md:text-5xl mb-4 tracking-tight">Professional Forex Lot Size Calculator</h1>
-        <p className="text-lg text-secondary leading-relaxed">
-          Position sizing is the single most critical skill for a professional trader. Without it, even the best strategy will eventually lead to ruin due to the mathematical certainty of drawdown. This tool helps you calculate the exact number of lots or units to trade based on your specific risk parameters.
+      <Breadcrumbs items={[
+        { label: 'Tools', href: '/tools' },
+        { label: 'Lot Size Calculator', href: '/tools/lot-size-calculator' }
+      ]} />
+
+      <header className="border-b border-slate-100 pb-8 space-y-4">
+        <h1 className="text-4xl font-bold font-serif text-slate-900 md:text-5xl tracking-tight">Lot Size Calculator</h1>
+        <p className="text-lg text-slate-600 leading-relaxed">
+          The most important part of trading isn&apos;t finding the perfect entry. It is making sure you don&apos;t risk too much of your money on a single trade. Our lot size tool tells you exactly how many units to buy or sell so you stay within your risk limits.
         </p>
       </header>
 
-      {/* Main Calculator Component */}
-      <section className="bg-surface border border-border rounded-xl p-6 md:p-8 shadow-sm">
+      <section className="bg-white border border-slate-200 rounded-2xl p-6 md:p-10 shadow-sm">
         <LotSizeCalculator />
       </section>
 
-      {/* Educational Content */}
-      <section className="prose prose-invert max-w-none space-y-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-primary">The Importance of Position Sizing</h2>
-            <p className="text-secondary leading-relaxed">
-              Many novice traders focus solely on entry signals, neglecting the quantitative reality of their exposure. Position sizing ensures that no single trade can significantly damage your account equity. By defining a fixed percentage of risk (typically 1% or less), you align your trading with the Law of Large Numbers.
-            </p>
-            <p className="text-secondary leading-relaxed">
-              This statistical approach allows for "breathing room" during losing streaks, ensuring you stay in the game long enough for your edge to manifest. Without precise sizing, a short string of losses can lead to catastrophic equity depletion, a state from which it is mathematically difficult to recover.
-            </p>
-          </div>
-          <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-2xl">
+      <div className="article-content space-y-12 text-slate-700 leading-relaxed text-lg">
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">Why Position Sizing Matters</h2>
+          <p>
+            Many new traders make the mistake of using the same lot size for every trade. This is dangerous because every trade has a different stop loss distance. If you use the same size on a trade with a wide stop loss as you do on one with a tight stop loss, you are actually risking much more money on the first trade.
+          </p>
+          <p>
+            By using a calculator, you ensure that your risk stays consistent. If you decide to risk 1% of your account, you will lose exactly 1% whether your stop loss is 10 pips or 100 pips away. This consistency is what allows professional traders to survive losing streaks and stay in the game long enough to see their strategy work.
+          </p>
+          <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
             <Image 
               src={image1.url} 
-              alt={image1.alt} 
-              fill 
-              className="object-cover"
-              priority
-            />
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-primary">Breaking Down the Lot Size Formula</h2>
-          <p className="text-secondary leading-relaxed">
-            The math behind our calculator is straightforward but vital to understand. The core formula that governs every trade execution on this platform is:
-          </p>
-          <div className="bg-surface border border-border p-6 rounded-lg font-mono text-sm text-accent">
-            Position Size = (Account Balance * Risk %) / (Stop Loss in Pips * Pip Value)
-          </div>
-          <p className="text-secondary leading-relaxed">
-            For example, if you have a $10,000 account and want to risk 1% ($100) with a 20-pip stop loss on EUR/USD (where 1 pip = $10 per standard lot), the calculation would be $100 / (20 * $10) = 0.5 Lots. This tool automates these conversions for various instruments, including Gold and Bitcoin, where contract specifications differ significantly from traditional currency pairs.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-4">
-          <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-2xl order-2 md:order-1">
-            <Image 
-              src={image2.url} 
-              alt={image2.alt} 
+              alt="Trading planning and risk management illustration" 
               fill 
               className="object-cover"
             />
           </div>
-          <div className="space-y-4 order-1 md:order-2">
-            <h2 className="text-2xl font-bold text-primary">Managing Drawdown with Precision</h2>
-            <p className="text-secondary leading-relaxed">
-              Drawdown is an inevitable phase of every trading career. The difference between a professional and an amateur is how they manage it. By using a precise lot size calculator, you eliminate the emotional temptation to "revenge trade" or "size up" to recover losses.
-            </p>
-            <p className="text-secondary leading-relaxed">
-              Consistent sizing leads to a smoother equity curve and provides the psychological stability needed to execute your plan without hesitation. Precision in sizing is the bridge between gambling and professional speculation. It allows you to treat trading as a business of probabilities rather than a series of guesses.
-            </p>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Internal SEO links */}
-      <footer className="border-t border-border pt-8 flex justify-between items-center text-sm">
-        <Link href="/tools" className="text-secondary no-underline hover:text-primary font-medium transition-colors">&larr; Back to Tools</Link>
-        <Link href="/tools/risk-calculator" className="bg-accent/10 text-accent px-4 py-2 rounded-full no-underline hover:bg-accent hover:text-white transition-all font-bold">Open Risk Calculator &rarr;</Link>
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">The Simple Lot Size Formula</h2>
+          <p>
+            You can calculate your trade size manually using a simple mathematical approach. Understanding the logic behind the numbers helps you become a more confident trader.
+          </p>
+          <div className="bg-slate-50 border border-slate-100 p-8 rounded-2xl space-y-4">
+            <p className="font-bold text-slate-900 text-center text-xl">
+              Lot Size = Risk Amount / (Stop Loss &times; Pip Value)
+            </p>
+            <ul className="text-base space-y-2 list-none p-0">
+              <li className="flex gap-2"><strong>Risk Amount:</strong> The cash value you are willing to lose (Balance &times; Risk %).</li>
+              <li className="flex gap-2"><strong>Stop Loss:</strong> The distance in pips between your entry and exit.</li>
+              <li className="flex gap-2"><strong>Pip Value:</strong> The dollar value of a single pip for one standard lot.</li>
+            </ul>
+          </div>
+          <p>
+            For a standard Forex pair like EUR/USD, the pip value is usually $10 for a full lot. If you want to risk $100 with a 20 pip stop loss, the math would be $100 divided by 200, which equals 0.50 lots. Our tool handles all these conversions for you instantly.
+          </p>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">Real World Examples</h2>
+          <div className="grid gap-6">
+            <div className="p-6 border border-slate-100 rounded-xl bg-white">
+              <h3 className="font-bold text-slate-900 mb-2">Forex Example (EUR/USD)</h3>
+              <p className="text-base text-slate-600">
+                You have $5,000 and risk 1% ($50). Your stop loss is 25 pips. The calculator will recommend 0.20 lots. If you hit your stop loss, you lose exactly $50.
+              </p>
+            </div>
+            <div className="p-6 border border-slate-100 rounded-xl bg-white">
+              <h3 className="font-bold text-slate-900 mb-2">Gold Example (XAU/USD)</h3>
+              <p className="text-base text-slate-600">
+                Gold moves in larger dollar amounts. If you have $10,000 and risk 1% ($100) with a $5 move stop loss, the calculator ensures your position size respects that $100 limit.
+              </p>
+            </div>
+            <div className="p-6 border border-slate-100 rounded-xl bg-white">
+              <h3 className="font-bold text-slate-900 mb-2">Bitcoin Example (BTC/USD)</h3>
+              <p className="text-base text-slate-600">
+                Since Bitcoin is priced in whole dollars, the calculation is even simpler. If Bitcoin is at $60,000 and your stop loss is at $59,000, your risk distance is $1,000. The tool tells you exactly how many BTC units to buy.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">Common Questions about Lot Sizes</h2>
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h3 className="font-bold text-slate-900">What is a standard lot in Forex?</h3>
+              <p className="text-base">A standard lot represents 100,000 units of the base currency. For most pairs, this means every pip of movement is worth about $10.</p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-bold text-slate-900">How much should I risk per trade?</h3>
+              <p className="text-base">Most experienced traders recommend risking no more than 1% or 2% of your account balance. This allows you to handle several losses in a row without damaging your capital too much.</p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-bold text-slate-900">Does this tool work for micro lots?</h3>
+              <p className="text-base">Yes. The calculator provides the exact decimal value. For example, 0.01 is one micro lot, and 0.10 is one mini lot. You can use these values with any broker.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer className="border-t border-slate-100 pt-8 flex justify-between items-center text-sm">
+        <Link href="/tools" className="text-slate-500 no-underline hover:text-slate-900 font-bold uppercase tracking-widest">Explore All Tools</Link>
+        <Link href="/tools/risk-calculator" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest">Risk Calculator &rarr;</Link>
       </footer>
     </article>
   );

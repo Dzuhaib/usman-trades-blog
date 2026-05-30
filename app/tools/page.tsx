@@ -1,10 +1,21 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Calculator, ShieldAlert, BarChart3, TrendingUp } from 'lucide-react';
+import { 
+  Calculator, 
+  ShieldAlert, 
+  BarChart3, 
+  TrendingUp, 
+  ArrowLeftRight, 
+  Coins, 
+  TrendingDown, 
+  Lock, 
+  Scale, 
+  Clock 
+} from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Free Trading Calculators | Lot Size, Risk, Pip and Profit Tools',
-  description: 'Access free mathematically precise trading calculators for Forex, Gold XAUUSD, and Bitcoin. Calculate lot size, risk exposure, pip value, and projected profit instantly in your browser.',
+  title: 'Trading Utility Suite | Professional Calculators and Tools',
+  description: 'Access our full suite of professional trading tools. Calculate lot size, risk reward, compound growth, and margin requirements for Forex, Gold, and Bitcoin.',
   alternates: {
     canonical: '/tools',
   },
@@ -14,40 +25,84 @@ export default function ToolsLanding() {
   const tools = [
     {
       title: 'Lot Size Calculator',
-      description: 'Calculate the exact contract size or units to trade based on your balance, stop loss pips, and risk percentage.',
+      description: 'Calculate the exact trade size based on your account balance and stop loss pips.',
       href: '/tools/lot-size-calculator',
       badge: 'Risk Control',
       icon: Calculator
     },
     {
       title: 'Risk Calculator',
-      description: 'Determine your absolute cash risk, entry/exit coordinates, and pip gaps before committing any capital to a position.',
+      description: 'Find out exactly how much cash you are risking before you enter the market.',
       href: '/tools/risk-calculator',
-      badge: 'Account Defense',
+      badge: 'Defense',
       icon: ShieldAlert
     },
     {
       title: 'Pip Calculator',
-      description: 'Instantly calculate the pip value in your account currency for standard, mini, and micro lots across major instruments.',
+      description: 'Understand the monetary value of every pip across different assets and lot sizes.',
       href: '/tools/pip-calculator',
-      badge: 'Contract Math',
+      badge: 'Valuation',
       icon: BarChart3
     },
     {
       title: 'Profit Calculator',
-      description: 'Calculate potential returns or losses based on entry price, exit targets, leverage contracts, and trade direction.',
+      description: 'Estimate your potential gains or losses based on your technical price targets.',
       href: '/tools/profit-calculator',
-      badge: 'Setup Valuation',
+      badge: 'Projection',
       icon: TrendingUp
+    },
+    {
+      title: 'Risk Reward Calculator',
+      description: 'Analyze the relationship between your potential profit and loss on any setup.',
+      href: '/tools/risk-reward-calculator',
+      badge: 'Strategy',
+      icon: ArrowLeftRight
+    },
+    {
+      title: 'Compound Growth',
+      description: 'Project your long term account path through the power of consistent gains.',
+      href: '/tools/compound-growth-calculator',
+      badge: 'Wealth',
+      icon: Coins
+    },
+    {
+      title: 'Drawdown Calculator',
+      description: 'See the mathematical reality of account recovery after a period of losses.',
+      href: '/tools/drawdown-calculator',
+      badge: 'Recovery',
+      icon: TrendingDown
+    },
+    {
+      title: 'Margin Calculator',
+      description: 'Calculate the deposit required by your broker to maintain leveraged positions.',
+      href: '/tools/margin-calculator',
+      badge: 'Collateral',
+      icon: Lock
+    },
+    {
+      title: 'Spread Cost Tool',
+      description: 'Calculate the real dollar cost of entry based on current broker spreads.',
+      href: '/tools/spread-cost-calculator',
+      badge: 'Expenses',
+      icon: Scale
+    },
+    {
+      title: 'Session Timer',
+      description: 'Track global market hours and identify high liquidity session overlaps.',
+      href: '/tools/session-timer',
+      badge: 'Timing',
+      icon: Clock
     }
   ];
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-16 py-8">
       {/* Header */}
-      <header className="border-b border-border pb-6">
-        <h1 className="text-3xl font-extrabold text-primary mb-2 md:text-4xl">Trading Utility Tools</h1>
-        <p className="text-sm text-secondary font-medium">Mathematically sound, standard calculators designed for Forex, Gold (XAUUSD), and Bitcoin.</p>
+      <header className="space-y-6 max-w-[700px]">
+        <h1 className="text-4xl md:text-5xl font-bold font-serif text-slate-900 tracking-tight">Trading Utility Suite</h1>
+        <p className="text-lg text-slate-600 leading-relaxed">
+          Our suite of professional calculators is designed to help you make objective, mathematically sound decisions. We focus on risk management and market mechanics to ensure your longevity in the financial world.
+        </p>
       </header>
 
       {/* Grid of Tools */}
@@ -55,27 +110,27 @@ export default function ToolsLanding() {
         {tools.map((tool) => (
           <article 
             key={tool.title} 
-            className="border border-border p-6 rounded-[4px] bg-white flex flex-col justify-between hover:shadow-md hover:border-accent/30 hover:-translate-y-0.5 transition-all duration-300 group"
+            className="border border-slate-100 p-8 rounded-2xl bg-white flex flex-col justify-between hover:shadow-xl hover:border-accent/10 transition-all duration-300 group"
           >
             <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-semibold text-accent bg-accent/10 px-2.5 py-0.5 rounded-[4px] inline-block">
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-[10px] font-black text-accent bg-accent/5 px-3 py-1 rounded-full uppercase tracking-widest">
                   {tool.badge}
                 </span>
-                <div className="p-2 bg-slate-50 rounded-full group-hover:bg-accent/10 transition-colors">
-                  <tool.icon className="w-5 h-5 text-secondary group-hover:text-accent transition-colors" />
+                <div className="p-3 bg-slate-50 rounded-xl group-hover:bg-accent/10 transition-colors">
+                  <tool.icon className="w-5 h-5 text-slate-400 group-hover:text-accent transition-colors" />
                 </div>
               </div>
-              <h2 className="text-xl font-bold text-primary mb-2 flex items-center gap-2">
+              <h2 className="text-2xl font-bold font-serif text-slate-900 mb-3">
                 {tool.title}
               </h2>
-              <p className="text-sm text-secondary leading-relaxed mb-6">
+              <p className="text-slate-500 leading-relaxed mb-8">
                 {tool.description}
               </p>
             </div>
             <Link
               href={tool.href}
-              className="inline-block text-center border border-border hover:border-primary text-primary font-semibold text-sm px-4 py-2.5 rounded-[4px] bg-surface hover:bg-white active:scale-[0.98] transition-all duration-200"
+              className="inline-block text-center border border-slate-200 text-slate-900 font-bold text-xs uppercase tracking-widest py-4 rounded-xl bg-slate-50 hover:bg-white hover:border-slate-900 active:scale-[0.98] transition-all duration-200 no-underline"
             >
               Open Calculator &rarr;
             </Link>
@@ -83,12 +138,18 @@ export default function ToolsLanding() {
         ))}
       </div>
 
-      {/* Trust & Policy reminder */}
-      <section className="bg-surface border border-border p-6 rounded-[4px] space-y-2 text-xs text-muted leading-relaxed">
-        <h3 className="text-xs font-bold text-primary m-0">Zero Tracking Policy</h3>
-        <p className="m-0">
-          All calculations are handled entirely in your local browser using client-side JavaScript. None of your balance metrics, currency configurations, or trade coordinates are transmitted or stored on our servers. Safe, fast, and completely private.
-        </p>
+      {/* Policy Section */}
+      <section className="bg-slate-900 text-white rounded-3xl p-10 md:p-16 space-y-8 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-accent/20 blur-[100px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
+        <div className="max-w-[600px] relative z-10 space-y-4">
+          <h3 className="text-2xl font-bold font-serif">Your Data Privacy</h3>
+          <p className="text-slate-400 leading-relaxed">
+            All calculations are performed locally in your browser. We do not store, track, or transmit your trading data, balances, or strategies to any external server. Our tools are built for speed, accuracy, and absolute privacy.
+          </p>
+          <div className="pt-4">
+             <Link href="/privacy-policy" className="text-accent font-bold text-sm hover:underline uppercase tracking-widest">Privacy Policy &rarr;</Link>
+          </div>
+        </div>
       </section>
     </div>
   );
