@@ -28,7 +28,6 @@ async function getGSCAuth() {
       credentials = JSON.parse(process.env.GSC_SERVICE_ACCOUNT_JSON);
       
       // CRITICAL FIX: Ensure the private key handles newlines correctly 
-      // Vercel sometimes escapes them as double backslashes
       if (credentials.private_key) {
         credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
       }
@@ -42,7 +41,7 @@ async function getGSCAuth() {
     }
 
     if (!credentials) {
-      console.error('[GSC Auth] No credentials found in GSC_SERVICE_ACCOUNT_JSON or google-credentials.json');
+      console.error('[GSC Auth] Missing GSC_SERVICE_ACCOUNT_JSON or google-credentials.json');
       return null;
     }
 
@@ -106,15 +105,14 @@ export async function getPerformanceReport(): Promise<GSCReport[]> {
   try {
     const searchConsole = await getGSCAuth();
     
-    // In production, if Auth fails, we throw an error so it appears in Vercel logs
     if (!searchConsole) {
-      if (process.env.NODE_ENV === 'production') {
-        throw new Error('Google Authentication Failed. Ensure GSC_SERVICE_ACCOUNT_JSON is set in Vercel.');
+      // STRICT MODE: No more mock data in production or Vercel
+      if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+        throw new Error('GSC Auth Failed. Check your Vercel GSC_SERVICE_ACCOUNT_JSON.');
       }
-      return getMockReport();
+      return getLocalMockReport();
     }
 
-    // Use exact URL as defined in your GSC Property
     const siteUrl = process.env.GSC_SITE_URL || 'https://usmantrades.co.uk/';
 
     const res = await searchConsole.searchanalytics.query({
@@ -128,8 +126,8 @@ export async function getPerformanceReport(): Promise<GSCReport[]> {
     });
 
     if (!res.data.rows || res.data.rows.length === 0) {
-      console.warn(`[GSC] No rows returned for site: ${siteUrl}.`);
-      return process.env.NODE_ENV === 'production' ? [] : getMockReport();
+      console.warn(`[GSC] No live data found for property: ${siteUrl}.`);
+      return []; // Return empty list, NOT dummy data
     }
 
     return res.data.rows.map((row: any) => ({
@@ -142,19 +140,18 @@ export async function getPerformanceReport(): Promise<GSCReport[]> {
     }));
 
   } catch (error: any) {
-    console.error('[GSC Engine] API Error:', error.message);
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error(`GSC API Error: ${error.message}`);
+    console.error('[GSC API Error]:', error.message);
+    if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+      throw error;
     }
-    return getMockReport();
+    return getLocalMockReport();
   }
 }
 
-function getMockReport(): GSCReport[] {
+// Only used for Local Development testing
+function getLocalMockReport(): GSCReport[] {
   return [
-    { url: '/blog/posts/position-sizing', impressions: 1200, clicks: 85, ctr: 0.07, position: 4.2, trend: 'winning' },
-    { url: '/tools/lot-size-calculator', impressions: 5400, clicks: 420, ctr: 0.08, position: 2.1, trend: 'winning' },
-    { url: '/blog/posts/xauusd-guide', impressions: 800, clicks: 30, ctr: 0.03, position: 12.5, trend: 'declining' },
+    { url: '/dev-mock-1', impressions: 0, clicks: 0, ctr: 0, position: 0, trend: 'stable' }
   ];
 }
 
