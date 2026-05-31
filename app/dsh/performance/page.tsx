@@ -18,7 +18,7 @@ async function fetchPerformanceData(): Promise<GSCReport[]> {
   // Use the absolute URL for the API to ensure it hits the serverless function
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://usmantrades.co.uk';
   try {
-    const res = await fetch(`${baseUrl}/api/seo-os/performance`, {
+    const res = await fetch(`${baseUrl}/api/seo-os/performance-live`, {
       cache: 'no-store',
       headers: {
         'Pragma': 'no-cache',

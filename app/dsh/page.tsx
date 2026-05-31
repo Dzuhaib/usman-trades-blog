@@ -32,7 +32,7 @@ export default function DashboardPage() {
   const loadData = async () => {
     try {
       const [repRes, roadRes, logRes] = await Promise.all([
-        fetch('/api/seo-os/performance'),
+        fetch('/api/seo-os/performance-live'),
         fetch('/api/seo-os/roadmap'),
         fetch('/api/seo-os/logs')
       ]);
