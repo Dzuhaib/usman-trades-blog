@@ -14,6 +14,7 @@ export interface GSCReport {
   ctr: number;
   position: number;
   trend: 'winning' | 'declining' | 'stable';
+  error?: string;
 }
 
 /**
@@ -35,7 +36,7 @@ async function getGSCAuth() {
       }
     }
 
-    if (!credentials) return null;
+    if (!credentials) throw new Error('Missing credentials in environment or local file.');
 
     const auth = new google.auth.GoogleAuth({
       credentials,
@@ -48,20 +49,13 @@ async function getGSCAuth() {
 
     return google.webmasters({ version: 'v3', auth });
   } catch (error: any) {
-    console.error('[GSC Auth Error]:', error.message);
-    return null;
+    throw new Error(`[GSC Auth Error]: ${error.message}`);
   }
 }
 
 export async function getPerformanceReport(): Promise<GSCReport[]> {
   try {
     const searchConsole = await getGSCAuth();
-    
-    if (!searchConsole) {
-      console.warn('[GSC] Authentication failed. No data will be returned.');
-      return []; 
-    }
-
     const siteUrl = process.env.GSC_SITE_URL || 'https://usmantrades.co.uk/';
 
     const res = await searchConsole.searchanalytics.query({
@@ -70,7 +64,7 @@ export async function getPerformanceReport(): Promise<GSCReport[]> {
         startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0],
         dimensions: ['page'],
-        rowLimit: 50,
+        rowLimit: 100,
       },
     });
 
@@ -87,14 +81,14 @@ export async function getPerformanceReport(): Promise<GSCReport[]> {
 
   } catch (error: any) {
     console.error('[GSC API Error]:', error.message);
-    return []; // Return empty array on error to avoid breaking UI with dummy data
+    // Rethrow to let the API route handle the error message
+    throw error;
   }
 }
 
 export async function requestIndexing(url: string) {
   try {
     const searchConsole = await getGSCAuth();
-    if (!searchConsole) return { success: false, error: 'Auth failed' };
     console.log(`[GSC] Indexing request for: ${url}`);
     return { success: true };
   } catch (error) {

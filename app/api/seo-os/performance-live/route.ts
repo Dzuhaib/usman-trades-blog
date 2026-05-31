@@ -8,8 +8,13 @@ export async function GET() {
   try {
     const reports = await getPerformanceReport();
     console.log(`[API] Performance data returned: ${reports.length} rows`);
-    return NextResponse.json(reports);
+    return NextResponse.json({ success: true, data: reports });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('[API] Performance Error:', error.message);
+    return NextResponse.json({ 
+      success: false, 
+      error: error.message,
+      data: [] 
+    }, { status: 500 });
   }
 }

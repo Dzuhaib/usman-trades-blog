@@ -28,6 +28,7 @@ export default function DashboardPage() {
   const [logs, setLogs] = useState<AgentLog[]>([]);
   const [agentStatuses, setAgentStatuses] = useState<AgentStatus[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const loadData = async () => {
     try {
@@ -37,7 +38,15 @@ export default function DashboardPage() {
         fetch('/api/seo-os/logs')
       ]);
       
-      if (repRes.ok) setReports(await repRes.json());
+      if (repRes.ok) {
+        const repData = await repRes.json();
+        if (repData.success) {
+          setReports(repData.data);
+          setError(null);
+        } else {
+          setError(repData.error);
+        }
+      }
       if (roadRes.ok) setRoadmap(await roadRes.json());
       if (logRes.ok) {
         const logData = await logRes.json();
@@ -53,7 +62,6 @@ export default function DashboardPage() {
 
   useEffect(() => {
     loadData();
-    // Poll for updates every 10 seconds
     const interval = setInterval(loadData, 10000);
     return () => clearInterval(interval);
   }, []);
@@ -170,6 +178,14 @@ export default function DashboardPage() {
               <h2 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Performance Snapshot</h2>
               <Link href="/dsh/performance" className="text-[10px] font-bold text-accent uppercase tracking-widest hover:underline no-underline">Deep Dive &rarr;</Link>
             </div>
+
+            {error && (
+              <div className="bg-rose-50 border border-rose-100 p-4 rounded-2xl flex items-center gap-3 text-rose-600 text-xs font-bold">
+                 <AlertCircle className="w-4 h-4" />
+                 <span>GSC Error: {error}</span>
+              </div>
+            )}
+
             <div className="bg-white border border-slate-200 rounded-[2rem] overflow-hidden shadow-sm">
               <table className="w-full text-left">
                 <thead className="bg-slate-50 border-b border-slate-100">
@@ -180,23 +196,29 @@ export default function DashboardPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
-                  {reports.slice(0, 5).map((report) => (
-                    <tr key={report.url} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-8 py-5">
-                        <span className="text-xs font-bold text-slate-900">{report.url}</span>
-                      </td>
-                      <td className="px-8 py-5 text-center">
-                        <span className="text-xs font-medium text-slate-600">#{report.position}</span>
-                      </td>
-                      <td className="px-8 py-5 text-right">
-                        <span className={`inline-flex items-center gap-1 text-[9px] font-black uppercase ${
-                          report.trend === 'winning' ? 'text-emerald-600' : 'text-slate-400'
-                        }`}>
-                          {report.trend}
-                        </span>
-                      </td>
+                  {reports.length === 0 ? (
+                    <tr>
+                      <td colSpan={3} className="px-8 py-10 text-center text-slate-400 italic text-xs">No ranking data available yet.</td>
                     </tr>
-                  ))}
+                  ) : (
+                    reports.slice(0, 5).map((report) => (
+                      <tr key={report.url} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-8 py-5">
+                          <span className="text-xs font-bold text-slate-900">{report.url}</span>
+                        </td>
+                        <td className="px-8 py-5 text-center">
+                          <span className="text-xs font-medium text-slate-600">#{report.position}</span>
+                        </td>
+                        <td className="px-8 py-5 text-right">
+                          <span className={`inline-flex items-center gap-1 text-[9px] font-black uppercase ${
+                            report.trend === 'winning' ? 'text-emerald-600' : 'text-slate-400'
+                          }`}>
+                            {report.trend}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
