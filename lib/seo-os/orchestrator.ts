@@ -1,6 +1,6 @@
 /**
  * SEO-OS Orchestrator
- * This script runs the full daily cycle of the SEO-OS.
+ * This script handles the hourly execution of SEO agents.
  */
 
 import { getPerformanceReport, requestIndexing, getMissingUrls } from './analytics-engine';
@@ -17,89 +17,124 @@ import { publishArticle } from './publisher-engine';
 import { logAgentAction } from './log-engine';
 
 export async function runDailyCycle() {
-  console.log('[Orchestrator] Starting Daily SEO-OS Cycle...');
+  const now = new Date();
+  // We use UTC hours to be consistent across deployments
+  const hour = now.getUTCHours();
+  
+  console.log(`[Orchestrator] Heartbeat at ${hour}:00 UTC`);
 
   try {
-    // 11 PM: Monitor & Research
-    logAgentAction('Monitor Agent', 'active', 'Checking GSC Performance...');
-    const gscData = await getPerformanceReport();
-    const currentRoadmap = getRoadmap();
-    const correctionReport = currentRoadmap 
-      ? await monitorPerformanceAndAdjust(gscData, currentRoadmap)
-      : 'No roadmap exists yet.';
-    logAgentAction('Monitor Agent', 'success', 'Performance check complete.');
-    
-    logAgentAction('Research Agent', 'active', 'Performing Deep Research...');
-    const researchReport = await performDeepResearch(gscData);
-    logAgentAction('Research Agent', 'success', 'Deep research complete.');
+    // 11 PM UTC (23): Monitor & Research & Strategy
+    if (hour === 23) {
+      logAgentAction('Monitor Agent', 'active', 'Analyzing GSC performance...');
+      const gscData = await getPerformanceReport();
+      const currentRoadmap = getRoadmap();
+      const correctionReport = currentRoadmap 
+        ? await monitorPerformanceAndAdjust(gscData, currentRoadmap)
+        : 'Initial strategy.';
+      logAgentAction('Monitor Agent', 'success', 'Performance analyzed.');
 
-    // 12 AM: Strategy
-    logAgentAction('Strategist Agent', 'active', 'Updating Roadmap...');
-    const newTasks = await generate30DayPlan(researchReport, correctionReport);
-    if (!currentRoadmap) {
-      initializeRoadmap(newTasks as any);
-    } else {
-      currentRoadmap.tasks = newTasks as any;
-      saveRoadmap(currentRoadmap);
-    }
-    logAgentAction('Strategist Agent', 'success', 'Roadmap updated.');
+      logAgentAction('Research Agent', 'active', 'Identifying keyword gaps...');
+      const researchReport = await performDeepResearch(gscData);
+      logAgentAction('Research Agent', 'success', 'Gaps identified.');
 
-    // 1 AM: Content Planner
-    const roadmap = getRoadmap();
-    if (!roadmap) return;
-    const todayTask = roadmap.tasks.find(t => t.status === 'pending');
-    if (!todayTask) {
-      console.log('No pending tasks for today.');
-      return;
+      logAgentAction('Strategist Agent', 'active', 'Updating 30-day roadmap...');
+      const newTasks = await generate30DayPlan(researchReport, correctionReport);
+      if (!currentRoadmap) initializeRoadmap(newTasks as any);
+      else {
+        currentRoadmap.tasks = newTasks as any;
+        saveRoadmap(currentRoadmap);
+      }
+      logAgentAction('Strategist Agent', 'success', 'Roadmap synchronized.');
     }
 
-    // 4 AM: Writer
-    logAgentAction('Writer Agent', 'active', `Generating content for "${todayTask.keyword}"...`);
-    const rawContent = await generateAIPost(todayTask.keyword);
-    if (!rawContent) {
-      logAgentAction('Writer Agent', 'error', 'Content generation failed.');
-      throw new Error('Writer failed.');
-    }
-    logAgentAction('Writer Agent', 'success', 'Content generated.');
-
-    // 6 AM: Review
-    logAgentAction('Review Agent', 'active', 'Polishing content...');
-    const { approved, finalContent, feedback } = await reviewContent(rawContent);
-    if (!approved) {
-      logAgentAction('Review Agent', 'error', `Content rejected: ${feedback}`);
-    } else {
-      logAgentAction('Review Agent', 'success', 'Content approved.');
-    }
-
-    // 8 AM: Internal Linking
-    logAgentAction('Linking Agent', 'active', 'Injecting contextual links...');
-    const linkedContent = injectContextualLinks(finalContent);
-    logAgentAction('Linking Agent', 'success', 'Links injected.');
-
-    // 10 AM: Publish
-    logAgentAction('Publish Agent', 'active', 'Making it live...');
-    const slug = todayTask.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
-    const publishResult = await publishArticle(slug, todayTask.keyword, linkedContent, 'Risk Management');
-
-    if (publishResult.success) {
-      todayTask.status = 'completed';
-      todayTask.publishedUrl = publishResult.url;
-      todayTask.completedAt = new Date().toISOString();
-      saveRoadmap(roadmap);
-      logAgentAction('Publish Agent', 'success', `Published to ${publishResult.url}`);
-    } else {
-      logAgentAction('Publish Agent', 'error', 'Publishing failed.');
+    // 4 AM UTC (4): Writer Agent
+    if (hour === 4) {
+      const roadmap = getRoadmap();
+      const task = roadmap?.tasks.find(t => t.status === 'pending');
+      if (task) {
+        logAgentAction('Writer Agent', 'active', `Drafting article: ${task.keyword}`);
+        const content = await generateAIPost(task.keyword);
+        if (content) {
+          // Store raw content in task for Review Agent
+          (task as any).rawContent = content;
+          saveRoadmap(roadmap!);
+          logAgentAction('Writer Agent', 'success', 'Draft complete.');
+        } else {
+          logAgentAction('Writer Agent', 'error', 'Drafting failed.');
+        }
+      }
     }
 
-    // 12 PM: Submission
-    logAgentAction('Submission Agent', 'active', `Submitting ${publishResult.url} to GSC...`);
-    await requestIndexing(`https://usmantrades.co.uk${publishResult.url}`);
-    logAgentAction('Submission Agent', 'success', 'URL submitted for indexing.');
+    // 6 AM UTC (6): Review Agent
+    if (hour === 6) {
+      const roadmap = getRoadmap();
+      const task = roadmap?.tasks.find(t => t.status === 'pending' && (t as any).rawContent);
+      if (task) {
+        logAgentAction('Review Agent', 'active', 'Polishing content for brand voice...');
+        const { approved, finalContent } = await reviewContent((task as any).rawContent);
+        if (approved) {
+          (task as any).reviewedContent = finalContent;
+          saveRoadmap(roadmap!);
+          logAgentAction('Review Agent', 'success', 'Content approved.');
+        } else {
+          logAgentAction('Review Agent', 'error', 'Content rejected.');
+        }
+      }
+    }
 
-    // 1 PM: Analytics Reporting
-    console.log('[1 PM] Generating Daily Performance Report...');
-    const report = await getPerformanceReport();
-    console.log('Cycle Complete.');
+    // 8 AM UTC (8): Linking Agent
+    if (hour === 8) {
+      const roadmap = getRoadmap();
+      const task = roadmap?.tasks.find(t => t.status === 'pending' && (task as any).reviewedContent);
+      if (task) {
+        logAgentAction('Linking Agent', 'active', 'Injecting internal links...');
+        const linkedContent = injectContextualLinks((task as any).reviewedContent);
+        (task as any).finalContent = linkedContent;
+        saveRoadmap(roadmap!);
+        logAgentAction('Linking Agent', 'success', 'Internal links optimized.');
+      }
+    }
+
+    // 10 AM UTC (10): Publish Agent
+    if (hour === 10) {
+      const roadmap = getRoadmap();
+      const task = roadmap?.tasks.find(t => t.status === 'pending' && (t as any).finalContent);
+      if (task) {
+        logAgentAction('Publish Agent', 'active', 'Publishing to live site...');
+        const slug = task.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
+        const res = await publishArticle(slug, task.keyword, (task as any).finalContent, 'Risk Management');
+        if (res.success) {
+          task.status = 'completed';
+          task.publishedUrl = res.url;
+          task.completedAt = new Date().toISOString();
+          saveRoadmap(roadmap!);
+          logAgentAction('Publish Agent', 'success', `Live at ${res.url}`);
+        } else {
+          logAgentAction('Publish Agent', 'error', 'Publication failed.');
+        }
+      }
+    }
+
+    // 12 PM UTC (12): Submission Agent
+    if (hour === 12) {
+      const roadmap = getRoadmap();
+      const task = roadmap?.tasks.find(t => t.status === 'completed' && !t.completedAt?.startsWith(new Date().toISOString().split('T')[0]));
+      // Note: we actually want the one completed today
+      const today = new Date().toISOString().split('T')[0];
+      const todayTask = roadmap?.tasks.find(t => t.status === 'completed' && t.completedAt?.startsWith(today));
+      
+      if (todayTask) {
+        logAgentAction('Submission Agent', 'active', 'Requesting Google crawl...');
+        await requestIndexing(`https://usmantrades.co.uk${todayTask.publishedUrl}`);
+        logAgentAction('Submission Agent', 'success', 'Indexing request sent.');
+      }
+    }
+
+    // Catch-all for other hours
+    if (![23, 4, 6, 8, 10, 12].includes(hour)) {
+      console.log(`[Orchestrator] Idle hour. Agents awaiting their schedule.`);
+    }
 
   } catch (error: any) {
     console.error('Cycle Error:', error.message);
@@ -107,19 +142,14 @@ export async function runDailyCycle() {
   }
 }
 
-/**
- * Identify and submit any URLs that exist in the codebase but aren't in GSC yet.
- */
 export async function cleanupMissingUrls() {
   logAgentAction('Submission Agent', 'active', 'Scanning for missing URLs...');
   const reports = await getPerformanceReport();
   const missingUrls = await getMissingUrls(reports);
-
   for (const url of missingUrls) {
     await requestIndexing(`https://usmantrades.co.uk${url}`);
     await new Promise(resolve => setTimeout(resolve, 500));
   }
-  
   logAgentAction('Submission Agent', 'success', `Submitted ${missingUrls.length} missing URLs.`);
   return { submittedCount: missingUrls.length, urls: missingUrls };
 }
