@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function WhatMovesGoldPost() {
   const post = BLOG_POSTS.find(p => p.slug === 'what-moves-gold')!;
-  const images = await getPexelsImages('Gold market finance vault', 5);
+  const images = await getPexelsImages('federal reserve interest rates gold', 5);
 
   const jsonLd = {
     "@context": "https://schema.org",

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function SupportResistancePost() {
   const post = BLOG_POSTS.find(p => p.slug === 'support-resistance')!;
-  const images = await getPexelsImages('Technical analysis stock chart', 4);
+  const images = await getPexelsImages('candlestick chart technical analysis patterns', 4);
 
   const jsonLd = {
     "@context": "https://schema.org",

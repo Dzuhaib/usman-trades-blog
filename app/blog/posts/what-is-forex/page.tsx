@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function WhatIsForexPost() {
   const post = BLOG_POSTS.find(p => p.slug === 'what-is-forex')!;
-  const images = await getPexelsImages('Foreign Exchange Trading', 4);
+  const images = await getPexelsImages('global world map finance currency', 4);
 
   const jsonLd = {
     "@context": "https://schema.org",

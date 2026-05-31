@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function GoldTradingGuidePost() {
   const post = BLOG_POSTS.find(p => p.slug === 'xauusd-guide')!;
-  const images = await getPexelsImages('Gold bullion market finance', 4);
+  const images = await getPexelsImages('gold bullion bars vault luxury', 4);
 
   const jsonLd = {
     "@context": "https://schema.org",

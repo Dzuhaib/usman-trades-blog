@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function BestRiskPercentagePost() {
   const post = BLOG_POSTS.find(p => p.slug === 'best-risk-percentage')!;
-  const images = await getPexelsImages('financial risk safety math', 5);
+  const images = await getPexelsImages('percentage math calculation finance', 5);
 
   const jsonLd = {
     "@context": "https://schema.org",

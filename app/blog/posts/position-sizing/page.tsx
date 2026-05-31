@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function PositionSizingPost() {
   const post = BLOG_POSTS.find(p => p.slug === 'position-sizing')!;
-  const images = await getPexelsImages('Risk Management calculations', 4);
+  const images = await getPexelsImages('mathematics formula chalkboard calculation', 4);
 
   const jsonLd = {
     "@context": "https://schema.org",

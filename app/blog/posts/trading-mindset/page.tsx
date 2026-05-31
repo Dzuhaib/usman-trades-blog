@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function TradingMindsetPost() {
   const post = BLOG_POSTS.find(p => p.slug === 'trading-mindset')!;
-  const images = await getPexelsImages('Trading psychology mindset', 4);
+  const images = await getPexelsImages('meditation zen focus office calm', 4);
 
   const jsonLd = {
     "@context": "https://schema.org",

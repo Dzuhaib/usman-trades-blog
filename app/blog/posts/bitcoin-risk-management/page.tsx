@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function BitcoinRiskPost() {
   const post = BLOG_POSTS.find(p => p.slug === 'bitcoin-risk-management')!;
-  const images = await getPexelsImages('Bitcoin cryptocurrency risk', 4);
+  const images = await getPexelsImages('bitcoin secure wallet crypto safety', 4);
 
   const jsonLd = {
     "@context": "https://schema.org",

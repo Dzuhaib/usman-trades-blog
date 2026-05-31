@@ -30,7 +30,7 @@ export default async function BlogIndex({ searchParams }: PageProps) {
   // Fetch Pexels cover images
   const postsWithImages = await Promise.all(
     filteredPosts.map(async (post) => {
-      const pexelsImage = await getPexelsImage(post.category);
+      const pexelsImage = await getPexelsImage(post.title);
       return {
         ...post,
         image: pexelsImage,
