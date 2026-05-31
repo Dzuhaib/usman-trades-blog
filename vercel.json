@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/seo-os/cron?token=seo-os-automated-trigger-2026",
+      "schedule": "0 5 * * *"
+    }
+  ]
+}
