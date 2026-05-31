@@ -14,6 +14,12 @@ export interface BlogPost {
   };
 }
 
+// Utility to get today's date in 'Month DD, YYYY' format
+export function getTodayDate(): string {
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date().toLocaleDateString('en-US', options);
+}
+
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'position-sizing',
@@ -125,8 +131,8 @@ export const BLOG_POSTS: BlogPost[] = [
     title: 'What Is The Best Risk Percentage Per Trade? A Complete Guide',
     excerpt: 'Find your optimal risk level to survive and grow. We explain why 1% is the gold standard and how deep losses can ruin your compounding math.',
     category: 'Risk Management',
-    date: 'May 29, 2026',
-    updatedAt: 'May 29, 2026',
+    date: 'May 31, 2026',
+    updatedAt: 'May 31, 2026',
     readTime: '12 min read',
     route: '/blog/posts/best-risk-percentage',
     author: {
