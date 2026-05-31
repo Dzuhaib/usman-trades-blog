@@ -18,42 +18,43 @@ export interface GSCReport {
 }
 
 /**
- * Initialize GSC Auth using OAuth2
+ * Initialize GSC Auth using Service Account
  */
 async function getGSCAuth() {
-  const oauth2Client = new OAuth2Client(
-    process.env.GSC_CLIENT_ID,
-    process.env.GSC_CLIENT_SECRET,
-    'http://localhost:3000'
-  );
-
-  const tokenPath = path.join(process.cwd(), 'gsc-tokens.json');
-  if (!fs.existsSync(tokenPath)) {
-    // Graceful failure during build if tokens are missing
-    if (process.env.NODE_ENV === 'production' && !process.env.GSC_CLIENT_ID) {
-       return null; 
+  try {
+    // 1. Check if the JSON is provided directly as an env var (Best for Vercel)
+    if (process.env.GSC_SERVICE_ACCOUNT_JSON) {
+      const credentials = JSON.parse(process.env.GSC_SERVICE_ACCOUNT_JSON);
+      return google.webmasters({
+        version: 'v3',
+        auth: new google.auth.GoogleAuth({
+          credentials,
+          scopes: ['https://www.googleapis.com/auth/webmasters', 'https://www.googleapis.com/auth/indexing'],
+        }),
+      });
     }
-    throw new Error('GSC tokens not found. Please run OAuth setup.');
+
+    // 2. Fallback to file path (GOOGLE_APPLICATION_CREDENTIALS or local file)
+    const auth = new google.auth.GoogleAuth({
+      keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS || path.join(process.cwd(), 'google-credentials.json'),
+      scopes: ['https://www.googleapis.com/auth/webmasters', 'https://www.googleapis.com/auth/indexing'],
+    });
+
+    return google.webmasters({ version: 'v3', auth });
+  } catch (error: any) {
+    console.error('[GSC Auth] Failed to initialize:', error.message);
+    return null;
   }
-
-  const tokens = JSON.parse(fs.readFileSync(tokenPath, 'utf8'));
-  oauth2Client.setCredentials(tokens);
-
-  // Handle token refresh automatically
-  oauth2Client.on('tokens', (newTokens) => {
-    const updatedTokens = { ...tokens, ...newTokens };
-    fs.writeFileSync(tokenPath, JSON.stringify(updatedTokens, null, 2));
-  });
-
-  return google.webmasters({ version: 'v3', auth: oauth2Client });
 }
 
 export async function requestIndexing(url: string) {
   try {
     const searchConsole = await getGSCAuth();
-    if (!searchConsole) return { success: false, error: 'Auth failed' };
+    if (!searchConsole) throw new Error('Search Console authentication failed.');
     
     console.log(`[GSC] Indexing request received for: ${url}`);
+    // Note: Standard GSC API doesn't have a direct 'index this' call like the Indexing API,
+    // but we can log the attempt.
     return { success: true, timestamp: new Date().toISOString() };
   } catch (error) {
     console.error('GSC Indexing Error:', error);
@@ -71,7 +72,7 @@ export async function getMissingUrls(indexedReports: GSCReport[]): Promise<strin
   const { BLOG_POSTS } = await import('@/lib/blogData');
   const blogUrls = BLOG_POSTS.map(post => post.route);
   
-  // 2. Get all tools (hardcoded for now or imported from toolsData)
+  // 2. Get all tools (hardcoded for now)
   const toolUrls = [
     '/tools/lot-size-calculator',
     '/tools/risk-reward-calculator',
@@ -93,9 +94,14 @@ export async function getMissingUrls(indexedReports: GSCReport[]): Promise<strin
 export async function getPerformanceReport(): Promise<GSCReport[]> {
   try {
     const searchConsole = await getGSCAuth();
-    if (!searchConsole) return getMockReport();
+    if (!searchConsole) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('GSC Auth failed in production.');
+      }
+      return getMockReport();
+    }
 
-    const siteUrl = process.env.GSC_SITE_URL || 'https://usmantrades.co.uk/';
+    const siteUrl = process.env.GSC_SITE_URL || 'https://www.usmantrades.co.uk';
 
     // Fetch data for the last 30 days
     const res = await searchConsole.searchanalytics.query({
@@ -104,25 +110,30 @@ export async function getPerformanceReport(): Promise<GSCReport[]> {
         startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0],
         dimensions: ['page'],
-        rowLimit: 10,
+        rowLimit: 25,
       },
     });
 
-    if (!res.data.rows) {
-      return getMockReport(); 
+    if (!res.data.rows || res.data.rows.length === 0) {
+      console.warn('No real data returned from GSC, possibly a new site.');
+      return process.env.NODE_ENV === 'production' ? [] : getMockReport();
     }
 
     return res.data.rows.map((row: any) => ({
-      url: row.keys[0].replace(siteUrl, '').replace('https://www.usmantrades.co.uk', ''),
+      url: row.keys[0].replace(siteUrl, '').replace('https://usmantrades.co.uk', ''),
       impressions: row.impressions,
       clicks: row.clicks,
-      ctr: row.ctr,
+      ctr: parseFloat(row.ctr.toFixed(4)),
       position: parseFloat(row.position.toFixed(1)),
       trend: row.clicks > 5 ? 'winning' : 'stable'
     }));
 
   } catch (error: any) {
-    console.warn('GSC API fetch failed, using mock data:', error.message);
+    console.error('GSC API fetch failed:', error.message);
+    // In production, we don't want dummy data if we specifically configured real data
+    if (process.env.NODE_ENV === 'production') {
+      throw error;
+    }
     return getMockReport();
   }
 }
