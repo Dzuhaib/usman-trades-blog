@@ -20,7 +20,7 @@ export async function runDailyCycle() {
   console.log('[Orchestrator] Starting Daily SEO-OS Cycle...');
 
   try {
-    // 1 AM: Monitor & Research
+    // 11 PM: Monitor & Research
     logAgentAction('Monitor Agent', 'active', 'Checking GSC Performance...');
     const gscData = await getPerformanceReport();
     const currentRoadmap = getRoadmap();
@@ -33,7 +33,7 @@ export async function runDailyCycle() {
     const researchReport = await performDeepResearch(gscData);
     logAgentAction('Research Agent', 'success', 'Deep research complete.');
 
-    // 2 AM: Strategy
+    // 12 AM: Strategy
     logAgentAction('Strategist Agent', 'active', 'Updating Roadmap...');
     const newTasks = await generate30DayPlan(researchReport, correctionReport);
     if (!currentRoadmap) {
@@ -44,7 +44,7 @@ export async function runDailyCycle() {
     }
     logAgentAction('Strategist Agent', 'success', 'Roadmap updated.');
 
-    // 3 AM: Content Planner
+    // 1 AM: Content Planner
     const roadmap = getRoadmap();
     if (!roadmap) return;
     const todayTask = roadmap.tasks.find(t => t.status === 'pending');
@@ -62,7 +62,7 @@ export async function runDailyCycle() {
     }
     logAgentAction('Writer Agent', 'success', 'Content generated.');
 
-    // 5 AM: Review
+    // 6 AM: Review
     logAgentAction('Review Agent', 'active', 'Polishing content...');
     const { approved, finalContent, feedback } = await reviewContent(rawContent);
     if (!approved) {
@@ -71,12 +71,12 @@ export async function runDailyCycle() {
       logAgentAction('Review Agent', 'success', 'Content approved.');
     }
 
-    // 6 AM: Internal Linking
+    // 8 AM: Internal Linking
     logAgentAction('Linking Agent', 'active', 'Injecting contextual links...');
     const linkedContent = injectContextualLinks(finalContent);
     logAgentAction('Linking Agent', 'success', 'Links injected.');
 
-    // 7 AM: Publish
+    // 10 AM: Publish
     logAgentAction('Publish Agent', 'active', 'Making it live...');
     const slug = todayTask.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
     const publishResult = await publishArticle(slug, todayTask.keyword, linkedContent, 'Risk Management');
@@ -91,13 +91,13 @@ export async function runDailyCycle() {
       logAgentAction('Publish Agent', 'error', 'Publishing failed.');
     }
 
-    // 8 AM: Submission
+    // 12 PM: Submission
     logAgentAction('Submission Agent', 'active', `Submitting ${publishResult.url} to GSC...`);
     await requestIndexing(`https://usmantrades.co.uk${publishResult.url}`);
     logAgentAction('Submission Agent', 'success', 'URL submitted for indexing.');
 
-    // 9 AM: Analytics Reporting
-    console.log('[9 AM] Generating Daily Performance Report...');
+    // 1 PM: Analytics Reporting
+    console.log('[1 PM] Generating Daily Performance Report...');
     const report = await getPerformanceReport();
     console.log('Cycle Complete.');
 
