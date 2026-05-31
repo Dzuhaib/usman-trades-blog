@@ -119,6 +119,21 @@ export const BLOG_POSTS: BlogPost[] = [
       role: 'Head of Research',
       bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
     }
+  },
+  {
+    slug: 'best-risk-percentage',
+    title: 'What Is The Best Risk Percentage Per Trade? A Complete Guide',
+    excerpt: 'Find your optimal risk level to survive and grow. We explain why 1% is the gold standard and how deep losses can ruin your compounding math.',
+    category: 'Risk Management',
+    date: 'May 29, 2026',
+    updatedAt: 'May 29, 2026',
+    readTime: '12 min read',
+    route: '/blog/posts/best-risk-percentage',
+    author: {
+      name: 'MUHAMMAD USMAN',
+      role: 'Head of Research',
+      bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
+    }
   }
 ];
 
