@@ -11,6 +11,8 @@ import {
 } from 'lucide-react';
 import { getPerformanceReport } from '@/lib/seo-os/analytics-engine';
 
+export const dynamic = 'force-dynamic';
+
 export default async function PerformancePage() {
   const reports = await getPerformanceReport();
   
