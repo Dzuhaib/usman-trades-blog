@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { runDailyCycle } from '@/lib/seo-os/orchestrator';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   // Security check: Verify a secret token to prevent unauthorized triggers
   const { searchParams } = new URL(request.url);

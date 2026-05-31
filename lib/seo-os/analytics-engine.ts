@@ -6,7 +6,7 @@
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import fs from 'fs';
-import 'dotenv/config';
+import path from 'path';
 
 export interface GSCReport {
   url: string;
@@ -27,8 +27,12 @@ async function getGSCAuth() {
     'http://localhost:3000'
   );
 
-  const tokenPath = './gsc-tokens.json';
+  const tokenPath = path.join(process.cwd(), 'gsc-tokens.json');
   if (!fs.existsSync(tokenPath)) {
+    // Graceful failure during build if tokens are missing
+    if (process.env.NODE_ENV === 'production' && !process.env.GSC_CLIENT_ID) {
+       return null; 
+    }
     throw new Error('GSC tokens not found. Please run OAuth setup.');
   }
 
@@ -46,15 +50,10 @@ async function getGSCAuth() {
 
 export async function requestIndexing(url: string) {
   try {
-    // Note: The Google Indexing API is officially for JobPostings and BroadcastEvents, 
-    // but often used for rapid crawling of new articles. 
-    // For standard SEO, we primarily ensure the Sitemap is updated.
+    const searchConsole = await getGSCAuth();
+    if (!searchConsole) return { success: false, error: 'Auth failed' };
+    
     console.log(`[GSC] Indexing request received for: ${url}`);
-    
-    // If you have the Indexing API enabled, you would call it here:
-    // const indexing = google.indexing({ version: 'v3', auth: oauth2Client });
-    // await indexing.urlNotifications.publish({ ... });
-    
     return { success: true, timestamp: new Date().toISOString() };
   } catch (error) {
     console.error('GSC Indexing Error:', error);
@@ -94,6 +93,8 @@ export async function getMissingUrls(indexedReports: GSCReport[]): Promise<strin
 export async function getPerformanceReport(): Promise<GSCReport[]> {
   try {
     const searchConsole = await getGSCAuth();
+    if (!searchConsole) return getMockReport();
+
     const siteUrl = process.env.GSC_SITE_URL || 'https://usmantrades.co.uk/';
 
     // Fetch data for the last 30 days

@@ -17,6 +17,9 @@ export interface AgentStatus {
 const LOG_PATH = path.join(process.cwd(), 'lib/seo-os/logs.json');
 
 export function logAgentAction(agent: string, status: 'active' | 'idle' | 'success' | 'error', message: string) {
+  // Only write logs if not in build environment or if file exists
+  if (process.env.NEXT_PHASE === 'phase-production-build') return;
+
   const logs = getLogs();
   const newLog: AgentLog = {
     timestamp: new Date().toISOString(),
@@ -29,7 +32,16 @@ export function logAgentAction(agent: string, status: 'active' | 'idle' | 'succe
   // Keep only last 50 logs
   const updatedLogs = logs.slice(0, 50);
   
-  fs.writeFileSync(LOG_PATH, JSON.stringify(updatedLogs, null, 2));
+  try {
+    // Ensure directory exists
+    const dir = path.dirname(LOG_PATH);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(LOG_PATH, JSON.stringify(updatedLogs, null, 2));
+  } catch (e) {
+    console.error('Failed to write agent logs:', e);
+  }
 }
 
 export function getLogs(): AgentLog[] {

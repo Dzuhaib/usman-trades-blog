@@ -3,6 +3,8 @@ import { getPerformanceReport } from '@/lib/seo-os/analytics-engine';
 import { performDeepResearch, generate30DayPlan, monitorPerformanceAndAdjust } from '@/lib/seo-os/ai-engine';
 import { initializeRoadmap, getRoadmap } from '@/lib/seo-os/roadmap-engine';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST() {
   try {
     console.log('[API] Stage 1: Initializing Deep Research...');

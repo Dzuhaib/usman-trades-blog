@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getPerformanceReport } from '@/lib/seo-os/analytics-engine';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const reports = await getPerformanceReport();

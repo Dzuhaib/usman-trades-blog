@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { cleanupMissingUrls } from '@/lib/seo-os/orchestrator';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: Request) {
   // Security check
   const { searchParams } = new URL(request.url);

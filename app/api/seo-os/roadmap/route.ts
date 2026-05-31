@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getRoadmap } from '@/lib/seo-os/roadmap-engine';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const roadmap = getRoadmap();

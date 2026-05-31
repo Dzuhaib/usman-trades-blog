@@ -1,9 +1,19 @@
 import OpenAI from 'openai';
-import 'dotenv/config';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Create a singleton for the OpenAI client to avoid re-instantiation
+let openaiClient: OpenAI | null = null;
+
+function getOpenAIClient() {
+  if (!openaiClient) {
+    if (!process.env.OPENAI_API_KEY) {
+      console.warn('OPENAI_API_KEY is not defined in environment variables.');
+    }
+    openaiClient = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY || 'missing-key',
+    });
+  }
+  return openaiClient;
+}
 
 export interface SEOMap {
   day: number;
@@ -18,6 +28,7 @@ export interface SEOMap {
  * Analyzes GSC data to identify clusters, gaps, and high-value opportunities.
  */
 export async function performDeepResearch(gscData: any[]): Promise<string> {
+  const openai = getOpenAIClient();
   if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY missing.');
 
   const prompt = `
@@ -50,6 +61,7 @@ export async function performDeepResearch(gscData: any[]): Promise<string> {
  * Checks Search Console performance and updates the strategist about real-time shifts.
  */
 export async function monitorPerformanceAndAdjust(gscData: any[], currentRoadmap: any): Promise<string> {
+  const openai = getOpenAIClient();
   const prompt = `
     You are the "SEO Monitor Agent".
     Data:
@@ -80,6 +92,7 @@ export async function monitorPerformanceAndAdjust(gscData: any[], currentRoadmap
  * Converts the Research Report into a Day-by-Day 30-day roadmap.
  */
 export async function generate30DayPlan(researchReport: string, correctionReport?: string): Promise<SEOMap[]> {
+  const openai = getOpenAIClient();
   const prompt = `
     Based on this SEO Audit Report:
     ${researchReport}
@@ -129,6 +142,7 @@ export async function generate30DayPlan(researchReport: string, correctionReport
  * Generates a full humanoid blog post based on a target keyword.
  */
 export async function generateAIPost(keyword: string) {
+  const openai = getOpenAIClient();
   const prompt = `
     Write a high-quality, humanoid trading article for the keyword: "${keyword}".
     Follow the "Usman Trades" voice: No hype, pure math, risk-first, professional but accessible.
@@ -159,6 +173,7 @@ export async function generateAIPost(keyword: string) {
  * Reviews generated content for quality and brand alignment.
  */
 export async function reviewContent(content: string): Promise<{ approved: boolean; feedback: string; finalContent: string }> {
+  const openai = getOpenAIClient();
   const prompt = `
     Review this trading article for "Usman Trades":
     ${content}
