@@ -5,6 +5,8 @@ import { getPexelsImages } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { BLOG_POSTS } from '@/lib/blogData';
+import { generateBlogSchema } from '@/lib/seo-os/schema-engine';
+import SmartText from '@/components/SmartText';
 
 export const metadata: Metadata = {
   title: 'What Moves Gold Prices Every Day? The 4 Core Drivers',
@@ -18,38 +20,21 @@ export default async function WhatMovesGoldPost() {
   const post = BLOG_POSTS.find(p => p.slug === 'what-moves-gold')!;
   const images = await getPexelsImages('federal reserve interest rates gold', 5);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "description": post.excerpt,
-    "image": images[0]?.url,
-    "datePublished": post.date,
-    "dateModified": post.updatedAt,
-    "author": {
-      "@type": "Person",
-      "name": post.author.name,
-      "url": "https://www.usmantrades.co.uk"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Usman Trades",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.usmantrades.co.uk/favicon.ico"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `https://www.usmantrades.co.uk${post.route}`
-    }
-  };
+  const blogSchema = generateBlogSchema({
+    title: post.title,
+    excerpt: post.excerpt,
+    image: images[0]?.url || '',
+    date: post.date,
+    updatedAt: post.updatedAt,
+    route: post.route,
+    author: post.author,
+  });
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
       />
       <article className="max-w-[720px] mx-auto space-y-12 py-8">
         <Breadcrumbs items={[
@@ -71,7 +56,7 @@ export default async function WhatMovesGoldPost() {
             {post.title}
           </h1>
           <p className="text-lg text-secondary leading-relaxed">
-            Gold is more than just a shiny metal used for jewelry. In the financial world, it acts as a global thermometer for economic health. To trade it successfully, you have to understand the massive forces that move the price every single day.
+            <SmartText text="Gold is more than just a shiny metal used for jewelry. In the financial world, it acts as a global thermometer for economic health. To trade it successfully, you have to understand the massive forces that move the price every single day." />
           </p>
         </header>
 
@@ -96,19 +81,19 @@ export default async function WhatMovesGoldPost() {
           <section id="drivers">
             <h2 className="text-2xl font-bold mt-12 mb-6">The Core Drivers of Gold Prices</h2>
             <p>
-              Many new traders think gold moves because of supply and demand for physical bars. While that matters in the long term, the daily price is actually driven by four main macro factors.
+              <SmartText text="Many new traders think gold moves because of supply and demand for physical bars. While that matters in the long term, the daily price is actually driven by four main macro factors." />
             </p>
             <div className="space-y-6 mt-6">
                <div className="space-y-2">
                  <h3 className="font-bold text-slate-900 underline decoration-accent underline-offset-4">The US Dollar Relationship</h3>
                  <p className="text-base text-slate-600">
-                   Gold is priced in US Dollars (XAUUSD). Because of this, they usually have an inverse relationship. When the Dollar gets stronger, gold becomes more expensive for people using other currencies to buy, which usually causes the price of gold to drop.
+                   <SmartText text="Gold is priced in US Dollars (XAUUSD). Because of this, they usually have an inverse relationship. When the Dollar gets stronger, gold becomes more expensive for people using other currencies to buy, which usually causes the price of gold to drop." />
                  </p>
                </div>
                <div className="space-y-2">
                  <h3 className="font-bold text-slate-900 underline decoration-accent underline-offset-4">Interest Rates (The Fed)</h3>
                  <p className="text-base text-slate-600">
-                   Gold doesn&apos;t pay interest or dividends. When the Federal Reserve raises interest rates, investors can earn more money by holding government bonds instead of gold. This "opportunity cost" often leads to selling pressure on gold.
+                   <SmartText text="Gold doesn't pay interest or dividends. When the Federal Reserve raises interest rates, investors can earn more money by holding government bonds instead of gold. This 'opportunity cost' often leads to selling pressure on gold." />
                  </p>
                </div>
             </div>
@@ -121,7 +106,7 @@ export default async function WhatMovesGoldPost() {
 
           <section>
             <p>
-              Beyond the US economy, gold also reacts to <strong>Geopolitical Tension</strong> and <strong>Central Bank Activity</strong>. When the world feels unstable—such as during a war or a major trade dispute—investors flock to gold as a "Safe Haven." Meanwhile, central banks in countries like China, India, and Russia buy massive amounts of gold to protect their national wealth from the fluctuating value of the US Dollar.
+              <SmartText text="Beyond the US economy, gold also reacts to Geopolitical Tension and Central Bank Activity. When the world feels unstable—such as during a war or a major trade dispute—investors flock to gold as a 'Safe Haven.' Meanwhile, central banks in countries like China, India, and Russia buy massive amounts of gold to protect their national wealth from the fluctuating value of the US Dollar." />
             </p>
           </section>
 
@@ -134,10 +119,10 @@ export default async function WhatMovesGoldPost() {
           <section id="example">
             <h2 className="text-2xl font-bold mt-12 mb-6">Practical Example: The FOMC Move</h2>
             <p>
-              Let&apos;s look at a situation that happens several times a year. Imagine the Federal Reserve holds a meeting and announces they are raising interest rates by 0.50% to fight inflation.
+              <SmartText text="Let's look at a situation that happens several times a year. Imagine the Federal Reserve holds a meeting and announces they are raising interest rates by 0.50% to fight inflation." />
             </p>
             <p>
-              In this scenario, you will often see the US Dollar spike higher within seconds of the news. Almost instantly, the price of gold will drop $20 or $30. Why? Because the "yield" on cash is now higher, making the non-yielding gold less attractive to big institutions. If you trade during these times, always check our <Link href="/tools/lot-size-calculator" className="text-accent hover:underline">Lot Size Calculator</Link> to ensure your position can handle the sudden price jump.
+              <SmartText text="In this scenario, you will often see the US Dollar spike higher within seconds of the news. Almost instantly, the price of gold will drop $20 or $30. Why? Because the 'yield' on cash is now higher, making the non-yielding gold less attractive to big institutions. If you trade during these times, always check our Lot Size Calculator to ensure your position can handle the sudden price jump." />
             </p>
           </section>
 
@@ -150,7 +135,7 @@ export default async function WhatMovesGoldPost() {
           <section id="mistakes">
             <h2 className="text-2xl font-bold mt-12 mb-6">Common Mistakes to Avoid</h2>
             <ul className="list-disc pl-6 space-y-4 text-base">
-              <li><strong>Chasing the News:</strong> Trying to buy gold after a massive price spike usually leads to getting stuck at the very top of the move.</li>
+              <li><strong>Chasing the News:</strong> This is known as the "invincibility trap." After a few wins, traders feel confident and double their risk, only for one loss to wipe out all their recent progress.</li>
               <li><strong>Ignoring the Dollar:</strong> If you trade gold without looking at what the US Dollar Index (DXY) is doing, you are trading with a blindfold on.</li>
               <li><strong>Using Too Much Leverage:</strong> Gold is much more volatile than currency pairs like EUR/USD. Using the same lot size on gold that you use on currencies is a recipe for a quick margin call.</li>
             </ul>
@@ -160,10 +145,10 @@ export default async function WhatMovesGoldPost() {
           <section id="risk">
             <h2 className="text-2xl font-bold mt-12 mb-6">Risk and Volatility Awareness</h2>
             <p>
-              Gold can move 500 or 1,000 pips in a single day. This speed is exciting but dangerous. You must accept that your analysis won&apos;t always be right. The market doesn&apos;t care about your opinion.
+              <SmartText text="Gold can move 500 or 1,000 pips in a single day. This speed is exciting but dangerous. You must accept that your analysis won't always be right. The market doesn't care about your opinion." />
             </p>
             <p>
-              The key to surviving in the gold market is to keep your risk small on every single trade. We recommend never risking more than 1% of your account on a gold setup. If the volatility is too high, it is perfectly okay to stay on the sidelines and wait for a calmer environment. If you need help staying disciplined, check out our <Link href="/blog/posts/trading-mindset" className="text-accent hover:underline">Trading Psychology Guide</Link>.
+              <SmartText text="The key to surviving in the gold market is to keep your risk small on every single trade. We recommend never risking more than 1% of your account on a gold setup. If the volatility is too high, it is perfectly okay to stay on the sidelines and wait for a calmer environment. If you need help staying disciplined, check out our Trading Psychology Guide." />
             </p>
           </section>
 
@@ -178,11 +163,15 @@ export default async function WhatMovesGoldPost() {
             <div className="space-y-4">
               <div>
                 <h3 className="font-bold text-slate-800 text-sm">Why does gold go down when the dollar goes up?</h3>
-                <p className="text-sm text-slate-600">Because gold is priced in dollars, a stronger dollar means you need fewer of them to buy the same ounce of gold, naturally pushing the price lower.</p>
+                <p className="text-sm text-slate-600">
+                  <SmartText text="Because gold is priced in dollars, a stronger dollar means you need fewer of them to buy the same ounce of gold, naturally pushing the price lower." />
+                </p>
               </div>
               <div>
                 <h3 className="font-bold text-slate-800 text-sm">Does jewelry demand move the daily gold price?</h3>
-                <p className="text-sm text-slate-600">Rarely. While physical demand matters over years, the daily price is driven by institutional investors, central banks, and algorithmic traders.</p>
+                <p className="text-sm text-slate-600">
+                  <SmartText text="Rarely. While physical demand matters over years, the daily price is driven by institutional investors, central banks, and algorithmic traders." />
+                </p>
               </div>
             </div>
           </section>
@@ -194,7 +183,7 @@ export default async function WhatMovesGoldPost() {
         <section className="bg-surface border border-border p-8 rounded-xl space-y-4 mt-12">
           <h3 className="text-lg font-bold text-primary m-0">Project Your Gold Outcomes</h3>
           <p className="text-base text-secondary m-0">
-            Gold moves fast. Use our tools to run the math on your potential profit and risk before you enter the market.
+            <SmartText text="Gold moves fast. Use our tools to run the math on your potential profit and risk before you enter the market." />
           </p>
           <div className="flex flex-wrap gap-4 pt-2">
             <Link href="/tools/pip-calculator" className="text-sm font-bold text-accent uppercase tracking-wider no-underline hover:text-accent-dark">

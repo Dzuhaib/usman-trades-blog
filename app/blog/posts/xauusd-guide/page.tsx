@@ -5,6 +5,8 @@ import { getPexelsImages } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { BLOG_POSTS } from '@/lib/blogData';
+import { generateBlogSchema } from '@/lib/seo-os/schema-engine';
+import SmartText from '@/components/SmartText';
 
 export const metadata: Metadata = {
   title: 'Gold Trading Guide | How to Trade XAUUSD With Macro Liquidity',
@@ -18,38 +20,21 @@ export default async function GoldTradingGuidePost() {
   const post = BLOG_POSTS.find(p => p.slug === 'xauusd-guide')!;
   const images = await getPexelsImages('gold bullion bars vault luxury', 4);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "description": post.excerpt,
-    "image": images[0]?.url,
-    "datePublished": post.date,
-    "dateModified": post.updatedAt,
-    "author": {
-      "@type": "Person",
-      "name": post.author.name,
-      "url": "https://www.usmantrades.co.uk"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Usman Trades",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.usmantrades.co.uk/favicon.ico"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `https://www.usmantrades.co.uk${post.route}`
-    }
-  };
+  const blogSchema = generateBlogSchema({
+    title: post.title,
+    excerpt: post.excerpt,
+    image: images[0]?.url || '',
+    date: post.date,
+    updatedAt: post.updatedAt,
+    route: post.route,
+    author: post.author,
+  });
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
       />
       <article className="max-w-[720px] mx-auto space-y-12 py-8">
         <Breadcrumbs items={[
@@ -71,7 +56,7 @@ export default async function GoldTradingGuidePost() {
             {post.title}
           </h1>
           <p className="text-lg text-secondary leading-relaxed">
-            {post.excerpt}
+            <SmartText text={post.excerpt} />
           </p>
         </header>
 
@@ -96,10 +81,10 @@ export default async function GoldTradingGuidePost() {
           <section id="nature">
             <h2 className="text-2xl font-bold mt-12 mb-6">The Unique Nature of Gold</h2>
             <p>
-              Trading gold is a different experience than trading regular currency pairs like EUR/USD or GBP/USD. Gold is often seen as a "safe haven"—a place where large investors move their money when the global economy feels uncertain. Whenever there's a spike in market worry or inflation, you'll often see more people looking to buy gold.
+              <SmartText text="Trading gold is a different experience than trading regular currency pairs like EUR/USD or GBP/USD. Gold is often seen as a 'safe haven'—a place where large investors move their money when the global economy feels uncertain. Whenever there's a spike in market worry or inflation, you'll often see more people looking to buy gold." />
             </p>
             <p>
-              One thing to remember is that gold doesn't pay interest. Because of this, it's very sensitive to what's happening with US government bonds. If those bonds start paying higher interest, big investors might sell their gold to buy bonds instead. Keeping an eye on this relationship is a key part of trading gold successfully. If you're new to this, our <Link href="/blog/posts/what-is-forex" className="text-accent hover:underline">Forex Education Guide</Link> covers the basics of how markets work.
+              <SmartText text="One thing to remember is that gold doesn't pay interest. Because of this, it's very sensitive to what's happening with US government bonds. If those bonds start paying higher interest, big investors might sell their gold to buy bonds instead. Keeping an eye on this relationship is a key part of trading gold successfully. If you're new to this, our Forex Education Guide covers the basics of how markets work." />
             </p>
           </section>
 
@@ -111,10 +96,10 @@ export default async function GoldTradingGuidePost() {
           <section id="centralbanks">
             <h2 className="text-2xl font-bold mt-12 mb-6">How Central Banks Influence Gold</h2>
             <p>
-              Some of the biggest buyers of gold are central banks. Countries like China and Russia often buy large amounts of gold to protect their national savings and rely less on the US dollar. This massive buying creates strong "price floors" on the charts that can last for a long time.
+              <SmartText text="Some of the biggest buyers of gold are central banks. Countries like China and Russia often buy large amounts of gold to protect their national savings and rely less on the US dollar. This massive buying creates strong 'price floors' on the charts that can last for a long time." />
             </p>
             <p>
-              When you trade gold, you're trading in the same market as these huge institutions. This is why gold trends can be so powerful—a central bank doesn't stop buying just because of a small change on a 5-minute chart. They buy steadily over months and years. Before you jump into these trends, it's a good idea to use our <Link href="/tools/lot-size-calculator" className="text-accent hover:underline">Lot Size Calculator</Link> to make sure your trade size is safe.
+              <SmartText text="When you trade gold, you're trading in the same market as these huge institutions. This is why gold trends can be so powerful—a central bank doesn't stop buying just because of a small change on a 5-minute chart. They buy steadily over months and years. Before you jump into these trends, it's a good idea to use our Lot Size Calculator to make sure your trade size is safe." />
             </p>
           </section>
 
@@ -126,10 +111,10 @@ export default async function GoldTradingGuidePost() {
           <section id="usd">
             <h2 className="text-2xl font-bold mt-12 mb-6">Gold and the US Dollar</h2>
             <p>
-              Gold is priced in US dollars. This means there's usually an opposite relationship between the two: when the dollar gets stronger, gold often gets cheaper, and when the dollar weakens, gold prices tend to rise.
+              <SmartText text="Gold is priced in US dollars. This means there's usually an opposite relationship between the two: when the dollar gets stronger, gold often gets cheaper, and when the dollar weakens, gold prices tend to rise." />
             </p>
             <p>
-              This happens because a stronger dollar makes gold more expensive for people using other currencies to buy. It's always smart to check the "Dollar Index" (DXY) before you enter a gold trade. Trading gold without looking at the dollar is like trying to sail a boat without checking the wind direction.
+              <SmartText text="This happens because a stronger dollar makes gold more expensive for people using other currencies to buy. It's always smart to check the 'Dollar Index' (DXY) before you enter a gold trade. Trading gold without looking at the dollar is like trying to sail a boat without checking the wind direction." />
             </p>
           </section>
 
@@ -141,10 +126,10 @@ export default async function GoldTradingGuidePost() {
           <section id="volatility">
             <h2 className="text-2xl font-bold mt-12 mb-6">Managing the Volatility</h2>
             <p>
-              Gold is known for being very fast-moving. It can jump hundreds of pips in minutes when big news breaks. While this speed can lead to quick wins, it's also why many traders run into trouble.
+              <SmartText text="Gold is known for being very fast-moving. It can jump hundreds of pips in minutes when big news breaks. While this speed can lead to quick wins, it's also why many traders run into trouble." />
             </p>
             <p>
-              Staying calm is essential. You have to accept that your stop loss might be hit, and you should avoid the temptation to "get even" with the market right away. If you find the mental side of trading tough, take a look at our guide on <Link href="/blog/posts/trading-mindset" className="text-accent hover:underline">Trading Psychology</Link> to help build a steadier approach.
+              <SmartText text="Staying calm is essential. You have to accept that your stop loss might be hit, and you should avoid the temptation to 'get even' with the market right away. If you find the mental side of trading tough, take a look at our guide on Trading Psychology to help build a steadier approach." />
             </p>
           </section>
         </div>

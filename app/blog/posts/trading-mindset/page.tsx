@@ -5,6 +5,8 @@ import { getPexelsImages } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { BLOG_POSTS } from '@/lib/blogData';
+import { generateBlogSchema } from '@/lib/seo-os/schema-engine';
+import SmartText from '@/components/SmartText';
 
 export const metadata: Metadata = {
   title: 'Trading Psychology Guide | How to Keep a Cool Head in the Market',
@@ -18,38 +20,21 @@ export default async function TradingMindsetPost() {
   const post = BLOG_POSTS.find(p => p.slug === 'trading-mindset')!;
   const images = await getPexelsImages('meditation zen focus office calm', 4);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "description": post.excerpt,
-    "image": images[0]?.url,
-    "datePublished": post.date,
-    "dateModified": post.updatedAt,
-    "author": {
-      "@type": "Person",
-      "name": post.author.name,
-      "url": "https://www.usmantrades.co.uk"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Usman Trades",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.usmantrades.co.uk/favicon.ico"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `https://www.usmantrades.co.uk${post.route}`
-    }
-  };
+  const blogSchema = generateBlogSchema({
+    title: post.title,
+    excerpt: post.excerpt,
+    image: images[0]?.url || '',
+    date: post.date,
+    updatedAt: post.updatedAt,
+    route: post.route,
+    author: post.author,
+  });
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
       />
       <article className="max-w-[720px] mx-auto space-y-12 py-8">
         <Breadcrumbs items={[
@@ -71,7 +56,7 @@ export default async function TradingMindsetPost() {
             {post.title}
           </h1>
           <p className="text-lg text-secondary leading-relaxed">
-            {post.excerpt}
+            <SmartText text={post.excerpt} />
           </p>
         </header>
 
@@ -87,7 +72,7 @@ export default async function TradingMindsetPost() {
             <li><a href="#loss" className="hover:text-accent no-underline">1. Dealing with the Pain of Losing</a></li>
             <li><a href="#bias" className="hover:text-accent no-underline">2. Avoiding the Trap of "Seeing What You Want to See"</a></li>
             <li><a href="#discipline" className="hover:text-accent no-underline">3. The Importance of a Solid Routine</a></li>
-            <li><a href="#randomness" className="hover:text-accent no-underline">4. Accepting That You Can&apos;t Control Everything</a></li>
+            <li><a href="#randomness" className="hover:text-accent no-underline">4. Accepting That You Can't Control Everything</a></li>
           </ul>
         </nav>
 
@@ -96,10 +81,10 @@ export default async function TradingMindsetPost() {
           <section id="loss">
             <h2 className="text-2xl font-bold mt-12 mb-6">Dealing with the Pain of Losing</h2>
             <p>
-              It&apos;s a biological fact: losing money hurts much more than making money feels good. In trading, this often leads people to hold onto losing trades for way too long, hoping they&apos;ll turn around, while closing winning trades too early out of fear they&apos;ll disappear.
+              <SmartText text="It's a biological fact: losing money hurts much more than making money feels good. In trading, this often leads people to hold onto losing trades for way too long, hoping they'll turn around, while closing winning trades too early out of fear they'll disappear." />
             </p>
             <p>
-              The only way to beat this is to know exactly how much you&apos;re willing to lose before you even enter a trade. Using our <Link href="/tools/lot-size-calculator" className="text-accent hover:underline">Lot Size Calculator</Link> lets you set that boundary mathematically, taking the guesswork and emotion out of the equation.
+              <SmartText text="The only way to beat this is to know exactly how much you're willing to lose before you even enter a trade. Using our Lot Size Calculator lets you set that boundary mathematically, taking the guesswork and emotion out of the equation." />
             </p>
           </section>
 
@@ -108,12 +93,12 @@ export default async function TradingMindsetPost() {
           </div>
 
           <section id="bias">
-            <h2 className="text-2xl font-bold mt-12 mb-6">Avoiding the Trap of &ldquo;Seeing What You Want to See&rdquo;</h2>
+            <h2 className="text-2xl font-bold mt-12 mb-6">Avoiding the Trap of “Seeing What You Want to See”</h2>
             <p>
-              When you&apos;ve already decided to buy an asset, your brain starts looking for every reason why it will go up and ignores all the reasons why it might go down. This is called confirmation bias, and it&apos;s a major reason why traders stay in bad trades.
+              <SmartText text="When you've already decided to buy an asset, your brain starts looking for every reason why it will go up and ignores all the reasons why it might go down. This is called confirmation bias, and it's a major reason why traders stay in bad trades." />
             </p>
             <p>
-              Try to look at the opposite side. Before you buy, ask yourself: &ldquo;What would have to happen for me to be wrong?&rdquo; If you can&apos;t answer that, you&apos;re trading on hope, not a plan. To understand the real market structure, take a look at our <Link href="/blog/posts/support-resistance" className="text-accent hover:underline">Technical Price Action Guide</Link>.
+              <SmartText text="Try to look at the opposite side. Before you buy, ask yourself: 'What would have to happen for me to be wrong?' If you can't answer that, you're trading on hope, not a plan. To understand the real market structure, take a look at our Technical Price Action Guide." />
             </p>
           </section>
 
@@ -124,10 +109,10 @@ export default async function TradingMindsetPost() {
           <section id="discipline">
             <h2 className="text-2xl font-bold mt-12 mb-6">The Importance of a Solid Routine</h2>
             <p>
-              Discipline is the only thing that will keep you going during a losing streak. Professional traders don&apos;t rely on how they feel; they rely on a checklist. If they haven&apos;t checked the news calendar or calculated their risk using a <Link href="/tools/profit-calculator" className="text-accent hover:underline">Profit Calculator</Link>, they don&apos;t trade.
+              <SmartText text="Discipline is the only thing that will keep you going during a losing streak. Professional traders don't rely on how they feel; they rely on a checklist. If they haven't checked the news calendar or calculated their risk using a Profit Calculator, they don't trade." />
             </p>
             <p>
-              Creating your own simple routine helps you treat trading like a business rather than a hobby. It keeps you from making impulsive decisions that you&apos;ll regret later.
+              <SmartText text="Creating your own simple routine helps you treat trading like a business rather than a hobby. It keeps you from making impulsive decisions that you'll regret later." />
             </p>
           </section>
 
@@ -136,12 +121,12 @@ export default async function TradingMindsetPost() {
           </div>
 
           <section id="randomness">
-            <h2 className="text-2xl font-bold mt-12 mb-6">Accepting That You Can&apos;t Control Everything</h2>
+            <h2 className="text-2xl font-bold mt-12 mb-6">Accepting That You Can't Control Everything</h2>
             <p>
-              The hardest part of trading is accepting that even a perfect setup can fail. You can do everything right and still lose money on a single trade. The market is random in the short term, and that&apos;s okay.
+              <SmartText text="The hardest part of trading is accepting that even a perfect setup can fail. You can do everything right and still lose money on a single trade. The market is random in the short term, and that's okay." />
             </p>
             <p>
-              Your goal isn&apos;t to win every trade, but to follow your plan flawlessly over 100 trades. When you stop worrying about the money on one trade and start focusing on your process, you&apos;ll find that trading becomes much calmer and more predictable.
+              <SmartText text="Your goal isn't to win every trade, but to follow your plan flawlessly over 100 trades. When you stop worrying about the money on one trade and start focusing on your process, you'll find that trading becomes much calmer and more predictable." />
             </p>
           </section>
         </div>
@@ -152,7 +137,7 @@ export default async function TradingMindsetPost() {
         <section className="bg-surface border border-border p-8 rounded-[4px] space-y-4 mt-12">
           <h3 className="text-lg font-bold text-primary m-0">Remove Emotion with Hard Math</h3>
           <p className="text-base text-secondary m-0">
-            The best defense against mental mistakes is using math to stay objective. Explore our free tool suite to make better decisions.
+            <SmartText text="The best defense against mental mistakes is using math to stay objective. Explore our free tool suite to make better decisions." />
           </p>
           <Link href="/tools" className="text-sm font-bold text-accent uppercase tracking-wider no-underline block hover:text-accent-dark">
             Open Utility Tools &rarr;

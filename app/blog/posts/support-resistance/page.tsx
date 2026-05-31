@@ -5,6 +5,8 @@ import { getPexelsImages } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { BLOG_POSTS } from '@/lib/blogData';
+import { generateBlogSchema } from '@/lib/seo-os/schema-engine';
+import SmartText from '@/components/SmartText';
 
 export const metadata: Metadata = {
   title: 'Support and Resistance | How to Find High-Probability Entry Zones',
@@ -18,38 +20,21 @@ export default async function SupportResistancePost() {
   const post = BLOG_POSTS.find(p => p.slug === 'support-resistance')!;
   const images = await getPexelsImages('candlestick chart technical analysis patterns', 4);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "description": post.excerpt,
-    "image": images[0]?.url,
-    "datePublished": post.date,
-    "dateModified": post.updatedAt,
-    "author": {
-      "@type": "Person",
-      "name": post.author.name,
-      "url": "https://www.usmantrades.co.uk"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Usman Trades",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.usmantrades.co.uk/favicon.ico"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `https://www.usmantrades.co.uk${post.route}`
-    }
-  };
+  const blogSchema = generateBlogSchema({
+    title: post.title,
+    excerpt: post.excerpt,
+    image: images[0]?.url || '',
+    date: post.date,
+    updatedAt: post.updatedAt,
+    route: post.route,
+    author: post.author,
+  });
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
       />
       <article className="max-w-[720px] mx-auto space-y-12 py-8">
         <Breadcrumbs items={[
@@ -71,7 +56,7 @@ export default async function SupportResistancePost() {
             {post.title}
           </h1>
           <p className="text-lg text-secondary leading-relaxed">
-            {post.excerpt}
+            <SmartText text={post.excerpt} />
           </p>
         </header>
 
@@ -96,10 +81,10 @@ export default async function SupportResistancePost() {
           <section id="trendlines">
             <h2 className="text-2xl font-bold mt-12 mb-6">The Problem with Basic Trendlines</h2>
             <p>
-              Many trading books teach you to draw diagonal lines connecting lows and highs on a chart. They tell you to just buy whenever the price touches that line. While this sounds simple, it often fails because big banks and funds don&apos;t look at charts that way.
+              <SmartText text="Many trading books teach you to draw diagonal lines connecting lows and highs on a chart. They tell you to just buy whenever the price touches that line. While this sounds simple, it often fails because big banks and funds don't look at charts that way." />
             </p>
             <p>
-              Institutional traders care about finding enough liquidity to fill their massive orders without moving the price too much. Before you look for patterns, it&apos;s better to understand the value of what you&apos;re trading using our <Link href="/tools/pip-calculator" className="text-accent hover:underline">Pip Value Estimator</Link>.
+              <SmartText text="Institutional traders care about finding enough liquidity to fill their massive orders without moving the price too much. Before you look for patterns, it's better to understand the value of what you're trading using our Pip Value Estimator." />
             </p>
           </section>
 
@@ -110,10 +95,10 @@ export default async function SupportResistancePost() {
           <section id="orderblocks">
             <h2 className="text-2xl font-bold mt-12 mb-6">Understanding Institutional Entry Zones</h2>
             <p>
-              Instead of diagonal lines, professional traders look for horizontal zones where price has suddenly accelerated in the past. These areas are often called &ldquo;order blocks&rdquo; because they represent places where a major institution stepped in with a lot of money.
+              <SmartText text="Instead of diagonal lines, professional traders look for horizontal zones where price has suddenly accelerated in the past. These areas are often called 'order blocks' because they represent places where a major institution stepped in with a lot of money." />
             </p>
             <p>
-              When the market returns to these areas, there&apos;s a good chance those same institutions will want to trade there again. By following these footprints, you align yourself with the real power in the market. To learn more about how these big players operate, check out our <Link href="/blog/posts/what-is-forex" className="text-accent hover:underline">Forex Architecture Guide</Link>.
+              <SmartText text="When the market returns to these areas, there's a good chance those same institutions will want to trade there again. By following these footprints, you align yourself with the real power in the market. To learn more about how these big players operate, check out our Forex Architecture Guide." />
             </p>
           </section>
 
@@ -124,10 +109,10 @@ export default async function SupportResistancePost() {
           <section id="fakeouts">
             <h2 className="text-2xl font-bold mt-12 mb-6">Why the Market Hits Your Stop Loss First</h2>
             <p>
-              Have you ever placed a trade, only for the price to spike just past your stop loss before heading exactly where you thought it would? This is often a &ldquo;liquidity grab.&rdquo; Institutions sometimes push the price just far enough to trigger retail stop losses, which gives them the liquidity they need to enter in the opposite direction.
+              <SmartText text="Have you ever placed a trade, only for the price to spike just past your stop loss before heading exactly where you thought it would? This is often a 'liquidity grab.' Institutions sometimes push the price just far enough to trigger retail stop losses, which gives them the liquidity they need to enter in the opposite direction." />
             </p>
             <p>
-              To avoid this, you need to give your trades more room to breathe. Using our <Link href="/tools/lot-size-calculator" className="text-accent hover:underline">Lot Size Calculator</Link> can help you figure out a safe position size that allows for a wider, more logical stop loss.
+              <SmartText text="To avoid this, you need to give your trades more room to breathe. Using our Lot Size Calculator can help you figure out a safe position size that allows for a wider, more logical stop loss." />
             </p>
           </section>
 
@@ -138,10 +123,10 @@ export default async function SupportResistancePost() {
           <section id="strategy">
             <h2 className="text-2xl font-bold mt-12 mb-6">Building a More Reliable Approach</h2>
             <p>
-              Start looking at higher timeframes like the 4-hour or daily charts to find the most important zones. Be patient and wait for the price to come to you, rather than chasing every small move.
+              <SmartText text="Start looking at higher timeframes like the 4-hour or daily charts to find the most important zones. Be patient and wait for the price to come to you, rather than chasing every small move." />
             </p>
             <p>
-              Trading this way requires a lot of discipline and a steady mindset. We go into this in much more detail in our <Link href="/blog/posts/trading-mindset" className="text-accent hover:underline">Trading Psychology Guide</Link>.
+              <SmartText text="Trading this way requires a lot of discipline and a steady mindset. We go into this in much more detail in our Trading Psychology Guide." />
             </p>
           </section>
         </div>
@@ -152,7 +137,7 @@ export default async function SupportResistancePost() {
         <section className="bg-surface border border-border p-8 rounded-[4px] space-y-4 mt-12">
           <h3 className="text-lg font-bold text-primary m-0">Project Your Price Action Targets</h3>
           <p className="text-base text-secondary m-0">
-            Once you identify your target zones, use our tools to run the math on your potential profit before you enter.
+            <SmartText text="Once you identify your target zones, use our tools to run the math on your potential profit before you enter." />
           </p>
           <Link href="/tools/profit-calculator" className="text-sm font-bold text-accent uppercase tracking-wider no-underline block hover:text-accent-dark">
             Open Profit Calculator &rarr;

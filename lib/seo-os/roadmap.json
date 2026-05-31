@@ -1,0 +1,217 @@
+{
+  "createdAt": "2026-05-31T13:14:17.671Z",
+  "updatedAt": "2026-05-31T13:14:17.672Z",
+  "progress": 0,
+  "tasks": [
+    {
+      "day": 1,
+      "keyword": "Home Page Meta Update",
+      "type": "article",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "day": 2,
+      "keyword": "Revising Headings on Home Page",
+      "type": "article",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "day": 3,
+      "keyword": "Improving Content Relevance Home Page",
+      "type": "article",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "day": 4,
+      "keyword": "Enhance Snippets for Main Page",
+      "type": "article",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 5,
+      "keyword": "Schema Markup for Main Page",
+      "type": "article",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 6,
+      "keyword": "Review Meta Descriptions and CTAs",
+      "type": "article",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 7,
+      "keyword": "Optimize Internal Linking",
+      "type": "article",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 8,
+      "keyword": "Optimize Images and Alt Text",
+      "type": "article",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 9,
+      "keyword": "Speed Improvements for Home Page",
+      "type": "article",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 10,
+      "keyword": "Mobile Usability Improvements",
+      "type": "article",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 11,
+      "keyword": "Risk Assessment Techniques",
+      "type": "article",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "day": 12,
+      "keyword": "Portfolio Risk Management Strategies",
+      "type": "article",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "day": 13,
+      "keyword": "Technology in Risk Analysis",
+      "type": "article",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "day": 14,
+      "keyword": "Real-Time Risk Monitoring Tools",
+      "type": "article",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "day": 15,
+      "keyword": "Case Studies on Successful Risk Management",
+      "type": "article",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "day": 16,
+      "keyword": "Gold Investment for Beginners",
+      "type": "article",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 17,
+      "keyword": "Current Gold Market Analysis",
+      "type": "article",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 18,
+      "keyword": "Forex Trading Strategies for 2024",
+      "type": "article",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 19,
+      "keyword": "AI in Forex Trading",
+      "type": "article",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 20,
+      "keyword": "Impact of Global Politics on Gold Prices",
+      "type": "article",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 21,
+      "keyword": "FAQs - Gold Investment Risk",
+      "type": "faq",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 22,
+      "keyword": "FAQs - Forex Trading Basics",
+      "type": "faq",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 23,
+      "keyword": "Tool Enhancement - Risk Analysis Tool",
+      "type": "tool_improvement",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "day": 24,
+      "keyword": "Tool Enhancement - Portfolio Management Calculator",
+      "type": "tool_improvement",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "day": 25,
+      "keyword": "Interactive Tool for Gold Price Trends",
+      "type": "tool_improvement",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 26,
+      "keyword": "FAQs - Analyzing Risk Assessment Techniques",
+      "type": "faq",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 27,
+      "keyword": "Case Study Visualizations for Forex",
+      "type": "tool_improvement",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 28,
+      "keyword": "Enhanced FAQs on Real-Time Risk Tools",
+      "type": "faq",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 29,
+      "keyword": "FAQs on Portfolio Risk Management Strategies",
+      "type": "faq",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "day": 30,
+      "keyword": "Multimedia Guides for Risk Management",
+      "type": "tool_improvement",
+      "priority": "high",
+      "status": "pending"
+    }
+  ]
+}

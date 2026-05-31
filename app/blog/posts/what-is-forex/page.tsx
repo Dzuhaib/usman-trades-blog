@@ -5,6 +5,8 @@ import { getPexelsImages } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { BLOG_POSTS } from '@/lib/blogData';
+import { generateBlogSchema } from '@/lib/seo-os/schema-engine';
+import SmartText from '@/components/SmartText';
 
 export const metadata: Metadata = {
   title: 'What is Forex Trading | Market Architecture and Order Types Explained',
@@ -18,38 +20,21 @@ export default async function WhatIsForexPost() {
   const post = BLOG_POSTS.find(p => p.slug === 'what-is-forex')!;
   const images = await getPexelsImages('global world map finance currency', 4);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "description": post.excerpt,
-    "image": images[0]?.url,
-    "datePublished": post.date,
-    "dateModified": post.updatedAt,
-    "author": {
-      "@type": "Person",
-      "name": post.author.name,
-      "url": "https://www.usmantrades.co.uk"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Usman Trades",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.usmantrades.co.uk/favicon.ico"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `https://www.usmantrades.co.uk${post.route}`
-    }
-  };
+  const blogSchema = generateBlogSchema({
+    title: post.title,
+    excerpt: post.excerpt,
+    image: images[0]?.url || '',
+    date: post.date,
+    updatedAt: post.updatedAt,
+    route: post.route,
+    author: post.author,
+  });
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
       />
       <article className="max-w-[720px] mx-auto space-y-12 py-8">
         <Breadcrumbs items={[
@@ -71,7 +56,7 @@ export default async function WhatIsForexPost() {
             {post.title}
           </h1>
           <p className="text-lg text-secondary leading-relaxed">
-            {post.excerpt}
+            <SmartText text={post.excerpt} />
           </p>
         </header>
 
@@ -94,10 +79,10 @@ export default async function WhatIsForexPost() {
           <section id="how">
             <h2 className="text-2xl font-bold mt-12 mb-6">How the Forex Market Works</h2>
             <p>
-              The foreign exchange (Forex) market is the largest financial network in the world. Every day, trillions of dollars are traded back and forth. Unlike the stock market, which has a central building (like the New York Stock Exchange), the Forex market is decentralized. It exists as a massive electronic network of banks all over the globe.
+              <SmartText text="The foreign exchange (Forex) market is the largest financial network in the world. Every day, trillions of dollars are traded back and forth. Unlike the stock market, which has a central building (like the New York Stock Exchange), the Forex market is decentralized. It exists as a massive electronic network of banks all over the globe." />
             </p>
             <p>
-              When you place a trade, your order doesn't go to one single office. Your broker sends it to "liquidity providers"—which are usually the world's largest banks, like JPMorgan or Citigroup. Understanding that you're trading in this global network is the first step toward a professional approach. Before you start looking at charts, it's helpful to know how to calculate your costs using our <Link href="/tools/pip-calculator" className="text-accent hover:underline">Pip Value Calculator</Link>.
+              <SmartText text="When you place a trade, your order doesn't go to one single office. Your broker sends it to 'liquidity providers'—which are usually the world's largest banks, like JPMorgan or Citigroup. Understanding that you're trading in this global network is the first step toward a professional approach. Before you start looking at charts, it's helpful to know how to calculate your costs using our Pip Value Calculator." />
             </p>
           </section>
 
@@ -108,10 +93,10 @@ export default async function WhatIsForexPost() {
           <section>
             <h2 className="text-2xl font-bold mt-12 mb-6">Major and Minor Currency Pairs</h2>
             <p>
-              In Forex, currencies are always traded in pairs. You're essentially swapping one for another. The most popular ones are called "Major Pairs." These always include the US Dollar—like EUR/USD (Euro vs. Dollar) or GBP/USD (Pound vs. Dollar).
+              <SmartText text="In Forex, currencies are always traded in pairs. You're essentially swapping one for another. The most popular ones are called 'Major Pairs.' These always include the US Dollar—like EUR/USD (Euro vs. Dollar) or GBP/USD (Pound vs. Dollar)." />
             </p>
             <p>
-              Because so many people trade the Majors, they usually have the lowest costs and the "tightest" spreads. "Minor Pairs" are trades between other big currencies that don't include the US Dollar. While these can be great to trade, they often have slightly higher costs because there's a bit less activity in those markets.
+              <SmartText text="Because so many people trade the Majors, they usually have the lowest costs and the 'tightest' spreads. 'Minor Pairs' are trades between other big currencies that don't include the US Dollar. While these can be great to trade, they often have slightly higher costs because there's a bit less activity in those markets." />
             </p>
           </section>
 
@@ -122,10 +107,10 @@ export default async function WhatIsForexPost() {
           <section>
             <h2 className="text-2xl font-bold mt-12 mb-6">Understanding Spreads and Costs</h2>
             <p>
-              The "spread" is simply the difference between the price you buy at and the price you sell at. This is how brokers cover their costs. When big news breaks, banks might step back for a moment to see what happens, which can cause spreads to "widen" or get larger.
+              <SmartText text="The 'spread' is simply the difference between the price you buy at and the price you sell at. This is how brokers cover their costs. When big news breaks, banks might step back for a moment to see what happens, which can cause spreads to 'widen' or get larger." />
             </p>
             <p>
-              It's important to account for the spread when you set your stop loss. If you set it too close during a busy news event, the spread itself might trigger your exit. We recommend using our <Link href="/tools/profit-calculator" className="text-accent hover:underline">Profit Calculator</Link> to get a clear picture of your potential gains after costs.
+              <SmartText text="It's important to account for the spread when you set your stop loss. If you set it too close during a busy news event, the spread itself might trigger your exit. We recommend using our Profit Calculator to get a clear picture of your potential gains after costs." />
             </p>
           </section>
 
@@ -136,7 +121,7 @@ export default async function WhatIsForexPost() {
           <section>
             <h2 className="text-2xl font-bold mt-12 mb-6">A Clearer View of the Market</h2>
             <p>
-              Once you understand how orders move and how banks interact, you can start to see charts differently. Instead of looking for "magic" indicators, you start to see the patterns left by large-scale trading activity. This shift in perspective is what helps traders move from guessing to making informed decisions. To see how these patterns work on a chart, take a look at our guide on <Link href="/blog/posts/support-resistance" className="text-accent hover:underline">Support and Resistance</Link>.
+              <SmartText text="Once you understand how orders move and how banks interact, you can start to see charts differently. Instead of looking for 'magic' indicators, you start to see the patterns left by large-scale trading activity. This shift in perspective is what helps traders move from guessing to making informed decisions. To see how these patterns work on a chart, take a look at our guide on Support and Resistance." />
             </p>
           </section>
         </div>
@@ -147,7 +132,7 @@ export default async function WhatIsForexPost() {
         <section className="bg-surface border border-border p-8 rounded-[4px] space-y-4 mt-12">
           <h3 className="text-lg font-bold text-primary m-0">Validate Your Trade Economics</h3>
           <p className="text-base text-secondary m-0">
-            Make sure you understand the cost of every trade. Use our tools to check your profit margins and pip values before you enter the market.
+            <SmartText text="Make sure you understand the cost of every trade. Use our tools to check your profit margins and pip values before you enter the market." />
           </p>
           <Link href="/tools/pip-calculator" className="text-sm font-bold text-accent uppercase tracking-wider no-underline block hover:text-accent-dark">
             Open Pip Calculator &rarr;

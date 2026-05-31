@@ -5,6 +5,8 @@ import { getPexelsImages } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { BLOG_POSTS } from '@/lib/blogData';
+import { generateBlogSchema } from '@/lib/seo-os/schema-engine';
+import SmartText from '@/components/SmartText';
 
 export const metadata: Metadata = {
   title: 'Bitcoin Risk Management | How to Handle Crypto Volatility Safely',
@@ -18,38 +20,21 @@ export default async function BitcoinRiskPost() {
   const post = BLOG_POSTS.find(p => p.slug === 'bitcoin-risk-management')!;
   const images = await getPexelsImages('bitcoin secure wallet crypto safety', 4);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "description": post.excerpt,
-    "image": images[0]?.url,
-    "datePublished": post.date,
-    "dateModified": post.updatedAt,
-    "author": {
-      "@type": "Person",
-      "name": post.author.name,
-      "url": "https://www.usmantrades.co.uk"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Usman Trades",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.usmantrades.co.uk/favicon.ico"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `https://www.usmantrades.co.uk${post.route}`
-    }
-  };
+  const blogSchema = generateBlogSchema({
+    title: post.title,
+    excerpt: post.excerpt,
+    image: images[0]?.url || '',
+    date: post.date,
+    updatedAt: post.updatedAt,
+    route: post.route,
+    author: post.author,
+  });
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
       />
       <article className="max-w-[720px] mx-auto space-y-12 py-8">
         <Breadcrumbs items={[
@@ -71,7 +56,7 @@ export default async function BitcoinRiskPost() {
             {post.title}
           </h1>
           <p className="text-lg text-secondary leading-relaxed">
-            {post.excerpt}
+            <SmartText text={post.excerpt} />
           </p>
         </header>
 
@@ -96,10 +81,10 @@ export default async function BitcoinRiskPost() {
           <section id="volatility">
             <h2 className="text-2xl font-bold mt-12 mb-6">The Reality of Bitcoin Volatility</h2>
             <p>
-              Bitcoin moves differently than any other asset. While a major currency like the Euro might move half a percent in a day, Bitcoin can easily swing 5% or 10% on a completely normal Tuesday. This is what makes it exciting, but it&apos;s also what makes it dangerous for unprepared traders.
+              <SmartText text="Bitcoin moves differently than any other asset. While a major currency like the Euro might move half a percent in a day, Bitcoin can easily swing 5% or 10% on a completely normal Tuesday. This is what makes it exciting, but it's also what makes it dangerous for unprepared traders." />
             </p>
             <p>
-              You can&apos;t use the same rules for Bitcoin that you use for Forex. If you try to use too much leverage, a sudden $2,000 drop can wipe out your account in minutes. Before you enter a crypto trade, always use our <Link href="/tools/lot-size-calculator" className="text-accent hover:underline">Lot Size Calculator</Link> to make sure your position isn&apos;t too big for your account.
+              <SmartText text="You can't use the same rules for Bitcoin that you use for Forex. If you try to use too much leverage, a sudden $2,000 drop can wipe out your account in minutes. Before you enter a crypto trade, always use our Lot Size Calculator to make sure your position isn't too big for your account." />
             </p>
           </section>
 
@@ -111,10 +96,10 @@ export default async function BitcoinRiskPost() {
           <section id="drawdown">
             <h2 className="text-2xl font-bold mt-12 mb-6">Protecting Your Account from Big Drops</h2>
             <p>
-              A &ldquo;drawdown&rdquo; is just a fancy way of saying your account balance has gone down from its highest point. In crypto, you are going to have losing streaks—it&apos;s a mathematical certainty. Your goal isn&apos;t to avoid them entirely, but to make sure they don&apos;t end your trading career.
+              <SmartText text="A 'drawdown' is just a fancy way of saying your account balance has gone down from its highest point. In crypto, you are going to have losing streaks—it's a mathematical certainty. Your goal isn't to avoid them entirely, but to make sure they don't end your trading career." />
             </p>
             <p>
-              Professional traders set limits. For example, if they lose 10% of their account, they stop trading and take a break to clear their head. You should have the same kind of &ldquo;circuit breaker&rdquo; for your own trading. Never let one bad week in Bitcoin ruin months of hard work.
+              <SmartText text="Professional traders set limits. For example, if they lose 10% of their account, they stop trading and take a break to clear their head. You should have the same kind of 'circuit breaker' for your own trading. Never let one bad week in Bitcoin ruin months of hard work." />
             </p>
           </section>
 
@@ -126,10 +111,10 @@ export default async function BitcoinRiskPost() {
           <section id="ranges">
             <h2 className="text-2xl font-bold mt-12 mb-6">Understanding Daily Price Swings</h2>
             <p>
-              Before you trade Bitcoin, you need to know how much it usually moves in a day. If Bitcoin is moving $3,000 up and down every day, putting your stop loss just $50 away from your entry is a mistake—you&apos;ll get stopped out by normal market noise before the price has a chance to move in your direction.
+              <SmartText text="Before you trade Bitcoin, you need to know how much it usually moves in a day. If Bitcoin is moving $3,000 up and down every day, putting your stop loss just $50 away from your entry is a mistake—you'll get stopped out by normal market noise before the price has a chance to move in your direction." />
             </p>
             <p>
-              Your stop loss needs to be in a logical place where the trade is actually &ldquo;broken,&rdquo; not just where you&apos;re afraid of losing money. We recommend checking our guide on <Link href="/blog/posts/support-resistance" className="text-accent hover:underline">Support and Resistance</Link> to find better places for your exits.
+              <SmartText text="Your stop loss needs to be in a logical place where the trade is actually 'broken,' not just where you're afraid of losing money. We recommend checking our guide on Support and Resistance to find better places for your exits." />
             </p>
           </section>
 
@@ -141,10 +126,10 @@ export default async function BitcoinRiskPost() {
           <section id="psychology">
             <h2 className="text-2xl font-bold mt-12 mb-6">Managing the Stress of Crypto Trading</h2>
             <p>
-              Trading Bitcoin can be incredibly stressful. Watching the price bounce around can trigger a lot of fear and greed. The best way to stay calm is to have a plan before you start.
+              <SmartText text="Trading Bitcoin can be incredibly stressful. Watching the price bounce around can trigger a lot of fear and greed. The best way to stay calm is to have a plan before you start." />
             </p>
             <p>
-              When you know exactly how much you stand to lose before you even click &ldquo;buy,&rdquo; the market can&apos;t surprise you as easily. If you find yourself getting emotional, take a look at our <Link href="/blog/posts/trading-mindset" className="text-accent hover:underline">Trading Psychology Guide</Link> for more tips on staying disciplined.
+              <SmartText text="When you know exactly how much you stand to lose before you even click 'buy,' the market can't surprise you as easily. If you find yourself getting emotional, take a look at our Trading Psychology Guide for more tips on staying disciplined." />
             </p>
           </section>
         </div>
@@ -155,7 +140,7 @@ export default async function BitcoinRiskPost() {
         <section className="bg-surface border border-border p-8 rounded-[4px] space-y-4 mt-12">
           <h3 className="text-lg font-bold text-primary m-0">Secure Your Crypto Capital</h3>
           <p className="text-base text-secondary m-0">
-            Don&apos;t guess your risk on Bitcoin. Use our tools to define your limits before you trade.
+            <SmartText text="Don't guess your risk on Bitcoin. Use our tools to define your limits before you trade." />
           </p>
           <Link href="/tools/risk-calculator" className="text-sm font-bold text-accent uppercase tracking-wider no-underline block hover:text-accent-dark">
             Open Risk Calculator &rarr;

@@ -5,6 +5,8 @@ import { getPexelsImages } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { BLOG_POSTS } from '@/lib/blogData';
+import { generateBlogSchema } from '@/lib/seo-os/schema-engine';
+import SmartText from '@/components/SmartText';
 
 export const metadata: Metadata = {
   title: 'Position Sizing Formula for Forex, Gold and Bitcoin Trading',
@@ -18,38 +20,21 @@ export default async function PositionSizingPost() {
   const post = BLOG_POSTS.find(p => p.slug === 'position-sizing')!;
   const images = await getPexelsImages('mathematics formula chalkboard calculation', 4);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "description": post.excerpt,
-    "image": images[0]?.url,
-    "datePublished": post.date,
-    "dateModified": post.updatedAt,
-    "author": {
-      "@type": "Person",
-      "name": post.author.name,
-      "url": "https://www.usmantrades.co.uk"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Usman Trades",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.usmantrades.co.uk/favicon.ico"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `https://www.usmantrades.co.uk${post.route}`
-    }
-  };
+  const blogSchema = generateBlogSchema({
+    title: post.title,
+    excerpt: post.excerpt,
+    image: images[0]?.url || '',
+    date: post.date,
+    updatedAt: post.updatedAt,
+    route: post.route,
+    author: post.author,
+  });
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
       />
       <article className="max-w-[720px] mx-auto space-y-12 py-8">
         <Breadcrumbs items={[
@@ -71,7 +56,7 @@ export default async function PositionSizingPost() {
             {post.title}
           </h1>
           <p className="text-lg text-secondary leading-relaxed">
-            {post.excerpt}
+            <SmartText text={post.excerpt} />
           </p>
         </header>
 
@@ -103,10 +88,10 @@ export default async function PositionSizingPost() {
           <section id="danger">
             <h2 className="text-2xl font-bold mt-12 mb-6">The Danger of Constant Lot Sizing</h2>
             <p>
-              Many people starting out in the markets make the mistake of using the same "lot size" for every trade. They might decide to buy 0.1 lots every time they trade, regardless of how far away their stop loss is or how volatile the market is. This is a simple mathematical error that can lead to unexpected losses.
+              <SmartText text="Many people starting out in the markets make the mistake of using the same 'lot size' for every trade. They might decide to buy 0.1 lots every time they trade, regardless of how far away their stop loss is or how volatile the market is. This is a simple mathematical error that can lead to unexpected losses." />
             </p>
             <p>
-              Think of it this way: if your stop loss on one trade is 10 pips and on another it's 50 pips, using the same lot size means you're risking five times more money on the second trade. Your account balance shouldn't depend on luck. You can fix this easily by using our <Link href="/tools/lot-size-calculator" className="text-accent hover:underline">Lot Size Calculator</Link> to find the right size before you trade.
+              <SmartText text="Think of it this way: if your stop loss on one trade is 10 pips and on another it's 50 pips, using the same lot size means you're risking five times more money on the second trade. Your account balance shouldn't depend on luck. You can fix this easily by using our Lot Size Calculator to find the right size before you trade." />
             </p>
           </section>
 
@@ -124,10 +109,10 @@ export default async function PositionSizingPost() {
           <section id="formula">
             <h2 className="text-2xl font-bold mt-12 mb-6">The Simple Position Sizing Formula</h2>
             <p>
-              To find the right trade size for any asset, you just need a simple bit of math. First, multiply your total account balance by the percentage you're willing to risk (like 1%). Then, divide that number by your stop loss distance multiplied by the "pip value" of what you're trading.
+              <SmartText text="To find the right trade size for any asset, you just need a simple bit of math. First, multiply your total account balance by the percentage you're willing to risk (like 1%). Then, divide that number by your stop loss distance multiplied by the 'pip value' of what you're trading." />
             </p>
             <p>
-              Let's break that down into plain English:
+              <SmartText text="Let's break that down into plain English:" />
             </p>
             <ul className="list-disc pl-6 space-y-3">
               <li><strong>Account Balance:</strong> The total money you have available to trade.</li>
@@ -150,20 +135,20 @@ export default async function PositionSizingPost() {
           <section id="example">
             <h2 className="text-2xl font-bold mt-12 mb-6">A Practical Example</h2>
             <p>
-              Imagine you're trading EUR/USD with $10,000 in your account. You decide to risk 1% ($100) on a trade. Your stop loss is 20 pips away.
+              <SmartText text="Imagine you're trading EUR/USD with $10,000 in your account. You decide to risk 1% ($100) on a trade. Your stop loss is 20 pips away." />
             </p>
             <p>
-              When you do the math, it shows you should trade exactly 0.5 lots. This way, if the market hits your stop loss, you lose exactly $100—no more, no less. You can check these numbers using our <Link href="/tools/pip-calculator" className="text-accent hover:underline">Pip Value Calculator</Link> to be sure.
+              <SmartText text="When you do the math, it shows you should trade exactly 0.5 lots. This way, if the market hits your stop loss, you lose exactly $100—no more, no less. You can check these numbers using our Pip Value Calculator to be sure." />
             </p>
           </section>
 
           <section id="assets">
             <h2 className="text-2xl font-bold mt-12 mb-6">Trading Gold and Bitcoin</h2>
             <p>
-              Calculating your size for Gold and Bitcoin requires a bit more care because these markets move much faster than regular currencies.
+              <SmartText text="Calculating your size for Gold and Bitcoin requires a bit more care because these markets move much faster than regular currencies." />
             </p>
             <p>
-              For Gold, you have to look at the actual dollar move rather than just "pips." For Bitcoin, since the price is in whole dollars, it's often easier to calculate your risk based on the price difference. If you're interested in Gold, we have a full <Link href="/blog/posts/xauusd-guide" className="text-accent hover:underline">Gold Trading Guide</Link> that explains the details.
+              <SmartText text="For Gold, you have to look at the actual dollar move rather than just 'pips.' For Bitcoin, since the price is in whole dollars, it's often easier to calculate your risk based on the price difference. If you're interested in Gold, we have a full Gold Trading Guide that explains the details." />
             </p>
           </section>
 
@@ -181,7 +166,7 @@ export default async function PositionSizingPost() {
           <section>
             <h2 className="text-2xl font-bold mt-12 mb-6">Wrapping Up</h2>
             <p>
-              You should never have to guess how much you're risking. Experienced traders always know their "risk boundary" before they enter a trade. By using this simple approach, you take the emotion out of trading. You protect your money from big market swings and make sure you can stay in the game long enough to see results.
+              <SmartText text="You should never have to guess how much you're risking. Experienced traders always know their 'risk boundary' before they enter a trade. By using this simple approach, you take the emotion out of trading. You protect your money from big market swings and make sure you can stay in the game long enough to see results." />
             </p>
           </section>
         </div>
@@ -192,7 +177,7 @@ export default async function PositionSizingPost() {
         <section className="bg-surface border border-border p-8 rounded-[4px] space-y-4 mt-12">
           <h3 className="text-lg font-bold text-primary m-0">Calculate Position Sizing Instantly</h3>
           <p className="text-base text-secondary m-0">
-            Don't worry about doing the math by hand. Use our free calculators to instantly find the right trade size for Forex, Gold, and Crypto.
+            <SmartText text="Don't worry about doing the math by hand. Use our free calculators to instantly find the right trade size for Forex, Gold, and Crypto." />
           </p>
           <Link href="/tools/lot-size-calculator" className="text-sm font-bold text-accent uppercase tracking-wider no-underline block hover:text-accent-dark">
             Open Lot Size Calculator &rarr;
