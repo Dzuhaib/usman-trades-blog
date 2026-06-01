@@ -24,19 +24,30 @@ async function getGSCAuth() {
   try {
     let credentials;
 
-    if (process.env.GSC_SERVICE_ACCOUNT_JSON) {
+    // 1. Try individual environment variables (Best for Vercel)
+    if (process.env.GSC_CLIENT_EMAIL && process.env.GSC_PRIVATE_KEY) {
+      credentials = {
+        client_email: process.env.GSC_CLIENT_EMAIL,
+        private_key: process.env.GSC_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        project_id: process.env.GSC_PROJECT_ID,
+      };
+    } 
+    // 2. Fallback to full JSON string
+    else if (process.env.GSC_SERVICE_ACCOUNT_JSON) {
       credentials = JSON.parse(process.env.GSC_SERVICE_ACCOUNT_JSON);
       if (credentials.private_key) {
         credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
       }
-    } else {
+    } 
+    // 3. Fallback to local file
+    else {
       const keyPath = path.join(process.cwd(), 'google-credentials.json');
       if (fs.existsSync(keyPath)) {
         credentials = JSON.parse(fs.readFileSync(keyPath, 'utf8'));
       }
     }
 
-    if (!credentials) throw new Error('Missing credentials in environment or local file.');
+    if (!credentials) throw new Error('Missing GSC credentials. Please set GSC_CLIENT_EMAIL and GSC_PRIVATE_KEY.');
 
     const auth = new google.auth.GoogleAuth({
       credentials,

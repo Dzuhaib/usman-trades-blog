@@ -10,11 +10,16 @@ You have your JSON file. Follow these steps to prepare the SEO-OS for live data:
 Ensure that `google-credentials.json` is added to your `.gitignore` so you don't accidentally push it to GitHub.
 
 ## 3. Environment Variables
-Add these to your `.env` file:
+Add these to your `.env` file and **Vercel Project Settings**:
 ```txt
 GSC_SITE_URL="https://usmantrades.co.uk"
-GOOGLE_APPLICATION_CREDENTIALS="./google-credentials.json"
+GSC_CLIENT_EMAIL="your-service-account@project.iam.gserviceaccount.com"
+GSC_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+GSC_PROJECT_ID="your-project-id"
 ```
+
+> **Note:** When adding the `GSC_PRIVATE_KEY` to Vercel, ensure you include the full string including the BEGIN and END lines. The system will handle the newline characters automatically.
+
 
 ## 4. Search Console Connection
 Once the email `usmantrades@endless-bolt-493110-u1.iam.gserviceaccount.com` is accepted by Google Search Console (as a 'Full' or 'Owner' user), the system will be able to:
