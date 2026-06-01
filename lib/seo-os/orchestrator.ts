@@ -16,16 +16,16 @@ import { injectContextualLinks } from './linking-engine';
 import { publishArticle } from './publisher-engine';
 import { logAgentAction } from './log-engine';
 
-export async function runDailyCycle() {
+export async function runDailyCycle(isManual: boolean = false) {
   const now = new Date();
   // We use UTC hours to be consistent across deployments
   const hour = now.getUTCHours();
   
-  console.log(`[Orchestrator] Heartbeat at ${hour}:00 UTC`);
+  console.log(`[Orchestrator] Heartbeat at ${hour}:00 UTC (Manual: ${isManual})`);
 
   try {
     // 11 PM UTC (23): Monitor & Research & Strategy
-    if (hour === 23) {
+    if (hour === 23 || isManual) {
       logAgentAction('Monitor Agent', 'active', 'Analyzing GSC performance...');
       const gscData = await getPerformanceReport();
       const currentRoadmap = getRoadmap();
@@ -46,6 +46,9 @@ export async function runDailyCycle() {
         saveRoadmap(currentRoadmap);
       }
       logAgentAction('Strategist Agent', 'success', 'Roadmap synchronized.');
+      
+      // If we were just testing manual mode, we can stop here or continue
+      if (isManual && hour !== 23) return; 
     }
 
     // 4 AM UTC (4): Writer Agent

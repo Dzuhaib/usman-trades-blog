@@ -22,24 +22,45 @@ export interface GSCReport {
  */
 async function getGSCAuth() {
   try {
-    let credentials;
+    // 1. Try OAuth2 "Login" method (Best for Personal Use/Localhost)
+    if (process.env.GSC_CLIENT_ID && process.env.GSC_CLIENT_SECRET && process.env.GSC_REFRESH_TOKEN) {
+      const oauth2Client = new google.auth.OAuth2(
+        process.env.GSC_CLIENT_ID,
+        process.env.GSC_CLIENT_SECRET
+      );
+      oauth2Client.setCredentials({
+        refresh_token: process.env.GSC_REFRESH_TOKEN
+      });
+      return google.webmasters({ version: 'v3', auth: oauth2Client });
+    }
 
-    // 1. Try individual environment variables (Best for Vercel)
+    let credentials;
+    // 2. Try individual environment variables (Best for Vercel Service Account)
     if (process.env.GSC_CLIENT_EMAIL && process.env.GSC_PRIVATE_KEY) {
+      // Robust newline handling for different environments
+      let privateKey = process.env.GSC_PRIVATE_KEY;
+      
+      // Remove any surrounding quotes that might have been preserved from .env
+      privateKey = privateKey.replace(/^["']|["']$/g, '');
+      
+      if (privateKey.includes('\\n')) {
+        privateKey = privateKey.replace(/\\n/g, '\n');
+      }
+      
       credentials = {
         client_email: process.env.GSC_CLIENT_EMAIL,
-        private_key: process.env.GSC_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        private_key: privateKey,
         project_id: process.env.GSC_PROJECT_ID,
       };
     } 
-    // 2. Fallback to full JSON string
+    // 3. Fallback to full JSON string
     else if (process.env.GSC_SERVICE_ACCOUNT_JSON) {
       credentials = JSON.parse(process.env.GSC_SERVICE_ACCOUNT_JSON);
       if (credentials.private_key) {
         credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
       }
     } 
-    // 3. Fallback to local file
+    // 4. Fallback to local file
     else {
       const keyPath = path.join(process.cwd(), 'google-credentials.json');
       if (fs.existsSync(keyPath)) {
@@ -47,7 +68,7 @@ async function getGSCAuth() {
       }
     }
 
-    if (!credentials) throw new Error('Missing GSC credentials. Please set GSC_CLIENT_EMAIL and GSC_PRIVATE_KEY.');
+    if (!credentials) throw new Error('Missing GSC credentials. Please set OAuth2 variables or Service Account keys.');
 
     const auth = new google.auth.GoogleAuth({
       credentials,
