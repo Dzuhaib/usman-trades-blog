@@ -11,8 +11,8 @@ interface OrganizationConfig {
 
 const ORG_CONFIG: OrganizationConfig = {
   name: "Usman Trades",
-  url: "https://www.usmantrades.co.uk",
-  logo: "https://www.usmantrades.co.uk/favicon.ico",
+  url: "https://usmantrades.co.uk",
+  logo: "https://usmantrades.co.uk/favicon.ico",
 };
 
 export function generateBlogSchema(post: {

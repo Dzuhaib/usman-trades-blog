@@ -12,7 +12,7 @@ Ensure that `google-credentials.json` is added to your `.gitignore` so you don't
 ## 3. Environment Variables
 Add these to your `.env` file:
 ```txt
-GSC_SITE_URL="https://www.usmantrades.co.uk"
+GSC_SITE_URL="https://usmantrades.co.uk"
 GOOGLE_APPLICATION_CREDENTIALS="./google-credentials.json"
 ```
 

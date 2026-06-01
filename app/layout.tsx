@@ -15,9 +15,9 @@ export const metadata: Metadata = {
     template: "%s | Usman Trades",
   },
   description: "Usman Trades is a free trading education platform with professional calculators for Forex, Gold (XAUUSD), and Bitcoin. Learn position sizing, risk management, and technical analysis with simple guides written for real people.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.usmantrades.co.uk"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://usmantrades.co.uk"),
   alternates: {
-    canonical: "/",
+    canonical: "./",
   },
   keywords: [
     "forex trading tools",
@@ -35,13 +35,13 @@ export const metadata: Metadata = {
     "free trading calculators",
     "usman trades",
   ],
-  authors: [{ name: "Usman Trades", url: "https://www.usmantrades.co.uk" }],
+  authors: [{ name: "Usman Trades", url: "https://usmantrades.co.uk" }],
   creator: "Usman Trades",
   publisher: "Usman Trades",
   openGraph: {
     title: "Usman Trades | Free Forex Education, Gold and Bitcoin Trading Tools and Education",
     description: "Access free professional trading calculators and simple educational guides for Forex, Gold, and Bitcoin. Learn position sizing, risk management, and price action analysis.",
-    url: "https://www.usmantrades.co.uk",
+    url: "https://usmantrades.co.uk",
     siteName: "Usman Trades",
     locale: "en_GB",
     type: "website",
@@ -73,16 +73,16 @@ function WebsiteJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Usman Trades",
-    url: "https://www.usmantrades.co.uk",
+    url: "https://usmantrades.co.uk",
     description: "Free trading education platform with professional calculators for Forex, Gold, and Bitcoin.",
     publisher: {
       "@type": "Organization",
       name: "Usman Trades",
-      url: "https://www.usmantrades.co.uk",
+      url: "https://usmantrades.co.uk",
     },
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://www.usmantrades.co.uk/blog?category={search_term_string}",
+      target: "https://usmantrades.co.uk/blog?category={search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };

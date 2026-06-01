@@ -20,7 +20,7 @@ export default function EditorialPolicy() {
     "publisher": {
       "@type": "Organization",
       "name": "Usman Trades",
-      "url": "https://www.usmantrades.co.uk"
+      "url": "https://usmantrades.co.uk"
     }
   };
 

@@ -71,7 +71,7 @@ export async function getPerformanceReport(): Promise<GSCReport[]> {
     if (!res.data.rows) return [];
 
     return res.data.rows.map((row: any) => ({
-      url: row.keys[0].replace(siteUrl, '').replace('https://www.usmantrades.co.uk', '').replace('https://usmantrades.co.uk', ''),
+      url: row.keys[0].replace(siteUrl, '').replace('https://usmantrades.co.uk', '').replace('https://www.usmantrades.co.uk', ''),
       impressions: row.impressions,
       clicks: row.clicks,
       ctr: parseFloat(row.ctr.toFixed(4)),

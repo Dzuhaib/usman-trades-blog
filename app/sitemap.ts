@@ -3,7 +3,7 @@ import { BLOG_POSTS } from '@/lib/blogData';
 import { TOOLS } from '@/lib/toolsData';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://www.usmantrades.co.uk';
+  const baseUrl = 'https://usmantrades.co.uk';
 
   const staticPages: MetadataRoute.Sitemap = [
     {
