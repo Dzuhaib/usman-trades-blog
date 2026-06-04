@@ -89,7 +89,7 @@ export async function runDailyCycle(isManual: boolean = false) {
     // 8 AM UTC (8): Linking Agent
     if (hour === 8) {
       const roadmap = getRoadmap();
-      const task = roadmap?.tasks.find(t => t.status === 'pending' && (task as any).reviewedContent);
+      const task = roadmap?.tasks.find(t => t.status === 'pending' && (t as any).reviewedContent);
       if (task) {
         logAgentAction('Linking Agent', 'active', 'Injecting internal links...');
         const linkedContent = injectContextualLinks((task as any).reviewedContent);
