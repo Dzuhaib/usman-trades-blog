@@ -31,7 +31,7 @@ export async function GET() {
       data: [],
       debug: {
         siteUrl: process.env.GSC_SITE_URL,
-        hasEmail: !!process.env.GSC_CLIENT_EMAIL,
+        clientEmail: process.env.GSC_CLIENT_EMAIL ? `${process.env.GSC_CLIENT_EMAIL.slice(0, 5)}...${process.env.GSC_CLIENT_EMAIL.slice(-10)}` : 'missing',
         hasKey: !!process.env.GSC_PRIVATE_KEY
       }
     }, { status: 500 });
