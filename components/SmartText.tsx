@@ -13,10 +13,13 @@ export default function SmartText({ text }: SmartTextProps) {
   const blocks = text.split(/\n\n+/);
 
   const processText = (content: string) => {
-    // 0. Initial Cleanup: Remove LaTeX leftovers and raw HTML tags
+    // 0. Ruthless Cleanup: Remove all LaTeX, raw HTML, and Markdown artifacts
     let cleanContent = content
-      .replace(/\\\[|\\\]|\\text\{|\}/g, '') // Remove LaTeX symbols
-      .replace(/<a\b[^>]*>(.*?)<\/a>/gi, '$1') // Strip raw <a> tags keeping text
+      .replace(/\\\[|\\\]|\\text\{|\}/g, '') // Remove basic LaTeX
+      .replace(/\\frac\{(.*?)\}\{(.*?)\}/g, '$1 / $2') // Convert fractions to plain division
+      .replace(/\\times/g, 'x') // Convert times symbol to 'x'
+      .replace(/\\/g, '') // Strip remaining backslashes
+      .replace(/<a\b[^>]*>(.*?)<\/a>/gi, '$1') // Strip raw <a> tags
       .replace(/\s+/g, ' ') // Normalize spaces
       .trim();
 
