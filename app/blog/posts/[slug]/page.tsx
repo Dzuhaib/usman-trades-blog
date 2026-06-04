@@ -107,7 +107,7 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         )}
 
-        <AuthorBio name={post.author.name} role={post.author.role} bio={post.author.bio} />
+        <AuthorBio author={post.author} updatedAt={post.updatedAt} />
 
         {/* Footer Navigation */}
         <footer className="border-t border-border pt-8 flex flex-col sm:flex-row sm:justify-between items-center gap-4 text-sm pb-12">
