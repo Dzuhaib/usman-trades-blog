@@ -15,6 +15,7 @@ import { getRoadmap, saveRoadmap, initializeRoadmap } from './roadmap-engine';
 import { injectContextualLinks } from './linking-engine';
 import { publishArticle } from './publisher-engine';
 import { logAgentAction } from './log-engine';
+import { performTechnicalAudit } from './technical-engine';
 
 export async function runDailyCycle(isManual: boolean = false) {
   const roadmap = getRoadmap();
@@ -31,9 +32,15 @@ export async function runDailyCycle(isManual: boolean = false) {
     // 1. MONITOR & RESEARCH (Pipeline Trigger)
     // Always run research to find new opportunities
     logAgentAction('Monitor Agent', 'active', 'Scanning GSC and market for new traffic opportunities...');
-    const gscData = await getPerformanceReport();
-    const currentRoadmap = getRoadmap();
-    const correctionReport = currentRoadmap 
+    // ... (logic)
+
+    // NEW: Technical Audit Agent
+    logAgentAction('Technical Auditor', 'active', 'Scanning website for errors and indexing mistakes...');
+    await performTechnicalAudit();
+    logAgentAction('Technical Auditor', 'success', 'Technical audit complete. Issues updated in dashboard.');
+
+    logAgentAction('Research Agent', 'active', 'Evaluating beneficial opportunities...');
+
       ? await monitorPerformanceAndAdjust(gscData, currentRoadmap)
       : 'Initial strategy.';
     logAgentAction('Monitor Agent', 'success', 'Performance analyzed.');

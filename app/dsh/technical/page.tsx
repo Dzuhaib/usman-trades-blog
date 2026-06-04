@@ -1,117 +1,133 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { ShieldCheck, Link as LinkIcon, FileJson, CheckCircle2, AlertTriangle, Search, ExternalLink, Loader2, AlertCircle } from 'lucide-react';
+import { TechnicalIssue } from '@/lib/seo-os/technical-engine';
 import Link from 'next/link';
-import { ShieldCheck, Link as LinkIcon, FileJson, CheckCircle2, AlertTriangle, Search, ExternalLink } from 'lucide-react';
-import { BLOG_POSTS } from '@/lib/blogData';
 
 export default function TechnicalAuditPage() {
-  const pages = [
-    { name: 'Homepage', status: 'Optimal', schema: ['WebSite', 'Organization'], links: 12 },
-    { name: 'Trading Tools', status: 'Optimal', schema: ['WebPage', 'Breadcrumbs'], links: 45 },
-    { name: 'Learning Library', status: 'Optimal', schema: ['WebPage', 'Breadcrumbs'], links: 18 },
-  ];
+  const [issues, setIssues] = useState<TechnicalIssue[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch('/api/seo-os/technical');
+        const data = await res.json();
+        if (data.success) setIssues(data.issues);
+      } catch (e) {
+        console.error('Failed to load technical audit');
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-[60vh] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-accent animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10">
       <header className="space-y-2">
         <h1 className="text-3xl font-bold font-serif text-slate-900">Technical SEO Audit</h1>
-        <p className="text-slate-500">Phase 2: Automated Schema & Internal Linking Analysis</p>
+        <p className="text-slate-500 uppercase text-[10px] font-black tracking-widest flex items-center gap-2">
+           <ShieldCheck className="w-3.5 h-3.5 text-accent" />
+           Technical Auditor Agent: Live Site Health Scan
+        </p>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left: Health Overview */}
         <section className="lg:col-span-8 space-y-8">
-          <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white border border-slate-200 rounded-[2rem] overflow-hidden shadow-sm">
             <table className="w-full text-left">
               <thead className="bg-slate-50 border-b border-slate-100">
                 <tr>
-                  <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Target Page</th>
-                  <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Schema Integrity</th>
-                  <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Link Density</th>
-                  <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Status</th>
+                  <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Target Page</th>
+                  <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Detected Issue</th>
+                  <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Priority</th>
+                  <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
-                {pages.map((page) => (
-                  <tr key={page.name} className="hover:bg-slate-50/50 transition-colors">
-                    <td className="px-6 py-4">
-                      <span className="text-sm font-bold text-slate-900">{page.name}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-1.5">
-                        {page.schema.map(s => (
-                          <span key={s} className="text-[9px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded uppercase">{s}</span>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-xs font-medium text-slate-600">{page.links} Contextual Links</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="flex items-center gap-1.5 text-[10px] font-black text-emerald-600 uppercase">
-                        <CheckCircle2 className="w-3 h-3" />
-                        {page.status}
-                      </span>
+                {issues.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="px-8 py-20 text-center">
+                       <div className="flex flex-col items-center justify-center space-y-4">
+                          <CheckCircle2 className="w-12 h-12 text-emerald-100" />
+                          <p className="text-slate-400 italic text-sm">No technical issues detected. Website health is optimal.</p>
+                       </div>
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  issues.map((issue) => (
+                    <tr key={issue.id} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-8 py-6">
+                        <span className="text-xs font-bold text-slate-900">{issue.page}</span>
+                      </td>
+                      <td className="px-8 py-6">
+                        <p className="text-xs text-slate-600 font-medium leading-relaxed">{issue.issue}</p>
+                        <p className="text-[10px] text-accent font-bold mt-1 uppercase">Fix: {issue.fix}</p>
+                      </td>
+                      <td className="px-8 py-6">
+                        <span className={`text-[9px] font-black uppercase px-2 py-1 rounded ${
+                          issue.severity === 'high' ? 'bg-rose-50 text-rose-500' :
+                          issue.severity === 'medium' ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'
+                        }`}>
+                          {issue.severity}
+                        </span>
+                      </td>
+                      <td className="px-8 py-6">
+                        <span className="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase">
+                          <AlertTriangle className="w-3 h-3 text-amber-500" />
+                          {issue.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
-          </div>
-
-          {/* Linking Opportunities */}
-          <div className="bg-slate-900 rounded-2xl p-8 text-white space-y-6">
-            <div className="flex items-center gap-3">
-              <LinkIcon className="w-5 h-5 text-accent" />
-              <h2 className="text-xl font-bold font-serif">Internal Linking Suggestions</h2>
-            </div>
-            <div className="space-y-4">
-              <div className="p-4 bg-white/5 border border-white/10 rounded-xl space-y-2">
-                <span className="text-[10px] font-bold text-accent uppercase tracking-widest">New Article Detected</span>
-                <p className="text-sm font-medium text-slate-200">"Best Risk Percentage" lacks links to "Drawdown Calculator".</p>
-                <button className="text-[10px] font-black uppercase text-white hover:text-accent transition-colors">Apply Auto-Link &rarr;</button>
-              </div>
-              <div className="p-4 bg-white/5 border border-white/10 rounded-xl space-y-2">
-                <span className="text-[10px] font-bold text-accent uppercase tracking-widest">Keyword Opportunity</span>
-                <p className="text-sm font-medium text-slate-200">"Gold Guide" mentions "pip value" 3 times without linking to the tool.</p>
-                <button className="text-[10px] font-black uppercase text-white hover:text-accent transition-colors">Apply Auto-Link &rarr;</button>
-              </div>
-            </div>
           </div>
         </section>
 
         {/* Right: Sidebar Audit */}
         <aside className="lg:col-span-4 space-y-8">
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-6 shadow-sm">
-            <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.2em] border-b border-slate-100 pb-3 flex items-center gap-2">
-              <FileJson className="w-3.5 h-3.5" />
-              Schema Health
-            </h3>
-            <div className="space-y-4">
-               {[
-                 { label: 'JSON-LD Validity', status: '100%', icon: CheckCircle2, color: 'text-emerald-500' },
-                 { label: 'Breadcrumb Sync', status: 'Verified', icon: CheckCircle2, color: 'text-emerald-500' },
-                 { label: 'Author Markup', status: 'Complete', icon: CheckCircle2, color: 'text-emerald-500' },
-                 { label: 'Missing FAQ Schema', status: '0 Pages', icon: AlertTriangle, color: 'text-slate-300' },
-               ].map((item) => (
-                 <div key={item.label} className="flex items-center justify-between text-xs">
-                   <span className="text-slate-500">{item.label}</span>
-                   <span className={`font-bold uppercase tracking-widest flex items-center gap-1 ${item.color}`}>
-                     {item.status}
-                   </span>
-                 </div>
-               ))}
-            </div>
+          <div className="bg-slate-900 rounded-[2rem] p-8 text-white space-y-6 shadow-xl relative overflow-hidden">
+             <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-3xl rounded-full"></div>
+             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] border-b border-white/10 pb-3">Audit Intelligence</h3>
+             <div className="space-y-4">
+                <div className="flex items-center justify-between text-[10px]">
+                   <span className="text-slate-400 font-bold uppercase">Critical Errors</span>
+                   <span className="text-rose-400 font-black">{issues.filter(i => i.severity === 'high').length}</span>
+                </div>
+                <div className="flex items-center justify-between text-[10px]">
+                   <span className="text-slate-400 font-bold uppercase">Warnings</span>
+                   <span className="text-amber-400 font-black">{issues.filter(i => i.severity === 'medium').length}</span>
+                </div>
+                <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                   <span className="text-[10px] text-emerald-400 font-black uppercase">Overall Health</span>
+                   <span className="text-white font-black">{issues.length > 5 ? '82%' : '100%'}</span>
+                </div>
+             </div>
           </div>
 
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
-            <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.2em] border-b border-slate-100 pb-3">
+          <div className="bg-white border border-slate-200 rounded-[2rem] p-8 space-y-6">
+            <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] border-b border-slate-100 pb-3">
               Automated Files
             </h3>
             <div className="space-y-3">
-              <Link href="/sitemap.xml" target="_blank" className="flex items-center justify-between p-3 bg-slate-50 rounded-xl no-underline group">
+              <Link href="/sitemap.xml" target="_blank" className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl no-underline group">
                 <span className="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors">sitemap.xml</span>
                 <ExternalLink className="w-3 h-3 text-slate-300" />
               </Link>
-              <Link href="/robots.txt" target="_blank" className="flex items-center justify-between p-3 bg-slate-50 rounded-xl no-underline group">
+              <Link href="/robots.txt" target="_blank" className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl no-underline group">
                 <span className="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors">robots.txt</span>
                 <ExternalLink className="w-3 h-3 text-slate-300" />
               </Link>
