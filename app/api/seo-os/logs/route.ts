@@ -5,8 +5,8 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const logs = getLogs();
-    const status = getAgentsStatus();
+    const logs = await getLogs();
+    const status = await getAgentsStatus();
     return NextResponse.json({ logs, status });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

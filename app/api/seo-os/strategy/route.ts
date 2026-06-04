@@ -11,7 +11,7 @@ export async function POST() {
     
     // 1. Fetch real rankings from GSC
     const reports = await getPerformanceReport();
-    const currentRoadmap = getRoadmap();
+    const currentRoadmap = await getRoadmap();
     
     if (!reports || reports.length === 0) {
        return NextResponse.json({ 
@@ -39,7 +39,7 @@ export async function POST() {
     }
 
     // 4. Initialize/Save
-    initializeRoadmap(newPlan as any);
+    await initializeRoadmap(newPlan as any);
 
     console.log('[API] Autopilot Strategy Finalized.');
     return NextResponse.json({ 

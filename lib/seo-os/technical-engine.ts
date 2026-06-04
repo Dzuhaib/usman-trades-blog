@@ -1,10 +1,8 @@
 /**
- * SEO-OS Technical Auditor Engine
- * Scans for site errors, indexing issues, and SEO mistakes.
+ * SEO-OS Technical Auditor Engine via Vercel KV
  */
 
-import fs from 'fs';
-import path from 'path';
+import { kv } from '@vercel/kv';
 import { getPerformanceReport } from './analytics-engine';
 
 export interface TechnicalIssue {
@@ -18,32 +16,29 @@ export interface TechnicalIssue {
   detectedAt: string;
 }
 
-const AUDIT_PATH = path.join(process.cwd(), 'lib/seo-os/technical-audit.json');
+const AUDIT_KEY = 'seo-os:technical-audit';
 
-export function getTechnicalAudit(): TechnicalIssue[] {
-  if (!fs.existsSync(AUDIT_PATH)) return [];
+export async function getTechnicalAudit(): Promise<TechnicalIssue[]> {
   try {
-    const data = fs.readFileSync(AUDIT_PATH, 'utf8');
-    return JSON.parse(data);
+    return (await kv.get<TechnicalIssue[]>(AUDIT_KEY)) || [];
   } catch (e) {
     return [];
   }
 }
 
-export function saveTechnicalAudit(issues: TechnicalIssue[]) {
-  fs.writeFileSync(AUDIT_PATH, JSON.stringify(issues, null, 2));
+export async function saveTechnicalAudit(issues: TechnicalIssue[]) {
+  try {
+    await kv.set(AUDIT_KEY, issues);
+  } catch (e) {
+    console.error('KV Technical Audit Error:', e);
+  }
 }
 
-/**
- * Technical Auditor Agent Logic
- */
 export async function performTechnicalAudit() {
-  const issues: TechnicalIssue[] = getTechnicalAudit();
-  
-  // 1. Check GSC data for underperforming pages (possible indexing/quality issues)
+  const issues: TechnicalIssue[] = await getTechnicalAudit();
   const gscData = await getPerformanceReport();
   
-  // Example: Find pages with high impressions but zero clicks (Meta/Snippet issues)
+  // 1. Meta Issues
   const metaIssues = gscData.filter(r => r.impressions > 100 && r.clicks === 0);
   for (const item of metaIssues) {
     if (!issues.find(i => i.page === item.url && i.type === 'meta')) {
@@ -60,10 +55,10 @@ export async function performTechnicalAudit() {
     }
   }
 
-  // 2. Check for "ghost" pages (not in our local blog data but ranking - possibly old/deleted)
+  // 2. Ghost Pages
   const { BLOG_POSTS } = await import('@/lib/blogData');
   const validRoutes = new Set([
-    ...BLOG_POSTS.map(p => p.route),
+    ...BLOG_POSTS.map(p => `/blog/posts/${p.slug}`),
     '/', '/about', '/contact', '/blog', '/tools'
   ]);
   
@@ -83,7 +78,6 @@ export async function performTechnicalAudit() {
     }
   }
 
-  // Keep only the most recent 50 issues
-  saveTechnicalAudit(issues.slice(-50));
+  await saveTechnicalAudit(issues.slice(-50));
   return issues;
 }

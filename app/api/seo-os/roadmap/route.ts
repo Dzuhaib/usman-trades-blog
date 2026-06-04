@@ -5,34 +5,31 @@ import { logAgentAction } from '@/lib/seo-os/log-engine';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const roadmap = getRoadmap();
+  const roadmap = await getRoadmap();
   return NextResponse.json(roadmap);
 }
 
 export async function POST(request: Request) {
   try {
     const { action, status, task } = await request.json();
-    const roadmap = getRoadmap();
+    const roadmap = await getRoadmap();
     
     if (!roadmap) return NextResponse.json({ error: 'No roadmap found' }, { status: 404 });
 
     if (action === 'toggle-status' && status) {
       roadmap.systemStatus = status;
-      saveRoadmap(roadmap);
+      await saveRoadmap(roadmap);
       
       if (status === 'active') {
-        logAgentAction('Orchestrator', 'success', 'Professional SEO Experts Activated. System in high-alert mode.');
-        logAgentAction('Monitor Agent', 'active', 'Standing by for performance shifts...');
-        logAgentAction('Researcher Agent', 'active', 'Scanning market trends for new opportunities...');
+        await logAgentAction('Orchestrator', 'success', 'Professional SEO Experts Activated. System in high-alert mode.');
       } else {
-        logAgentAction('Orchestrator', 'idle', 'System Hibernated. Agents on standby.');
+        await logAgentAction('Orchestrator', 'idle', 'System Hibernated. Agents on standby.');
       }
 
       return NextResponse.json({ success: true, status: roadmap.systemStatus });
     }
 
     if (action === 'add-task' && task) {
-      // Add the new expert task to the top of the pending list
       const newTask = {
         day: roadmap.tasks.length + 1,
         keyword: task.keyword,
@@ -43,9 +40,9 @@ export async function POST(request: Request) {
       };
       
       roadmap.tasks.unshift(newTask);
-      saveRoadmap(roadmap);
+      await saveRoadmap(roadmap);
       
-      logAgentAction('Strategist Agent', 'success', `Manually approved task added: ${task.keyword}`);
+      await logAgentAction('Strategist Agent', 'success', `Manually approved task added: ${task.keyword}`);
       return NextResponse.json({ success: true });
     }
 
