@@ -11,7 +11,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { action, status } = await request.json();
+    const { action, status, task } = await request.json();
     const roadmap = getRoadmap();
     
     if (!roadmap) return NextResponse.json({ error: 'No roadmap found' }, { status: 404 });
@@ -29,6 +29,24 @@ export async function POST(request: Request) {
       }
 
       return NextResponse.json({ success: true, status: roadmap.systemStatus });
+    }
+
+    if (action === 'add-task' && task) {
+      // Add the new expert task to the top of the pending list
+      const newTask = {
+        day: roadmap.tasks.length + 1,
+        keyword: task.keyword,
+        type: task.type || 'article',
+        priority: task.priority || 'high',
+        status: 'pending' as const,
+        expert_note: task.expert_note || 'Manually approved opportunity.'
+      };
+      
+      roadmap.tasks.unshift(newTask);
+      saveRoadmap(roadmap);
+      
+      logAgentAction('Strategist Agent', 'success', `Manually approved task added: ${task.keyword}`);
+      return NextResponse.json({ success: true });
     }
 
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });

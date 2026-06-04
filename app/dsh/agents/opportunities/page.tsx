@@ -93,7 +93,26 @@ export default function OpportunitiesPage() {
                      </div>
                      
                      <div className="flex flex-col gap-2">
-                        <button className="bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-6 py-4 rounded-xl hover:bg-accent transition-all">
+                        <button 
+                          onClick={async () => {
+                            if(confirm(`Approve this growth opportunity: ${opp.url}?`)) {
+                              const res = await fetch('/api/seo-os/roadmap', {
+                                method: 'POST',
+                                body: JSON.stringify({ 
+                                  action: 'add-task', 
+                                  task: { 
+                                    keyword: `Optimize ${opp.url}`, 
+                                    type: 'article',
+                                    priority: 'high',
+                                    expert_note: `Manual boost for Page 2 content at pos #${opp.position}`
+                                  } 
+                                })
+                              });
+                              if(res.ok) alert('Opportunity approved! Agents will now prioritize this task.');
+                            }
+                          }}
+                          className="bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-6 py-4 rounded-xl hover:bg-accent transition-all"
+                        >
                            Approve & Execute
                         </button>
                         <button className="text-[9px] font-bold text-slate-400 uppercase tracking-widest hover:text-rose-500 py-2">
