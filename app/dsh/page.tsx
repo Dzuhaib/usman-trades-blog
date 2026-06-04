@@ -158,52 +158,93 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {roadmap?.tasks.filter(t => t.status === 'pending').slice(0, 1).map((task) => (
-              <div 
-                key={task.day} 
-                onClick={() => setSelectedTaskDay(task.day)}
-                className="bg-white/5 border border-white/10 p-8 rounded-[2rem] space-y-4 relative z-10 cursor-pointer hover:bg-white/10 transition-all group"
-              >
-                 <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">Live Expert Task &mdash; Click to view pipeline</span>
-                    <Zap className="w-4 h-4 text-accent fill-accent" />
-                 </div>
-                 <h4 className="text-2xl font-bold font-serif text-white">{task.keyword}</h4>
-                 <div className="flex items-center gap-4">
-                    <span className="text-[10px] font-bold bg-white/10 text-slate-300 px-3 py-1 rounded-full uppercase">{task.type}</span>
-                    <span className="text-[10px] font-bold text-rose-400 uppercase tracking-widest">Priority: {task.priority}</span>
-                 </div>
-                 <div className="pt-4 flex flex-wrap gap-4">
-                    <button 
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        if(confirm('Force execution of the next atomic task in the pipeline?')) {
-                          const res = await fetch('/api/seo-os/cron?token=dev-test');
-                          const data = await res.json();
-                          alert(data.success ? 'Atomic Step Complete! Refreshing logs...' : 'Error: ' + data.error);
-                          loadData();
-                        }
-                      }}
-                      className="flex-1 bg-white text-slate-900 font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-accent hover:text-white transition-all"
-                    >
-                       Step Execute
-                    </button>
-                    <button 
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        if(confirm('Submit all missing URLs to GSC?')) {
-                          const res = await fetch('/api/seo-os/cleanup?token=dev-test', { method: 'POST' });
-                          const data = await res.json();
-                          alert(data.success ? `Submitted ${data.submittedCount} URLs!` : 'Error: ' + data.error);
-                        }
-                      }}
-                      className="px-6 py-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-white text-[10px] font-bold uppercase"
-                    >
-                       Cleanup GSC
-                    </button>
-                 </div>
-              </div>
-            ))}
+            {roadmap?.tasks.filter(t => t.status === 'pending').slice(0, 1).map((task) => {
+              const activeStepIdx = task.pipeline?.findIndex(s => s.status === 'active' || s.status === 'pending');
+              const activeStep = task.pipeline?.[activeStepIdx ?? -1];
+              const progressPercent = task.pipeline ? Math.round((task.pipeline.filter(s => s.status === 'completed').length / task.pipeline.length) * 100) : 0;
+
+              return (
+                <div 
+                  key={task.day} 
+                  onClick={() => setSelectedTaskDay(task.day)}
+                  className="bg-white/5 border border-white/10 p-8 rounded-[2rem] space-y-6 relative z-10 cursor-pointer hover:bg-white/10 transition-all group"
+                >
+                   <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Zap className="w-4 h-4 text-accent fill-accent" />
+                        <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">Live Expert Task &mdash; Pipeline Active</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-black text-white">{progressPercent}%</span>
+                        <div className="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
+                           <div className="h-full bg-accent transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
+                        </div>
+                      </div>
+                   </div>
+
+                   <div className="space-y-1">
+                      <h4 className="text-2xl font-bold font-serif text-white">{task.keyword}</h4>
+                      {activeStep && (
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></div>
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                            Current: {activeStep.agent} &mdash; <span className="text-white">{activeStep.message}</span>
+                          </p>
+                        </div>
+                      )}
+                   </div>
+
+                   <div className="flex items-center gap-4">
+                      <span className="text-[10px] font-bold bg-white/10 text-slate-300 px-3 py-1 rounded-full uppercase">{task.type}</span>
+                      <span className="text-[10px] font-bold text-rose-400 uppercase tracking-widest">Priority: {task.priority}</span>
+                   </div>
+                   
+                   <div className="pt-2 flex flex-wrap gap-4">
+                      <button 
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if(confirm('Force execution of the next atomic task in the pipeline?')) {
+                            const btn = e.currentTarget;
+                            btn.disabled = true;
+                            const originalText = btn.innerText;
+                            btn.innerText = 'Executing...';
+                            
+                            const res = await fetch('/api/seo-os/cron?token=dev-test');
+                            const data = await res.json();
+                            
+                            if (data.success) {
+                              loadData();
+                            } else {
+                              alert('Error: ' + data.error);
+                            }
+                            btn.disabled = false;
+                            btn.innerText = originalText;
+                          }
+                        }}
+                        className="flex-1 bg-white text-slate-900 font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-accent hover:text-white transition-all disabled:opacity-50"
+                      >
+                         Step Execute
+                      </button>
+                      <button 
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if(confirm('Submit all missing URLs to GSC?')) {
+                            const btn = e.currentTarget;
+                            btn.disabled = true;
+                            const res = await fetch('/api/seo-os/cleanup?token=dev-test', { method: 'POST' });
+                            const data = await res.json();
+                            alert(data.success ? `Submitted ${data.submittedCount} URLs!` : 'Error: ' + data.error);
+                            btn.disabled = false;
+                          }
+                        }}
+                        className="px-6 py-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-white text-[10px] font-bold uppercase disabled:opacity-50"
+                      >
+                         Cleanup GSC
+                      </button>
+                   </div>
+                </div>
+              );
+            })}
           </div>
           
           {/* Quick Performance Snapshot */}

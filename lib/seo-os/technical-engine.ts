@@ -83,3 +83,14 @@ export async function performTechnicalAudit() {
   await saveTechnicalAudit(issues.slice(-50));
   return issues;
 }
+
+export async function resolveTechnicalIssue(id: string) {
+  const issues = await getTechnicalAudit();
+  const issue = issues.find(i => i.id === id);
+  if (issue) {
+    issue.status = 'fixed';
+    await saveTechnicalAudit(issues);
+    return true;
+  }
+  return false;
+}

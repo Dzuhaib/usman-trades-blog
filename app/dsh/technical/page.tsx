@@ -24,6 +24,16 @@ export default function TechnicalAuditPage() {
     load();
   }, []);
 
+  const handleResolve = async (id: string) => {
+    if (confirm('Mark this technical issue as resolved?')) {
+      const res = await fetch('/api/seo-os/technical', {
+        method: 'POST',
+        body: JSON.stringify({ id })
+      });
+      if (res.ok) load();
+    }
+  };
+
   if (loading) {
     return (
       <div className="h-[60vh] flex items-center justify-center">
@@ -51,14 +61,13 @@ export default function TechnicalAuditPage() {
                 <tr>
                   <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Target Page</th>
                   <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Detected Issue</th>
-                  <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Priority</th>
-                  <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Status</th>
+                  <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {issues.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-8 py-20 text-center">
+                    <td colSpan={3} className="px-8 py-20 text-center">
                        <div className="flex flex-col items-center justify-center space-y-4">
                           <CheckCircle2 className="w-12 h-12 text-emerald-100" />
                           <p className="text-slate-400 italic text-sm">No technical issues detected. Website health is optimal.</p>
@@ -69,25 +78,34 @@ export default function TechnicalAuditPage() {
                   issues.map((issue) => (
                     <tr key={issue.id} className="hover:bg-slate-50/50 transition-colors">
                       <td className="px-8 py-6">
-                        <span className="text-xs font-bold text-slate-900">{issue.page}</span>
+                        <div className="space-y-1">
+                           <span className="text-xs font-bold text-slate-900 block">{issue.page}</span>
+                           <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded ${
+                             issue.severity === 'high' ? 'bg-rose-50 text-rose-500' :
+                             issue.severity === 'medium' ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'
+                           }`}>
+                             {issue.severity} Severity
+                           </span>
+                        </div>
                       </td>
                       <td className="px-8 py-6">
                         <p className="text-xs text-slate-600 font-medium leading-relaxed">{issue.issue}</p>
-                        <p className="text-[10px] text-accent font-bold mt-1 uppercase">Fix: {issue.fix}</p>
+                        <p className="text-[10px] text-accent font-bold mt-1 uppercase">Recommended Fix: {issue.fix}</p>
                       </td>
-                      <td className="px-8 py-6">
-                        <span className={`text-[9px] font-black uppercase px-2 py-1 rounded ${
-                          issue.severity === 'high' ? 'bg-rose-50 text-rose-500' :
-                          issue.severity === 'medium' ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'
-                        }`}>
-                          {issue.severity}
-                        </span>
-                      </td>
-                      <td className="px-8 py-6">
-                        <span className="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase">
-                          <AlertTriangle className="w-3 h-3 text-amber-500" />
-                          {issue.status}
-                        </span>
+                      <td className="px-8 py-6 text-right">
+                        {issue.status === 'fixed' ? (
+                          <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-emerald-600 uppercase bg-emerald-50 px-3 py-1.5 rounded-lg">
+                            <CheckCircle2 className="w-3 h-3" />
+                            Resolved
+                          </span>
+                        ) : (
+                          <button 
+                            onClick={() => handleResolve(issue.id)}
+                            className="text-[9px] font-black text-white uppercase bg-slate-900 px-4 py-2 rounded-lg hover:bg-accent transition-all whitespace-nowrap"
+                          >
+                             Resolve & Fix
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))
