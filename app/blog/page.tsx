@@ -25,8 +25,22 @@ export default async function BlogIndex({ searchParams }: PageProps) {
   // Fetch dynamic posts from Redis
   const dynamicPosts = await getDynamicPosts();
   
-  // Combine static and dynamic posts
-  const allPosts: BlogPost[] = [...dynamicPosts, ...BLOG_POSTS];
+  // Combine static and dynamic posts (Prefer static BLOG_POSTS by listing them first)
+  const combinedPosts: BlogPost[] = [...BLOG_POSTS, ...dynamicPosts];
+  
+  // De-duplicate by title (normalized) and slug
+  const seenTitles = new Set<string>();
+  const seenSlugs = new Set<string>();
+  
+  const allPosts = combinedPosts.filter(post => {
+    const normalizedTitle = post.title.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (seenTitles.has(normalizedTitle) || seenSlugs.has(post.slug)) {
+      return false;
+    }
+    seenTitles.add(normalizedTitle);
+    seenSlugs.add(post.slug);
+    return true;
+  });
 
   // Filter posts based on active category
   const filteredPosts = (activeCategory === 'All'

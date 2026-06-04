@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import MiniRiskTerminal from '@/components/MiniRiskTerminal';
-import { BLOG_POSTS } from '@/lib/blogData';
+import { BLOG_POSTS, BlogPost } from '@/lib/blogData';
+import { getDynamicPosts, getPostBySlug } from '@/lib/seo-os/article-engine';
 import { getPexelsImage } from '@/lib/pexels';
 import { Calculator, ShieldCheck, BarChart3, TrendingUp, CheckCircle2, ArrowRight, BookOpen } from 'lucide-react';
 import Image from 'next/image';
@@ -15,7 +16,26 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const featuredPosts = [...BLOG_POSTS]
+  const dynamicPosts = await getDynamicPosts();
+  
+  // Combine static and dynamic posts (Prefer static BLOG_POSTS by listing them first)
+  const combinedPosts: BlogPost[] = [...BLOG_POSTS, ...dynamicPosts];
+  
+  // De-duplicate by title (normalized) and slug
+  const seenTitles = new Set<string>();
+  const seenSlugs = new Set<string>();
+  
+  const allPosts = combinedPosts.filter(post => {
+    const normalizedTitle = post.title.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (seenTitles.has(normalizedTitle) || seenSlugs.has(post.slug)) {
+      return false;
+    }
+    seenTitles.add(normalizedTitle);
+    seenSlugs.add(post.slug);
+    return true;
+  });
+
+  const featuredPosts = allPosts
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 5);
 
