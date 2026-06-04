@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { BLOG_POSTS, CATEGORIES } from '@/lib/blogData';
+import { BLOG_POSTS, CATEGORIES, BlogPost } from '@/lib/blogData';
+import { getDynamicPosts } from '@/lib/seo-os/article-engine';
 import { getPexelsImage } from '@/lib/pexels';
 import Image from 'next/image';
 import { Search, Clock, Calendar, User } from 'lucide-react';
@@ -21,10 +22,16 @@ export default async function BlogIndex({ searchParams }: PageProps) {
   const resolvedParams = await searchParams;
   const activeCategory = resolvedParams.category || 'All';
 
+  // Fetch dynamic posts from Redis
+  const dynamicPosts = await getDynamicPosts();
+  
+  // Combine static and dynamic posts
+  const allPosts: BlogPost[] = [...dynamicPosts, ...BLOG_POSTS];
+
   // Filter posts based on active category
   const filteredPosts = (activeCategory === 'All'
-    ? [...BLOG_POSTS]
-    : BLOG_POSTS.filter(post => post.category === activeCategory))
+    ? allPosts
+    : allPosts.filter(post => post.category === activeCategory))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   // Fetch Pexels cover images

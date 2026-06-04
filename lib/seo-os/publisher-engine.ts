@@ -1,14 +1,11 @@
-import fs from 'fs';
-import path from 'path';
 import { BLOG_POSTS, BlogPost } from '@/lib/blogData';
+import { saveDynamicPost } from './article-engine';
 
 /**
  * Phase 7: Publish Agent
  * Handles data updates to make AI content live via dynamic routing.
  */
 export async function publishArticle(slug: string, title: string, content: string, category: any) {
-  const blogDataPath = path.join(process.cwd(), 'lib/blogData.ts');
-
   // 1. Prepare Metadata Object
   const newPost: BlogPost = {
     slug,
@@ -27,20 +24,12 @@ export async function publishArticle(slug: string, title: string, content: strin
     }
   };
 
-  // 2. Read and Update blogData.ts
+  // 2. Save to Redis Database (Bypasses read-only FS)
   try {
-    const blogDataContent = fs.readFileSync(blogDataPath, 'utf8');
-    
-    // Inject the new post at the start of the BLOG_POSTS array
-    const updatedContent = blogDataContent.replace(
-      'export const BLOG_POSTS: BlogPost[] = [',
-      `export const BLOG_POSTS: BlogPost[] = [\n  ${JSON.stringify(newPost, null, 2)},`
-    );
-
-    fs.writeFileSync(blogDataPath, updatedContent);
+    await saveDynamicPost(newPost);
     return { success: true, url: `/blog/posts/${slug}` };
   } catch (error: any) {
     console.error('Publish Agent Error:', error);
-    return { success: false, error: `Publishing failed: ${error.message}` };
+    return { success: false, error: `Database failed: ${error.message}` };
   }
 }

@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { getPexelsImages } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
-import { BLOG_POSTS } from '@/lib/blogData';
+import { getPostBySlug } from '@/lib/seo-os/article-engine';
 import { generateBlogSchema } from '@/lib/seo-os/schema-engine';
 import SmartText from '@/components/SmartText';
 
@@ -15,7 +15,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = BLOG_POSTS.find(p => p.slug === slug);
+  const post = await getPostBySlug(slug);
   
   if (!post) return { title: 'Post Not Found' };
 
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = BLOG_POSTS.find(p => p.slug === slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     notFound();
