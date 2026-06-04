@@ -1,9 +1,11 @@
 /**
- * SEO-OS Technical Auditor Engine via Vercel KV
+ * SEO-OS Technical Auditor Engine via Upstash Redis
  */
 
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import { getPerformanceReport } from './analytics-engine';
+
+const redis = Redis.fromEnv();
 
 export interface TechnicalIssue {
   id: string;
@@ -20,7 +22,7 @@ const AUDIT_KEY = 'seo-os:technical-audit';
 
 export async function getTechnicalAudit(): Promise<TechnicalIssue[]> {
   try {
-    return (await kv.get<TechnicalIssue[]>(AUDIT_KEY)) || [];
+    return (await redis.get<TechnicalIssue[]>(AUDIT_KEY)) || [];
   } catch (e) {
     return [];
   }
@@ -28,9 +30,9 @@ export async function getTechnicalAudit(): Promise<TechnicalIssue[]> {
 
 export async function saveTechnicalAudit(issues: TechnicalIssue[]) {
   try {
-    await kv.set(AUDIT_KEY, issues);
+    await redis.set(AUDIT_KEY, issues);
   } catch (e) {
-    console.error('KV Technical Audit Error:', e);
+    console.error('Redis Technical Audit Error:', e);
   }
 }
 

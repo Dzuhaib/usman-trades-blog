@@ -1,9 +1,11 @@
 /**
  * SEO-OS Roadmap Store
- * Handles persistence of the 30-day AI execution plan via Vercel KV.
+ * Handles persistence of the 30-day AI execution plan via Upstash Redis.
  */
 
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
+
+const redis = Redis.fromEnv();
 
 export interface RoadmapTask {
   day: number;
@@ -28,9 +30,9 @@ const ROADMAP_KEY = 'seo-os:roadmap';
 
 export async function getRoadmap(): Promise<RoadmapData | null> {
   try {
-    return await kv.get<RoadmapData>(ROADMAP_KEY);
+    return await redis.get<RoadmapData>(ROADMAP_KEY);
   } catch (e) {
-    console.error('KV Get Roadmap Error:', e);
+    console.error('Redis Get Roadmap Error:', e);
     return null;
   }
 }
@@ -41,9 +43,9 @@ export async function saveRoadmap(data: RoadmapData) {
   data.updatedAt = new Date().toISOString();
   
   try {
-    await kv.set(ROADMAP_KEY, data);
+    await redis.set(ROADMAP_KEY, data);
   } catch (e) {
-    console.error('KV Save Roadmap Error:', e);
+    console.error('Redis Save Roadmap Error:', e);
   }
 }
 

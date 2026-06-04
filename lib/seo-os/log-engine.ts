@@ -1,8 +1,10 @@
 /**
- * SEO-OS Agent Log Engine via Vercel KV
+ * SEO-OS Agent Log Engine via Upstash Redis
  */
 
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
+
+const redis = Redis.fromEnv();
 
 export interface AgentLog {
   timestamp: string;
@@ -31,15 +33,15 @@ export async function logAgentAction(agent: string, status: 'active' | 'idle' | 
     
     logs.unshift(newLog);
     const updatedLogs = logs.slice(0, 50);
-    await kv.set(LOGS_KEY, updatedLogs);
+    await redis.set(LOGS_KEY, updatedLogs);
   } catch (e) {
-    console.error('KV Log Error:', e);
+    console.error('Redis Log Error:', e);
   }
 }
 
 export async function getLogs(): Promise<AgentLog[]> {
   try {
-    return (await kv.get<AgentLog[]>(LOGS_KEY)) || [];
+    return (await redis.get<AgentLog[]>(LOGS_KEY)) || [];
   } catch (e) {
     return [];
   }
@@ -63,7 +65,7 @@ export async function getAgentsStatus(): Promise<AgentStatus[]> {
     const agentLogs = logs.filter(l => l.agent === name);
     const lastLog = agentLogs[0];
     
-    let currentStatus: 'active' | 'idle' | 'error' = 'active'; // Default to active if system is running
+    let currentStatus: 'active' | 'idle' | 'error' = 'active'; 
     
     if (lastLog) {
       if (lastLog.status === 'error') currentStatus = 'error';
