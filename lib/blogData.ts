@@ -7,6 +7,7 @@ export interface BlogPost {
   updatedAt: string;
   readTime: string;
   route: string;
+  content?: string;
   author: {
     name: string;
     role: string;

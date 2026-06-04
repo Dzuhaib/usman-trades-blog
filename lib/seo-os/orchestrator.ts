@@ -38,12 +38,18 @@ export async function runDailyCycle(isManual: boolean = false) {
 
   console.log(`[Orchestrator] Professional SEO Pipeline Heartbeat (Manual: ${isManual})`);
 
-  try {
-    // 1. STRATEGY & MONITORING - Only run if roadmap is empty or explicitly requested (not on Step Execute)
-    const hasTasks = roadmap && roadmap.tasks.length > 0;
+  // Use a loop for manual triggers to execute the full pipeline automatically
+  let shouldContinue = true;
+  let loopCount = 0;
+
+  while (shouldContinue && loopCount < 5) {
+    loopCount++;
+    const currentRoadmap = await getRoadmap();
+    if (!currentRoadmap) break;
+
+    const hasTasks = currentRoadmap.tasks.length > 0;
     
-    // We only run the Strategist if there's literally nothing to do, OR if this is a non-manual scheduled run and no work is in progress.
-    // "Step Execute" from the dashboard should NEVER trigger the strategist.
+    // 1. STRATEGY (Only on empty roadmap)
     if (!hasTasks) {
       await logAgentAction('Technical Auditor', 'active', 'Scanning website for errors...');
       await performTechnicalAudit();
@@ -51,9 +57,7 @@ export async function runDailyCycle(isManual: boolean = false) {
 
       await logAgentAction('Monitor Agent', 'active', 'Analyzing performance...');
       const gscData = await getPerformanceReport();
-      const correctionReport = roadmap 
-        ? await monitorPerformanceAndAdjust(gscData, roadmap)
-        : 'Initial strategy.';
+      const correctionReport = await monitorPerformanceAndAdjust(gscData, currentRoadmap);
       
       await logAgentAction('Research Agent', 'active', 'Finding opportunities...');
       const researchReport = await performDeepResearch(gscData);
@@ -61,44 +65,32 @@ export async function runDailyCycle(isManual: boolean = false) {
       await logAgentAction('Strategist Agent', 'active', 'Optimizing roadmap...');
       const newTasks = await generate30DayPlan(researchReport, correctionReport);
       
-      const updatedRoadmap = roadmap || {
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        progress: 0,
-        tasks: [],
-        systemStatus: 'active'
+      const updatedRoadmap = {
+        ...currentRoadmap,
+        tasks: (newTasks as any).map((t: any) => ({
+          ...t,
+          pipeline: [
+            { agent: 'Writer Agent', status: 'pending' as const, message: 'Waiting for research context.' },
+            { agent: 'Review Agent', status: 'pending' as const, message: 'Waiting for content draft.' },
+            { agent: 'Linking Agent', status: 'pending' as const, message: 'Waiting for final polish.' },
+            { agent: 'Publish Agent', status: 'pending' as const, message: 'Waiting for deployment signal.' },
+          ]
+        }))
       };
-      
-      const completedTasks = updatedRoadmap.tasks.filter(t => t.status === 'completed');
-      // Initialize pipeline for new tasks
-      const initializedTasks = (newTasks as any).map((t: any) => ({
-        ...t,
-        pipeline: [
-          { agent: 'Writer Agent', status: 'pending' as const, message: 'Waiting for research context.' },
-          { agent: 'Review Agent', status: 'pending' as const, message: 'Waiting for content draft.' },
-          { agent: 'Linking Agent', status: 'pending' as const, message: 'Waiting for final polish.' },
-          { agent: 'Publish Agent', status: 'pending' as const, message: 'Waiting for deployment signal.' },
-        ]
-      }));
 
-      updatedRoadmap.tasks = [...completedTasks, ...initializedTasks];
       await saveRoadmap(updatedRoadmap);
       await logAgentAction('Strategist Agent', 'success', 'Roadmap updated.');
-      
-      return; // End cycle after strategy refresh
+      return; 
     }
 
-    const activeRoadmap = await getRoadmap();
-    if (!activeRoadmap) return;
-
-    // 2. PIPELINE EXECUTION (One step per run)
-
+    // 2. PIPELINE EXECUTION
+    
     // A. PUBLISH
-    const taskToPublish = activeRoadmap.tasks.find(t => t.status === 'pending' && (t as any).finalContent);
+    const taskToPublish = currentRoadmap.tasks.find(t => t.status === 'pending' && (t as any).finalContent);
     if (taskToPublish) {
       await logAgentAction('Publish Agent', 'active', `Publishing: ${taskToPublish.keyword}`);
       taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'active', 'Deploying to live environment...');
-      await saveRoadmap(activeRoadmap);
+      await saveRoadmap(currentRoadmap);
 
       const slug = taskToPublish.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
       const res = await publishArticle(slug, taskToPublish.keyword, (taskToPublish as any).finalContent, 'Risk Management');
@@ -108,74 +100,80 @@ export async function runDailyCycle(isManual: boolean = false) {
         taskToPublish.completedAt = new Date().toISOString();
         taskToPublish.publishedUrl = res.url;
         taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'completed', `Successfully live at ${res.url}`);
-        await saveRoadmap(activeRoadmap);
+        await saveRoadmap(currentRoadmap);
         await logAgentAction('Publish Agent', 'success', `Live at ${res.url}`);
         await requestIndexing(`https://usmantrades.co.uk${res.url}`);
+        shouldContinue = false; // Task fully completed
       } else {
         taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'failed', 'Network error during deployment.');
-        await saveRoadmap(activeRoadmap);
+        await saveRoadmap(currentRoadmap);
+        shouldContinue = false;
       }
-      return;
+      if (!isManual) return;
+      continue;
     }
 
     // B. LINKING
-    const taskToLink = activeRoadmap.tasks.find(t => t.status === 'pending' && (t as any).reviewedContent && !(t as any).finalContent);
+    const taskToLink = currentRoadmap.tasks.find(t => t.status === 'pending' && (t as any).reviewedContent && !(t as any).finalContent);
     if (taskToLink) {
       await logAgentAction('Linking Agent', 'active', `Linking: ${taskToLink.keyword}`);
       taskToLink.pipeline = updateStep(taskToLink.pipeline, 'Linking Agent', 'active', 'Analyzing internal graph for contextual links...');
-      await saveRoadmap(activeRoadmap);
+      await saveRoadmap(currentRoadmap);
 
       const linkedContent = injectContextualLinks((taskToLink as any).reviewedContent);
       (taskToLink as any).finalContent = linkedContent;
       taskToLink.pipeline = updateStep(taskToLink.pipeline, 'Linking Agent', 'completed', 'Contextual links injected successfully.');
-      await saveRoadmap(activeRoadmap);
+      await saveRoadmap(currentRoadmap);
       await logAgentAction('Linking Agent', 'success', 'Links optimized.');
-      return;
+      if (!isManual) return;
+      continue;
     }
 
     // C. REVIEWER
-    const taskToReview = activeRoadmap.tasks.find(t => t.status === 'pending' && (t as any).rawContent && !(t as any).reviewedContent);
+    const taskToReview = currentRoadmap.tasks.find(t => t.status === 'pending' && (t as any).rawContent && !(t as any).reviewedContent);
     if (taskToReview) {
       await logAgentAction('Review Agent', 'active', `Reviewing: ${taskToReview.keyword}`);
       taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'active', 'Editing content for brand voice & accuracy...');
-      await saveRoadmap(activeRoadmap);
+      await saveRoadmap(currentRoadmap);
 
       const { approved, finalContent } = await reviewContent((taskToReview as any).rawContent);
       if (approved) {
         (taskToReview as any).reviewedContent = finalContent;
         taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'completed', 'Editorial review passed.');
-        await saveRoadmap(activeRoadmap);
+        await saveRoadmap(currentRoadmap);
         await logAgentAction('Review Agent', 'success', 'Approved by Editor.');
       } else {
         taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'failed', 'Content rejected for quality standards.');
-        await saveRoadmap(activeRoadmap);
+        await saveRoadmap(currentRoadmap);
+        shouldContinue = false;
       }
-      return;
+      if (!isManual) return;
+      continue;
     }
 
     // D. WRITER
-    const taskToDraft = activeRoadmap.tasks.find(t => t.status === 'pending' && !(t as any).rawContent);
+    const taskToDraft = currentRoadmap.tasks.find(t => t.status === 'pending' && !(t as any).rawContent);
     if (taskToDraft) {
       await logAgentAction('Writer Agent', 'active', `Drafting: ${taskToDraft.keyword}`);
       taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'active', 'Generating technical market analysis draft...');
-      await saveRoadmap(activeRoadmap);
+      await saveRoadmap(currentRoadmap);
 
       const content = await generateAIPost(taskToDraft.keyword);
       if (content) {
         (taskToDraft as any).rawContent = content;
         taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'completed', 'Expert draft generated.');
-        await saveRoadmap(activeRoadmap);
+        await saveRoadmap(currentRoadmap);
         await logAgentAction('Writer Agent', 'success', 'Draft complete.');
       } else {
         taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'failed', 'OpenAI capacity error.');
-        await saveRoadmap(activeRoadmap);
+        await saveRoadmap(currentRoadmap);
+        shouldContinue = false;
       }
-      return;
+      if (!isManual) return;
+      continue;
     }
 
-  } catch (error: any) {
-    console.error('Pipeline Error:', error.message);
-    await logAgentAction('Orchestrator', 'error', error.message);
+    shouldContinue = false; // No more work found
   }
 }
 
