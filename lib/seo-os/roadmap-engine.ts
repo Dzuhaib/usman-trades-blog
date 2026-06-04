@@ -21,6 +21,7 @@ export interface RoadmapData {
   updatedAt: string;
   progress: number; // 0-100
   tasks: RoadmapTask[];
+  systemStatus?: 'active' | 'paused';
 }
 
 const ROADMAP_PATH = path.join(process.cwd(), 'lib/seo-os/roadmap.json');

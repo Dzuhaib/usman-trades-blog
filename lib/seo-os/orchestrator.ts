@@ -17,10 +17,18 @@ import { publishArticle } from './publisher-engine';
 import { logAgentAction } from './log-engine';
 
 export async function runDailyCycle(isManual: boolean = false) {
+  const roadmap = getRoadmap();
+
+  // If not manual, and system is paused, skip the cycle
+  if (!isManual && roadmap?.systemStatus === 'paused') {
+    console.log('[Orchestrator] System is PAUSED. Skipping cycle.');
+    return;
+  }
+
   const now = new Date();
   // We use UTC hours to be consistent across deployments
   const hour = now.getUTCHours();
-  
+
   console.log(`[Orchestrator] Heartbeat at ${hour}:00 UTC (Manual: ${isManual})`);
 
   try {
@@ -40,16 +48,25 @@ export async function runDailyCycle(isManual: boolean = false) {
 
       logAgentAction('Strategist Agent', 'active', 'Updating 30-day roadmap...');
       const newTasks = await generate30DayPlan(researchReport, correctionReport);
-      if (!currentRoadmap) initializeRoadmap(newTasks as any);
-      else {
-        currentRoadmap.tasks = newTasks as any;
-        saveRoadmap(currentRoadmap);
-      }
+
+      const updatedRoadmap = currentRoadmap || {
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        progress: 0,
+        tasks: [],
+        systemStatus: 'active'
+      };
+
+      updatedRoadmap.tasks = newTasks as any;
+      updatedRoadmap.systemStatus = 'active'; // Always activate if manual trigger
+      saveRoadmap(updatedRoadmap);
+
       logAgentAction('Strategist Agent', 'success', 'Roadmap synchronized.');
-      
+
       // If we were just testing manual mode, we can stop here or continue
       if (isManual && hour !== 23) return; 
     }
+    // ... rest of agents ...
 
     // 4 AM UTC (4): Writer Agent
     if (hour === 4) {

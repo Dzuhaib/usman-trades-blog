@@ -121,12 +121,35 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold font-serif">Day {roadmap?.tasks.find(t => t.status === 'pending')?.day || 1} Operation</h2>
-                  <p className="text-xs text-slate-400 uppercase tracking-widest font-bold">Autopilot: Executing Roadmap</p>
+                  <p className="text-xs text-slate-400 uppercase tracking-widest font-bold">
+                    Status: {roadmap?.systemStatus === 'paused' ? 'Paused' : 'Autopilot Enabled'}
+                  </p>
                 </div>
               </div>
-              <Link href="/dsh/strategy" className="bg-white/10 hover:bg-white/20 text-white text-[10px] font-black uppercase tracking-widest px-6 py-3 rounded-xl transition-all border border-white/10 no-underline">
-                View Full Strategy
-              </Link>
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={async () => {
+                    const newStatus = roadmap?.systemStatus === 'paused' ? 'active' : 'paused';
+                    if(confirm(`Are you sure you want to ${newStatus === 'paused' ? 'STOP' : 'START'} the AI agents?`)) {
+                      const res = await fetch('/api/seo-os/roadmap', {
+                        method: 'POST',
+                        body: JSON.stringify({ action: 'toggle-status', status: newStatus })
+                      });
+                      if(res.ok) loadData();
+                    }
+                  }}
+                  className={`text-[10px] font-black uppercase tracking-widest px-6 py-3 rounded-xl transition-all border ${
+                    roadmap?.systemStatus === 'paused' 
+                    ? 'bg-emerald-500 text-white border-emerald-400 hover:bg-emerald-600' 
+                    : 'bg-rose-500/10 text-rose-500 border-rose-500/20 hover:bg-rose-500/20'
+                  }`}
+                >
+                  {roadmap?.systemStatus === 'paused' ? 'Start AI Agents' : 'Stop All Agents'}
+                </button>
+                <Link href="/dsh/strategy" className="bg-white/10 hover:bg-white/20 text-white text-[10px] font-black uppercase tracking-widest px-6 py-3 rounded-xl transition-all border border-white/10 no-underline">
+                  View Full Strategy
+                </Link>
+              </div>
             </div>
 
             {roadmap?.tasks.filter(t => t.status === 'pending').slice(0, 1).map((task) => (
