@@ -14,10 +14,13 @@ import {
   AlertCircle,
   Activity,
   ArrowUpRight,
-  LayoutDashboard
+  LayoutDashboard,
+  ChevronRight,
+  X,
+  Bot
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { RoadmapData } from '@/lib/seo-os/roadmap-engine';
+import { RoadmapData, RoadmapTask } from '@/lib/seo-os/roadmap-engine';
 import { GSCReport } from '@/lib/seo-os/analytics-engine';
 import { AgentLog, AgentStatus } from '@/lib/seo-os/log-engine';
 import Link from 'next/link';
@@ -30,6 +33,7 @@ export default function DashboardPage() {
   const [agentStatuses, setAgentStatuses] = useState<AgentStatus[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedTask, setSelectedTask] = useState<RoadmapTask | null>(null);
 
   const loadData = async () => {
     try {
@@ -153,9 +157,13 @@ export default function DashboardPage() {
             </div>
 
             {roadmap?.tasks.filter(t => t.status === 'pending').slice(0, 1).map((task) => (
-              <div key={task.day} className="bg-white/5 border border-white/10 p-8 rounded-[2rem] space-y-4 relative z-10">
+              <div 
+                key={task.day} 
+                onClick={() => setSelectedTask(task)}
+                className="bg-white/5 border border-white/10 p-8 rounded-[2rem] space-y-4 relative z-10 cursor-pointer hover:bg-white/10 transition-all group"
+              >
                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">Immediate Keyword Target</span>
+                    <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">Live Expert Task &mdash; Click to view pipeline</span>
                     <Zap className="w-4 h-4 text-accent fill-accent" />
                  </div>
                  <h4 className="text-2xl font-bold font-serif text-white">{task.keyword}</h4>
@@ -164,32 +172,32 @@ export default function DashboardPage() {
                     <span className="text-[10px] font-bold text-rose-400 uppercase tracking-widest">Priority: {task.priority}</span>
                  </div>
                  <div className="pt-4 flex flex-wrap gap-4">
-                    <button className="flex-1 bg-white text-slate-900 font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-accent hover:text-white transition-all">
-                       Generate Now
-                    </button>
                     <button 
-                      onClick={async () => {
-                        if(confirm('Start full 1AM-9AM SEO Cycle? This will generate and publish a live post.')) {
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        if(confirm('Force execution of the next atomic task in the pipeline?')) {
                           const res = await fetch('/api/seo-os/cron?token=dev-test');
                           const data = await res.json();
-                          alert(data.success ? 'Cycle Complete!' : 'Error: ' + data.error);
+                          alert(data.success ? 'Atomic Step Complete! Refreshing logs...' : 'Error: ' + data.error);
+                          loadData();
                         }
                       }}
-                      className="px-6 py-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-white text-[10px] font-bold uppercase"
+                      className="flex-1 bg-white text-slate-900 font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-accent hover:text-white transition-all"
                     >
-                       Trigger Full Cycle
+                       Step Execute
                     </button>
                     <button 
-                      onClick={async () => {
+                      onClick={async (e) => {
+                        e.stopPropagation();
                         if(confirm('Submit all missing URLs to GSC?')) {
                           const res = await fetch('/api/seo-os/cleanup?token=dev-test', { method: 'POST' });
                           const data = await res.json();
                           alert(data.success ? `Submitted ${data.submittedCount} URLs!` : 'Error: ' + data.error);
                         }
                       }}
-                      className="px-6 py-4 bg-accent/10 border border-accent/20 rounded-xl hover:bg-accent/20 transition-all text-accent text-[10px] font-bold uppercase"
+                      className="px-6 py-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-white text-[10px] font-bold uppercase"
                     >
-                       Submit Missing URLs
+                       Cleanup GSC
                     </button>
                  </div>
               </div>
@@ -312,6 +320,82 @@ export default function DashboardPage() {
           </div>
         </aside>
       </div>
+
+      {/* Task Pipeline Modal */}
+      {selectedTask && (
+        <div className="fixed inset-0 z-[10000] bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-6 animate-in fade-in duration-300">
+           <div className="bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200">
+              <header className="p-8 border-b border-slate-100 flex items-center justify-between">
+                 <div className="flex items-center gap-4">
+                    <div className="p-3 bg-slate-900 rounded-2xl">
+                       <Bot className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                       <h3 className="text-xl font-bold font-serif">Task Execution Pipeline</h3>
+                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{selectedTask.keyword}</p>
+                    </div>
+                 </div>
+                 <button 
+                  onClick={() => setSelectedTask(null)}
+                  className="p-2 hover:bg-slate-50 rounded-xl transition-colors"
+                 >
+                    <X className="w-5 h-5 text-slate-400" />
+                 </button>
+              </header>
+
+              <div className="p-10 space-y-8">
+                 {selectedTask.pipeline ? (
+                   <div className="space-y-8 relative">
+                      {/* Connector Line */}
+                      <div className="absolute left-[11px] top-2 bottom-2 w-[2px] bg-slate-100"></div>
+
+                      {selectedTask.pipeline.map((step, idx) => (
+                        <div key={step.agent} className="flex gap-6 relative z-10">
+                           <div className={`w-6 h-6 rounded-full border-4 border-white flex items-center justify-center shrink-0 shadow-sm ${
+                             step.status === 'completed' ? 'bg-emerald-500' :
+                             step.status === 'active' ? 'bg-accent animate-pulse' :
+                             step.status === 'failed' ? 'bg-rose-500' : 'bg-slate-200'
+                           }`}>
+                             {step.status === 'completed' && <CheckCircle2 className="w-3 h-3 text-white" />}
+                           </div>
+                           <div className="flex-1 space-y-1">
+                              <div className="flex items-center justify-between">
+                                 <span className="text-[10px] font-black text-slate-900 uppercase tracking-tight">{step.agent}</span>
+                                 <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${
+                                   step.status === 'completed' ? 'bg-emerald-50 text-emerald-600' :
+                                   step.status === 'active' ? 'bg-accent/10 text-accent' :
+                                   step.status === 'failed' ? 'bg-rose-50 text-rose-500' : 'bg-slate-100 text-slate-400'
+                                 }`}>
+                                   {step.status}
+                                 </span>
+                              </div>
+                              <p className="text-xs text-slate-500 font-medium">{step.message}</p>
+                              {step.completedAt && (
+                                <p className="text-[9px] text-slate-300 font-bold uppercase tracking-widest mt-1">Finished: {new Date(step.completedAt).toLocaleTimeString()}</p>
+                              )}
+                           </div>
+                        </div>
+                      ))}
+                   </div>
+                 ) : (
+                   <div className="text-center py-10 space-y-4">
+                      <Loader2 className="w-8 h-8 text-slate-200 mx-auto animate-spin" />
+                      <p className="text-sm text-slate-400 italic">Initializing expert pipeline for this task...</p>
+                   </div>
+                 )}
+              </div>
+
+              <footer className="p-8 bg-slate-50 border-t border-slate-100 flex justify-end">
+                 <button 
+                  onClick={() => setSelectedTask(null)}
+                  className="px-8 py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-900 hover:bg-slate-50 transition-all"
+                 >
+                    Close Tracking
+                 </button>
+              </footer>
+           </div>
+        </div>
+      )}
     </div>
   );
 }

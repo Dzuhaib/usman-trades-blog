@@ -7,6 +7,13 @@ import { Redis } from '@upstash/redis';
 
 const redis = Redis.fromEnv();
 
+export interface PipelineStep {
+  agent: string;
+  status: 'pending' | 'active' | 'completed' | 'failed';
+  message: string;
+  completedAt?: string;
+}
+
 export interface RoadmapTask {
   day: number;
   keyword: string;
@@ -16,6 +23,7 @@ export interface RoadmapTask {
   publishedUrl?: string;
   completedAt?: string;
   expert_note?: string;
+  pipeline?: PipelineStep[];
 }
 
 export interface RoadmapData {
