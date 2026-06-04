@@ -39,19 +39,20 @@ export async function runDailyCycle(isManual: boolean = false) {
   console.log(`[Orchestrator] Professional SEO Pipeline Heartbeat (Manual: ${isManual})`);
 
   try {
-    // 1. STRATEGY & MONITORING
-    const hasWorkInProgress = roadmap?.tasks.some(t => t.status === 'pending' && ((t as any).rawContent || (t as any).reviewedContent));
+    // 1. STRATEGY & MONITORING - Only run if roadmap is empty or explicitly requested (not on Step Execute)
+    const hasTasks = roadmap && roadmap.tasks.length > 0;
     
-    if (isManual || !hasWorkInProgress) {
+    // We only run the Strategist if there's literally nothing to do, OR if this is a non-manual scheduled run and no work is in progress.
+    // "Step Execute" from the dashboard should NEVER trigger the strategist.
+    if (!hasTasks) {
       await logAgentAction('Technical Auditor', 'active', 'Scanning website for errors...');
       await performTechnicalAudit();
       await logAgentAction('Technical Auditor', 'success', 'Audit complete.');
 
       await logAgentAction('Monitor Agent', 'active', 'Analyzing performance...');
       const gscData = await getPerformanceReport();
-      const currentRoadmap = await getRoadmap();
-      const correctionReport = currentRoadmap 
-        ? await monitorPerformanceAndAdjust(gscData, currentRoadmap)
+      const correctionReport = roadmap 
+        ? await monitorPerformanceAndAdjust(gscData, roadmap)
         : 'Initial strategy.';
       
       await logAgentAction('Research Agent', 'active', 'Finding opportunities...');
@@ -60,7 +61,7 @@ export async function runDailyCycle(isManual: boolean = false) {
       await logAgentAction('Strategist Agent', 'active', 'Optimizing roadmap...');
       const newTasks = await generate30DayPlan(researchReport, correctionReport);
       
-      const updatedRoadmap = currentRoadmap || {
+      const updatedRoadmap = roadmap || {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         progress: 0,
@@ -73,10 +74,10 @@ export async function runDailyCycle(isManual: boolean = false) {
       const initializedTasks = (newTasks as any).map((t: any) => ({
         ...t,
         pipeline: [
-          { agent: 'Writer Agent', status: 'pending', message: 'Waiting for research context.' },
-          { agent: 'Review Agent', status: 'pending', message: 'Waiting for content draft.' },
-          { agent: 'Linking Agent', status: 'pending', message: 'Waiting for final polish.' },
-          { agent: 'Publish Agent', status: 'pending', message: 'Waiting for deployment signal.' },
+          { agent: 'Writer Agent', status: 'pending' as const, message: 'Waiting for research context.' },
+          { agent: 'Review Agent', status: 'pending' as const, message: 'Waiting for content draft.' },
+          { agent: 'Linking Agent', status: 'pending' as const, message: 'Waiting for final polish.' },
+          { agent: 'Publish Agent', status: 'pending' as const, message: 'Waiting for deployment signal.' },
         ]
       }));
 
@@ -84,7 +85,7 @@ export async function runDailyCycle(isManual: boolean = false) {
       await saveRoadmap(updatedRoadmap);
       await logAgentAction('Strategist Agent', 'success', 'Roadmap updated.');
       
-      if (!isManual) return;
+      return; // End cycle after strategy refresh
     }
 
     const activeRoadmap = await getRoadmap();
