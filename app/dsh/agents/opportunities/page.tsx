@@ -20,6 +20,7 @@ export default function OpportunitiesPage() {
   const [reports, setReports] = useState<GSCReport[]>([]);
   const [roadmap, setRoadmap] = useState<RoadmapData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [locallyApproved, setLocallyApproved] = useState<string[]>([]);
 
   const load = async () => {
     const [repRes, roadRes] = await Promise.all([
@@ -50,9 +51,9 @@ export default function OpportunitiesPage() {
   }
 
   const opportunities = reports
-    .filter(r => r.position > 10 && r.position < 30)
+    .filter(r => r.position > 10 && r.position < 35)
     .sort((a, b) => b.impressions - a.impressions)
-    .slice(0, 10);
+    .slice(0, 15);
 
   return (
     <div className="space-y-10 pb-20 font-sans">
@@ -76,14 +77,16 @@ export default function OpportunitiesPage() {
              </div>
            ) : (
              opportunities.map((opp, i) => {
-               const isApproved = roadmap?.tasks.some(t => {
+               // Robust check for existing approval
+               const isApproved = locallyApproved.includes(opp.url) || roadmap?.tasks.some(t => {
                  const normalizedTaskKeyword = t.keyword.toLowerCase();
                  const normalizedOppUrl = opp.url.toLowerCase();
-                 return normalizedTaskKeyword.includes(normalizedOppUrl);
+                 const slug = normalizedOppUrl.split('/').pop() || normalizedOppUrl;
+                 return normalizedTaskKeyword.includes(slug) || normalizedTaskKeyword.includes(normalizedOppUrl);
                });
 
                return (
-                 <div key={opp.url} className="bg-white border border-slate-200 rounded-[2rem] p-8 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+                 <div key={opp.url} className={`bg-white border rounded-[2rem] p-8 shadow-sm hover:shadow-md transition-all group relative overflow-hidden ${isApproved ? 'border-emerald-200 bg-emerald-50/10' : 'border-slate-200'}`}>
                     {i === 0 && <div className="absolute top-0 right-0 bg-accent text-white text-[8px] font-black uppercase px-4 py-1.5 rounded-bl-xl tracking-widest">Top Recommendation</div>}
                     
                     <div className="flex items-start justify-between gap-6">
@@ -129,6 +132,7 @@ export default function OpportunitiesPage() {
                                   })
                                 });
                                 if(res.ok) {
+                                  setLocallyApproved(prev => [...prev, opp.url]);
                                   alert('Opportunity approved! Agents will now prioritize this task.');
                                   load();
                                 }

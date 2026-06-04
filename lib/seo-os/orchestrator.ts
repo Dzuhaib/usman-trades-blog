@@ -47,40 +47,40 @@ export async function runDailyCycle(isManual: boolean = false) {
     const currentRoadmap = await getRoadmap();
     if (!currentRoadmap) break;
 
-    const hasTasks = currentRoadmap.tasks.length > 0;
+    const pendingTasks = currentRoadmap.tasks.filter(t => t.status === 'pending');
+    const hasEnoughWork = pendingTasks.length >= 3;
     
-    // 1. STRATEGY (Only on empty roadmap)
-    if (!hasTasks) {
-      await logAgentAction('Technical Auditor', 'active', 'Scanning website for errors...');
-      await performTechnicalAudit();
-      await logAgentAction('Technical Auditor', 'success', 'Audit complete.');
-
-      await logAgentAction('Monitor Agent', 'active', 'Analyzing performance...');
+    // 1. STRATEGY (When roadmap is low on work)
+    if (!hasEnoughWork) {
+      await logAgentAction('Monitor Agent', 'active', 'Workload low. Analyzing performance to find new gaps...');
       const gscData = await getPerformanceReport();
       const correctionReport = await monitorPerformanceAndAdjust(gscData, currentRoadmap);
       
-      await logAgentAction('Research Agent', 'active', 'Finding opportunities...');
+      await logAgentAction('Research Agent', 'active', 'Scanning for fresh high-growth opportunities...');
       const researchReport = await performDeepResearch(gscData);
       
-      await logAgentAction('Strategist Agent', 'active', 'Optimizing roadmap...');
+      await logAgentAction('Strategist Agent', 'active', 'Optimizing and expanding roadmap...');
       const newTasks = await generate30DayPlan(researchReport, correctionReport);
       
-      const updatedRoadmap = {
-        ...currentRoadmap,
-        tasks: (newTasks as any).map((t: any) => ({
-          ...t,
-          pipeline: [
-            { agent: 'Writer Agent', status: 'pending' as const, message: 'Waiting for research context.' },
-            { agent: 'Review Agent', status: 'pending' as const, message: 'Waiting for content draft.' },
-            { agent: 'Linking Agent', status: 'pending' as const, message: 'Waiting for final polish.' },
-            { agent: 'Publish Agent', status: 'pending' as const, message: 'Waiting for deployment signal.' },
-          ]
-        }))
-      };
+      // Merge new tasks without duplicates
+      const existingKeywords = new Set(currentRoadmap.tasks.map(t => t.keyword.toLowerCase()));
+      const filteredNewTasks = (newTasks as any).filter((t: any) => !existingKeywords.has(t.keyword.toLowerCase()));
 
-      await saveRoadmap(updatedRoadmap);
-      await logAgentAction('Strategist Agent', 'success', 'Roadmap updated.');
-      return; 
+      const tasksToAppend = filteredNewTasks.map((t: any) => ({
+        ...t,
+        pipeline: [
+          { agent: 'Writer Agent', status: 'pending' as const, message: 'Waiting for research context.' },
+          { agent: 'Review Agent', status: 'pending' as const, message: 'Waiting for content draft.' },
+          { agent: 'Linking Agent', status: 'pending' as const, message: 'Waiting for final polish.' },
+          { agent: 'Publish Agent', status: 'pending' as const, message: 'Waiting for deployment signal.' },
+        ]
+      }));
+
+      currentRoadmap.tasks.push(...tasksToAppend);
+      await saveRoadmap(currentRoadmap);
+      await logAgentAction('Strategist Agent', 'success', `Roadmap expanded with ${tasksToAppend.length} new tasks.`);
+      
+      if (tasksToAppend.length > 0 && !isManual) return;
     }
 
     // 2. PIPELINE EXECUTION
