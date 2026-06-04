@@ -40,9 +40,10 @@ async function getGSCAuth() {
       // Robust newline handling for different environments
       let privateKey = process.env.GSC_PRIVATE_KEY;
       
-      // Remove any surrounding quotes that might have been preserved from .env
+      // Remove any surrounding quotes that might have been preserved from .env or Vercel
       privateKey = privateKey.replace(/^["']|["']$/g, '');
       
+      // Handle escaped newlines
       if (privateKey.includes('\\n')) {
         privateKey = privateKey.replace(/\\n/g, '\n');
       }
@@ -55,8 +56,12 @@ async function getGSCAuth() {
     } 
     // 3. Fallback to full JSON string
     else if (process.env.GSC_SERVICE_ACCOUNT_JSON) {
-      credentials = JSON.parse(process.env.GSC_SERVICE_ACCOUNT_JSON);
-      if (credentials.private_key) {
+      let jsonStr = process.env.GSC_SERVICE_ACCOUNT_JSON.trim();
+      // Remove potential surrounding quotes from the whole JSON string
+      jsonStr = jsonStr.replace(/^["']|["']$/g, '');
+      
+      credentials = JSON.parse(jsonStr);
+      if (credentials.private_key && credentials.private_key.includes('\\n')) {
         credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
       }
     } 
@@ -81,6 +86,7 @@ async function getGSCAuth() {
 
     return google.webmasters({ version: 'v3', auth });
   } catch (error: any) {
+    console.error('[GSC Auth Internal Error]:', error);
     throw new Error(`[GSC Auth Error]: ${error.message}`);
   }
 }
@@ -102,14 +108,44 @@ export async function getPerformanceReport(): Promise<GSCReport[]> {
 
     if (!res.data.rows) return [];
 
-    return res.data.rows.map((row: any) => ({
-      url: row.keys[0].replace(siteUrl, '').replace('https://usmantrades.co.uk', '').replace('https://www.usmantrades.co.uk', ''),
-      impressions: row.impressions,
-      clicks: row.clicks,
-      ctr: parseFloat(row.ctr.toFixed(4)),
-      position: parseFloat(row.position.toFixed(1)),
-      trend: row.clicks > 5 ? 'winning' : 'stable'
-    }));
+    return res.data.rows.map((row: any) => {
+      const rawUrl = row.keys[0];
+      let cleanUrl = rawUrl;
+      
+      // Robustly remove domain prefixes
+      const prefixes = [
+        siteUrl,
+        siteUrl.endsWith('/') ? siteUrl.slice(0, -1) : siteUrl + '/',
+        'https://usmantrades.co.uk/',
+        'https://usmantrades.co.uk',
+        'https://www.usmantrades.co.uk/',
+        'https://www.usmantrades.co.uk'
+      ];
+
+      for (const prefix of prefixes) {
+        if (cleanUrl.startsWith(prefix)) {
+          cleanUrl = cleanUrl.slice(prefix.length);
+          break;
+        }
+      }
+
+      // Ensure leading slash
+      if (!cleanUrl.startsWith('/')) {
+        cleanUrl = '/' + cleanUrl;
+      }
+      
+      // Handle potential double slashes from cleaning
+      cleanUrl = cleanUrl.replace(/\/+/g, '/');
+
+      return {
+        url: cleanUrl,
+        impressions: row.impressions,
+        clicks: row.clicks,
+        ctr: parseFloat(row.ctr.toFixed(4)),
+        position: parseFloat(row.position.toFixed(1)),
+        trend: row.clicks > 5 ? 'winning' : 'stable'
+      };
+    });
 
   } catch (error: any) {
     console.error('[GSC API Error]:', error.message);

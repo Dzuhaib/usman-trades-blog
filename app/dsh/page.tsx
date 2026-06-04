@@ -21,6 +21,7 @@ import { RoadmapData } from '@/lib/seo-os/roadmap-engine';
 import { GSCReport } from '@/lib/seo-os/analytics-engine';
 import { AgentLog, AgentStatus } from '@/lib/seo-os/log-engine';
 import Link from 'next/link';
+import { BLOG_POSTS } from '@/lib/blogData';
 
 export default function DashboardPage() {
   const [reports, setReports] = useState<GSCReport[]>([]);
@@ -75,7 +76,7 @@ export default function DashboardPage() {
   }
 
   const stats = [
-    { label: 'Total Articles', value: '8', change: '+2', icon: Trophy },
+    { label: 'Total Articles', value: BLOG_POSTS.length.toString(), change: '+2', icon: Trophy },
     { label: 'SEO Progress', value: `${roadmap?.progress || 0}%`, change: `${roadmap?.tasks.filter(t => t.status === 'completed').length || 0}/30`, icon: LayoutDashboard },
     { label: 'Top CTR', value: reports.length > 0 ? `${(Math.max(...reports.map(r => r.ctr)) * 100).toFixed(1)}%` : '0%', change: 'Optimal', icon: TrendingUp },
     { label: 'Avg Position', value: reports.length > 0 ? (reports.reduce((a, b) => a + b.position, 0) / reports.length).toFixed(1) : '0', change: 'Stable', icon: Activity },
