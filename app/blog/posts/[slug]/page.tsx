@@ -99,7 +99,7 @@ export default async function BlogPostPage({ params }: Props) {
         )}
 
         {/* Content Body */}
-        <div className="article-content space-y-8 text-primary leading-relaxed text-lg">
+        <div className="article-content">
           <SmartText text={post.content || post.excerpt} />
         </div>
 

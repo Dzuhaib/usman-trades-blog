@@ -2,57 +2,126 @@ import React from 'react';
 import Link from 'next/link';
 import { LINK_MAP } from '@/lib/seo-os/linking-engine';
 
-export default function SmartText({ text }: { text: string }) {
+interface SmartTextProps {
+  text: string;
+}
+
+export default function SmartText({ text }: SmartTextProps) {
   if (!text) return null;
 
-  // Simple implementation: only link the first occurrence of any keyword
-  let parts: (string | React.ReactNode)[] = [text];
-  const linkedKeywords = new Set<string>();
+  // Split text into blocks based on double newlines
+  const blocks = text.split(/\n\n+/);
 
-  // Sort by length descending to match longer phrases first
-  const sortedLinks = [...LINK_MAP].sort((a, b) => b.keyword.length - a.keyword.length);
+  const processText = (content: string) => {
+    let parts: (string | React.ReactNode)[] = [content];
+    const linkedKeywords = new Set<string>();
+    const sortedLinks = [...LINK_MAP].sort((a, b) => b.keyword.length - a.keyword.length);
 
-  for (const link of sortedLinks) {
-    if (linkedKeywords.has(link.keyword)) continue;
+    for (const link of sortedLinks) {
+      if (linkedKeywords.has(link.keyword)) continue;
 
-    const newParts: (string | React.ReactNode)[] = [];
-    let keywordFound = false;
+      const newParts: (string | React.ReactNode)[] = [];
+      let keywordFound = false;
 
-    for (const part of parts) {
-      if (typeof part !== 'string' || keywordFound) {
-        newParts.push(part);
-        continue;
+      for (const part of parts) {
+        if (typeof part !== 'string' || keywordFound) {
+          newParts.push(part);
+          continue;
+        }
+
+        const regex = new RegExp(`\\b(${link.keyword})\\b`, 'i');
+        const match = part.match(regex);
+
+        if (match) {
+          const index = match.index!;
+          const before = part.substring(0, index);
+          const keyword = part.substring(index, index + match[0].length);
+          const after = part.substring(index + match[0].length);
+
+          if (before) newParts.push(before);
+          newParts.push(
+            <Link 
+              key={`${link.keyword}-${index}`} 
+              href={link.href} 
+              className="text-accent hover:underline font-medium"
+            >
+              {keyword}
+            </Link>
+          );
+          if (after) newParts.push(after);
+          
+          keywordFound = true;
+          linkedKeywords.add(link.keyword);
+        } else {
+          newParts.push(part);
+        }
       }
-
-      const regex = new RegExp(`\\b(${link.keyword})\\b`, 'i');
-      const match = part.match(regex);
-
-      if (match) {
-        const index = match.index!;
-        const before = part.substring(0, index);
-        const keyword = part.substring(index, index + match[0].length);
-        const after = part.substring(index + match[0].length);
-
-        if (before) newParts.push(before);
-        newParts.push(
-          <Link 
-            key={`${link.keyword}-${index}`} 
-            href={link.href} 
-            className="text-accent hover:underline font-medium"
-          >
-            {keyword}
-          </Link>
-        );
-        if (after) newParts.push(after);
-        
-        keywordFound = true;
-        linkedKeywords.add(link.keyword);
-      } else {
-        newParts.push(part);
-      }
+      parts = newParts;
     }
-    parts = newParts;
-  }
+    return parts;
+  };
 
-  return <>{parts}</>;
+  return (
+    <div className="space-y-6">
+      {blocks.map((block, idx) => {
+        const trimmed = block.trim();
+        
+        // Headers
+        if (trimmed.startsWith('# ')) {
+          return <h1 key={idx} className="text-3xl md:text-5xl font-bold font-serif text-slate-900 leading-tight mt-12 mb-6">{processText(trimmed.replace('# ', ''))}</h1>;
+        }
+        if (trimmed.startsWith('## ')) {
+          return <h2 key={idx} className="text-2xl md:text-3xl font-bold font-serif text-slate-900 mt-10 mb-4 border-b border-slate-100 pb-2">{processText(trimmed.replace('## ', ''))}</h2>;
+        }
+        if (trimmed.startsWith('### ')) {
+          return <h3 key={idx} className="text-xl font-bold font-serif text-slate-800 mt-8 mb-3">{processText(trimmed.replace('### ', ''))}</h3>;
+        }
+
+        // Lists
+        if (trimmed.startsWith('* ') || trimmed.startsWith('- ') || /^\d+\. /.test(trimmed)) {
+          const items = trimmed.split('\n');
+          return (
+            <ul key={idx} className="space-y-3 my-6">
+              {items.map((item, i) => (
+                <li key={i} className="flex gap-3 text-slate-600 leading-relaxed">
+                  <span className="text-accent font-bold">•</span>
+                  <span>{processText(item.replace(/^(\* |- |\d+\. )/, ''))}</span>
+                </li>
+              ))}
+            </ul>
+          );
+        }
+
+        // Horizontal Rule
+        if (trimmed === '---') {
+          return <hr key={idx} className="border-t border-slate-100 my-12" />;
+        }
+
+        // Blockquotes or Expert Tips
+        if (trimmed.startsWith('> ')) {
+          return (
+            <div key={idx} className="bg-slate-50 border-l-4 border-accent p-6 rounded-r-xl my-8 italic text-slate-700 leading-relaxed">
+              {processText(trimmed.replace('> ', ''))}
+            </div>
+          );
+        }
+
+        // Image Placeholders
+        if (trimmed.includes('[IMAGE_PROMPT:')) {
+          return (
+             <div key={idx} className="hidden">
+                {/* We handle images in the main page component, so we hide the raw prompt here */}
+             </div>
+          );
+        }
+
+        // Regular Paragraph
+        return (
+          <p key={idx} className="text-slate-600 leading-relaxed text-lg mb-4">
+            {processText(trimmed)}
+          </p>
+        );
+      })}
+    </div>
+  );
 }
