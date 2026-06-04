@@ -35,7 +35,7 @@ export async function runDailyCycle(isManual: boolean = false) {
   // STAGE-GATE: If system is paused, stop immediately (Even for manual triggers)
   if (roadmap?.systemStatus === 'paused') {
     console.log('[Orchestrator] System is PAUSED. Pipeline execution halted.');
-    await logAgentAction('System', 'stable', 'Pipeline is currently paused. Resume via Dashboard to continue.');
+    await logAgentAction('System', 'idle', 'Pipeline is currently paused. Resume via Dashboard to continue.');
     return { success: false, error: 'System is paused' };
   }
 
@@ -53,7 +53,7 @@ export async function runDailyCycle(isManual: boolean = false) {
     // RE-VERIFY STATUS: Allow immediate shutdown if user toggles 'Stop' mid-cycle
     if (currentRoadmap.systemStatus === 'paused') {
       console.log('[Orchestrator] Stop signal received mid-cycle. Haling.');
-      await logAgentAction('System', 'stable', 'Emergency Stop: Pipeline halted mid-cycle by user.');
+      await logAgentAction('System', 'idle', 'Emergency Stop: Pipeline halted mid-cycle by user.');
       return { success: true, message: 'Pipeline halted.' };
     }
 
