@@ -33,12 +33,41 @@ export default function SmartText({ text }: SmartTextProps) {
     }
     parts = tempParts;
 
-    // 2. Handle Internal Links (Strictly 1 link per keyword, max 5 total)
+    // 2. Handle Internal Link Placeholders [LINK_URL:LABEL]
+    const linkParts: (string | React.ReactNode)[] = [];
+    for (const part of parts) {
+      if (typeof part !== 'string') {
+        linkParts.push(part);
+        continue;
+      }
+
+      const segments = part.split(/(\[LINK_.*?:.*?\])/);
+      for (const segment of segments) {
+        if (segment.startsWith('[LINK_') && segment.endsWith(']')) {
+          const content = segment.slice(6, -1);
+          const [href, label] = content.split(':');
+          linkParts.push(
+            <Link 
+              key={Math.random()} 
+              href={href} 
+              className="text-accent hover:underline font-medium"
+            >
+              {label}
+            </Link>
+          );
+        } else if (segment) {
+          linkParts.push(segment);
+        }
+      }
+    }
+    parts = linkParts;
+
+    // 3. Handle Auto-Keywords (Fallback for manual articles not using placeholders)
     const sortedLinks = [...LINK_MAP].sort((a, b) => b.keyword.length - a.keyword.length);
-    let linksInjected = 0;
+    let autoLinksInjected = parts.filter(p => React.isValidElement(p)).length;
 
     for (const link of sortedLinks) {
-      if (linksInjected >= 5) break;
+      if (autoLinksInjected >= 5) break;
 
       let keywordFound = false;
       const nextParts: (string | React.ReactNode)[] = [];
@@ -61,7 +90,7 @@ export default function SmartText({ text }: SmartTextProps) {
           if (before) nextParts.push(before);
           nextParts.push(
             <Link 
-              key={`${link.keyword}-${linksInjected}`} 
+              key={`${link.keyword}-${autoLinksInjected}`} 
               href={link.href} 
               className="text-accent hover:underline font-medium"
             >
@@ -71,7 +100,7 @@ export default function SmartText({ text }: SmartTextProps) {
           if (after) nextParts.push(after);
           
           keywordFound = true;
-          linksInjected++;
+          autoLinksInjected++;
         } else {
           nextParts.push(part);
         }

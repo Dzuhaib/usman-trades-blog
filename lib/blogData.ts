@@ -148,7 +148,7 @@ To the uninitiated, gold seems to move on "news" or geopolitical tension. While 
 
 The single most important variable for gold investors is the "Real Yield." Unlike Treasury bonds, gold pays no interest. It is a "zero-yield" asset. Therefore, its attractiveness is inversely proportional to the yield available on "risk-free" assets like the US 10-Year Treasury.
 
-The mathematical formula is: **Real Yield = Nominal Interest Rate - Inflation Expectations**. When real yields are negative, gold becomes the superior store of value.
+The mathematical formula is simple: **Real Yield = Nominal Interest Rate - Inflation Expectations**. When real yields are negative, gold becomes the superior store of value.
 
 ### The Inverse Correlation with USD/DXY
 
@@ -194,7 +194,7 @@ In gold, we talk about **Points**. If gold moves from $2,000 to $2,001, that is 
 
 ### The Position Sizing Formula
 
-**Lot Size = (Total Account Risk in USD) / (Stop Loss Distance in Points × 100)**. If you are a beginner, you should round down your position size. A small mistake in gold volatility can lead to a large drawdown if your **risk management guide** is not followed.
+The professional way to calculate your size is: **Lot Size = (Total Account Risk in USD) / (Stop Loss Distance in Points × 100)**. If you are a beginner, you should round down your position size. A small mistake in gold volatility can lead to a large drawdown if your **risk management guide** is not followed.
 
 ## Risk-First Strategy - Avoiding the Margin Trap
 
@@ -207,89 +207,6 @@ Gold is a high-leverage instrument. You should focus on your **Effective Leverag
 Investing in gold is a mathematical and macro-economic discipline. By monitoring real yields, watching the DXY for divergences, and calculating your size precisely with a **pip value calculator**, you can build a professional portfolio.
 
 Respect the Tier 1 status of gold. It is the "King of Metals" because it follows the laws of mathematics. If you manage your risk and understand the macro-drivers, gold can be the reliable cornerstone of your investment strategy.`
-  },
-  {
-    slug: 'xauusd-guide',
-    title: 'Gold Trading Guide: How to Trade XAUUSD with Confidence',
-    excerpt: "Understand what actually moves the gold market. We explore central bank activity, US dollar correlation, and how to manage gold's volatility.",
-    category: 'Gold (XAUUSD) Analysis',
-    date: 'May 29, 2026',
-    updatedAt: 'May 29, 2026',
-    readTime: '8 min read',
-    route: '/blog/posts/xauusd-guide',
-    author: {
-      name: 'MUHAMMAD USMAN',
-      role: 'Head of Research',
-      bio: 'Professional trader with over 12 years of experience in global macro markets and risk management.'
-    },
-    content: `# Gold Trading Guide: How to Trade XAUUSD with Confidence
-
-Gold (XAUUSD) is arguably the most respected instrument in the financial world. Unlike fiat currencies, which can be printed at will by central banks, Gold represents a finite, tangible store of value. For traders, this makes Gold a unique beast—one that combines the technical precision of Forex with the fundamental volatility of a safe-haven asset.
-
-In this guide, we will peel back the layers of the Gold market to understand how you can trade it with professional-grade confidence.
-
-## The Dual Nature of Gold
-
-To trade Gold successfully, you must understand that it wears two hats. 
-
-1.  **The Commodity Hat:** It is a physical asset used in jewelry and technology.
-2.  **The Monetary Hat:** It is a "proxy" for the US Dollar and a hedge against inflation.
-
-When the US Dollar (DXY) is strong, Gold typically falls. When the US Dollar weakens or inflation rises, Gold typically shines. However, during times of extreme geopolitical stress, Gold can rise *even if* the Dollar is strong, as investors flee to safety.
-
-[IMAGE_1]
-
-## The Real Drivers: Real Yields and Interest Rates
-
-If there is one "secret" to Gold trading, it is the relationship with **Real Yields**. 
-
-\`Real Yield = Nominal Interest Rate - Inflation Rate\`
-
-Gold pays no interest (no yield). Therefore, if you can get a 5% "real" return by holding US Treasury bonds, Gold looks unattractive. But if interest rates are low and inflation is high (negative real yields), Gold becomes the preferred asset. Always watch the 10-year US Treasury yield; when it spikes, Gold usually faces selling pressure.
-
-## Market Sessions and Volatility
-
-Gold doesn't move the same way at 2:00 AM as it does at 8:30 AM EST. 
-
-*   **London Open:** This is when the initial liquidity arrives. You will often see "fake-outs" here where the price moves one way before reversing.
-*   **New York Open (8:00 AM - 11:00 AM EST):** This is the most volatile time for XAUUSD. US economic data (CPI, NFP, Fed Meetings) acts as a catalyst for massive moves. If you are a beginner, avoid trading during the first 15 minutes of the New York open.
-
-[IMAGE_2]
-
-## Technical Strategy: The "Big Levels"
-
-Gold is a highly technical instrument. It respects "round numbers" (like $2,000, $2,050, $2,100) and institutional supply/demand zones.
-
-1.  **Daily Pivot Points:** Gold frequently gravitates toward the daily pivot.
-2.  **The 200-Day EMA:** On the daily chart, this is the "line in the sand" for long-term bulls and bears.
-3.  **Liquidity Sweeps:** Gold is famous for "wicking" above old highs to trigger stop losses before moving in the actual intended direction.
-
-## Risk Management: The Gold Standard
-
-Because Gold is more volatile than EUR/USD, your stop loss should generally be wider in terms of "points," but your lot size must be smaller to compensate. 
-
-**Pro Tip:** Never trade Gold without a stop loss. A single "black swan" event can move Gold $50 in minutes. Without a stop loss, your account could be liquidated before you can even refresh your browser.
-
-[IMAGE_3]
-
-## The Role of Central Banks
-
-Central banks are the "whales" of the Gold market. In recent years, countries like China, India, and Turkey have been massive buyers of Gold to diversify away from the US Dollar. Watching the quarterly "World Gold Council" reports can give you a "macro" view of where the big money is flowing.
-
-## FAQ: Gold Trading
-
-**Q: Is Gold a good investment for beginners?**
-A: It is a great instrument to *learn*, but its volatility can be punishing. Beginners should start with very small positions (0.01 lots) until they understand its "personality."
-
-**Q: What is the best time frame for Gold?**
-A: For analysis, the Daily and 4-Hour charts are king. For entries, the 15-minute chart provides the precision needed to keep stop losses tight.
-
-**Q: Why does Gold drop when the Fed raises interest rates?**
-A: Higher rates make the Dollar stronger and increase the "opportunity cost" of holding Gold (which pays no interest).
-
-[IMAGE_4]
-
-Trading Gold with confidence requires a blend of macro-economic awareness and technical discipline. Respect the volatility, manage your risk, and never fight the primary trend.`
   },
   {
     slug: 'what-is-forex',
@@ -605,7 +522,7 @@ To the untrained eye, Gold (XAUUSD) prices seem to jump around randomly. One day
 
 If you want to stop being a "reactive" trader and start being a "proactive" one, you must understand the four core drivers that dictate Gold’s daily price action.
 
-## Real Interest Rates (The Yield Factor)
+## 1. Real Interest Rates (The Yield Factor)
 
 This is the "King" of Gold drivers. Gold is a non-yielding asset—it doesn't pay dividends or interest. Because of this, it competes directly with US Treasury bonds.
 
@@ -615,7 +532,7 @@ Conversely, when real rates are low or negative, Gold becomes the ultimate "insu
 
 [IMAGE_1]
 
-## The US Dollar (DXY) Correlation
+## 2. The US Dollar (DXY) Correlation
 
 Gold is denominated in US Dollars. This creates a natural inverse relationship. 
 
@@ -624,7 +541,7 @@ Gold is denominated in US Dollars. This creates a natural inverse relationship.
 
 Every morning, professional Gold traders look at the **DXY (Dollar Index)**. If the DXY is breaking above a resistance level, they are very cautious about taking "Long" positions on Gold.
 
-## Geopolitical Uncertainty (Safe-Haven Flow)
+## 3. Geopolitical Uncertainty (Safe-Haven Flow)
 
 Gold is the "World's Currency of Last Resort." During times of war, political instability, or global pandemics, investors lose faith in governments and fiat currencies. They flock to Gold because it has no "counterparty risk"—it is nobody else's liability.
 
@@ -632,7 +549,7 @@ In these scenarios, the "Safe-Haven Flow" can override interest rates and the US
 
 [IMAGE_2]
 
-## Central Bank Demand
+## 4. Central Bank Demand
 
 Central banks are the largest holders of Gold in the world. In the last decade, there has been a massive shift: Central banks (especially in the "BRICS" nations) have been buying record amounts of Gold to "de-dollarize" their reserves.
 

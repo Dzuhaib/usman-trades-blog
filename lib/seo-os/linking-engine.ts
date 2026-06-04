@@ -25,20 +25,23 @@ export function getLinkSuggestions(text: string): InternalLink[] {
 export function injectContextualLinks(text: string): string {
   let result = text;
   
-  // Sort by keyword length descending to match longer phrases first (e.g., "lot size calculator" before "lot size")
+  // Sort by keyword length descending to match longer phrases first
   const sortedLinks = [...LINK_MAP].sort((a, b) => b.keyword.length - a.keyword.length);
 
   const linkedKeywords = new Set<string>();
+  let linksCount = 0;
 
   for (const link of sortedLinks) {
+    if (linksCount >= 5) break;
+
     const regex = new RegExp(`\\b(${link.keyword})\\b`, 'i');
     
-    // Check if keyword exists and hasn't been linked yet in this text
     if (regex.test(result) && !linkedKeywords.has(link.keyword)) {
-      // Very simple injection - in a real app, this would need to be much more robust 
-      // (e.g., not injecting inside existing <a> tags or HTML attributes)
-      result = result.replace(regex, `<a href="${link.href}" class="text-accent hover:underline font-medium">${link.label}</a>`);
+      // Use custom placeholder [LINK_URL:LABEL] instead of raw HTML
+      // This will be parsed by SmartText to use Next.js <Link> tags
+      result = result.replace(regex, `[LINK_${link.href}:${link.label}]`);
       linkedKeywords.add(link.keyword);
+      linksCount++;
     }
   }
 

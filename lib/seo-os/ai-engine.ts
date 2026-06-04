@@ -185,23 +185,23 @@ export async function generateAIPost(keyword: string) {
 
     STRICT CONTENT GUIDELINES (AdSense Compliance):
     1. ORIGINALITY: Never provide generic or auto-generated-sounding text. Add unique insights that only an expert trader would know.
-    2. DEPTH & LENGTH: Avoid "insufficient content" flags. Write a comprehensive guide (1000-1500 words) using complete sentences and well-structured paragraphs.
-    3. STRUCTURE: Use clear, hierarchical headings (H1, H2, H3). Every heading MUST be followed by multiple paragraphs of rich, meaningful text. No headlines without substance.
+    2. DEPTH & LENGTH: Write a comprehensive guide (1000-1500 words) using complete sentences and well-structured paragraphs.
+    3. STRUCTURE: Use clear, hierarchical headings (## Header, ### Subheader). DO NOT use 'Section X' labeling.
     4. NO AUTO-GENERATED TRAITS: Avoid repetitive filler, "fluff" words, or templates. Every sentence must add new value.
-    5. USER VALUE: Provide a clear "reason to visit." Solve specific trading problems. Don't just summarize; teach.
-    6. TONE: Maintain a professional, humanoid tone. Avoid common AI tropes like "In conclusion," "Embark on a journey," or "Delve into."
-    7. FACTUAL ACCURACY: Use real examples of pips, lot sizes, and risk math.
+    5. TONE: Maintain a professional, humanoid tone. Avoid common AI tropes like "In conclusion," "Embark on a journey," or "Delve into."
+    6. MATH & SYMBOLS: Use plain text or bold numbers for math. NEVER use LaTeX like \\[ \\text{...} \\] or complex mathematical notation that fails to render. Use standard bullet points (•) or numbered lists.
+    7. INTERNAL LINKING: Use exactly 3-5 unique internal links to our tools and guides using this EXACT placeholder format: [LINK_/path/to/page:Label Text].
+       Example: [LINK_/tools/lot-size-calculator:Lot Size Calculator]
   `;
 
   const userPrompt = `
     Write a comprehensive, expert-level trading guide for the keyword: "${keyword}". 
     Focus on the "Usman Trades" voice: Risk-first, math-heavy, capital preservation.
 
-    Format: MDX (no frontmatter).
     Include:
-    - 4 image placeholder markers like [IMAGE_PROMPT: description].
+    - 4 image placeholder markers like [IMAGE_1], [IMAGE_2], etc.
     - A detailed FAQ section at the end.
-    - Specific mathematical examples (Lot sizes, Drawdown math).
+    - 3-5 strategic internal links using the [LINK_href:label] format.
   `;
 
   try {
@@ -231,9 +231,11 @@ export async function reviewContent(content: string): Promise<{ approved: boolea
     ${content}
     
     Tasks:
-    1. Check for AI fluff (words like "delve", "tapestry", "embark"). Remove them.
-    2. Ensure mathematical accuracy in any pip/lot size examples.
-    3. Ensure the tone is "Capital Preservation First".
+    1. Check for AI fluff (words like "delve", "tapestry", "embark", "In conclusion"). Remove them.
+    2. Check for LaTeX math like \\[ ... \\] or \\text{...}. Remove them and replace with plain bold text or standard arithmetic symbols.
+    3. Check for 'Section X' headers. Remove 'Section X:' and keep only the descriptive header name.
+    4. Ensure exactly 3-5 [LINK_href:label] placeholders are present.
+    5. Ensure 4 [IMAGE_X] placeholders are present and well-distributed.
     
     Return a JSON object: { "approved": boolean, "feedback": string, "finalContent": string }.
   `;
