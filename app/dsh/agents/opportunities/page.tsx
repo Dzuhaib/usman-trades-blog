@@ -76,7 +76,11 @@ export default function OpportunitiesPage() {
              </div>
            ) : (
              opportunities.map((opp, i) => {
-               const isApproved = roadmap?.tasks.some(t => t.keyword.includes(opp.url));
+               const isApproved = roadmap?.tasks.some(t => {
+                 const normalizedTaskKeyword = t.keyword.toLowerCase();
+                 const normalizedOppUrl = opp.url.toLowerCase();
+                 return normalizedTaskKeyword.includes(normalizedOppUrl);
+               });
 
                return (
                  <div key={opp.url} className="bg-white border border-slate-200 rounded-[2rem] p-8 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
