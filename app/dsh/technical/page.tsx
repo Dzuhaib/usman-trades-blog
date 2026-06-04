@@ -9,19 +9,20 @@ export default function TechnicalAuditPage() {
   const [issues, setIssues] = useState<TechnicalIssue[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const loadData = async () => {
+    try {
+      const res = await fetch('/api/seo-os/technical');
+      const data = await res.json();
+      if (data.success) setIssues(data.issues);
+    } catch (e) {
+      console.error('Failed to load technical audit');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetch('/api/seo-os/technical');
-        const data = await res.json();
-        if (data.success) setIssues(data.issues);
-      } catch (e) {
-        console.error('Failed to load technical audit');
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+    loadData();
   }, []);
 
   const handleResolve = async (id: string) => {
@@ -30,7 +31,7 @@ export default function TechnicalAuditPage() {
         method: 'POST',
         body: JSON.stringify({ id })
       });
-      if (res.ok) load();
+      if (res.ok) loadData();
     }
   };
 
