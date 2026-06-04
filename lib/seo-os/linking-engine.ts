@@ -10,19 +10,11 @@ interface InternalLink {
 }
 
 export const LINK_MAP: InternalLink[] = [
-  { keyword: "lot size", href: "/tools/lot-size-calculator", label: "Lot Size Calculator" },
-  { keyword: "position sizing", href: "/tools/lot-size-calculator", label: "Position Sizing Tool" },
-  { keyword: "risk management", href: "/blog/posts/best-risk-percentage", label: "Risk Management Guide" },
-  { keyword: "stop loss", href: "/tools/risk-calculator", label: "Risk Calculator" },
-  { keyword: "pip value", href: "/tools/pip-calculator", label: "Pip Value Estimator" },
-  { keyword: "profit", href: "/tools/profit-calculator", label: "Profit Projection Tool" },
-  { keyword: "gold", href: "/blog/posts/xauusd-guide", label: "Gold Trading Guide" },
-  { keyword: "bitcoin", href: "/blog/posts/bitcoin-risk-management", label: "Bitcoin Risk Guide" },
-  { keyword: "drawdown", href: "/tools/drawdown-calculator", label: "Drawdown Calculator" },
-  { keyword: "compound", href: "/tools/compound-growth-calculator", label: "Compound Growth Tool" },
-  { keyword: "margin", href: "/tools/margin-calculator", label: "Margin Calculator" },
-  { keyword: "spread", href: "/tools/spread-cost-calculator", label: "Spread Cost Tool" },
-  { keyword: "session", href: "/tools/session-timer", label: "Market Session Timer" },
+  { keyword: "lot size calculator", href: "/tools/lot-size-calculator", label: "Lot Size Calculator" },
+  { keyword: "risk management guide", href: "/blog/posts/best-risk-percentage", label: "Risk Management Guide" },
+  { keyword: "pip value calculator", href: "/tools/pip-calculator", label: "Pip Value Estimator" },
+  { keyword: "drawdown calculator", href: "/tools/drawdown-calculator", label: "Drawdown Calculator" },
+  { keyword: "bitcoin risk guide", href: "/blog/posts/bitcoin-risk-management", label: "Bitcoin Risk Guide" },
 ];
 
 export function getLinkSuggestions(text: string): InternalLink[] {

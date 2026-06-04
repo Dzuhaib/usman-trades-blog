@@ -14,18 +14,38 @@ export default function SmartText({ text }: SmartTextProps) {
 
   const processText = (content: string) => {
     let parts: (string | React.ReactNode)[] = [content];
-    const linkedKeywords = new Set<string>();
+    
+    // 1. Handle Bold (**text**)
+    let tempParts: (string | React.ReactNode)[] = [];
+    for (const part of parts) {
+      if (typeof part !== 'string') {
+        tempParts.push(part);
+        continue;
+      }
+      const segments = part.split(/(\*\*.*?\*\*)/);
+      for (const segment of segments) {
+        if (segment.startsWith('**') && segment.endsWith('**')) {
+          tempParts.push(<strong key={Math.random()} className="font-bold text-slate-900">{segment.slice(2, -2)}</strong>);
+        } else if (segment) {
+          tempParts.push(segment);
+        }
+      }
+    }
+    parts = tempParts;
+
+    // 2. Handle Internal Links (Strictly 1 link per keyword, max 5 total)
     const sortedLinks = [...LINK_MAP].sort((a, b) => b.keyword.length - a.keyword.length);
+    let linksInjected = 0;
 
     for (const link of sortedLinks) {
-      if (linkedKeywords.has(link.keyword)) continue;
+      if (linksInjected >= 5) break;
 
-      const newParts: (string | React.ReactNode)[] = [];
       let keywordFound = false;
+      const nextParts: (string | React.ReactNode)[] = [];
 
       for (const part of parts) {
         if (typeof part !== 'string' || keywordFound) {
-          newParts.push(part);
+          nextParts.push(part);
           continue;
         }
 
@@ -38,25 +58,25 @@ export default function SmartText({ text }: SmartTextProps) {
           const keyword = part.substring(index, index + match[0].length);
           const after = part.substring(index + match[0].length);
 
-          if (before) newParts.push(before);
-          newParts.push(
+          if (before) nextParts.push(before);
+          nextParts.push(
             <Link 
-              key={`${link.keyword}-${index}`} 
+              key={`${link.keyword}-${linksInjected}`} 
               href={link.href} 
               className="text-accent hover:underline font-medium"
             >
               {keyword}
             </Link>
           );
-          if (after) newParts.push(after);
+          if (after) nextParts.push(after);
           
           keywordFound = true;
-          linkedKeywords.add(link.keyword);
+          linksInjected++;
         } else {
-          newParts.push(part);
+          nextParts.push(part);
         }
       }
-      parts = newParts;
+      parts = nextParts;
     }
     return parts;
   };
