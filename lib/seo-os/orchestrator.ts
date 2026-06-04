@@ -3,7 +3,7 @@
  * This script handles the execution of SEO agents via a status-driven pipeline.
  */
 
-import { getPerformanceReport, requestIndexing } from './analytics-engine';
+import { getPerformanceReport, requestIndexing, getMissingUrls } from './analytics-engine';
 import { 
   performDeepResearch, 
   generate30DayPlan, 
@@ -128,4 +128,16 @@ export async function runDailyCycle(isManual: boolean = false) {
     console.error('Pipeline Error:', error.message);
     await logAgentAction('Orchestrator', 'error', error.message);
   }
+}
+
+export async function cleanupMissingUrls() {
+  await logAgentAction('Submission Agent', 'active', 'Scanning for missing URLs...');
+  const reports = await getPerformanceReport();
+  const missingUrls = await getMissingUrls(reports);
+  for (const url of missingUrls) {
+    await requestIndexing(`https://usmantrades.co.uk${url}`);
+    await new Promise(resolve => setTimeout(resolve, 500));
+  }
+  await logAgentAction('Submission Agent', 'success', `Submitted ${missingUrls.length} missing URLs.`);
+  return { submittedCount: missingUrls.length, urls: missingUrls };
 }
