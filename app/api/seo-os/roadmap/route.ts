@@ -38,10 +38,10 @@ export async function POST(request: Request) {
         status: 'pending' as const,
         expert_note: task.expert_note || 'Manually approved opportunity.',
         pipeline: [
-          { agent: 'Writer Agent', status: 'pending', message: 'Waiting for research context.' },
-          { agent: 'Review Agent', status: 'pending', message: 'Waiting for content draft.' },
-          { agent: 'Linking Agent', status: 'pending', message: 'Waiting for final polish.' },
-          { agent: 'Publish Agent', status: 'pending', message: 'Waiting for deployment signal.' },
+          { agent: 'Writer Agent', status: 'pending' as const, message: 'Waiting for research context.' },
+          { agent: 'Review Agent', status: 'pending' as const, message: 'Waiting for content draft.' },
+          { agent: 'Linking Agent', status: 'pending' as const, message: 'Waiting for final polish.' },
+          { agent: 'Publish Agent', status: 'pending' as const, message: 'Waiting for deployment signal.' },
         ]
       };
       
