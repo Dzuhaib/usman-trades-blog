@@ -13,7 +13,14 @@ export default function SmartText({ text }: SmartTextProps) {
   const blocks = text.split(/\n\n+/);
 
   const processText = (content: string) => {
-    let parts: (string | React.ReactNode)[] = [content];
+    // 0. Initial Cleanup: Remove LaTeX leftovers and raw HTML tags
+    let cleanContent = content
+      .replace(/\\\[|\\\]|\\text\{|\}/g, '') // Remove LaTeX symbols
+      .replace(/<a\b[^>]*>(.*?)<\/a>/gi, '$1') // Strip raw <a> tags keeping text
+      .replace(/\s+/g, ' ') // Normalize spaces
+      .trim();
+
+    let parts: (string | React.ReactNode)[] = [cleanContent];
     
     // 1. Handle Bold (**text**)
     let tempParts: (string | React.ReactNode)[] = [];
@@ -27,13 +34,14 @@ export default function SmartText({ text }: SmartTextProps) {
         if (segment.startsWith('**') && segment.endsWith('**')) {
           tempParts.push(<strong key={Math.random()} className="font-bold text-slate-900">{segment.slice(2, -2)}</strong>);
         } else if (segment) {
-          tempParts.push(segment);
+          // Clean paragraph-level symbols like hashtags or stars
+          tempParts.push(segment.replace(/[#*]/g, ''));
         }
       }
     }
     parts = tempParts;
 
-    // 2. Handle Internal Link Placeholders [LINK_URL:LABEL]
+    // 2. Handle Internal Link Placeholders [LINK_url:label]
     const linkParts: (string | React.ReactNode)[] = [];
     for (const part of parts) {
       if (typeof part !== 'string') {
@@ -62,7 +70,7 @@ export default function SmartText({ text }: SmartTextProps) {
     }
     parts = linkParts;
 
-    // 3. Handle Auto-Keywords (Fallback for manual articles not using placeholders)
+    // 3. Handle Auto-Keywords (Strict 5 total links limit)
     const sortedLinks = [...LINK_MAP].sort((a, b) => b.keyword.length - a.keyword.length);
     let autoLinksInjected = parts.filter(p => React.isValidElement(p)).length;
 

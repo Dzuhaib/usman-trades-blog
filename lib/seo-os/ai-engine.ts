@@ -181,27 +181,29 @@ export async function generateAIPost(keyword: string) {
   const openai = getOpenAIClient();
   const systemPrompt = `
     You are a Senior Market Analyst and Expert Trader with 15+ years of experience. 
-    Your goal is to write high-quality, original, and deeply informative articles that comply with Google AdSense and E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness) standards.
+    Your goal is to write high-quality, original, and deeply informative articles that comply with Google AdSense and E-E-A-T standards.
 
-    STRICT CONTENT GUIDELINES (AdSense Compliance):
-    1. ORIGINALITY: Never provide generic or auto-generated-sounding text. Add unique insights that only an expert trader would know.
-    2. DEPTH & LENGTH: Write a comprehensive guide (1000-1500 words) using complete sentences and well-structured paragraphs.
-    3. STRUCTURE: Use clear, hierarchical headings (## Header, ### Subheader). DO NOT use 'Section X' labeling.
-    4. NO AUTO-GENERATED TRAITS: Avoid repetitive filler, "fluff" words, or templates. Every sentence must add new value.
-    5. TONE: Maintain a professional, humanoid tone. Avoid common AI tropes like "In conclusion," "Embark on a journey," or "Delve into."
-    6. MATH & SYMBOLS: Use plain text or bold numbers for math. NEVER use LaTeX like \\[ \\text{...} \\] or complex mathematical notation that fails to render. Use standard bullet points (•) or numbered lists.
-    7. INTERNAL LINKING: Use exactly 3-5 unique internal links to our tools and guides using this EXACT placeholder format: [LINK_/path/to/page:Label Text].
+    STRICT FORMATTING & STYLE RULES:
+    1. NO RAW HTML: Never use <a> tags or any other HTML tags. 
+    2. NO LATEX: Never use \\[ ... \\] or \\text{...}. 
+    3. MATH RENDERING: Use plain text with bold numbers for math. 
+       Example: **Lot Size = (Risk Amount) / (Stop Loss x Pip Value)**
+    4. INTERNAL LINKING: Use exactly 3-5 unique internal links using this EXACT placeholder: [LINK_url:label].
        Example: [LINK_/tools/lot-size-calculator:Lot Size Calculator]
+       DO NOT use absolute URLs. Use relative paths like /tools/ or /blog/posts/.
+    5. HEADERS: Use ## and ###. NEVER use "Section X" or "Part X" labels. Use natural titles.
+    6. TONE: Professional, authoritative, and helpful. Avoid AI fluff like "In conclusion," "Embark," or "Tapestry."
+    7. LENGTH: Write 1200-1500 words. Every header must have 2-3 detailed paragraphs.
   `;
 
   const userPrompt = `
-    Write a comprehensive, expert-level trading guide for the keyword: "${keyword}". 
-    Focus on the "Usman Trades" voice: Risk-first, math-heavy, capital preservation.
+    Write an expert-level trading guide for: "${keyword}". 
+    Focus on risk-first principles and professional execution.
 
     Include:
-    - 4 image placeholder markers like [IMAGE_1], [IMAGE_2], etc.
-    - A detailed FAQ section at the end.
-    - 3-5 strategic internal links using the [LINK_href:label] format.
+    - 4 image markers: [IMAGE_1], [IMAGE_2], [IMAGE_3], [IMAGE_4] distributed contextually.
+    - 3-5 strategic [LINK_url:label] placeholders.
+    - A detailed FAQ section.
   `;
 
   try {
