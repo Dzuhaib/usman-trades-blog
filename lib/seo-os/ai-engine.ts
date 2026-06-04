@@ -102,12 +102,16 @@ export async function generate30DayPlan(researchReport: string, correctionReport
     Generate a 30-day execution roadmap for Usman Trades.
     
     Requirements:
-    - Days 1-10: Quick wins (Optimizing existing "Winning Clusters").
-    - Days 11-20: Gap Filling (New articles for missed search intent).
-    - Days 21-30: Authority Building (Tool improvements and FAQ expansion).
+    - Days 1-10: "Aggressive Growth" (Targeting Pos 11-20 keywords to push them to Page 1).
+    - Days 11-20: "Authority Expansion" (Creating high-depth technical articles for Gold and Forex).
+    - Days 21-30: "Moat Building" (Internal linking clusters and FAQ dominance).
+    
+    Professional Expert Logic:
+    - Every task MUST have a specific target keyword or technical goal.
+    - Tasks should be designed to increase organic traffic by at least 20%.
     
     Return a JSON object with a "plan" key containing an array of 30 objects.
-    Each object: { "day": number, "keyword": string, "type": "article" | "tool_improvement" | "faq", "priority": "high" | "medium" | "low" }.
+    Each object: { "day": number, "keyword": string, "type": "article" | "tool_improvement" | "faq", "priority": "high" | "medium" | "low", "expert_note": "A short note explaining WHY this task will increase traffic" }.
   `;
 
   try {
