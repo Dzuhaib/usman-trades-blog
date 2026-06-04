@@ -33,7 +33,7 @@ export default function DashboardPage() {
   const [agentStatuses, setAgentStatuses] = useState<AgentStatus[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedTask, setSelectedTask] = useState<RoadmapTask | null>(null);
+  const [selectedTaskDay, setSelectedTaskDay] = useState<number | null>(null);
 
   const loadData = async () => {
     try {
@@ -85,6 +85,8 @@ export default function DashboardPage() {
     { label: 'Top CTR', value: reports.length > 0 ? `${(Math.max(...reports.map(r => r.ctr)) * 100).toFixed(1)}%` : '0%', change: 'Optimal', icon: TrendingUp },
     { label: 'Avg Position', value: reports.length > 0 ? (reports.reduce((a, b) => a + b.position, 0) / reports.length).toFixed(1) : '0', change: 'Stable', icon: Activity },
   ];
+
+  const selectedTask = roadmap?.tasks.find(t => t.day === selectedTaskDay);
 
   return (
     <div className="space-y-10 pb-20 font-sans">
@@ -159,7 +161,7 @@ export default function DashboardPage() {
             {roadmap?.tasks.filter(t => t.status === 'pending').slice(0, 1).map((task) => (
               <div 
                 key={task.day} 
-                onClick={() => setSelectedTask(task)}
+                onClick={() => setSelectedTaskDay(task.day)}
                 className="bg-white/5 border border-white/10 p-8 rounded-[2rem] space-y-4 relative z-10 cursor-pointer hover:bg-white/10 transition-all group"
               >
                  <div className="flex items-center justify-between">
@@ -293,7 +295,7 @@ export default function DashboardPage() {
                     return (
                       <div 
                         key={i} 
-                        onClick={() => relatedTask && setSelectedTask(relatedTask)}
+                        onClick={() => relatedTask && setSelectedTaskDay(relatedTask.day)}
                         className={`flex gap-3 relative group ${relatedTask ? 'cursor-pointer hover:bg-slate-50 p-2 -m-2 rounded-xl transition-all' : ''}`}
                       >
                          <div className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${
@@ -337,7 +339,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Task Pipeline Modal */}
-      {selectedTask && (
+      {selectedTaskDay && selectedTask && (
         <div className="fixed inset-0 z-[10000] bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-6 animate-in fade-in duration-300">
            <div className="bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200">
               <header className="p-8 border-b border-slate-100 flex items-center justify-between">
@@ -351,7 +353,7 @@ export default function DashboardPage() {
                     </div>
                  </div>
                  <button 
-                  onClick={() => setSelectedTask(null)}
+                  onClick={() => setSelectedTaskDay(null)}
                   className="p-2 hover:bg-slate-50 rounded-xl transition-colors"
                  >
                     <X className="w-5 h-5 text-slate-400" />
@@ -402,7 +404,7 @@ export default function DashboardPage() {
 
               <footer className="p-8 bg-slate-50 border-t border-slate-100 flex justify-end">
                  <button 
-                  onClick={() => setSelectedTask(null)}
+                  onClick={() => setSelectedTaskDay(null)}
                   className="px-8 py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-900 hover:bg-slate-50 transition-all"
                  >
                     Close Tracking
@@ -414,3 +416,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

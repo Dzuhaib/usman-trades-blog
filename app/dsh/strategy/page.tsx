@@ -166,39 +166,61 @@ export default function StrategyPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-             {roadmap.tasks.map((task) => (
-               <div key={task.day} className={`group bg-white border rounded-[2rem] p-8 space-y-6 transition-all hover:shadow-xl ${
-                 task.status === 'completed' ? 'border-accent/20 bg-accent/5' : 'border-slate-100'
-               }`}>
-                  <div className="flex items-center justify-between">
-                     <span className={`text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest ${
-                       task.status === 'completed' ? 'bg-accent text-white' : 'bg-slate-100 text-slate-400'
-                     }`}>
-                        Day {task.day}
-                     </span>
-                     {task.status === 'completed' ? <CheckCircle2 className="w-5 h-5 text-accent" /> : <Clock className="w-5 h-5 text-slate-300" />}
-                  </div>
-                  
-                  <div className="space-y-2">
-                     <h4 className="text-lg font-bold font-serif text-slate-900 line-clamp-1">{task.keyword}</h4>
-                     <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed italic">
-                        Data-Backed Priority: AI has identified this {task.type} as a {task.priority} priority based on current search trends.
-                     </p>
-                  </div>
+             {roadmap.tasks.map((task) => {
+               const createdAtDate = new Date(roadmap.createdAt);
+               const today = new Date();
+               const diffTime = Math.abs(today.getTime() - createdAtDate.getTime());
+               const currentRoadmapDay = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+               const isToday = task.day === currentRoadmapDay;
+               const isCompleted = task.status === 'completed';
 
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-50">
-                     <div className="flex gap-2">
-                        <span className="text-[9px] font-bold bg-slate-50 text-slate-400 px-2 py-0.5 rounded uppercase tracking-tighter">{task.type}</span>
-                        <span className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter ${
-                          task.priority === 'high' ? 'bg-rose-50 text-rose-500' : 'bg-blue-50 text-blue-500'
-                        }`}>{task.priority}</span>
-                     </div>
-                     <button className="text-slate-400 hover:text-accent transition-colors">
-                        <ArrowRight className="w-4 h-4" />
-                     </button>
-                  </div>
-               </div>
-             ))}
+               return (
+                 <div 
+                   key={task.day} 
+                   className={`group relative bg-white border rounded-[2rem] p-8 space-y-6 transition-all hover:shadow-xl ${
+                     isCompleted 
+                       ? 'border-blue-200 bg-blue-50/50' 
+                       : isToday 
+                         ? 'border-accent shadow-lg shadow-accent/10 ring-2 ring-accent/20 animate-pulse' 
+                         : 'border-slate-100'
+                   }`}
+                 >
+                    {isToday && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-[8px] font-black uppercase px-4 py-1 rounded-full tracking-widest shadow-lg z-10">
+                        Today's Focus
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center justify-between">
+                       <span className={`text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest ${
+                         isCompleted ? 'bg-blue-500 text-white' : isToday ? 'bg-accent text-white' : 'bg-slate-100 text-slate-400'
+                       }`}>
+                          Day {task.day}
+                       </span>
+                       {isCompleted ? <CheckCircle2 className="w-5 h-5 text-blue-500" /> : <Clock className={`w-5 h-5 ${isToday ? 'text-accent' : 'text-slate-300'}`} />}
+                    </div>
+                    
+                    <div className="space-y-2">
+                       <h4 className={`text-lg font-bold font-serif line-clamp-1 ${isCompleted ? 'text-blue-900' : 'text-slate-900'}`}>{task.keyword}</h4>
+                       <p className={`text-xs line-clamp-2 leading-relaxed italic ${isCompleted ? 'text-blue-600/70' : 'text-slate-500'}`}>
+                          Data-Backed Priority: AI has identified this {task.type} as a {task.priority} priority based on current search trends.
+                       </p>
+                    </div>
+
+                    <div className={`flex items-center justify-between pt-4 border-t ${isCompleted ? 'border-blue-100' : 'border-slate-50'}`}>
+                       <div className="flex gap-2">
+                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter ${isCompleted ? 'bg-blue-100 text-blue-500' : 'bg-slate-50 text-slate-400'}`}>{task.type}</span>
+                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter ${
+                            task.priority === 'high' ? 'bg-rose-50 text-rose-500' : 'bg-blue-50 text-blue-500'
+                          }`}>{task.priority}</span>
+                       </div>
+                       <button className={`${isCompleted ? 'text-blue-400' : 'text-slate-400'} hover:text-accent transition-colors`}>
+                          <ArrowRight className="w-4 h-4" />
+                       </button>
+                    </div>
+                 </div>
+               );
+             })}
           </div>
         </section>
       )}

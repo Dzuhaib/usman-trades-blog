@@ -36,7 +36,13 @@ export async function POST(request: Request) {
         type: task.type || 'article',
         priority: task.priority || 'high',
         status: 'pending' as const,
-        expert_note: task.expert_note || 'Manually approved opportunity.'
+        expert_note: task.expert_note || 'Manually approved opportunity.',
+        pipeline: [
+          { agent: 'Writer Agent', status: 'pending', message: 'Waiting for research context.' },
+          { agent: 'Review Agent', status: 'pending', message: 'Waiting for content draft.' },
+          { agent: 'Linking Agent', status: 'pending', message: 'Waiting for final polish.' },
+          { agent: 'Publish Agent', status: 'pending', message: 'Waiting for deployment signal.' },
+        ]
       };
       
       roadmap.tasks.unshift(newTask);
