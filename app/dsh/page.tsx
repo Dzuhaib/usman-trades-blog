@@ -279,24 +279,39 @@ export default function DashboardPage() {
              <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] border-b border-slate-100 pb-3 pt-4">
                Recent Activity
              </h3>
-             <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+             <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {logs.length === 0 ? (
                   <p className="text-[10px] text-slate-400 italic">No activity recorded.</p>
                 ) : (
-                  logs.slice(0, 10).map((log, i) => (
-                    <div key={i} className="flex gap-3 relative group">
-                       <div className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${
-                          log.status === 'success' ? 'bg-emerald-500' : 
-                          log.status === 'error' ? 'bg-rose-500' : 
-                          log.status === 'active' ? 'bg-accent' : 'bg-slate-300'
-                       }`}></div>
-                       <div>
-                         <span className="block text-[10px] font-black text-slate-900 leading-none mb-1 uppercase">{log.agent}</span>
-                         <p className="text-[10px] text-slate-500 leading-tight">{log.message}</p>
-                         <span className="text-[8px] text-slate-300 font-bold uppercase">{new Date(log.timestamp).toLocaleTimeString()}</span>
-                       </div>
-                    </div>
-                  ))
+                  logs.slice(0, 15).map((log, i) => {
+                    // Try to find a matching task for this log
+                    const relatedTask = roadmap?.tasks.find(t => 
+                      log.message.toLowerCase().includes(t.keyword.toLowerCase()) ||
+                      (t.publishedUrl && log.message.includes(t.publishedUrl))
+                    );
+
+                    return (
+                      <div 
+                        key={i} 
+                        onClick={() => relatedTask && setSelectedTask(relatedTask)}
+                        className={`flex gap-3 relative group ${relatedTask ? 'cursor-pointer hover:bg-slate-50 p-2 -m-2 rounded-xl transition-all' : ''}`}
+                      >
+                         <div className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${
+                            log.status === 'success' ? 'bg-emerald-500' : 
+                            log.status === 'error' ? 'bg-rose-500' : 
+                            log.status === 'active' ? 'bg-accent' : 'bg-slate-300'
+                         }`}></div>
+                         <div>
+                           <div className="flex items-center gap-2">
+                             <span className="block text-[10px] font-black text-slate-900 leading-none uppercase">{log.agent}</span>
+                             {relatedTask && <span className="text-[7px] font-black bg-accent/10 text-accent px-1.5 py-0.5 rounded uppercase tracking-tighter">Trackable</span>}
+                           </div>
+                           <p className="text-[10px] text-slate-500 leading-tight mt-1">{log.message}</p>
+                           <span className="text-[8px] text-slate-300 font-bold uppercase">{new Date(log.timestamp).toLocaleTimeString()}</span>
+                         </div>
+                      </div>
+                    );
+                  })
                 )}
              </div>
           </div>
