@@ -8,6 +8,7 @@ import {
   performDeepResearch, 
   generate30DayPlan, 
   generateAIPost, 
+  generateGlossaryEntry,
   reviewContent,
   monitorPerformanceAndAdjust 
 } from './ai-engine';
@@ -31,9 +32,11 @@ function updateStep(pipeline: PipelineStep[] | undefined, agent: string, status:
 export async function runDailyCycle(isManual: boolean = false) {
   const roadmap = await getRoadmap();
 
-  if (!isManual && roadmap?.systemStatus === 'paused') {
-    console.log('[Orchestrator] System is PAUSED. Skipping cycle.');
-    return;
+  // STAGE-GATE: If system is paused, stop immediately (Even for manual triggers)
+  if (roadmap?.systemStatus === 'paused') {
+    console.log('[Orchestrator] System is PAUSED. Pipeline execution halted.');
+    await logAgentAction('System', 'stable', 'Pipeline is currently paused. Resume via Dashboard to continue.');
+    return { success: false, error: 'System is paused' };
   }
 
   console.log(`[Orchestrator] Professional SEO Pipeline Heartbeat (Manual: ${isManual})`);
@@ -42,10 +45,17 @@ export async function runDailyCycle(isManual: boolean = false) {
   let shouldContinue = true;
   let loopCount = 0;
 
-  while (shouldContinue && loopCount < 5) {
+  while (shouldContinue && loopCount < 10) {
     loopCount++;
     const currentRoadmap = await getRoadmap();
     if (!currentRoadmap) break;
+
+    // RE-VERIFY STATUS: Allow immediate shutdown if user toggles 'Stop' mid-cycle
+    if (currentRoadmap.systemStatus === 'paused') {
+      console.log('[Orchestrator] Stop signal received mid-cycle. Haling.');
+      await logAgentAction('System', 'stable', 'Emergency Stop: Pipeline halted mid-cycle by user.');
+      return { success: true, message: 'Pipeline halted.' };
+    }
 
     const pendingTasks = currentRoadmap.tasks.filter(t => t.status === 'pending');
     const hasEnoughWork = pendingTasks.length >= 3;
@@ -68,7 +78,10 @@ export async function runDailyCycle(isManual: boolean = false) {
 
       const tasksToAppend = filteredNewTasks.map((t: any) => ({
         ...t,
-        pipeline: [
+        pipeline: t.type === 'glossary' ? [
+           { agent: 'Glossary Agent', status: 'pending' as const, message: 'Waiting for technical definition.' },
+           { agent: 'Publish Agent', status: 'pending' as const, message: 'Waiting for deployment.' },
+        ] : [
           { agent: 'Writer Agent', status: 'pending' as const, message: 'Waiting for research context.' },
           { agent: 'Review Agent', status: 'pending' as const, message: 'Waiting for content draft.' },
           { agent: 'Linking Agent', status: 'pending' as const, message: 'Waiting for final polish.' },
@@ -86,35 +99,40 @@ export async function runDailyCycle(isManual: boolean = false) {
     // 2. PIPELINE EXECUTION
     
     // A. PUBLISH
-    const taskToPublish = currentRoadmap.tasks.find(t => t.status === 'pending' && (t as any).finalContent);
+    const taskToPublish = currentRoadmap.tasks.find(t => t.status === 'pending' && (t as any).reviewedContent && !(t as any).publishedUrl);
     if (taskToPublish) {
-      await logAgentAction('Publish Agent', 'active', `Publishing: ${taskToPublish.keyword}`);
-      taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'active', 'Deploying to live environment...');
-      await saveRoadmap(currentRoadmap);
-
-      const slug = taskToPublish.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
-      const res = await publishArticle(slug, taskToPublish.keyword, (taskToPublish as any).finalContent, 'Risk Management');
+      // For articles, we need finalContent (linking phase). For glossary, reviewedContent is enough.
+      const contentToPublish = (taskToPublish as any).finalContent || (taskToPublish as any).reviewedContent;
       
-      if (res.success) {
-        taskToPublish.status = 'completed';
-        taskToPublish.completedAt = new Date().toISOString();
-        taskToPublish.publishedUrl = res.url;
-        taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'completed', `Successfully live at ${res.url}`);
+      if (contentToPublish) {
+        await logAgentAction('Publish Agent', 'active', `Publishing: ${taskToPublish.keyword}`);
+        taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'active', 'Deploying to live environment...');
         await saveRoadmap(currentRoadmap);
-        await logAgentAction('Publish Agent', 'success', `Live at ${res.url}`);
-        await requestIndexing(`https://usmantrades.co.uk${res.url}`);
-        shouldContinue = false; // Task fully completed
-      } else {
-        taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'failed', res.error || 'Network error during deployment.');
-        await saveRoadmap(currentRoadmap);
-        shouldContinue = false;
+
+        const slug = taskToPublish.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
+        const res = await publishArticle(slug, taskToPublish.keyword, contentToPublish, taskToPublish.type === 'glossary' ? 'Glossary' : 'Risk Management');
+        
+        if (res.success) {
+          taskToPublish.status = 'completed';
+          taskToPublish.completedAt = new Date().toISOString();
+          taskToPublish.publishedUrl = res.url;
+          taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'completed', `Successfully live at ${res.url}`);
+          await saveRoadmap(currentRoadmap);
+          await logAgentAction('Publish Agent', 'success', `Live at ${res.url}`);
+          await requestIndexing(`https://usmantrades.co.uk${res.url}`);
+          shouldContinue = false; 
+        } else {
+          taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'failed', res.error || 'Network error during deployment.');
+          await saveRoadmap(currentRoadmap);
+          shouldContinue = false;
+        }
+        if (!isManual) return;
+        continue;
       }
-      if (!isManual) return;
-      continue;
     }
 
-    // B. LINKING
-    const taskToLink = currentRoadmap.tasks.find(t => t.status === 'pending' && (t as any).reviewedContent && !(t as any).finalContent);
+    // B. LINKING (Articles only)
+    const taskToLink = currentRoadmap.tasks.find(t => t.status === 'pending' && t.type !== 'glossary' && (t as any).reviewedContent && !(t as any).finalContent);
     if (taskToLink) {
       await logAgentAction('Linking Agent', 'active', `Linking: ${taskToLink.keyword}`);
       taskToLink.pipeline = updateStep(taskToLink.pipeline, 'Linking Agent', 'active', 'Analyzing internal graph for contextual links...');
@@ -129,8 +147,8 @@ export async function runDailyCycle(isManual: boolean = false) {
       continue;
     }
 
-    // C. REVIEWER
-    const taskToReview = currentRoadmap.tasks.find(t => t.status === 'pending' && (t as any).rawContent && !(t as any).reviewedContent);
+    // C. REVIEWER (Articles only for now, glossary is direct)
+    const taskToReview = currentRoadmap.tasks.find(t => t.status === 'pending' && t.type !== 'glossary' && (t as any).rawContent && !(t as any).reviewedContent);
     if (taskToReview) {
       await logAgentAction('Review Agent', 'active', `Reviewing: ${taskToReview.keyword}`);
       taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'active', 'Editing content for brand voice & accuracy...');
@@ -151,8 +169,8 @@ export async function runDailyCycle(isManual: boolean = false) {
       continue;
     }
 
-    // D. WRITER
-    const taskToDraft = currentRoadmap.tasks.find(t => t.status === 'pending' && !(t as any).rawContent);
+    // D. WRITER (Articles)
+    const taskToDraft = currentRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'article' && !(t as any).rawContent);
     if (taskToDraft) {
       await logAgentAction('Writer Agent', 'active', `Drafting: ${taskToDraft.keyword}`);
       taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'active', 'Generating technical market analysis draft...');
@@ -168,6 +186,29 @@ export async function runDailyCycle(isManual: boolean = false) {
         taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'failed', 'OpenAI capacity error.');
         await saveRoadmap(currentRoadmap);
         shouldContinue = false;
+      }
+      if (!isManual) return;
+      continue;
+    }
+
+    // E. GLOSSARY (pSEO)
+    const taskToGlossary = currentRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'glossary' && !(t as any).rawContent);
+    if (taskToGlossary) {
+      await logAgentAction('Glossary Agent', 'active', `Defining: ${taskToGlossary.keyword}`);
+      
+      const content = await generateGlossaryEntry(taskToGlossary.keyword);
+      if (content) {
+        (taskToGlossary as any).rawContent = content;
+        (taskToGlossary as any).reviewedContent = content; 
+        taskToGlossary.pipeline = [
+          { agent: 'Glossary Agent', status: 'completed' as const, message: 'Technical definition generated.' },
+          { agent: 'Publish Agent', status: 'pending' as const, message: 'Waiting for deployment.' }
+        ];
+        await saveRoadmap(currentRoadmap);
+        await logAgentAction('Glossary Agent', 'success', 'Definition complete.');
+      } else {
+        taskToGlossary.status = 'failed';
+        await saveRoadmap(currentRoadmap);
       }
       if (!isManual) return;
       continue;

@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next';
 import { BLOG_POSTS } from '@/lib/blogData';
 import { TOOLS } from '@/lib/toolsData';
+import { getDynamicPosts } from '@/lib/seo-os/article-engine';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://usmantrades.co.uk';
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -24,6 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.9,
     },
+    // ... rest of static pages
     {
       url: `${baseUrl}/about`,
       lastModified: new Date(),
@@ -69,6 +71,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  // Fetch and include dynamic posts from Redis
+  const dynamicPosts = await getDynamicPosts();
+  const dynamicBlogPosts: MetadataRoute.Sitemap = dynamicPosts.map((post) => ({
+    url: `${baseUrl}${post.route}`,
+    lastModified: new Date(post.updatedAt || post.date),
+    changeFrequency: 'weekly',
+    priority: 0.8,
+  }));
+
   const toolPages: MetadataRoute.Sitemap = TOOLS.map((tool) => ({
     url: `${baseUrl}${tool.href}`,
     lastModified: new Date(),
@@ -76,5 +87,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...blogPosts, ...toolPages];
+  return [...staticPages, ...blogPosts, ...dynamicBlogPosts, ...toolPages];
 }

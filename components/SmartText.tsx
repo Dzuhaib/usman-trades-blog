@@ -1,10 +1,23 @@
 import React from 'react';
 import Link from 'next/link';
 import { LINK_MAP } from '@/lib/seo-os/linking-engine';
+import LotSizeCalculator from '@/app/tools/lot-size-calculator/LotSizeCalculator';
+import RiskCalculator from '@/app/tools/risk-calculator/RiskCalculator';
+import PipValueCalculator from '@/app/tools/pip-calculator/PipValueCalculator';
+import MarginCalculator from '@/app/tools/margin-calculator/MarginCalculator';
+import ProfitCalculator from '@/app/tools/profit-calculator/ProfitCalculator';
 
 interface SmartTextProps {
   text: string;
 }
+
+const TOOL_COMPONENTS: Record<string, React.ReactNode> = {
+  'lot-size-calculator': <LotSizeCalculator />,
+  'risk-calculator': <RiskCalculator />,
+  'pip-calculator': <PipValueCalculator />,
+  'margin-calculator': <MarginCalculator />,
+  'profit-calculator': <ProfitCalculator />,
+};
 
 export default function SmartText({ text }: SmartTextProps) {
   if (!text) return null;
@@ -173,6 +186,23 @@ export default function SmartText({ text }: SmartTextProps) {
                 {/* We handle images in the main page component, so we hide the raw prompt here */}
              </div>
           );
+        }
+
+        // Tool Embeds
+        if (trimmed.startsWith('[TOOL_') && trimmed.endsWith(']')) {
+          const slug = trimmed.slice(6, -1);
+          const tool = TOOL_COMPONENTS[slug];
+          if (tool) {
+            return (
+              <div key={idx} className="my-12 p-8 bg-slate-50 border-2 border-slate-100 rounded-2xl shadow-sm">
+                <div className="mb-6 flex items-center justify-between">
+                  <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">Interactive Technical Terminal</h4>
+                  <span className="bg-accent text-white text-[10px] font-bold px-2 py-1 rounded">LIVE TOOL</span>
+                </div>
+                {tool}
+              </div>
+            );
+          }
         }
 
         // Regular Paragraph

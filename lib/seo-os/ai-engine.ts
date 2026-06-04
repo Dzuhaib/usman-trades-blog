@@ -65,13 +65,15 @@ export async function performDeepResearch(gscData: any[]): Promise<string> {
 
   const prompt = `
     You are an Expert SEO Researcher for "Usman Trades". 
-    Analyze this raw Google Search Console data: ${JSON.stringify(gscData)}
+    Analyze this raw Google Search Console data (up to 1000 rows): ${JSON.stringify(gscData)}
+    
+    Goal: Identify the path to 1M impressions.
     
     Tasks:
-    1. Identify "Winning Clusters": Topics where we are in Pos 4-15 with high impressions (low-hanging fruit).
-    2. Identify "Content Gaps": Keywords where CTR is low despite good positions.
-    3. Identify "Topical Authority Needs": Where do we lack coverage in the "Risk Management" niche?
-    4. Propose 10 high-value "Search Intent" angles for Gold and Forex.
+    1. Identify "Long-Tail Gold": Specific, high-intent keywords with low competition (e.g., "XAUUSD spread on news", "risk management for $500 account").
+    2. Identify "Winning Clusters": Topics where we are in Pos 4-20. We need "striking distance" optimizations.
+    3. Identify "AEO Gaps": Common questions in our niche that we haven't answered definitively.
+    4. Propose 15 high-value "Search Intent" angles for Gold and Forex.
     
     Output a detailed "SEO Audit & Opportunity Report" in Markdown format.
   `;
@@ -131,19 +133,20 @@ export async function generate30DayPlan(researchReport: string, correctionReport
     
     ${correctionReport ? `AND this Correction Report: ${correctionReport}` : ''}
     
-    Generate a 30-day execution roadmap for Usman Trades.
+    Generate a 30-day "1M Impressions" execution roadmap for Usman Trades.
     
     Requirements:
-    - Days 1-10: "Aggressive Growth" (Targeting Pos 11-20 keywords to push them to Page 1).
-    - Days 11-20: "Authority Expansion" (Creating high-depth technical articles for Gold and Forex).
-    - Days 21-30: "Moat Building" (Internal linking clusters and FAQ dominance).
+    - Days 1-5: "Striking Distance" (Optimize current Pos 4-20).
+    - Days 6-15: "pSEO Glossary Blitz" (Create 50+ glossary/dictionary entries for low-competition technical terms).
+    - Days 16-25: "Authority Clusters" (Technical guides for Gold and Forex).
+    - Days 26-30: "Tool-to-Content loops" (Articles that focus on using our calculators).
     
     Professional Expert Logic:
     - Every task MUST have a specific target keyword or technical goal.
-    - Tasks should be designed to increase organic traffic by at least 20%.
+    - Tasks should be designed to maximize "Answer Engine" visibility and impression share.
     
     Return a JSON object with a "plan" key containing an array of 30 objects.
-    Each object: { "day": number, "keyword": string, "type": "article" | "tool_improvement" | "faq", "priority": "high" | "medium" | "low", "expert_note": "A short note explaining WHY this task will increase traffic" }.
+    Each object: { "day": number, "keyword": string, "type": "article" | "glossary" | "tool_improvement" | "faq", "priority": "high" | "medium" | "low", "expert_note": "A short note explaining WHY this task will increase traffic" }.
   `;
 
   try {
@@ -151,7 +154,7 @@ export async function generate30DayPlan(researchReport: string, correctionReport
       model: "gpt-4o",
       messages: [{ 
         role: "system", 
-        content: "You are a Senior SEO Strategist that builds data-backed roadmaps." 
+        content: "You are a Senior SEO Strategist obsessed with compounding organic growth." 
       }, { 
         role: "user", 
         content: prompt 
@@ -174,36 +177,71 @@ export async function generate30DayPlan(researchReport: string, correctionReport
 }
 
 /**
- * Phase 4: Writer Agent
- * Generates a full humanoid blog post based on a target keyword.
+ * Phase 6: Glossary Agent (pSEO)
+ * Generates technical dictionary/glossary entries for programmatic scaling.
+ */
+export async function generateGlossaryEntry(term: string) {
+  const openai = getOpenAIClient();
+  const systemPrompt = `
+    You are the "Technical Glossary Agent" for Usman Trades. 
+    Your goal is to provide a mathematically precise, institutional definition of a trading term.
+    
+    STRICT RULES:
+    1. AEO FIRST: The first sentence must be a perfect 30-word definition.
+    2. TECHNICAL DEPTH: Explain the math or mechanic behind the term.
+    3. TRADER VOICE: Direct, no fluff, institutional tone.
+    4. MAX 300 WORDS.
+  `;
+
+  const userPrompt = `Define the trading term: "${term}". Explain its importance in professional risk management.`;
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "system", content: systemPrompt }, { role: "user", content: userPrompt }],
+    });
+    return response.choices[0].message.content;
+  } catch (error) {
+    console.error('Glossary Agent Error:', error);
+    return null;
+  }
+}
+
+/**
+ * Phase 4: Writer Agent (E-E-A-T & AEO Focused)
  */
 export async function generateAIPost(keyword: string) {
   const openai = getOpenAIClient();
   const systemPrompt = `
-    You are a Senior Market Analyst and Expert Trader with 15+ years of experience. 
-    Your goal is to write high-quality, original, and deeply informative articles that comply with Google AdSense and E-E-A-T standards.
+    You are Muhammad Usman, a Professional Market Analyst and Institutional Trader with 15+ years of experience. 
+    Your goal is to write high-integrity, experience-backed guides that rank for both Google (E-E-A-T) and Answer Engines (AEO).
 
-    STRICT FORMATTING & STYLE RULES:
-    1. NO RAW HTML: Never use <a> tags or any other HTML tags. 
-    2. NO LATEX: Never use \\[ ... \\] or \\text{...}. 
-    3. MATH RENDERING: Use plain text with bold numbers for math. 
+    STRICT WRITING RULES (ANTI-AI):
+    1. NO AI-ISMS: Never use: "In the fast-paced world of", "delve", "tapestry", "embark", "comprehensive guide", "look no further", "moreover", "furthermore", "in conclusion", "it's important to note".
+    2. VOICE: Use a direct, blunt, and technical tone. Talk like a trader in a London prop firm. Use "I" and "we" to show first-hand experience (e.g., "In my 12 years trading Gold, I've seen...").
+    3. AEO SUMMARY: The VERY FIRST paragraph MUST be a 40-50 word direct answer to the keyword (target Position Zero).
+    4. NO RAW HTML/LATEX: Use plain bold text for math and headers.
+    5. MATH RENDERING: Use plain text with bold numbers for math. 
        Example: **Lot Size = (Risk Amount) / (Stop Loss x Pip Value)**
-    4. INTERNAL LINKING: Use exactly 3-5 unique internal links using this EXACT placeholder: [LINK_url:label].
-       Example: [LINK_/tools/lot-size-calculator:Lot Size Calculator]
-       DO NOT use absolute URLs. Use relative paths like /tools/ or /blog/posts/.
-    5. HEADERS: Use ## and ###. NEVER use "Section X" or "Part X" labels. Use natural titles.
-    6. TONE: Professional, authoritative, and helpful. Avoid AI fluff like "In conclusion," "Embark," or "Tapestry."
-    7. LENGTH: Write 1200-1500 words. Every header must have 2-3 detailed paragraphs.
+    6. INTERNAL LINKING: Use exactly 3-5 unique internal links using this EXACT placeholder: [LINK_url:label].
+    7. TONE: Authoritative, skeptical of "retail" myths, and math-focused.
   `;
 
   const userPrompt = `
-    Write an expert-level trading guide for: "${keyword}". 
-    Focus on risk-first principles and professional execution.
+    Write an institutional-grade trading guide for: "${keyword}". 
+    
+    Structure:
+    1. [AEO Summary]: Direct 45-word answer.
+    2. [Experience Insight]: A brief story or observation from your trading career.
+    3. [Technical Core]: Detailed mechanics with math.
+    4. [Common Pitfalls]: What retail traders get wrong.
+    5. [FAQ]: 3-5 high-intent questions.
 
     Include:
-    - 4 image markers: [IMAGE_1], [IMAGE_2], [IMAGE_3], [IMAGE_4] distributed contextually.
+    - 4 image markers: [IMAGE_1], [IMAGE_2], [IMAGE_3], [IMAGE_4].
     - 3-5 strategic [LINK_url:label] placeholders.
-    - A detailed FAQ section.
+    - EMBED TOOL: If the topic relates to lot size, risk, pips, or margin, include exactly one [TOOL_slug] placeholder where it makes sense.
+      Available slugs: lot-size-calculator, risk-calculator, pip-calculator, margin-calculator, profit-calculator.
   `;
 
   try {
@@ -223,21 +261,20 @@ export async function generateAIPost(keyword: string) {
 }
 
 /**
- * Phase 5: Review Agent
- * Reviews generated content for quality and brand alignment.
+ * Phase 5: Review Agent (Stricter Anti-AI)
  */
 export async function reviewContent(content: string): Promise<{ approved: boolean; feedback: string; finalContent: string }> {
   const openai = getOpenAIClient();
   const prompt = `
-    Review this trading article for "Usman Trades":
-    ${content}
-    
+    Review this trading article for "Usman Trades". 
+    Your ONLY goal is to ensure it DOES NOT look like AI and follows E-E-A-T.
+
     Tasks:
-    1. Check for AI fluff (words like "delve", "tapestry", "embark", "In conclusion"). Remove them.
-    2. Check for LaTeX math like \\[ ... \\] or \\text{...}. Remove them and replace with plain bold text or standard arithmetic symbols.
-    3. Check for 'Section X' headers. Remove 'Section X:' and keep only the descriptive header name.
-    4. Ensure exactly 3-5 [LINK_href:label] placeholders are present.
-    5. Ensure 4 [IMAGE_X] placeholders are present and well-distributed.
+    1. REMOVE ALL AI WORDS: "delve", "tapestry", "embark", "In conclusion", "Moreover", "Furthermore", "In the world of".
+    2. Check AEO Summary: Does the first paragraph answer the query directly?
+    3. Check Experience: Is there a first-hand perspective ("I", "my")?
+    4. Replace generic "Conclusion" headers with descriptive ones like "The Bottom Line on ${content.substring(0,20)}".
+    5. Fix any LaTeX/HTML math.
     
     Return a JSON object: { "approved": boolean, "feedback": string, "finalContent": string }.
   `;
