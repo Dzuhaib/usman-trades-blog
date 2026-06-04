@@ -17,7 +17,7 @@ export interface PipelineStep {
 export interface RoadmapTask {
   day: number;
   keyword: string;
-  type: 'article' | 'tool_improvement' | 'faq';
+  type: 'article' | 'tool_improvement' | 'faq' | 'glossary';
   priority: 'high' | 'medium' | 'low';
   status: 'pending' | 'completed' | 'failed';
   publishedUrl?: string;

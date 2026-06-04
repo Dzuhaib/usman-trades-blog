@@ -19,7 +19,7 @@ export interface SEOMap {
   day: number;
   keyword: string;
   intent: string;
-  type: 'article' | 'tool_improvement' | 'faq';
+  type: 'article' | 'tool_improvement' | 'faq' | 'glossary';
   priority: 'high' | 'medium' | 'low';
 }
 
