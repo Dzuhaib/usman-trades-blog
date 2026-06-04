@@ -85,7 +85,15 @@ export default function DashboardLayout({
     { label: 'Overview', href: '/dsh', icon: LayoutDashboard },
     { label: 'GSC Performance', href: '/dsh/performance', icon: BarChart3 },
     { label: 'AI Strategy', href: '/dsh/strategy', icon: Trophy },
-    { label: 'AI Agents', href: '/dsh/agents', icon: Bot },
+    { 
+      label: 'AI Agents', 
+      href: '/dsh/agents', 
+      icon: Bot,
+      subItems: [
+        { label: 'Workforce Logs', href: '/dsh/agents' },
+        { label: 'Opportunity Feed', href: '/dsh/agents/opportunities' },
+      ]
+    },
     { label: 'Content Manager', href: '/dsh/content', icon: FileEdit },
     { label: 'Technical SEO', href: '/dsh/technical', icon: Settings },
   ];
@@ -106,20 +114,37 @@ export default function DashboardLayout({
           </div>
         </div>
 
-        <nav className="flex-1 px-4 py-4 space-y-2">
+        <nav className="flex-1 px-4 py-4 space-y-1">
            {navItems.map((item) => {
-             const isActive = pathname === item.href;
+             const isActive = pathname === item.href || (item.subItems && item.subItems.some(sub => pathname === sub.href));
              return (
-               <Link 
-                 key={item.href} 
-                 href={item.href}
-                 className={`flex items-center gap-4 px-4 py-4 rounded-2xl transition-all no-underline group ${
-                   isActive ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'text-slate-500 hover:bg-white/5 hover:text-slate-300'
-                 }`}
-               >
-                 <item.icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-600 group-hover:text-slate-400'}`} />
-                 <span className="text-[13px] font-bold tracking-tight">{item.label}</span>
-               </Link>
+               <div key={item.label} className="space-y-1">
+                 <Link 
+                   href={item.href}
+                   className={`flex items-center gap-4 px-4 py-4 rounded-2xl transition-all no-underline group ${
+                     isActive ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'text-slate-500 hover:bg-white/5 hover:text-slate-300'
+                   }`}
+                 >
+                   <item.icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-600 group-hover:text-slate-400'}`} />
+                   <span className="text-[13px] font-bold tracking-tight">{item.label}</span>
+                 </Link>
+                 
+                 {item.subItems && isActive && (
+                   <div className="ml-12 space-y-1">
+                      {item.subItems.map(sub => (
+                        <Link 
+                          key={sub.href} 
+                          href={sub.href}
+                          className={`block py-2 text-[11px] font-bold uppercase tracking-widest no-underline transition-colors ${
+                            pathname === sub.href ? 'text-accent' : 'text-slate-600 hover:text-slate-400'
+                          }`}
+                        >
+                          {sub.label}
+                        </Link>
+                      ))}
+                   </div>
+                 )}
+               </div>
              );
            })}
         </nav>
