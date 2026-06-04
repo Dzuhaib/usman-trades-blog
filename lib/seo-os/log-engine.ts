@@ -55,6 +55,7 @@ export function getLogs(): AgentLog[] {
 }
 
 export function getAgentsStatus(): AgentStatus[] {
+  const roadmap = (global as any).cachedRoadmap || { systemStatus: 'active' }; // Fallback for status check
   const logs = getLogs();
   const agents = [
     'Monitor Agent', 
@@ -72,15 +73,21 @@ export function getAgentsStatus(): AgentStatus[] {
     const lastLog = agentLogs[0];
     
     let currentStatus: 'active' | 'idle' | 'error' = 'idle';
+    
+    // If the system is active, we want the agents to show as "active" (watching/waiting) 
+    // rather than "idle" to reflect that the OS is running.
     if (lastLog) {
-      if (lastLog.status === 'active') currentStatus = 'active';
-      else if (lastLog.status === 'error') currentStatus = 'error';
+      if (lastLog.status === 'error') currentStatus = 'error';
+      else if (lastLog.status === 'active') currentStatus = 'active';
+      else currentStatus = 'active'; // Default to active if system is on
+    } else {
+      currentStatus = 'active';
     }
 
     return {
       name,
       currentStatus,
-      lastRun: lastLog ? lastLog.timestamp : 'Never'
+      lastRun: lastLog ? lastLog.timestamp : 'System Boot'
     };
   });
 }

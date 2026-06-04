@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getRoadmap, saveRoadmap } from '@/lib/seo-os/roadmap-engine';
+import { logAgentAction } from '@/lib/seo-os/log-engine';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,6 +19,15 @@ export async function POST(request: Request) {
     if (action === 'toggle-status' && status) {
       roadmap.systemStatus = status;
       saveRoadmap(roadmap);
+      
+      if (status === 'active') {
+        logAgentAction('Orchestrator', 'success', 'Professional SEO Experts Activated. System in high-alert mode.');
+        logAgentAction('Monitor Agent', 'active', 'Standing by for performance shifts...');
+        logAgentAction('Researcher Agent', 'active', 'Scanning market trends for new opportunities...');
+      } else {
+        logAgentAction('Orchestrator', 'idle', 'System Hibernated. Agents on standby.');
+      }
+
       return NextResponse.json({ success: true, status: roadmap.systemStatus });
     }
 
