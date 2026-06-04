@@ -36,8 +36,16 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  // Use the post title and category for specific research
-  const images = await getPexelsImages(`${post.title} ${post.category}`, 3);
+  // Use post title, category, and specific descriptive terms for unique image generation
+  const imageSearchTerms = [
+    post.title,
+    post.category,
+    post.slug.replace(/-/g, ' '),
+    'professional trading',
+    'financial analysis'
+  ].join(' ');
+  
+  const images = await getPexelsImages(imageSearchTerms, 3);
 
   const blogSchema = generateBlogSchema({
     title: post.title,
