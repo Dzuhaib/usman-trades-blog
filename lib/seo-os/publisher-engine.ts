@@ -40,7 +40,7 @@ export async function publishArticle(slug: string, title: string, content: strin
     fs.writeFileSync(blogDataPath, updatedContent);
     return { success: true, url: `/blog/posts/${slug}` };
   } catch (error: any) {
-    console.error('Publish Agent File Error:', error.message);
-    return { success: false, error: error.message };
+    console.error('Publish Agent Error:', error);
+    return { success: false, error: `Publishing failed: ${error.message}` };
   }
 }

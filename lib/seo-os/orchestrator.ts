@@ -105,7 +105,7 @@ export async function runDailyCycle(isManual: boolean = false) {
         await requestIndexing(`https://usmantrades.co.uk${res.url}`);
         shouldContinue = false; // Task fully completed
       } else {
-        taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'failed', 'Network error during deployment.');
+        taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'failed', res.error || 'Network error during deployment.');
         await saveRoadmap(currentRoadmap);
         shouldContinue = false;
       }
