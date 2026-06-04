@@ -24,6 +24,38 @@ export interface SEOMap {
 }
 
 /**
+ * Phase 1: Researcher Agent - Opportunity Evaluation
+ * Evaluates if a found keyword or issue is worth pursuing.
+ */
+export async function evaluateOpportunity(topic: string, data: any): Promise<{ beneficial: boolean; reasoning: string; priority: 'high' | 'medium' | 'low' }> {
+  const openai = getOpenAIClient();
+  const prompt = `
+    Analyze this SEO Opportunity for "Usman Trades":
+    Topic: ${topic}
+    Context: ${JSON.stringify(data)}
+    
+    Tasks:
+    1. Is this beneficial for traffic growth?
+    2. Does it align with "Risk Management", "Gold", or "Forex"?
+    3. What is the potential impact?
+    
+    Return a JSON object: { "beneficial": boolean, "reasoning": string, "priority": "high" | "medium" | "low" }.
+  `;
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "system", content: "You are a ROI-focused SEO Analyst." }, { role: "user", content: prompt }],
+      response_format: { type: "json_object" },
+    });
+    return JSON.parse(response.choices[0].message.content || '{}');
+  } catch (error) {
+    console.error('Opportunity Evaluation Error:', error);
+    return { beneficial: false, reasoning: 'Evaluation failed', priority: 'low' };
+  }
+}
+
+/**
  * Phase 1: Deep Research Agent
  * Analyzes GSC data to identify clusters, gaps, and high-value opportunities.
  */

@@ -25,139 +25,96 @@ export async function runDailyCycle(isManual: boolean = false) {
     return;
   }
 
-  const now = new Date();
-  // We use UTC hours to be consistent across deployments
-  const hour = now.getUTCHours();
-
-  console.log(`[Orchestrator] Heartbeat at ${hour}:00 UTC (Manual: ${isManual})`);
+  console.log(`[Orchestrator] Professional SEO Pipeline Heartbeat (Manual: ${isManual})`);
 
   try {
-    // 11 PM UTC (23): Monitor & Research & Strategy
-    if (hour === 23 || isManual) {
-      logAgentAction('Monitor Agent', 'active', 'Analyzing GSC performance...');
-      const gscData = await getPerformanceReport();
-      const currentRoadmap = getRoadmap();
-      const correctionReport = currentRoadmap 
-        ? await monitorPerformanceAndAdjust(gscData, currentRoadmap)
-        : 'Initial strategy.';
-      logAgentAction('Monitor Agent', 'success', 'Performance analyzed.');
+    // 1. MONITOR & RESEARCH (Pipeline Trigger)
+    // Always run research to find new opportunities
+    logAgentAction('Monitor Agent', 'active', 'Scanning GSC and market for new traffic opportunities...');
+    const gscData = await getPerformanceReport();
+    const currentRoadmap = getRoadmap();
+    const correctionReport = currentRoadmap 
+      ? await monitorPerformanceAndAdjust(gscData, currentRoadmap)
+      : 'Initial strategy.';
+    logAgentAction('Monitor Agent', 'success', 'Performance analyzed.');
 
-      logAgentAction('Research Agent', 'active', 'Identifying keyword gaps...');
-      const researchReport = await performDeepResearch(gscData);
-      logAgentAction('Research Agent', 'success', 'Gaps identified.');
+    logAgentAction('Research Agent', 'active', 'Evaluating beneficial opportunities...');
+    const researchReport = await performDeepResearch(gscData);
+    logAgentAction('Research Agent', 'success', 'New high-ROI opportunities identified.');
 
-      logAgentAction('Strategist Agent', 'active', 'Updating 30-day roadmap...');
-      const newTasks = await generate30DayPlan(researchReport, correctionReport);
+    // 2. STRATEGIST (Always ensure roadmap is optimized)
+    logAgentAction('Strategist Agent', 'active', 'Synchronizing roadmap with new data...');
+    const newTasks = await generate30DayPlan(researchReport, correctionReport);
+    const updatedRoadmap = currentRoadmap || {
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      progress: 0,
+      tasks: [],
+      systemStatus: 'active'
+    };
+    
+    // Only update pending tasks to avoid overwriting completed work
+    const completedTasks = updatedRoadmap.tasks.filter(t => t.status === 'completed');
+    updatedRoadmap.tasks = [...completedTasks, ...(newTasks as any)];
+    saveRoadmap(updatedRoadmap);
+    logAgentAction('Strategist Agent', 'success', 'Roadmap optimized for maximum growth.');
 
-      const updatedRoadmap = currentRoadmap || {
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        progress: 0,
-        tasks: [],
-        systemStatus: 'active'
-      };
+    // 3. WRITER (Pick up the next pending task immediately)
+    const taskToDraft = updatedRoadmap.tasks.find(t => t.status === 'pending' && !(t as any).rawContent);
+    if (taskToDraft) {
+      logAgentAction('Writer Agent', 'active', `Drafting Expert Content: ${taskToDraft.keyword}`);
+      const content = await generateAIPost(taskToDraft.keyword);
+      if (content) {
+        (taskToDraft as any).rawContent = content;
+        saveRoadmap(updatedRoadmap);
+        logAgentAction('Writer Agent', 'success', 'High-quality draft completed.');
+      }
+    }
 
-      updatedRoadmap.tasks = newTasks as any;
-      updatedRoadmap.systemStatus = 'active'; // Always activate if manual trigger
+    // 4. REVIEWER (Process any new drafts)
+    const taskToReview = updatedRoadmap.tasks.find(t => t.status === 'pending' && (t as any).rawContent && !(t as any).reviewedContent);
+    if (taskToReview) {
+      logAgentAction('Review Agent', 'active', 'Polishing content for brand authority...');
+      const { approved, finalContent } = await reviewContent((taskToReview as any).rawContent);
+      if (approved) {
+        (taskToReview as any).reviewedContent = finalContent;
+        saveRoadmap(updatedRoadmap);
+        logAgentAction('Review Agent', 'success', 'Content approved by Editorial.');
+      }
+    }
+
+    // 5. LINKING (Optimize internal structure)
+    const taskToLink = updatedRoadmap.tasks.find(t => t.status === 'pending' && (t as any).reviewedContent && !(t as any).finalContent);
+    if (taskToLink) {
+      logAgentAction('Linking Agent', 'active', 'Injecting contextual internal links...');
+      const linkedContent = injectContextualLinks((taskToLink as any).reviewedContent);
+      (taskToLink as any).finalContent = linkedContent;
       saveRoadmap(updatedRoadmap);
-
-      logAgentAction('Strategist Agent', 'success', 'Roadmap synchronized.');
-
-      // If we were just testing manual mode, we can stop here or continue
-      if (isManual && hour !== 23) return; 
+      logAgentAction('Linking Agent', 'success', 'Internal link architecture optimized.');
     }
-    // ... rest of agents ...
 
-    // 4 AM UTC (4): Writer Agent
-    if (hour === 4) {
-      const roadmap = getRoadmap();
-      const task = roadmap?.tasks.find(t => t.status === 'pending');
-      if (task) {
-        logAgentAction('Writer Agent', 'active', `Drafting article: ${task.keyword}`);
-        const content = await generateAIPost(task.keyword);
-        if (content) {
-          // Store raw content in task for Review Agent
-          (task as any).rawContent = content;
-          saveRoadmap(roadmap!);
-          logAgentAction('Writer Agent', 'success', 'Draft complete.');
-        } else {
-          logAgentAction('Writer Agent', 'error', 'Drafting failed.');
-        }
+    // 6. PUBLISH (Go Live)
+    const taskToPublish = updatedRoadmap.tasks.find(t => t.status === 'pending' && (t as any).finalContent);
+    if (taskToPublish) {
+      logAgentAction('Publish Agent', 'active', 'Deploying to production...');
+      const slug = taskToPublish.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
+      const res = await publishArticle(slug, taskToPublish.keyword, (taskToPublish as any).finalContent, 'Risk Management');
+      if (res.success) {
+        taskToPublish.status = 'completed';
+        taskToPublish.publishedUrl = res.url;
+        taskToPublish.completedAt = new Date().toISOString();
+        saveRoadmap(updatedRoadmap);
+        logAgentAction('Publish Agent', 'success', `Article live at: ${res.url}`);
+        
+        // 7. SUBMISSION (Request Instant Indexing)
+        logAgentAction('Submission Agent', 'active', 'Notifying Google of new content...');
+        await requestIndexing(`https://usmantrades.co.uk${res.url}`);
+        logAgentAction('Submission Agent', 'success', 'Instant indexing request sent.');
       }
-    }
-
-    // 6 AM UTC (6): Review Agent
-    if (hour === 6) {
-      const roadmap = getRoadmap();
-      const task = roadmap?.tasks.find(t => t.status === 'pending' && (t as any).rawContent);
-      if (task) {
-        logAgentAction('Review Agent', 'active', 'Polishing content for brand voice...');
-        const { approved, finalContent } = await reviewContent((task as any).rawContent);
-        if (approved) {
-          (task as any).reviewedContent = finalContent;
-          saveRoadmap(roadmap!);
-          logAgentAction('Review Agent', 'success', 'Content approved.');
-        } else {
-          logAgentAction('Review Agent', 'error', 'Content rejected.');
-        }
-      }
-    }
-
-    // 8 AM UTC (8): Linking Agent
-    if (hour === 8) {
-      const roadmap = getRoadmap();
-      const task = roadmap?.tasks.find(t => t.status === 'pending' && (t as any).reviewedContent);
-      if (task) {
-        logAgentAction('Linking Agent', 'active', 'Injecting internal links...');
-        const linkedContent = injectContextualLinks((task as any).reviewedContent);
-        (task as any).finalContent = linkedContent;
-        saveRoadmap(roadmap!);
-        logAgentAction('Linking Agent', 'success', 'Internal links optimized.');
-      }
-    }
-
-    // 10 AM UTC (10): Publish Agent
-    if (hour === 10) {
-      const roadmap = getRoadmap();
-      const task = roadmap?.tasks.find(t => t.status === 'pending' && (t as any).finalContent);
-      if (task) {
-        logAgentAction('Publish Agent', 'active', 'Publishing to live site...');
-        const slug = task.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
-        const res = await publishArticle(slug, task.keyword, (task as any).finalContent, 'Risk Management');
-        if (res.success) {
-          task.status = 'completed';
-          task.publishedUrl = res.url;
-          task.completedAt = new Date().toISOString();
-          saveRoadmap(roadmap!);
-          logAgentAction('Publish Agent', 'success', `Live at ${res.url}`);
-        } else {
-          logAgentAction('Publish Agent', 'error', 'Publication failed.');
-        }
-      }
-    }
-
-    // 12 PM UTC (12): Submission Agent
-    if (hour === 12) {
-      const roadmap = getRoadmap();
-      const task = roadmap?.tasks.find(t => t.status === 'completed' && !t.completedAt?.startsWith(new Date().toISOString().split('T')[0]));
-      // Note: we actually want the one completed today
-      const today = new Date().toISOString().split('T')[0];
-      const todayTask = roadmap?.tasks.find(t => t.status === 'completed' && t.completedAt?.startsWith(today));
-      
-      if (todayTask) {
-        logAgentAction('Submission Agent', 'active', 'Requesting Google crawl...');
-        await requestIndexing(`https://usmantrades.co.uk${todayTask.publishedUrl}`);
-        logAgentAction('Submission Agent', 'success', 'Indexing request sent.');
-      }
-    }
-
-    // Catch-all for other hours
-    if (![23, 4, 6, 8, 10, 12].includes(hour)) {
-      console.log(`[Orchestrator] Idle hour. Agents awaiting their schedule.`);
     }
 
   } catch (error: any) {
-    console.error('Cycle Error:', error.message);
+    console.error('Pipeline Error:', error.message);
     logAgentAction('Orchestrator', 'error', error.message);
   }
 }
