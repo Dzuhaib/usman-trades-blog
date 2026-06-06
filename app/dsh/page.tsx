@@ -200,31 +200,9 @@ export default function DashboardPage() {
                    </div>
                    
                    <div className="pt-2 flex flex-wrap gap-4">
-                      <button 
-                        onClick={async (e) => {
-                          e.stopPropagation();
-                          if(confirm('Force execution of the next atomic task in the pipeline?')) {
-                            const btn = e.currentTarget;
-                            btn.disabled = true;
-                            const originalText = btn.innerText;
-                            btn.innerText = 'Executing...';
-                            
-                            const res = await fetch('/api/seo-os/cron?token=dev-test');
-                            const data = await res.json();
-                            
-                            if (data.success) {
-                              loadData();
-                            } else {
-                              alert('Error: ' + data.error);
-                            }
-                            btn.disabled = false;
-                            btn.innerText = originalText;
-                          }
-                        }}
-                        className="flex-1 bg-white text-slate-900 font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-accent hover:text-white transition-all disabled:opacity-50"
-                      >
-                         Step Execute
-                      </button>
+                      <div className="flex-1 bg-white/5 border border-white/10 text-white font-black uppercase tracking-widest text-[10px] py-4 rounded-xl text-center">
+                         Autopilot Processing...
+                      </div>
                       <button 
                         onClick={async (e) => {
                           e.stopPropagation();
@@ -347,7 +325,6 @@ export default function DashboardPage() {
                          <div>
                            <div className="flex items-center gap-2">
                              <span className="block text-[10px] font-black text-slate-900 leading-none uppercase">{log.agent}</span>
-                             {relatedTask && <span className="text-[7px] font-black bg-accent/10 text-accent px-1.5 py-0.5 rounded uppercase tracking-tighter">Trackable</span>}
                            </div>
                            <p className="text-[10px] text-slate-500 leading-tight mt-1">{log.message}</p>
                            <span className="text-[8px] text-slate-300 font-bold uppercase">{new Date(log.timestamp).toLocaleTimeString()}</span>
