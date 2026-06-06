@@ -6,7 +6,7 @@ import { saveDynamicPost, getDynamicPosts } from './article-engine';
  * Handles data updates to make AI content live via dynamic routing.
  */
 export async function publishArticle(slug: string, title: string, content: string, category: any) {
-  // 1. Determine the best publication time (4-hour gap enforcement)
+  // 1. Determine the best publication time (Strict 24-hour drip-feed)
   const dynamicPosts = await getDynamicPosts();
   let publishDate = new Date();
 
@@ -15,13 +15,14 @@ export async function publishArticle(slug: string, title: string, content: strin
     const lastDate = new Date(lastPost.updatedAt || lastPost.date);
     
     if (!isNaN(lastDate.getTime())) {
-      const fourHoursInMs = 4 * 60 * 60 * 1000;
-      const nextAvailableSlot = lastDate.getTime() + fourHoursInMs;
+      // Check if lastDate is today or in the future
+      const isTodayOrFuture = lastDate.getTime() >= new Date().setHours(0, 0, 0, 0);
       
-      // If the next slot is in the future relative to 'now', we continue the chain
-      // If 'now' is already past the lastDate + 4h, we use 'now'
-      if (nextAvailableSlot > publishDate.getTime()) {
-        publishDate = new Date(nextAvailableSlot);
+      if (isTodayOrFuture) {
+        // If there's already a post today or scheduled for the future, 
+        // schedule this one exactly 24 hours after the last one.
+        const twentyFourHoursInMs = 24 * 60 * 60 * 1000;
+        publishDate = new Date(lastDate.getTime() + twentyFourHoursInMs);
       }
     }
   }
