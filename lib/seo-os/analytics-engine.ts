@@ -156,11 +156,29 @@ export async function getPerformanceReport(): Promise<GSCReport[]> {
 
 export async function requestIndexing(url: string) {
   try {
-    const searchConsole = await getGSCAuth();
-    console.log(`[GSC] Indexing request for: ${url}`);
-    return { success: true };
-  } catch (error) {
-    return { success: false, error };
+    const siteUrl = process.env.GSC_SITE_URL || 'https://usmantrades.co.uk/';
+    const fullUrl = url.startsWith('http') ? url : `${siteUrl}${url.startsWith('/') ? url.slice(1) : url}`;
+
+    // 1. Initialize Indexing API
+    const auth = await getGSCAuth();
+    // getGSCAuth returns webmasters client by default, we need to extract auth or create indexing client
+    const credentials = (auth as any).context._options.auth; 
+    
+    const indexing = google.indexing({ version: 'v3', auth: credentials });
+
+    console.log(`[GSC] Indexing request for: ${fullUrl}`);
+    
+    const res = await indexing.urlNotifications.publish({
+      requestBody: {
+        url: fullUrl,
+        type: 'URL_UPDATED',
+      },
+    });
+
+    return { success: true, data: res.data };
+  } catch (error: any) {
+    console.error('[GSC Indexing Error]:', error.message);
+    return { success: false, error: error.message };
   }
 }
 

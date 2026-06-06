@@ -138,11 +138,12 @@ export async function generate30DayPlan(researchReport: string, correctionReport
     Requirements:
     - Days 1-5: "Striking Distance" (Optimize current Pos 4-20).
     - Days 6-15: "pSEO Glossary Blitz" (Create 50+ glossary/dictionary entries for low-competition technical terms).
-    - Days 16-25: "Authority Clusters" (Technical guides for Gold and Forex).
+    - Days 16-25: "Authority Clusters" (Technical, 1500-word guides for Gold and Forex).
     - Days 26-30: "Tool-to-Content loops" (Articles that focus on using our calculators).
     
     Professional Expert Logic:
     - Every task MUST have a specific target keyword or technical goal.
+    - Articles MUST target 1200-1800 words and institutional-grade depth.
     - Tasks should be designed to maximize "Answer Engine" visibility and impression share.
     
     Return a JSON object with a "plan" key containing an array of 30 objects.
@@ -154,7 +155,7 @@ export async function generate30DayPlan(researchReport: string, correctionReport
       model: "gpt-4o",
       messages: [{ 
         role: "system", 
-        content: "You are a Senior SEO Strategist obsessed with compounding organic growth." 
+        content: "You are a Senior SEO Strategist obsessed with compounding organic growth and high-integrity financial content." 
       }, { 
         role: "user", 
         content: prompt 
@@ -216,31 +217,37 @@ export async function generateAIPost(keyword: string) {
     You are Muhammad Usman, a Professional Market Analyst and Institutional Trader with 15+ years of experience. 
     Your goal is to write high-integrity, experience-backed guides that rank for both Google (E-E-A-T) and Answer Engines (AEO).
 
-    STRICT WRITING RULES (ANTI-AI):
-    1. NO AI-ISMS: Never use: "In the fast-paced world of", "delve", "tapestry", "embark", "comprehensive guide", "look no further", "moreover", "furthermore", "in conclusion", "it's important to note".
-    2. VOICE: Use a direct, blunt, and technical tone. Talk like a trader in a London prop firm. Use "I" and "we" to show first-hand experience (e.g., "In my 12 years trading Gold, I've seen...").
-    3. AEO SUMMARY: The VERY FIRST paragraph MUST be a 40-50 word direct answer to the keyword (target Position Zero).
-    4. NO RAW HTML/LATEX: Use plain bold text for math and headers.
-    5. MATH RENDERING: Use plain text with bold numbers for math. 
+    STRICT WRITING RULES (ANTI-AI & BLOG STANDARDS):
+    1. LENGTH: Every article must be between 1200 and 1800 words. Provide deep, technical value.
+    2. NO DASHES: The use of dashes (-) is strictly prohibited in the article content. Use alternative punctuation or sentence structures.
+    3. NO AI-ISMS: Never use: "In the fast-paced world of", "delve", "tapestry", "embark", "comprehensive guide", "look no further", "moreover", "furthermore", "in conclusion", "it's important to note".
+    4. VOICE: Use a direct, blunt, and technical tone. Talk like a trader in a London prop firm. Use "I" and "we" to show first-hand experience.
+    5. AEO SUMMARY: The VERY FIRST paragraph MUST be a 40-50 word direct answer to the keyword (target Position Zero).
+    6. NO RAW HTML/LATEX: Use plain bold text for math and headers.
+    7. MATH RENDERING: Use plain text with bold numbers for math. 
        Example: **Lot Size = (Risk Amount) / (Stop Loss x Pip Value)**
-    6. INTERNAL LINKING: Use exactly 3-5 unique internal links using this EXACT placeholder: [LINK_url:label].
-    7. TONE: Authoritative, skeptical of "retail" myths, and math-focused.
+    8. INTERNAL LINKING: Use exactly 3-5 unique internal links using this EXACT placeholder: [LINK_url:label].
+    9. TONE: Authoritative, skeptical of "retail" myths, and math-focused.
   `;
 
   const userPrompt = `
     Write an institutional-grade trading guide for: "${keyword}". 
     
-    Structure:
+    Structure (FOLLOW EXACTLY):
     1. [AEO Summary]: Direct 45-word answer.
-    2. [Experience Insight]: A brief story or observation from your trading career.
-    3. [Technical Core]: Detailed mechanics with math.
-    4. [Common Pitfalls]: What retail traders get wrong.
-    5. [FAQ]: 3-5 high-intent questions.
+    2. Introduction: Introduce the topic and why it matters.
+    3. Main Concept: Explain the core idea in simple but professional language.
+    4. Practical Example: A realistic trading scenario with math.
+    5. Common Mistakes: What retail traders get wrong.
+    6. Risk Considerations: Potential risks and limitations.
+    7. Frequently Asked Questions: 3-5 high-intent questions with direct answers.
+    8. Related Tools & Articles: Use placeholders for tools and links.
+    9. Conclusion: Summarize key takeaways and next steps.
 
     Include:
     - 4 image markers: [IMAGE_1], [IMAGE_2], [IMAGE_3], [IMAGE_4].
     - 3-5 strategic [LINK_url:label] placeholders.
-    - EMBED TOOL: If the topic relates to lot size, risk, pips, or margin, include exactly one [TOOL_slug] placeholder where it makes sense.
+    - EMBED TOOL: If the topic relates to lot size, risk, pips, or margin, include exactly one [TOOL_slug] placeholder.
       Available slugs: lot-size-calculator, risk-calculator, pip-calculator, margin-calculator, profit-calculator.
   `;
 
@@ -267,14 +274,14 @@ export async function reviewContent(content: string): Promise<{ approved: boolea
   const openai = getOpenAIClient();
   const prompt = `
     Review this trading article for "Usman Trades". 
-    Your ONLY goal is to ensure it DOES NOT look like AI and follows E-E-A-T.
+    Your goal is to ensure it follows the official blog standards and E-E-A-T.
 
-    Tasks:
-    1. REMOVE ALL AI WORDS: "delve", "tapestry", "embark", "In conclusion", "Moreover", "Furthermore", "In the world of".
-    2. Check AEO Summary: Does the first paragraph answer the query directly?
-    3. Check Experience: Is there a first-hand perspective ("I", "my")?
-    4. Replace generic "Conclusion" headers with descriptive ones like "The Bottom Line on ${content.substring(0,20)}".
-    5. Fix any LaTeX/HTML math.
+    STRICT CHECKLIST:
+    1. WORD COUNT: Is it between 1200-1800 words? (Reject if too short).
+    2. NO DASHES: Does it contain any dashes (-)? (Reject if found).
+    3. NO AI WORDS: "delve", "tapestry", "embark", "In conclusion", "Moreover", "Furthermore".
+    4. AEO Summary: Does the first paragraph answer the query directly?
+    5. Replace generic "Conclusion" headers with descriptive ones like "The Bottom Line on ${content.substring(0,20)}".
     
     Return a JSON object: { "approved": boolean, "feedback": string, "finalContent": string }.
   `;
