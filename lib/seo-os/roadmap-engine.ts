@@ -24,6 +24,13 @@ export interface RoadmapTask {
   completedAt?: string;
   expert_note?: string;
   pipeline?: PipelineStep[];
+  // Dynamic fields for agent state
+  rawContent?: string | null;
+  reviewedContent?: string | null;
+  finalContent?: string | null;
+  reviewFeedback?: string | null;
+  retryCount?: number;
+  optimizationPlan?: string | null;
 }
 
 export interface RoadmapData {
