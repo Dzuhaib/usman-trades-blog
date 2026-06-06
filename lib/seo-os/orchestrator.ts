@@ -154,16 +154,25 @@ export async function runDailyCycle(isManual: boolean = false) {
       taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'active', 'Editing content for brand voice & accuracy...');
       await saveRoadmap(currentRoadmap);
 
-      const { approved, finalContent } = await reviewContent((taskToReview as any).rawContent);
+      const { approved, feedback, finalContent } = await reviewContent((taskToReview as any).rawContent);
       if (approved) {
         (taskToReview as any).reviewedContent = finalContent;
         taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'completed', 'Editorial review passed.');
         await saveRoadmap(currentRoadmap);
         await logAgentAction('Review Agent', 'success', 'Approved by Editor.');
       } else {
-        taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'failed', 'Content rejected for quality standards.');
+        // BOUNCE BACK: If rejected, send back to Writer Agent with feedback
+        await logAgentAction('Review Agent', 'error', `Rejected: ${feedback}`);
+        
+        (taskToReview as any).reviewFeedback = feedback;
+        (taskToReview as any).rawContent = null; // Clear content to trigger re-draft
+        
+        // Reset pipeline steps for retry
+        taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Writer Agent', 'pending', `Rewrite required: ${feedback}`);
+        taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'pending', 'Awaiting improved draft.');
+        
         await saveRoadmap(currentRoadmap);
-        shouldContinue = false;
+        continue; // Immediately loop to re-draft
       }
       if (!isManual) return;
       continue;
@@ -176,9 +185,11 @@ export async function runDailyCycle(isManual: boolean = false) {
       taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'active', 'Generating technical market analysis draft...');
       await saveRoadmap(currentRoadmap);
 
-      const content = await generateAIPost(taskToDraft.keyword);
+      const feedback = (taskToDraft as any).reviewFeedback;
+      const content = await generateAIPost(taskToDraft.keyword, feedback);
       if (content) {
         (taskToDraft as any).rawContent = content;
+        (taskToDraft as any).reviewFeedback = null; // Clear feedback once addressed
         taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'completed', 'Expert draft generated.');
         await saveRoadmap(currentRoadmap);
         await logAgentAction('Writer Agent', 'success', 'Draft complete.');

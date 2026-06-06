@@ -211,7 +211,7 @@ export async function generateGlossaryEntry(term: string) {
 /**
  * Phase 4: Writer Agent (E-E-A-T & AEO Focused)
  */
-export async function generateAIPost(keyword: string) {
+export async function generateAIPost(keyword: string, feedback?: string) {
   const openai = getOpenAIClient();
   const systemPrompt = `
     You are Muhammad Usman, a Professional Market Analyst and Institutional Trader with 15+ years of experience. 
@@ -231,6 +231,7 @@ export async function generateAIPost(keyword: string) {
   `;
 
   const userPrompt = `
+    ${feedback ? `CRITICAL: Your previous draft was REJECTED. Fix these issues: ${feedback}\n\n` : ''}
     Write an institutional-grade trading guide for: "${keyword}". 
     
     Structure (FOLLOW EXACTLY):
