@@ -158,22 +158,29 @@ export async function runDailyCycle(isManual: boolean = false) {
     if (!actionTaken) {
       const taskToReview = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'article' && t.rawContent && !t.reviewedContent);
       if (taskToReview) {
-        taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'active', 'Reviewing...');
-        await saveRoadmap(refreshedRoadmap);
-        const { approved, feedback, finalContent } = await reviewContent(taskToReview.rawContent!);
-        if (approved) {
-          taskToReview.reviewedContent = finalContent;
-          taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'completed', 'Approved.');
-        } else {
-          taskToReview.reviewFeedback = feedback;
-          taskToReview.rawContent = null;
-          taskToReview.retryCount = (taskToReview.retryCount || 0) + 1;
-          taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Writer Agent', 'pending', `Retry #${taskToReview.retryCount}: ${feedback}`);
-          taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'pending', 'Awaiting fixes.');
+        try {
+          taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'active', 'Reviewing...');
+          await saveRoadmap(refreshedRoadmap);
+          const { approved, feedback, finalContent } = await reviewContent(taskToReview.rawContent!);
+          if (approved) {
+            taskToReview.reviewedContent = finalContent;
+            taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'completed', 'Approved.');
+          } else {
+            taskToReview.reviewFeedback = feedback;
+            taskToReview.rawContent = null;
+            taskToReview.retryCount = (taskToReview.retryCount || 0) + 1;
+            taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Writer Agent', 'pending', `Retry #${taskToReview.retryCount}: ${feedback}`);
+            taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'pending', 'Awaiting fixes.');
+          }
+          await saveRoadmap(refreshedRoadmap);
+          actionTaken = true;
+          workDoneCount++;
+        } catch (error: any) {
+          console.error('[Orchestrator] Review Agent Failed:', error.message);
+          taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'failed', error.message);
+          await saveRoadmap(refreshedRoadmap);
+          break; // Stop loop on fatal API error
         }
-        await saveRoadmap(refreshedRoadmap);
-        actionTaken = true;
-        workDoneCount++;
       }
     }
 
@@ -181,17 +188,26 @@ export async function runDailyCycle(isManual: boolean = false) {
     if (!actionTaken) {
       const taskToDraft = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'article' && !t.rawContent);
       if (taskToDraft) {
-        taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'active', 'Drafting...');
-        await saveRoadmap(refreshedRoadmap);
-        const content = await generateAIPost(taskToDraft.keyword, taskToDraft.reviewFeedback || undefined);
-        if (content) {
-          taskToDraft.rawContent = content;
-          taskToDraft.reviewFeedback = null;
-          taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'completed', 'Drafted.');
+        try {
+          taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'active', 'Drafting...');
           await saveRoadmap(refreshedRoadmap);
+          const content = await generateAIPost(taskToDraft.keyword, taskToDraft.reviewFeedback || undefined);
+          if (content) {
+            taskToDraft.rawContent = content;
+            taskToDraft.reviewFeedback = null;
+            taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'completed', 'Drafted.');
+            await saveRoadmap(refreshedRoadmap);
+            actionTaken = true;
+            workDoneCount++;
+          } else {
+            throw new Error('OpenAI returned empty content.');
+          }
+        } catch (error: any) {
+          console.error('[Orchestrator] Writer Agent Failed:', error.message);
+          taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'failed', error.message);
+          await saveRoadmap(refreshedRoadmap);
+          break; 
         }
-        actionTaken = true;
-        workDoneCount++;
       }
     }
 

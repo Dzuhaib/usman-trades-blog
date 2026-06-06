@@ -18,11 +18,11 @@ export interface GSCReport {
 }
 
 /**
- * Initialize GSC Auth using Service Account
+ * Initialize GSC Auth
  */
 async function getGSCAuth() {
   try {
-    // 1. Try OAuth2 "Login" method (Best for Personal Use/Localhost)
+    // 1. Try OAuth2 (Personal/Local)
     if (process.env.GSC_CLIENT_ID && process.env.GSC_CLIENT_SECRET && process.env.GSC_REFRESH_TOKEN) {
       const oauth2Client = new google.auth.OAuth2(
         process.env.GSC_CLIENT_ID,
@@ -31,51 +31,35 @@ async function getGSCAuth() {
       oauth2Client.setCredentials({
         refresh_token: process.env.GSC_REFRESH_TOKEN
       });
-      return google.webmasters({ version: 'v3', auth: oauth2Client });
+      return oauth2Client;
     }
 
     let credentials;
-    // 2. Try individual environment variables (Best for Vercel Service Account)
     if (process.env.GSC_CLIENT_EMAIL && process.env.GSC_PRIVATE_KEY) {
-      // Robust newline handling for different environments
-      let privateKey = process.env.GSC_PRIVATE_KEY;
-      
-      // Remove any surrounding quotes that might have been preserved from .env or Vercel
-      privateKey = privateKey.replace(/^["']|["']$/g, '');
-      
-      // Handle escaped newlines
-      if (privateKey.includes('\\n')) {
-        privateKey = privateKey.replace(/\\n/g, '\n');
-      }
+      let privateKey = process.env.GSC_PRIVATE_KEY.replace(/^["']|["']$/g, '');
+      if (privateKey.includes('\\n')) privateKey = privateKey.replace(/\\n/g, '\n');
       
       credentials = {
         client_email: process.env.GSC_CLIENT_EMAIL,
         private_key: privateKey,
         project_id: process.env.GSC_PROJECT_ID,
       };
-    } 
-    // 3. Fallback to full JSON string
-    else if (process.env.GSC_SERVICE_ACCOUNT_JSON) {
-      let jsonStr = process.env.GSC_SERVICE_ACCOUNT_JSON.trim();
-      // Remove potential surrounding quotes from the whole JSON string
-      jsonStr = jsonStr.replace(/^["']|["']$/g, '');
-      
+    } else if (process.env.GSC_SERVICE_ACCOUNT_JSON) {
+      let jsonStr = process.env.GSC_SERVICE_ACCOUNT_JSON.trim().replace(/^["']|["']$/g, '');
       credentials = JSON.parse(jsonStr);
       if (credentials.private_key && credentials.private_key.includes('\\n')) {
         credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
       }
-    } 
-    // 4. Fallback to local file
-    else {
+    } else {
       const keyPath = path.join(process.cwd(), 'google-credentials.json');
       if (fs.existsSync(keyPath)) {
         credentials = JSON.parse(fs.readFileSync(keyPath, 'utf8'));
       }
     }
 
-    if (!credentials) throw new Error('Missing GSC credentials. Please set OAuth2 variables or Service Account keys.');
+    if (!credentials) throw new Error('Missing GSC credentials.');
 
-    const auth = new google.auth.GoogleAuth({
+    return new google.auth.GoogleAuth({
       credentials,
       scopes: [
         'https://www.googleapis.com/auth/webmasters.readonly',
@@ -83,17 +67,15 @@ async function getGSCAuth() {
         'https://www.googleapis.com/auth/indexing'
       ],
     });
-
-    return google.webmasters({ version: 'v3', auth });
   } catch (error: any) {
-    console.error('[GSC Auth Internal Error]:', error);
     throw new Error(`[GSC Auth Error]: ${error.message}`);
   }
 }
 
 export async function getPerformanceReport(): Promise<GSCReport[]> {
   try {
-    const searchConsole = await getGSCAuth();
+    const auth = await getGSCAuth();
+    const searchConsole = google.webmasters({ version: 'v3', auth: auth as any });
     const siteUrl = process.env.GSC_SITE_URL || 'https://usmantrades.co.uk/';
 
     const res = await searchConsole.searchanalytics.query({
@@ -112,7 +94,6 @@ export async function getPerformanceReport(): Promise<GSCReport[]> {
       const rawUrl = row.keys[0];
       let cleanUrl = rawUrl;
       
-      // Robustly remove domain prefixes
       const prefixes = [
         siteUrl,
         siteUrl.endsWith('/') ? siteUrl.slice(0, -1) : siteUrl + '/',
@@ -129,12 +110,7 @@ export async function getPerformanceReport(): Promise<GSCReport[]> {
         }
       }
 
-      // Ensure leading slash
-      if (!cleanUrl.startsWith('/')) {
-        cleanUrl = '/' + cleanUrl;
-      }
-      
-      // Handle potential double slashes from cleaning
+      if (!cleanUrl.startsWith('/')) cleanUrl = '/' + cleanUrl;
       cleanUrl = cleanUrl.replace(/\/+/g, '/');
 
       return {
@@ -149,7 +125,6 @@ export async function getPerformanceReport(): Promise<GSCReport[]> {
 
   } catch (error: any) {
     console.error('[GSC API Error]:', error.message);
-    // Rethrow to let the API route handle the error message
     throw error;
   }
 }
@@ -159,12 +134,8 @@ export async function requestIndexing(url: string) {
     const siteUrl = process.env.GSC_SITE_URL || 'https://usmantrades.co.uk/';
     const fullUrl = url.startsWith('http') ? url : `${siteUrl}${url.startsWith('/') ? url.slice(1) : url}`;
 
-    // 1. Initialize Indexing API
     const auth = await getGSCAuth();
-    // getGSCAuth returns webmasters client by default, we need to extract auth or create indexing client
-    const credentials = (auth as any).context._options.auth; 
-    
-    const indexing = google.indexing({ version: 'v3', auth: credentials });
+    const indexing = google.indexing({ version: 'v3', auth: auth as any });
 
     console.log(`[GSC] Indexing request for: ${fullUrl}`);
     
