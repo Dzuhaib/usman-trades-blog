@@ -69,11 +69,24 @@ export default function AuditDashboard() {
             {running ? 'Running Audit...' : 'Run Audit Now'}
         </button>
       </div>
-      <div className="grid grid-cols-2 gap-6">
-        <AuditCard icon={<FileText />} title="Technical Audit" content={audit?.technical} />
-        <AuditCard icon={<Search />} title="SEO Audit" content={audit?.seo} />
-        <AuditCard icon={<MapPin />} title="GEO Audit" content={audit?.geo} />
-        <AuditCard icon={<Target />} title="AIO Audit" content={audit?.aio} />
+      
+      <div className="space-y-6">
+        {audit?.pages?.map((page: any) => (
+            <div key={page.url} className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <h2 className="font-bold text-lg text-accent">{page.url}</h2>
+                <div className="grid gap-3">
+                    {page.issues.map((issue: any, idx: number) => (
+                        <div key={idx} className="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
+                            <AlertCircle className={`w-5 h-5 ${issue.severity === 'high' ? 'text-rose-500' : 'text-amber-500'}`} />
+                            <div>
+                                <p className="font-bold text-sm uppercase">{issue.type}</p>
+                                <p className="text-sm text-slate-600">{issue.description}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        ))}
       </div>
     </div>
   );

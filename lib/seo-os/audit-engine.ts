@@ -8,12 +8,20 @@ const redis = new Redis({
 
 const AUDIT_KEY = 'seo-os:audit';
 
+export interface Issue {
+  type: 'technical' | 'seo' | 'geo' | 'aio';
+  description: string;
+  severity: 'high' | 'medium' | 'low';
+}
+
+export interface PageAudit {
+  url: string;
+  issues: Issue[];
+}
+
 export interface AuditReport {
   timestamp: string;
-  technical: string;
-  seo: string;
-  geo: string;
-  aio: string;
+  pages: PageAudit[];
 }
 
 export async function getAuditReport(): Promise<AuditReport | null> {

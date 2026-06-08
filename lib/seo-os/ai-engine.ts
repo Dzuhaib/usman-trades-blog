@@ -218,18 +218,32 @@ export async function generateAIPost(keyword: string) {
  */
 export async function performComprehensiveAudit(gscData: any[]): Promise<AuditReport> {
   const openai = getOpenAIClient();
-  const prompt = `Analyze GSC data: ${JSON.stringify(gscData.slice(0, 50))}. Generate technical, SEO, GEO, and AIO audit report. Return JSON.`;
+  const prompt = `
+    Analyze this GSC data: ${JSON.stringify(gscData.slice(0, 50))}. 
+    
+    Generate an audit report with page-by-page breakdowns.
+    
+    Return JSON structured exactly as: 
+    { 
+        "pages": [
+            { 
+                "url": string, 
+                "issues": [{ "type": "technical" | "seo" | "geo" | "aio", "description": string, "severity": "high" | "medium" | "low" }] 
+            }
+        ] 
+    }
+  `;
 
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [{ role: "system", content: "You are an elite SEO auditor." }, { role: "user", content: prompt }],
+      messages: [{ role: "system", content: "You are an elite SEO auditor. You MUST return valid JSON." }, { role: "user", content: prompt }],
       response_format: { type: "json_object" },
     });
-    return JSON.parse(response.choices[0].message.content || '{}');
+    return JSON.parse(response.choices[0].message.content || '{"pages": []}');
   } catch (error) {
     console.error('Audit Error:', error);
-    return { technical: 'Error', seo: 'Error', geo: 'Error', aio: 'Error', timestamp: new Date().toISOString() };
+    return { pages: [], timestamp: new Date().toISOString() };
   }
 }
 
@@ -240,7 +254,10 @@ export async function delegateAuditTasks(audit: AuditReport): Promise<SEOMap[]> 
   const openai = getOpenAIClient();
   const prompt = `
     Analyze this SEO Audit Report: ${JSON.stringify(audit)}
-    Create 5 actionable tasks. Return JSON: { "tasks": [{ "day": number, "keyword": string, "type": "article" | "glossary" | "tool_improvement" | "faq", "priority": "high", "expert_note": "..." }] }.
+    For every issue found, create an actionable roadmap task to resolve it.
+    
+    Return a JSON object with a "tasks" key containing an array of task objects.
+    Each object: { "day": number, "keyword": string, "type": "article" | "glossary" | "tool_improvement" | "faq", "priority": "high", "expert_note": "..." }.
   `;
 
   try {
