@@ -10,9 +10,11 @@ import {
   generateAIPost, 
   generateGlossaryEntry,
   reviewContent,
-  monitorPerformanceAndAdjust 
+  monitorPerformanceAndAdjust,
+  performComprehensiveAudit
 } from './ai-engine';
 import { getRoadmap, saveRoadmap, PipelineStep } from './roadmap-engine';
+import { getAuditReport, saveAuditReport } from './audit-engine';
 import { injectContextualLinks } from './linking-engine';
 import { publishArticle } from './publisher-engine';
 import { logAgentAction } from './log-engine';
@@ -171,6 +173,7 @@ export async function runDailyCycle(isManual: boolean = false) {
     // C. LINKING
     if (!actionTaken) {
       const taskToLink = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'article' && t.reviewedContent && !t.finalContent);
+      console.log(`[DEBUG] Linking Agent: taskToLink = ${taskToLink ? taskToLink.keyword : 'None'}`);
       if (taskToLink) {
         taskToLink.pipeline = updateStep(taskToLink.pipeline, 'Linking Agent', 'active', 'Linking...');
         await saveRoadmap(refreshedRoadmap);
@@ -185,11 +188,14 @@ export async function runDailyCycle(isManual: boolean = false) {
     // D. REVIEW
     if (!actionTaken) {
       const taskToReview = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'article' && t.rawContent && !t.reviewedContent);
+      console.log(`[DEBUG] Review Agent: taskToReview = ${taskToReview ? taskToReview.keyword : 'None'}`);
       if (taskToReview) {
         try {
           taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'active', 'Reviewing...');
           await saveRoadmap(refreshedRoadmap);
+          console.log(`[DEBUG] Review Agent: Calling reviewContent for ${taskToReview.keyword}`);
           const { approved, feedback, finalContent } = await reviewContent(taskToReview.rawContent!);
+          console.log(`[DEBUG] Review Agent: Result = ${approved}`);
           if (approved) {
             taskToReview.reviewedContent = finalContent;
             taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'completed', 'Approved.');
@@ -215,11 +221,14 @@ export async function runDailyCycle(isManual: boolean = false) {
     // E. WRITER
     if (!actionTaken) {
       const taskToDraft = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'article' && !t.rawContent);
+      console.log(`[DEBUG] Writer Agent: taskToDraft = ${taskToDraft ? taskToDraft.keyword : 'None'}`);
       if (taskToDraft) {
         try {
           taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'active', 'Drafting...');
           await saveRoadmap(refreshedRoadmap);
+          console.log(`[DEBUG] Writer Agent: Calling generateAIPost for ${taskToDraft.keyword}`);
           const content = await generateAIPost(taskToDraft.keyword, taskToDraft.reviewFeedback || undefined);
+          console.log(`[DEBUG] Writer Agent: Result length = ${content ? content.length : 'None'}`);
           if (content) {
             taskToDraft.rawContent = content;
             taskToDraft.reviewFeedback = null;

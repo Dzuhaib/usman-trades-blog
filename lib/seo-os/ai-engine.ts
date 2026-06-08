@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { AuditReport } from './audit-engine';
 
 // Create a singleton for the OpenAI client to avoid re-instantiation
 let openaiClient: OpenAI | null = null;
@@ -248,8 +249,6 @@ export async function generateAIPost(keyword: string, feedback?: string) {
     - 3-5 strategic [LINK_url:label] placeholders.
     - EMBED TOOL: If relevant, include exactly one [TOOL_slug] placeholder.
   `;
-// ... (rest of function remains same)
-
 
   try {
     const response = await openai.chat.completions.create({
@@ -264,6 +263,37 @@ export async function generateAIPost(keyword: string, feedback?: string) {
   } catch (error) {
     console.error('OpenAI Content Generation Error:', error);
     return null;
+  }
+}
+
+/**
+ * Audit Agent: Performs multi-layer site audits.
+ */
+export async function performComprehensiveAudit(gscData: any[]): Promise<AuditReport> {
+  const openai = getOpenAIClient();
+  const prompt = `
+    You are the "Senior Audit Agent" for Usman Trades. 
+    Analyze this Google Search Console data: ${JSON.stringify(gscData.slice(0, 50))}
+    
+    Generate a comprehensive audit report containing:
+    1. Technical Audit: Indexing issues, page speed indicators from GSC, core web vitals if visible.
+    2. SEO Audit: Content relevance, meta tag quality, keyword density gaps.
+    3. GEO Audit: Insights on geographic traffic distribution, localization improvements.
+    4. AIO Audit: How well we answer search queries (Position Zero candidates).
+    
+    Return JSON: { "technical": "...", "seo": "...", "geo": "...", "aio": "..." }.
+  `;
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "system", content: "You are an elite SEO auditor." }, { role: "user", content: prompt }],
+      response_format: { type: "json_object" },
+    });
+    return JSON.parse(response.choices[0].message.content || '{}');
+  } catch (error) {
+    console.error('Audit Error:', error);
+    return { technical: 'Error', seo: 'Error', geo: 'Error', aio: 'Error' };
   }
 }
 
