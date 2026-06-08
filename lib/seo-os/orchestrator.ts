@@ -19,6 +19,8 @@ import { injectContextualLinks } from './linking-engine';
 import { publishArticle } from './publisher-engine';
 import { logAgentAction } from './log-engine';
 import { performTechnicalAudit } from './technical-engine';
+import { updateRoadmapWithNewTasks } from './roadmap-engine';
+import { delegateAuditTasks } from './ai-engine';
 
 function updateStep(pipeline: PipelineStep[] | undefined, agent: string, status: PipelineStep['status'], message: string): PipelineStep[] {
   const steps = pipeline || [];
@@ -34,52 +36,25 @@ export async function runDailyCycle(isManual: boolean = false) {
   }
 
   // 1. PROACTIVE RESEARCH (Always active check)
-  // Check every heartbeat, not just when tasks are low
   const currentRoadmap = await getRoadmap();
   if (currentRoadmap) {
     const lastUpdate = new Date(currentRoadmap.updatedAt).getTime();
     const oneHourAgo = Date.now() - (60 * 60 * 1000);
-    
-    if (lastUpdate < oneHourAgo || currentRoadmap.tasks.filter(t => t.status === 'pending').length < 3) {
+
+    if (lastUpdate < oneHourAgo) {
       await logAgentAction('Monitor Agent', 'active', 'Running proactive opportunity research...');
       const gscData = await getPerformanceReport();
-      
+
       // Fix impressions by running technical audit
       await performTechnicalAudit();
-      
-      const researchReport = await performDeepResearch(gscData);
-      const correctionReport = await monitorPerformanceAndAdjust(gscData, currentRoadmap);
-      
-      const newTasks = await generate30DayPlan(researchReport, correctionReport);
-      const existingKeywords = new Set(currentRoadmap.tasks.map(t => t.keyword.toLowerCase()));
-      const filteredNewTasks = (newTasks as any).filter((t: any) => !existingKeywords.has(t.keyword.toLowerCase()));
 
-      const tasksToAppend = filteredNewTasks.map((t: any) => {
-        let pipeline: PipelineStep[] = [];
-        if (t.type === 'glossary') {
-          pipeline = [
-            { agent: 'Glossary Agent', status: 'pending', message: 'Generating definition.' },
-            { agent: 'Publish Agent', status: 'pending', message: 'Waiting for deployment.' }
-          ];
-        } else if (t.keyword.toLowerCase().includes('update') || t.keyword.toLowerCase().includes('optimize')) {
-          pipeline = [
-            { agent: 'Technical Auditor', status: 'pending', message: 'Analyzing CTR gaps.' },
-            { agent: 'Review Agent', status: 'pending', message: 'Optimizing meta tags.' },
-            { agent: 'Submission Agent', status: 'pending', message: 'Requesting GSC re-index.' }
-          ];
-        } else {
-          pipeline = [
-            { agent: 'Writer Agent', status: 'pending', message: 'Researching context.' },
-            { agent: 'Review Agent', status: 'pending', message: 'Editorial loop.' },
-            { agent: 'Linking Agent', status: 'pending', message: 'Internal linking.' },
-            { agent: 'Publish Agent', status: 'pending', message: 'Live deployment.' }
-          ];
-        }
-        return { ...t, pipeline };
-      });
+      // Audit and delegate findings immediately
+      const audit = await performComprehensiveAudit(gscData);
+      await saveAuditReport({ ...audit, timestamp: new Date().toISOString() });
+      const newTasks = await delegateAuditTasks(audit);
 
-      currentRoadmap.tasks.push(...tasksToAppend);
-      await saveRoadmap(currentRoadmap);
+      await updateRoadmapWithNewTasks(newTasks);
+      await logAgentAction('Audit Agent', 'success', `Audit complete. Delegated ${newTasks.length} tasks.`);
     }
   }
 
@@ -90,6 +65,9 @@ export async function runDailyCycle(isManual: boolean = false) {
   while (workDoneCount < maxWorkPerCycle) {
     const refreshedRoadmap = await getRoadmap();
     if (!refreshedRoadmap || refreshedRoadmap.systemStatus === 'paused') break;
+
+    // FIX: Enforce sequential processing by sorting tasks by day
+    refreshedRoadmap.tasks.sort((a, b) => a.day - b.day);
 
     // FIX LOOPHOLE: Ensure every pending task has a pipeline
     let tasksUpdated = false;
@@ -120,15 +98,16 @@ export async function runDailyCycle(isManual: boolean = false) {
     if (tasksUpdated) await saveRoadmap(refreshedRoadmap);
 
     let actionTaken = false;
+    console.log(`[Orchestrator] Loop Start. Pending tasks: ${refreshedRoadmap.tasks.filter(t => t.status === 'pending').length}`);
 
     // A. OPTIMIZATION / PAGE UPDATES
     const taskToUpdate = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.pipeline?.some(p => p.agent === 'Technical Auditor' && p.status === 'pending'));
+    console.log(`[DEBUG] Update Auditor: Found = ${taskToUpdate ? taskToUpdate.keyword : 'None'}`);
     if (taskToUpdate) {
       taskToUpdate.pipeline = updateStep(taskToUpdate.pipeline, 'Technical Auditor', 'completed', 'Audit complete.');
       taskToUpdate.pipeline = updateStep(taskToUpdate.pipeline, 'Review Agent', 'active', 'Refining meta...');
       await saveRoadmap(refreshedRoadmap);
       
-      // Real Optimization
       taskToUpdate.optimizationPlan = `Optimized meta tags for ${taskToUpdate.keyword} to recover impressions.`;
       taskToUpdate.pipeline = updateStep(taskToUpdate.pipeline, 'Review Agent', 'completed', 'Metadata optimized.');
       taskToUpdate.pipeline = updateStep(taskToUpdate.pipeline, 'Submission Agent', 'active', 'Pinging GSC...');
@@ -147,6 +126,7 @@ export async function runDailyCycle(isManual: boolean = false) {
     // B. PUBLISHING
     if (!actionTaken) {
       const taskToPublish = refreshedRoadmap.tasks.find(t => t.status === 'pending' && (t.reviewedContent || t.finalContent) && !t.publishedUrl);
+      console.log(`[DEBUG] Publisher: Found = ${taskToPublish ? taskToPublish.keyword : 'None'}`);
       if (taskToPublish) {
         const content = taskToPublish.finalContent || taskToPublish.reviewedContent;
         if (content) {
@@ -173,7 +153,7 @@ export async function runDailyCycle(isManual: boolean = false) {
     // C. LINKING
     if (!actionTaken) {
       const taskToLink = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'article' && t.reviewedContent && !t.finalContent);
-      console.log(`[DEBUG] Linking Agent: taskToLink = ${taskToLink ? taskToLink.keyword : 'None'}`);
+      console.log(`[DEBUG] Linking: Found = ${taskToLink ? taskToLink.keyword : 'None'}`);
       if (taskToLink) {
         taskToLink.pipeline = updateStep(taskToLink.pipeline, 'Linking Agent', 'active', 'Linking...');
         await saveRoadmap(refreshedRoadmap);
@@ -188,19 +168,16 @@ export async function runDailyCycle(isManual: boolean = false) {
     // D. REVIEW
     if (!actionTaken) {
       const taskToReview = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'article' && t.rawContent && !t.reviewedContent);
-      console.log(`[DEBUG] Review Agent: taskToReview = ${taskToReview ? taskToReview.keyword : 'None'}`);
+      console.log(`[DEBUG] Reviewer: Found = ${taskToReview ? taskToReview.keyword : 'None'}`);
       if (taskToReview) {
         try {
           taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'active', 'Reviewing...');
           await saveRoadmap(refreshedRoadmap);
-          console.log(`[DEBUG] Review Agent: Calling reviewContent for ${taskToReview.keyword}`);
           const { approved, feedback, finalContent } = await reviewContent(taskToReview.rawContent!);
-          console.log(`[DEBUG] Review Agent: Result = ${approved}`);
           if (approved) {
             taskToReview.reviewedContent = finalContent;
             taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'completed', 'Approved.');
           } else {
-            // IF FAILED: Just reset rawContent to try ONE more time without complex feedback looping
             taskToReview.rawContent = null; 
             taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Writer Agent', 'pending', `Retry: ${feedback}`);
             taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'pending', 'Awaiting fixes.');
@@ -212,7 +189,7 @@ export async function runDailyCycle(isManual: boolean = false) {
           console.error('[Orchestrator] Review Agent Failed:', error.message);
           taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'failed', error.message);
           await saveRoadmap(refreshedRoadmap);
-          break; // Stop loop on fatal API error
+          break;
         }
       }
     }
@@ -220,15 +197,12 @@ export async function runDailyCycle(isManual: boolean = false) {
     // E. WRITER
     if (!actionTaken) {
       const taskToDraft = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'article' && !t.rawContent);
-      console.log(`[DEBUG] Writer Agent: taskToDraft = ${taskToDraft ? taskToDraft.keyword : 'None'}`);
+      console.log(`[DEBUG] Writer: Found = ${taskToDraft ? taskToDraft.keyword : 'None'}`);
       if (taskToDraft) {
         try {
           taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'active', 'Drafting...');
           await saveRoadmap(refreshedRoadmap);
           
-          console.log(`[DEBUG] Writer Agent: Calling generateAIPost for ${taskToDraft.keyword}`);
-          
-          // Timeout implementation for the writer agent
           const writerPromise = generateAIPost(taskToDraft.keyword);
           const timeoutPromise = new Promise((_, reject) => 
             setTimeout(() => reject(new Error('Writer Agent timed out (120s)')), 120000)
@@ -236,7 +210,6 @@ export async function runDailyCycle(isManual: boolean = false) {
           
           const content = await Promise.race([writerPromise, timeoutPromise]) as string | null;
           
-          console.log(`[DEBUG] Writer Agent: Result length = ${content ? content.length : 'None'}`);
           if (content) {
             taskToDraft.rawContent = content;
             taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'completed', 'Drafted.');
@@ -250,7 +223,7 @@ export async function runDailyCycle(isManual: boolean = false) {
           console.error('[Orchestrator] Writer Agent Failed:', error.message);
           taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'failed', error.message);
           await saveRoadmap(refreshedRoadmap);
-          break; // Stop loop on fatal error
+          break; 
         }
       }
     }
@@ -258,6 +231,7 @@ export async function runDailyCycle(isManual: boolean = false) {
     // F. GLOSSARY
     if (!actionTaken) {
       const taskToGlossary = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'glossary' && !t.rawContent);
+      console.log(`[DEBUG] Glossary: Found = ${taskToGlossary ? taskToGlossary.keyword : 'None'}`);
       if (taskToGlossary) {
         taskToGlossary.pipeline = updateStep(taskToGlossary.pipeline, 'Glossary Agent', 'active', 'Defining...');
         await saveRoadmap(refreshedRoadmap);
@@ -273,7 +247,10 @@ export async function runDailyCycle(isManual: boolean = false) {
       }
     }
 
-    if (!actionTaken) break; // No more actionable work found
+    if (!actionTaken) {
+        console.log('[Orchestrator] No actionable tasks found.');
+        break; 
+    }
   }
 }
 
