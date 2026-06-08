@@ -72,18 +72,43 @@ export async function updateRoadmapWithNewTasks(newTasks: any[]) {
   const roadmap = await getRoadmap();
   if (!roadmap) return;
 
-  // Clear non-completed, non-essential tasks
-  roadmap.tasks = [
-    ...roadmap.tasks.filter(t => t.status === 'completed'),
-    ...newTasks.map((t: any, index: number) => ({
-      day: index + 1,
+  const tasksToAppend = newTasks.map((t: any, index: number) => {
+    let pipeline: PipelineStep[] = [];
+    if (t.type === 'glossary') {
+        pipeline = [
+            { agent: 'Glossary Agent', status: 'pending', message: 'Generating definition.' },
+            { agent: 'Publish Agent', status: 'pending', message: 'Waiting for deployment.' }
+        ];
+    } else if (t.keyword.toLowerCase().includes('update') || t.keyword.toLowerCase().includes('optimize')) {
+        pipeline = [
+            { agent: 'Technical Auditor', status: 'pending', message: 'Analyzing CTR gaps.' },
+            { agent: 'Review Agent', status: 'pending', message: 'Optimizing meta tags.' },
+            { agent: 'Submission Agent', status: 'pending', message: 'Requesting GSC re-index.' }
+        ];
+    } else {
+        pipeline = [
+            { agent: 'Writer Agent', status: 'pending', message: 'Researching context.' },
+            { agent: 'Review Agent', status: 'pending', message: 'Editorial loop.' },
+            { agent: 'Linking Agent', status: 'pending', message: 'Internal linking.' },
+            { agent: 'Publish Agent', status: 'pending', message: 'Live deployment.' }
+        ];
+    }
+
+    return {
+      day: roadmap.tasks.length + index + 1,
       keyword: t.keyword,
       type: t.type,
       priority: t.priority,
       status: 'pending' as const,
       expert_note: t.expert_note,
-      pipeline: []
-    }))
+      pipeline
+    };
+  });
+
+  // Clear non-completed, non-essential tasks
+  roadmap.tasks = [
+    ...roadmap.tasks.filter(t => t.status === 'completed'),
+    ...tasksToAppend
   ];
   
   await saveRoadmap(roadmap);
