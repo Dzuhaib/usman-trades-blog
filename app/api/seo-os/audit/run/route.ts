@@ -9,28 +9,24 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    console.log('[Manual Audit] Request received.');
     
-    // Debugging: Log partial token to identify mismatch
-    console.log(`[Manual Audit] Token received (length: ${body.token?.length}): ${body.token?.substring(0, 3)}...`);
+    // Define valid secrets
+    const validSecrets = [
+      process.env.CRON_SECRET || 'seo-os-automated-trigger-2026',
+      process.env.DASHBOARD_PASSWORD || '@Zuhaib467'
+    ];
     
-    if (body.token !== (process.env.CRON_SECRET || 'seo-os-automated-trigger-2026')) {
+    if (!validSecrets.includes(body.token)) {
         console.error('[Manual Audit] Unauthorized token attempt.');
         return NextResponse.json({ error: `Unauthorized. Received token mismatch.` }, { status: 401 });
     }
 
     await logAgentAction('Audit Agent', 'active', 'Manual audit triggered.');
-    console.log('[Manual Audit] Fetching GSC data...');
     const gscData = await getPerformanceReport();
-    
-    console.log('[Manual Audit] Performing AI Audit...');
     const audit = await performComprehensiveAudit(gscData);
-    
-    console.log('[Manual Audit] Saving report...');
     await saveAuditReport({ ...audit, timestamp: new Date().toISOString() });
     
     await logAgentAction('Audit Agent', 'success', 'Manual audit complete.');
-    console.log('[Manual Audit] Success.');
     
     return NextResponse.json({ success: true });
   } catch (error: any) {
