@@ -89,6 +89,34 @@ export async function runDailyCycle(isManual: boolean = false) {
     const refreshedRoadmap = await getRoadmap();
     if (!refreshedRoadmap || refreshedRoadmap.systemStatus === 'paused') break;
 
+    // FIX LOOPHOLE: Ensure every pending task has a pipeline
+    let tasksUpdated = false;
+    refreshedRoadmap.tasks.forEach(task => {
+        if (task.status === 'pending' && (!task.pipeline || task.pipeline.length === 0)) {
+            if (task.type === 'glossary') {
+                task.pipeline = [
+                    { agent: 'Glossary Agent', status: 'pending', message: 'Generating definition.' },
+                    { agent: 'Publish Agent', status: 'pending', message: 'Waiting for deployment.' }
+                ];
+            } else if (task.keyword.toLowerCase().includes('update') || task.keyword.toLowerCase().includes('optimize')) {
+                task.pipeline = [
+                    { agent: 'Technical Auditor', status: 'pending', message: 'Analyzing CTR gaps.' },
+                    { agent: 'Review Agent', status: 'pending', message: 'Optimizing meta tags.' },
+                    { agent: 'Submission Agent', status: 'pending', message: 'Requesting GSC re-index.' }
+                ];
+            } else {
+                task.pipeline = [
+                    { agent: 'Writer Agent', status: 'pending', message: 'Researching context.' },
+                    { agent: 'Review Agent', status: 'pending', message: 'Editorial loop.' },
+                    { agent: 'Linking Agent', status: 'pending', message: 'Internal linking.' },
+                    { agent: 'Publish Agent', status: 'pending', message: 'Live deployment.' }
+                ];
+            }
+            tasksUpdated = true;
+        }
+    });
+    if (tasksUpdated) await saveRoadmap(refreshedRoadmap);
+
     let actionTaken = false;
 
     // A. OPTIMIZATION / PAGE UPDATES
