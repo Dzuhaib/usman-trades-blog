@@ -225,8 +225,17 @@ export async function runDailyCycle(isManual: boolean = false) {
         try {
           taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'active', 'Drafting...');
           await saveRoadmap(refreshedRoadmap);
+          
           console.log(`[DEBUG] Writer Agent: Calling generateAIPost for ${taskToDraft.keyword}`);
-          const content = await generateAIPost(taskToDraft.keyword);
+          
+          // Timeout implementation for the writer agent
+          const writerPromise = generateAIPost(taskToDraft.keyword);
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Writer Agent timed out (120s)')), 120000)
+          );
+          
+          const content = await Promise.race([writerPromise, timeoutPromise]) as string | null;
+          
           console.log(`[DEBUG] Writer Agent: Result length = ${content ? content.length : 'None'}`);
           if (content) {
             taskToDraft.rawContent = content;
@@ -241,7 +250,7 @@ export async function runDailyCycle(isManual: boolean = false) {
           console.error('[Orchestrator] Writer Agent Failed:', error.message);
           taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'failed', error.message);
           await saveRoadmap(refreshedRoadmap);
-          break; 
+          break; // Stop loop on fatal error
         }
       }
     }
