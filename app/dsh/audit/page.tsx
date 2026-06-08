@@ -22,16 +22,21 @@ export default function AuditDashboard() {
   const runManualAudit = async () => {
     setRunning(true);
     const cronSecret = sessionStorage.getItem('dsh_pw') || '';
-    const res = await fetch('/api/seo-os/audit/run', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: cronSecret })
-    });
-    if(res.ok) {
-        alert('Audit complete!');
-        loadData();
-    } else {
-        alert('Failed to run audit.');
+    try {
+        const res = await fetch('/api/seo-os/audit/run', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: cronSecret })
+        });
+        const data = await res.json();
+        if(res.ok) {
+            alert('Audit complete!');
+            loadData();
+        } else {
+            alert('Error: ' + (data.error || 'Failed to run audit.'));
+        }
+    } catch (e) {
+        alert('Network error while running audit.');
     }
     setRunning(false);
   };
