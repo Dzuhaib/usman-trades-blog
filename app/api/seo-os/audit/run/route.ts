@@ -11,14 +11,17 @@ export async function POST(request: Request) {
     const body = await request.json();
     
     // Define valid secrets
-    const validSecrets = [
-      process.env.CRON_SECRET || 'seo-os-automated-trigger-2026',
-      process.env.DASHBOARD_PASSWORD || '@Zuhaib467'
-    ];
+    const expectedCron = process.env.CRON_SECRET || 'seo-os-automated-trigger-2026';
+    const expectedDash = process.env.DASHBOARD_PASSWORD || '@Zuhaib467';
+    const received = body.token;
     
-    if (!validSecrets.includes(body.token)) {
-        console.error('[Manual Audit] Unauthorized token attempt.');
-        return NextResponse.json({ error: `Unauthorized. Received token mismatch.` }, { status: 401 });
+    if (received !== expectedCron && received !== expectedDash) {
+        console.error(`[Manual Audit] Unauthorized. Received: "${received}", Expected: "${expectedCron}" or "${expectedDash}"`);
+        return NextResponse.json({ 
+            error: `Unauthorized. Received token "${received}" does not match secrets.`,
+            received: received,
+            expected: [expectedCron, expectedDash] 
+        }, { status: 401 });
     }
 
     await logAgentAction('Audit Agent', 'active', 'Manual audit triggered.');

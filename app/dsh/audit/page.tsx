@@ -22,6 +22,7 @@ export default function AuditDashboard() {
   const runManualAudit = async () => {
     setRunning(true);
     const cronSecret = sessionStorage.getItem('dsh_pw') || '';
+    console.log('[DEBUG] Token being sent to API:', cronSecret);
     try {
         const res = await fetch('/api/seo-os/audit/run', {
             method: 'POST',
@@ -33,7 +34,8 @@ export default function AuditDashboard() {
             alert('Audit complete!');
             loadData();
         } else {
-            alert('Error: ' + (data.error || 'Failed to run audit.'));
+            console.error('[DEBUG] Audit API Error response:', data);
+            alert(`Error: ${data.error} | Token Sent: ${cronSecret}`);
         }
     } catch (e) {
         alert('Network error while running audit.');
