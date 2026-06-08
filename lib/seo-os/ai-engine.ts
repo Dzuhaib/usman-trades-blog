@@ -288,15 +288,25 @@ export async function delegateAuditTasks(audit: AuditReport): Promise<SEOMap[]> 
  */
 export async function reviewContent(content: string): Promise<{ approved: boolean; feedback: string; finalContent: string }> {
   const openai = getOpenAIClient();
-  const prompt = `Review this trading article. Check Word count (1200-1800), NO DASHES, NO AI words. Return JSON.`;
+  const prompt = `
+    Review this trading article. 
+    1. Check Word count (1200-1800).
+    2. Remove all dashes (-) from the text, replace with commas or rephrase.
+    3. Remove AI words: "delve", "tapestry", "embark", "furthermore".
+    
+    If you find issues, FIX THEM and return the corrected text.
+    Return JSON: { "approved": boolean, "feedback": string, "finalContent": string }.
+  `;
 
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [{ role: "system", content: "You are a Senior Editorial Reviewer." }, { role: "user", content: prompt }],
+      messages: [{ role: "system", content: "You are a Senior Editorial Reviewer. You MUST fix formatting errors." }, { role: "user", content: prompt + `\n\nArticle: ${content}` }],
       response_format: { type: "json_object" },
     });
-    return JSON.parse(response.choices[0].message.content || '{}');
+    const result = JSON.parse(response.choices[0].message.content || '{}');
+    console.log(`[DEBUG] Reviewer Result: Approved=${result.approved}, Feedback=${result.feedback}`);
+    return result;
   } catch (error) {
     console.error('Review Agent Error:', error);
     return { approved: false, feedback: 'Review failed', finalContent: content };
