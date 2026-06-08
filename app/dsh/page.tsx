@@ -35,12 +35,22 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedTaskDay, setSelectedTaskDay] = useState<number | null>(null);
 
+  // Read the dashboard password from the cookie to attach as Bearer token
+  // The cookie is httpOnly in prod, but on client we use a JS-accessible session flag.
+  // Since the middleware already guards the page, we can safely use the cookie name to
+  // reconstruct the auth header from sessionStorage (set at login time).
+  const getAuthHeaders = () => {
+    const pw = sessionStorage.getItem('dsh_pw') || '';
+    return { 'Authorization': `Bearer ${pw}` };
+  };
+
   const loadData = async () => {
     try {
+      const headers = getAuthHeaders();
       const [repRes, roadRes, logRes] = await Promise.all([
-        fetch('/api/seo-os/performance-live'),
-        fetch('/api/seo-os/roadmap'),
-        fetch('/api/seo-os/logs')
+        fetch('/api/seo-os/performance-live', { headers }),
+        fetch('/api/seo-os/roadmap', { headers }),
+        fetch('/api/seo-os/logs', { headers })
       ]);
       
       if (repRes.ok) {
@@ -139,6 +149,7 @@ export default function DashboardPage() {
                     if(confirm(`Are you sure you want to ${newStatus === 'paused' ? 'STOP' : 'START'} the AI agents?`)) {
                       const res = await fetch('/api/seo-os/roadmap', {
                         method: 'POST',
+                        headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
                         body: JSON.stringify({ action: 'toggle-status', status: newStatus })
                       });
                       if(res.ok) loadData();
@@ -209,7 +220,8 @@ export default function DashboardPage() {
                           if(confirm('Submit all missing URLs to GSC?')) {
                             const btn = e.currentTarget;
                             btn.disabled = true;
-                            const res = await fetch('/api/seo-os/cleanup?token=dev-test', { method: 'POST' });
+                            const cronSecret = sessionStorage.getItem('dsh_pw') || '';
+                            const res = await fetch(`/api/seo-os/cleanup?token=${encodeURIComponent(cronSecret)}`, { method: 'POST' });
                             const data = await res.json();
                             alert(data.success ? `Submitted ${data.submittedCount} URLs!` : 'Error: ' + data.error);
                             btn.disabled = false;
