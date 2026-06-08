@@ -3,11 +3,12 @@
  * Handles persistence of the 30-day AI execution plan via Upstash Redis.
  */
 
+import 'dotenv/config';
 import { Redis } from '@upstash/redis';
 
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || '',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || '',
+  url: (process.env.UPSTASH_REDIS_REST_URL || '').replace(/^["']|["']$/g, ''),
+  token: (process.env.UPSTASH_REDIS_REST_TOKEN || '').replace(/^["']|["']$/g, ''),
 });
 
 export interface PipelineStep {
@@ -65,6 +66,27 @@ export async function saveRoadmap(data: RoadmapData) {
   } catch (e) {
     console.error('Redis Save Roadmap Error:', e);
   }
+}
+
+export async function updateRoadmapWithNewTasks(newTasks: any[]) {
+  const roadmap = await getRoadmap();
+  if (!roadmap) return;
+
+  // Clear non-completed, non-essential tasks
+  roadmap.tasks = [
+    ...roadmap.tasks.filter(t => t.status === 'completed'),
+    ...newTasks.map((t: any, index: number) => ({
+      day: index + 1,
+      keyword: t.keyword,
+      type: t.type,
+      priority: t.priority,
+      status: 'pending' as const,
+      expert_note: t.expert_note,
+      pipeline: []
+    }))
+  ];
+  
+  await saveRoadmap(roadmap);
 }
 
 export async function initializeRoadmap(tasks: RoadmapTask[]) {
