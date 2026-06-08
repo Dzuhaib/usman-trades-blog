@@ -26,7 +26,6 @@ export interface SEOMap {
 
 /**
  * Phase 1: Researcher Agent - Opportunity Evaluation
- * Evaluates if a found keyword or issue is worth pursuing.
  */
 export async function evaluateOpportunity(topic: string, data: any): Promise<{ beneficial: boolean; reasoning: string; priority: 'high' | 'medium' | 'low' }> {
   const openai = getOpenAIClient();
@@ -34,11 +33,6 @@ export async function evaluateOpportunity(topic: string, data: any): Promise<{ b
     Analyze this SEO Opportunity for "Usman Trades":
     Topic: ${topic}
     Context: ${JSON.stringify(data)}
-    
-    Tasks:
-    1. Is this beneficial for traffic growth?
-    2. Does it align with "Risk Management", "Gold", or "Forex"?
-    3. What is the potential impact?
     
     Return a JSON object: { "beneficial": boolean, "reasoning": string, "priority": "high" | "medium" | "low" }.
   `;
@@ -58,7 +52,6 @@ export async function evaluateOpportunity(topic: string, data: any): Promise<{ b
 
 /**
  * Phase 1: Deep Research Agent
- * Analyzes GSC data to identify clusters, gaps, and high-value opportunities.
  */
 export async function performDeepResearch(gscData: any[]): Promise<string> {
   const openai = getOpenAIClient();
@@ -66,15 +59,7 @@ export async function performDeepResearch(gscData: any[]): Promise<string> {
 
   const prompt = `
     You are an Expert SEO Researcher for "Usman Trades". 
-    Analyze this raw Google Search Console data (up to 1000 rows): ${JSON.stringify(gscData)}
-    
-    Goal: Identify the path to 1M impressions.
-    
-    Tasks:
-    1. Identify "Long-Tail Gold": Specific, high-intent keywords with low competition (e.g., "XAUUSD spread on news", "risk management for $500 account").
-    2. Identify "Winning Clusters": Topics where we are in Pos 4-20. We need "striking distance" optimizations.
-    3. Identify "AEO Gaps": Common questions in our niche that we haven't answered definitively.
-    4. Propose 15 high-value "Search Intent" angles for Gold and Forex.
+    Analyze this Google Search Console data: ${JSON.stringify(gscData)}
     
     Output a detailed "SEO Audit & Opportunity Report" in Markdown format.
   `;
@@ -93,21 +78,12 @@ export async function performDeepResearch(gscData: any[]): Promise<string> {
 
 /**
  * Phase 1.5: Monitor Agent
- * Checks Search Console performance and updates the strategist about real-time shifts.
  */
 export async function monitorPerformanceAndAdjust(gscData: any[], currentRoadmap: any): Promise<string> {
   const openai = getOpenAIClient();
   const prompt = `
     You are the "SEO Monitor Agent".
-    Data:
-    - GSC Performance: ${JSON.stringify(gscData)}
-    - Current Roadmap: ${JSON.stringify(currentRoadmap)}
-    
-    Tasks:
-    1. Compare current rankings against the roadmap. 
-    2. Are any "Completed" tasks underperforming (Pos > 20)?
-    3. Are there new keywords emerging that aren't on the roadmap?
-    4. Provide a "Correction Report" for the Strategist Agent.
+    Compare current rankings against roadmap and identify new opportunities.
   `;
 
   try {
@@ -124,31 +100,13 @@ export async function monitorPerformanceAndAdjust(gscData: any[], currentRoadmap
 
 /**
  * Phase 2: Strategist Agent
- * Converts the Research Report into a Day-by-Day 30-day roadmap.
  */
 export async function generate30DayPlan(researchReport: string, correctionReport?: string): Promise<SEOMap[]> {
   const openai = getOpenAIClient();
   const prompt = `
-    Based on this SEO Audit Report:
-    ${researchReport}
-    
-    ${correctionReport ? `AND this Correction Report: ${correctionReport}` : ''}
-    
-    Generate a 30-day "1M Impressions" execution roadmap for Usman Trades.
-    
-    Requirements:
-    - Days 1-5: "Striking Distance" (Optimize current Pos 4-20).
-    - Days 6-15: "pSEO Glossary Blitz" (Create 50+ glossary/dictionary entries for low-competition technical terms).
-    - Days 16-25: "Authority Clusters" (Technical, 1500-word guides for Gold and Forex).
-    - Days 26-30: "Tool-to-Content loops" (Articles that focus on using our calculators).
-    
-    Professional Expert Logic:
-    - Every task MUST have a specific target keyword or technical goal.
-    - Articles MUST target 1200-1800 words and institutional-grade depth.
-    - Tasks should be designed to maximize "Answer Engine" visibility and impression share.
-    
+    Generate a 30-day execution roadmap for Usman Trades.
     Return a JSON object with a "plan" key containing an array of 30 objects.
-    Each object: { "day": number, "keyword": string, "type": "article" | "glossary" | "tool_improvement" | "faq", "priority": "high" | "medium" | "low", "expert_note": "A short note explaining WHY this task will increase traffic" }.
+    Each object: { "day": number, "keyword": string, "type": "article" | "glossary" | "tool_improvement" | "faq", "priority": "high" | "medium" | "low", "expert_note": "..." }.
   `;
 
   try {
@@ -156,7 +114,7 @@ export async function generate30DayPlan(researchReport: string, correctionReport
       model: "gpt-4o",
       messages: [{ 
         role: "system", 
-        content: "You are a Senior SEO Strategist obsessed with compounding organic growth and high-integrity financial content." 
+        content: "You are a Senior SEO Strategist." 
       }, { 
         role: "user", 
         content: prompt 
@@ -166,9 +124,7 @@ export async function generate30DayPlan(researchReport: string, correctionReport
 
     const content = response.choices[0].message.content;
     const rawData = JSON.parse(content || '{"plan": []}');
-    const plan = rawData.plan || [];
-
-    return plan.map((task: any) => ({
+    return (rawData.plan || []).map((task: any) => ({
       ...task,
       status: 'pending'
     }));
@@ -179,23 +135,12 @@ export async function generate30DayPlan(researchReport: string, correctionReport
 }
 
 /**
- * Phase 6: Glossary Agent (pSEO)
- * Generates technical dictionary/glossary entries for programmatic scaling.
+ * Phase 6: Glossary Agent
  */
 export async function generateGlossaryEntry(term: string) {
   const openai = getOpenAIClient();
-  const systemPrompt = `
-    You are the "Technical Glossary Agent" for Usman Trades. 
-    Your goal is to provide a mathematically precise, institutional definition of a trading term.
-    
-    STRICT RULES:
-    1. AEO FIRST: The first sentence must be a perfect 30-word definition.
-    2. TECHNICAL DEPTH: Explain the math or mechanic behind the term.
-    3. TRADER VOICE: Direct, no fluff, institutional tone.
-    4. MAX 300 WORDS.
-  `;
-
-  const userPrompt = `Define the trading term: "${term}". Explain its importance in professional risk management.`;
+  const systemPrompt = `You are a Technical Glossary Agent for Usman Trades.`;
+  const userPrompt = `Define: "${term}".`;
 
   try {
     const response = await openai.chat.completions.create({
@@ -210,58 +155,24 @@ export async function generateGlossaryEntry(term: string) {
 }
 
 /**
- * Phase 4: Writer Agent (E-E-A-T & AEO Focused)
+ * Phase 4: Writer Agent
  */
 export async function generateAIPost(keyword: string, feedback?: string) {
   const openai = getOpenAIClient();
-  const systemPrompt = `
-    You are Muhammad Usman, an expert Market Analyst.
-
-    STRICT WRITING RULES (ANTI-AI & BLOG STANDARDS):
-    1. LENGTH: 1200-1800 words.
-    2. NO DASHES: The use of dashes (-) is BANNED.
-    3. VOICE: Direct, blunt, technical. Use "I".
-    4. AEO: Paragraph 1 is a direct 40-50 word answer.
-    5. FORMAT: NO HTML, NO LATEX. Bold plain text for math.
-    6. LINKS: 3-5 [LINK_url:label] placeholders.
-    7. NO AI-ISMS: Avoid "delve", "tapestry", "embark", "furthermore", "in conclusion".
-  `;
-
+  const systemPrompt = `You are Muhammad Usman, an expert Market Analyst. Follow strict formatting: No dashes, 1200-1800 words, direct AEO answer in first paragraph.`;
   const userPrompt = `
-    ${feedback ? `CRITICAL REVISION NEEDED: Your previous draft was rejected for these reasons: ${feedback}. 
-    DO NOT repeat these mistakes. Rewrite the article from scratch following the rules strictly.` : ''}
-    
-    Write an institutional-grade guide for: "${keyword}". 
-    
-    Structure (FOLLOW EXACTLY):
-    1. [AEO Summary]: Direct 45-word answer.
-    2. Introduction: Introduce the topic.
-    3. Main Concept: Technical explanation.
-    4. Practical Example: Realistic trading math scenario.
-    5. Common Mistakes: Institutional perspective.
-    6. Risk Considerations.
-    7. FAQ: 3-5 high-intent questions.
-    8. Related Tools & Articles.
-    9. Conclusion: Summary and takeaways.
-
-    Include:
-    - 4 image markers: [IMAGE_1], [IMAGE_2], [IMAGE_3], [IMAGE_4].
-    - 3-5 strategic [LINK_url:label] placeholders.
-    - EMBED TOOL: If relevant, include exactly one [TOOL_slug] placeholder.
+    ${feedback ? `CRITICAL REVISION NEEDED: Your previous draft was rejected for these reasons: ${feedback}.` : ''}
+    Write a guide for: "${keyword}".
   `;
 
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt }
-      ],
+      messages: [{ role: "system", content: systemPrompt }, { role: "user", content: userPrompt }],
     });
-
     return response.choices[0].message.content;
   } catch (error) {
-    console.error('OpenAI Content Generation Error:', error);
+    console.error('Writer Agent Error:', error);
     return null;
   }
 }
@@ -271,18 +182,7 @@ export async function generateAIPost(keyword: string, feedback?: string) {
  */
 export async function performComprehensiveAudit(gscData: any[]): Promise<AuditReport> {
   const openai = getOpenAIClient();
-  const prompt = `
-    You are the "Senior Audit Agent" for Usman Trades. 
-    Analyze this Google Search Console data: ${JSON.stringify(gscData.slice(0, 50))}
-    
-    Generate a comprehensive audit report containing:
-    1. Technical Audit: Indexing issues, page speed indicators from GSC, core web vitals if visible.
-    2. SEO Audit: Content relevance, meta tag quality, keyword density gaps.
-    3. GEO Audit: Insights on geographic traffic distribution, localization improvements.
-    4. AIO Audit: How well we answer search queries (Position Zero candidates).
-    
-    Return JSON: { "technical": "...", "seo": "...", "geo": "...", "aio": "..." }.
-  `;
+  const prompt = `Analyze GSC data: ${JSON.stringify(gscData.slice(0, 50))}. Generate technical, SEO, GEO, and AIO audit report. Return JSON.`;
 
   try {
     const response = await openai.chat.completions.create({
@@ -293,34 +193,40 @@ export async function performComprehensiveAudit(gscData: any[]): Promise<AuditRe
     return JSON.parse(response.choices[0].message.content || '{}');
   } catch (error) {
     console.error('Audit Error:', error);
-    return { 
-        technical: 'Error', 
-        seo: 'Error', 
-        geo: 'Error', 
-        aio: 'Error', 
-        timestamp: new Date().toISOString() 
-    };
+    return { technical: 'Error', seo: 'Error', geo: 'Error', aio: 'Error', timestamp: new Date().toISOString() };
   }
 }
 
 /**
- * Phase 5: Review Agent (Stricter Anti-AI)
+ * Delegation Agent: Converts audit insights into roadmap tasks.
+ */
+export async function delegateAuditTasks(audit: AuditReport): Promise<SEOMap[]> {
+  const openai = getOpenAIClient();
+  const prompt = `
+    Analyze this SEO Audit Report: ${JSON.stringify(audit)}
+    Create 5 actionable tasks. Return JSON: { "tasks": [{ "day": number, "keyword": string, "type": "article" | "glossary" | "tool_improvement" | "faq", "priority": "high", "expert_note": "..." }] }.
+  `;
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "system", content: "You are an expert SEO task delegator." }, { role: "user", content: prompt }],
+      response_format: { type: "json_object" },
+    });
+    const data = JSON.parse(response.choices[0].message.content || '{"tasks": []}');
+    return data.tasks || [];
+  } catch (error) {
+    console.error('Delegation Error:', error);
+    return [];
+  }
+}
+
+/**
+ * Phase 5: Review Agent
  */
 export async function reviewContent(content: string): Promise<{ approved: boolean; feedback: string; finalContent: string }> {
   const openai = getOpenAIClient();
-  const prompt = `
-    Review this trading article for "Usman Trades". 
-    Your goal is to ensure it follows the official blog standards and E-E-A-T.
-
-    STRICT CHECKLIST:
-    1. WORD COUNT: Is it between 1200-1800 words? (Reject if too short).
-    2. NO DASHES: Does it contain any dashes (-)? (Reject if found).
-    3. NO AI WORDS: "delve", "tapestry", "embark", "In conclusion", "Moreover", "Furthermore".
-    4. AEO Summary: Does the first paragraph answer the query directly?
-    5. Replace generic "Conclusion" headers with descriptive ones like "The Bottom Line on ${content.substring(0,20)}".
-    
-    Return a JSON object: { "approved": boolean, "feedback": string, "finalContent": string }.
-  `;
+  const prompt = `Review this trading article. Check Word count (1200-1800), NO DASHES, NO AI words. Return JSON.`;
 
   try {
     const response = await openai.chat.completions.create({
@@ -328,7 +234,6 @@ export async function reviewContent(content: string): Promise<{ approved: boolea
       messages: [{ role: "system", content: "You are a Senior Editorial Reviewer." }, { role: "user", content: prompt }],
       response_format: { type: "json_object" },
     });
-
     return JSON.parse(response.choices[0].message.content || '{}');
   } catch (error) {
     console.error('Review Agent Error:', error);
