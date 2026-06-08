@@ -293,7 +293,13 @@ export async function performComprehensiveAudit(gscData: any[]): Promise<AuditRe
     return JSON.parse(response.choices[0].message.content || '{}');
   } catch (error) {
     console.error('Audit Error:', error);
-    return { technical: 'Error', seo: 'Error', geo: 'Error', aio: 'Error' };
+    return { 
+        technical: 'Error', 
+        seo: 'Error', 
+        geo: 'Error', 
+        aio: 'Error', 
+        timestamp: new Date().toISOString() 
+    };
   }
 }
 
