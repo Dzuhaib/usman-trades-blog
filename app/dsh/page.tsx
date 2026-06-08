@@ -293,9 +293,12 @@ export default function DashboardPage() {
         {/* Sidebar logs */}
         <aside className="lg:col-span-4 space-y-8">
           <div className="bg-white border border-slate-200 rounded-[2rem] p-8 space-y-6 shadow-sm">
-             <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] border-b border-slate-100 pb-3 flex items-center gap-2">
-               <Clock className="w-3.5 h-3.5 text-accent" />
-               Agent Live Status
+             <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] border-b border-slate-100 pb-3 flex items-center justify-between">
+               <span className="flex items-center gap-2">
+                 <Clock className="w-3.5 h-3.5 text-accent" />
+                 Agent Live Status
+               </span>
+               <Link href="/dsh/audit" className="text-accent hover:underline font-black">AUDIT</Link>
              </h3>
              <div className="grid grid-cols-2 gap-3">
                 {agentStatuses.map(agent => (
