@@ -20,7 +20,7 @@ export default function AuditDashboard() {
   }, []);
 
   const runManualAudit = async () => {
-    let cronSecret = sessionStorage.getItem('dsh_pw') || '';
+    let cronSecret = localStorage.getItem('dsh_pw') || '';
     
     // Fallback prompt if token is missing
     if (!cronSecret) {

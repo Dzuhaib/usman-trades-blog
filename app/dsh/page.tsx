@@ -40,7 +40,7 @@ export default function DashboardPage() {
   // Since the middleware already guards the page, we can safely use the cookie name to
   // reconstruct the auth header from sessionStorage (set at login time).
   const getAuthHeaders = () => {
-    const pw = sessionStorage.getItem('dsh_pw') || '';
+    const pw = localStorage.getItem('dsh_pw') || '';
     return { 'Authorization': `Bearer ${pw}` };
   };
 
