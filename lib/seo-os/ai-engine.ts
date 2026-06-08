@@ -214,14 +214,21 @@ export async function generateAIPost(keyword: string) {
 }
 
 /**
- * Audit Agent: Performs multi-layer site audits.
+ * Audit Agent: Performs multi-layer site audits focused on AEO and GEO.
  */
 export async function performComprehensiveAudit(gscData: any[]): Promise<AuditReport> {
   const openai = getOpenAIClient();
   const prompt = `
-    Analyze this GSC data: ${JSON.stringify(gscData.slice(0, 50))}. 
+    Analyze this GSC data: ${JSON.stringify(gscData.slice(0, 100))}. 
     
-    Generate an audit report with page-by-page breakdowns.
+    CRITICAL: Perform a deep audit focusing specifically on AEO (Answer Engine Optimization) and GEO-intent gaps for every page.
+    
+    For each page, analyze:
+    - AEO Gaps: Does it provide a direct, Position-Zero-style answer? Is the structure AEO-friendly?
+    - GEO Gaps: Is the content optimized for the geographic intent and localization of the traffic?
+    - Technical/SEO: Standard technical issues.
+    
+    If a page lacks AEO/GEO optimization, flag it as 'Needs Rewrite' in the issues.
     
     Return JSON structured exactly as: 
     { 
@@ -237,7 +244,7 @@ export async function performComprehensiveAudit(gscData: any[]): Promise<AuditRe
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [{ role: "system", content: "You are an elite SEO auditor. You MUST return valid JSON." }, { role: "user", content: prompt }],
+      messages: [{ role: "system", content: "You are an elite AEO/GEO SEO auditor. You MUST return valid JSON." }, { role: "user", content: prompt }],
       response_format: { type: "json_object" },
     });
     return JSON.parse(response.choices[0].message.content || '{"pages": []}');
@@ -248,13 +255,15 @@ export async function performComprehensiveAudit(gscData: any[]): Promise<AuditRe
 }
 
 /**
- * Delegation Agent: Converts audit insights into roadmap tasks.
+ * Delegation Agent: Converts audit insights into roadmap tasks, specifically flagging AEO rewrites.
  */
 export async function delegateAuditTasks(audit: AuditReport): Promise<SEOMap[]> {
   const openai = getOpenAIClient();
   const prompt = `
-    Analyze this SEO Audit Report: ${JSON.stringify(audit)}
-    For every issue found, create an actionable roadmap task to resolve it.
+    Analyze this AEO/GEO-focused SEO Audit Report: ${JSON.stringify(audit)}
+    
+    For every issue found, create an actionable roadmap task.
+    If the issue is "Needs Rewrite" (AEO/GEO gap), create an "article" type task with the expert_note: "Rewrite for AEO/GEO optimization following one-shot guidelines."
     
     Return a JSON object with a "tasks" key containing an array of task objects.
     Each object: { "day": number, "keyword": string, "type": "article" | "glossary" | "tool_improvement" | "faq", "priority": "high", "expert_note": "..." }.
@@ -263,7 +272,7 @@ export async function delegateAuditTasks(audit: AuditReport): Promise<SEOMap[]> 
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [{ role: "system", content: "You are an expert SEO task delegator." }, { role: "user", content: prompt }],
+      messages: [{ role: "system", content: "You are an expert SEO task delegator. You MUST return valid JSON." }, { role: "user", content: prompt }],
       response_format: { type: "json_object" },
     });
     const data = JSON.parse(response.choices[0].message.content || '{"tasks": []}');
