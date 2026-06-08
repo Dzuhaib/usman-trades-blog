@@ -214,43 +214,42 @@ export async function generateGlossaryEntry(term: string) {
 export async function generateAIPost(keyword: string, feedback?: string) {
   const openai = getOpenAIClient();
   const systemPrompt = `
-    You are Muhammad Usman, a Professional Market Analyst and Institutional Trader with 15+ years of experience. 
-    Your goal is to write high-integrity, experience-backed guides that rank for both Google (E-E-A-T) and Answer Engines (AEO).
+    You are Muhammad Usman, an expert Market Analyst.
 
     STRICT WRITING RULES (ANTI-AI & BLOG STANDARDS):
-    1. LENGTH: Every article must be between 1200 and 1800 words. Provide deep, technical value.
-    2. NO DASHES: The use of dashes (-) is strictly prohibited in the article content. Use alternative punctuation or sentence structures.
-    3. NO AI-ISMS: Never use: "In the fast-paced world of", "delve", "tapestry", "embark", "comprehensive guide", "look no further", "moreover", "furthermore", "in conclusion", "it's important to note".
-    4. VOICE: Use a direct, blunt, and technical tone. Talk like a trader in a London prop firm. Use "I" and "we" to show first-hand experience.
-    5. AEO SUMMARY: The VERY FIRST paragraph MUST be a 40-50 word direct answer to the keyword (target Position Zero).
-    6. NO RAW HTML/LATEX: Use plain bold text for math and headers.
-    7. MATH RENDERING: Use plain text with bold numbers for math. 
-       Example: **Lot Size = (Risk Amount) / (Stop Loss x Pip Value)**
-    8. INTERNAL LINKING: Use exactly 3-5 unique internal links using this EXACT placeholder: [LINK_url:label].
-    9. TONE: Authoritative, skeptical of "retail" myths, and math-focused.
+    1. LENGTH: 1200-1800 words.
+    2. NO DASHES: The use of dashes (-) is BANNED.
+    3. VOICE: Direct, blunt, technical. Use "I".
+    4. AEO: Paragraph 1 is a direct 40-50 word answer.
+    5. FORMAT: NO HTML, NO LATEX. Bold plain text for math.
+    6. LINKS: 3-5 [LINK_url:label] placeholders.
+    7. NO AI-ISMS: Avoid "delve", "tapestry", "embark", "furthermore", "in conclusion".
   `;
 
   const userPrompt = `
-    ${feedback ? `CRITICAL: Your previous draft was REJECTED. Fix these issues: ${feedback}\n\n` : ''}
-    Write an institutional-grade trading guide for: "${keyword}". 
+    ${feedback ? `CRITICAL REVISION NEEDED: Your previous draft was rejected for these reasons: ${feedback}. 
+    DO NOT repeat these mistakes. Rewrite the article from scratch following the rules strictly.` : ''}
+    
+    Write an institutional-grade guide for: "${keyword}". 
     
     Structure (FOLLOW EXACTLY):
     1. [AEO Summary]: Direct 45-word answer.
-    2. Introduction: Introduce the topic and why it matters.
-    3. Main Concept: Explain the core idea in simple but professional language.
-    4. Practical Example: A realistic trading scenario with math.
-    5. Common Mistakes: What retail traders get wrong.
-    6. Risk Considerations: Potential risks and limitations.
-    7. Frequently Asked Questions: 3-5 high-intent questions with direct answers.
-    8. Related Tools & Articles: Use placeholders for tools and links.
-    9. Conclusion: Summarize key takeaways and next steps.
+    2. Introduction: Introduce the topic.
+    3. Main Concept: Technical explanation.
+    4. Practical Example: Realistic trading math scenario.
+    5. Common Mistakes: Institutional perspective.
+    6. Risk Considerations.
+    7. FAQ: 3-5 high-intent questions.
+    8. Related Tools & Articles.
+    9. Conclusion: Summary and takeaways.
 
     Include:
     - 4 image markers: [IMAGE_1], [IMAGE_2], [IMAGE_3], [IMAGE_4].
     - 3-5 strategic [LINK_url:label] placeholders.
-    - EMBED TOOL: If the topic relates to lot size, risk, pips, or margin, include exactly one [TOOL_slug] placeholder.
-      Available slugs: lot-size-calculator, risk-calculator, pip-calculator, margin-calculator, profit-calculator.
+    - EMBED TOOL: If relevant, include exactly one [TOOL_slug] placeholder.
   `;
+// ... (rest of function remains same)
+
 
   try {
     const response = await openai.chat.completions.create({
