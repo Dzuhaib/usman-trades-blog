@@ -20,8 +20,19 @@ export default function AuditDashboard() {
   }, []);
 
   const runManualAudit = async () => {
+    let cronSecret = sessionStorage.getItem('dsh_pw') || '';
+    
+    // Fallback prompt if token is missing
+    if (!cronSecret) {
+        cronSecret = prompt('Authentication missing. Please enter your Dashboard Password:') || '';
+    }
+    
+    if (!cronSecret) {
+        alert('Audit cannot run without a password.');
+        return;
+    }
+
     setRunning(true);
-    const cronSecret = sessionStorage.getItem('dsh_pw') || '';
     console.log('[DEBUG] Token being sent to API:', cronSecret);
     try {
         const res = await fetch('/api/seo-os/audit/run', {
@@ -35,7 +46,7 @@ export default function AuditDashboard() {
             loadData();
         } else {
             console.error('[DEBUG] Audit API Error response:', data);
-            alert(`Error: ${data.error} | Token Sent: ${cronSecret}`);
+            alert(`Error: ${data.error}`);
         }
     } catch (e) {
         alert('Network error while running audit.');
