@@ -200,10 +200,9 @@ export async function runDailyCycle(isManual: boolean = false) {
             taskToReview.reviewedContent = finalContent;
             taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'completed', 'Approved.');
           } else {
-            taskToReview.reviewFeedback = feedback;
-            taskToReview.rawContent = null;
-            taskToReview.retryCount = (taskToReview.retryCount || 0) + 1;
-            taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Writer Agent', 'pending', `Retry #${taskToReview.retryCount}: ${feedback}`);
+            // IF FAILED: Just reset rawContent to try ONE more time without complex feedback looping
+            taskToReview.rawContent = null; 
+            taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Writer Agent', 'pending', `Retry: ${feedback}`);
             taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'pending', 'Awaiting fixes.');
           }
           await saveRoadmap(refreshedRoadmap);
@@ -227,11 +226,10 @@ export async function runDailyCycle(isManual: boolean = false) {
           taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'active', 'Drafting...');
           await saveRoadmap(refreshedRoadmap);
           console.log(`[DEBUG] Writer Agent: Calling generateAIPost for ${taskToDraft.keyword}`);
-          const content = await generateAIPost(taskToDraft.keyword, taskToDraft.reviewFeedback || undefined);
+          const content = await generateAIPost(taskToDraft.keyword);
           console.log(`[DEBUG] Writer Agent: Result length = ${content ? content.length : 'None'}`);
           if (content) {
             taskToDraft.rawContent = content;
-            taskToDraft.reviewFeedback = null;
             taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'completed', 'Drafted.');
             await saveRoadmap(refreshedRoadmap);
             actionTaken = true;

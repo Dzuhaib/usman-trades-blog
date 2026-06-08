@@ -155,21 +155,57 @@ export async function generateGlossaryEntry(term: string) {
 }
 
 /**
- * Phase 4: Writer Agent
+ * Phase 4: Writer Agent (E-E-A-T & AEO Focused - ONE SHOT)
  */
-export async function generateAIPost(keyword: string, feedback?: string) {
+export async function generateAIPost(keyword: string) {
   const openai = getOpenAIClient();
-  const systemPrompt = `You are Muhammad Usman, an expert Market Analyst. Follow strict formatting: No dashes, 1200-1800 words, direct AEO answer in first paragraph.`;
+  const systemPrompt = `
+    You are Muhammad Usman, an expert Market Analyst. 
+    YOUR OUTPUT MUST COMPLY WITH ALL RULES IN ONE ATTEMPT. DO NOT REQUIRE REVISION.
+
+    STRICT WRITING RULES (ANTI-AI & BLOG STANDARDS):
+    1. LENGTH: 1200-1800 words.
+    2. NO DASHES: The use of dashes (-) is BANNED.
+    3. VOICE: Direct, blunt, technical. Use "I".
+    4. AEO: Paragraph 1 is a direct 40-50 word answer.
+    5. FORMAT: NO HTML, NO LATEX. Bold plain text for math.
+    6. LINKS: 3-5 [LINK_url:label] placeholders.
+    7. NO AI-ISMS: Avoid "delve", "tapestry", "embark", "furthermore", "in conclusion".
+    
+    PRE-DRAFT CHECKLIST:
+    - Are there any dashes? If yes, REWRITE.
+    - Is word count > 1200? If no, EXPAND.
+    - Is paragraph 1 a direct answer? If no, REWRITE.
+  `;
+
   const userPrompt = `
-    ${feedback ? `CRITICAL REVISION NEEDED: Your previous draft was rejected for these reasons: ${feedback}.` : ''}
-    Write a guide for: "${keyword}".
+    Write an institutional-grade guide for: "${keyword}". 
+    
+    Structure (FOLLOW EXACTLY):
+    1. [AEO Summary]: Direct 45-word answer.
+    2. Introduction: Introduce the topic.
+    3. Main Concept: Technical explanation.
+    4. Practical Example: Realistic trading math scenario.
+    5. Common Mistakes: Institutional perspective.
+    6. Risk Considerations.
+    7. FAQ: 3-5 high-intent questions.
+    8. Related Tools & Articles.
+    9. Conclusion: Summary and takeaways.
+
+    Include 4 image markers: [IMAGE_1], [IMAGE_2], [IMAGE_3], [IMAGE_4].
+    Include 3-5 strategic [LINK_url:label] placeholders.
+    Include 1 [TOOL_slug] placeholder.
   `;
 
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [{ role: "system", content: systemPrompt }, { role: "user", content: userPrompt }],
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ],
     });
+
     return response.choices[0].message.content;
   } catch (error) {
     console.error('Writer Agent Error:', error);
