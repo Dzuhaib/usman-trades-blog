@@ -11,9 +11,12 @@ export async function POST(request: Request) {
     const body = await request.json();
     console.log('[Manual Audit] Request received.');
     
+    // Debugging: Log partial token to identify mismatch
+    console.log(`[Manual Audit] Token received (length: ${body.token?.length}): ${body.token?.substring(0, 3)}...`);
+    
     if (body.token !== (process.env.CRON_SECRET || 'seo-os-automated-trigger-2026')) {
         console.error('[Manual Audit] Unauthorized token attempt.');
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        return NextResponse.json({ error: `Unauthorized. Received token mismatch.` }, { status: 401 });
     }
 
     await logAgentAction('Audit Agent', 'active', 'Manual audit triggered.');
