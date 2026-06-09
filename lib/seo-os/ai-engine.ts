@@ -214,28 +214,23 @@ export async function generateAIPost(keyword: string) {
 }
 
 /**
- * Audit Agent: Performs multi-layer site audits focused on AEO and GEO.
+ * Audit Agent: Performs granular site audits.
  */
 export async function performComprehensiveAudit(gscData: any[]): Promise<AuditReport> {
   const openai = getOpenAIClient();
   const prompt = `
     Analyze this GSC data: ${JSON.stringify(gscData.slice(0, 100))}. 
     
-    CRITICAL: Perform a deep audit focusing specifically on AEO (Answer Engine Optimization) and GEO-intent gaps for every page.
+    CRITICAL: Perform a granular audit on every page. For each page, identify specific issues and categorize them:
     
-    For each page, analyze:
-    - AEO Gaps: Does it provide a direct, Position-Zero-style answer? Is the structure AEO-friendly?
-    - GEO Gaps: Is the content optimized for the geographic intent and localization of the traffic?
-    - Technical/SEO: Standard technical issues.
-    
-    If a page lacks AEO/GEO optimization, flag it as 'Needs Rewrite' in the issues.
+    Valid issue types: 'technical' (technical SEO), 'seo' (meta tags/headings), 'geo' (localization), 'aio' (AEO/Position zero gaps), 'media' (missing images/alt text), 'keywords' (missing opportunities).
     
     Return JSON structured exactly as: 
     { 
         "pages": [
             { 
                 "url": string, 
-                "issues": [{ "type": "technical" | "seo" | "geo" | "aio", "description": string, "severity": "high" | "medium" | "low" }] 
+                "issues": [{ "type": "technical" | "seo" | "geo" | "aio" | "media" | "keywords", "description": string, "severity": "high" | "medium" | "low" }] 
             }
         ] 
     }
@@ -244,7 +239,7 @@ export async function performComprehensiveAudit(gscData: any[]): Promise<AuditRe
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [{ role: "system", content: "You are an elite AEO/GEO SEO auditor. You MUST return valid JSON." }, { role: "user", content: prompt }],
+      messages: [{ role: "system", content: "You are an elite SEO auditor. You MUST return valid JSON." }, { role: "user", content: prompt }],
       response_format: { type: "json_object" },
     });
     return JSON.parse(response.choices[0].message.content || '{"pages": []}');
@@ -255,18 +250,23 @@ export async function performComprehensiveAudit(gscData: any[]): Promise<AuditRe
 }
 
 /**
- * Delegation Agent: Converts audit insights into roadmap tasks, specifically flagging AEO rewrites.
+ * Delegation Agent: Converts granular audit insights into specialized roadmap tasks.
  */
 export async function delegateAuditTasks(audit: AuditReport): Promise<SEOMap[]> {
   const openai = getOpenAIClient();
   const prompt = `
-    Analyze this AEO/GEO-focused SEO Audit Report: ${JSON.stringify(audit)}
+    Analyze this SEO Audit Report: ${JSON.stringify(audit)}
     
-    For every issue found, create an actionable roadmap task.
-    If the issue is "Needs Rewrite" (AEO/GEO gap), create an "article" type task with the expert_note: "Rewrite for AEO/GEO optimization following one-shot guidelines."
+    For each issue, create an actionable roadmap task. Map the issue type to the correct task_type:
+    - technical -> FIX_TECHNICAL
+    - seo -> FIX_TECHNICAL
+    - geo -> FIX_GEO
+    - aio -> FIX_AEO
+    - media -> FIX_MEDIA
+    - keywords -> FIX_KEYWORDS
     
-    Return a JSON object with a "tasks" key containing an array of task objects.
-    Each object: { "day": number, "keyword": string, "type": "article" | "glossary" | "tool_improvement" | "faq", "priority": "high", "expert_note": "..." }.
+    Return a JSON object with a "tasks" key.
+    Each object: { "day": number, "keyword": string, "task_type": "FIX_TECHNICAL" | "FIX_GEO" | "FIX_AEO" | "FIX_MEDIA" | "FIX_KEYWORDS" | "CREATE_CONTENT", "priority": "high" | "medium" | "low", "expert_note": "..." }.
   `;
 
   try {

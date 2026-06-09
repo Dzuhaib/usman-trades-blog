@@ -150,7 +150,10 @@ export async function runDailyCycle(isManual: boolean = false) {
   }
 
   // 2. AUTONOMOUS EXECUTION LOOP
-  while (true) {
+  let workDoneCount = 0;
+  const maxWorkPerCycle = 100;
+
+  while (workDoneCount < maxWorkPerCycle) {
     const refreshedRoadmap = await getRoadmap();
     if (!refreshedRoadmap || refreshedRoadmap.systemStatus === 'paused') break;
 
@@ -188,6 +191,14 @@ export async function runDailyCycle(isManual: boolean = false) {
     const nextTask = refreshedRoadmap.tasks.find(t => t.status === 'pending');
     if (!nextTask) break;
 
+    // LEGACY COMPATIBILITY LAYER: Map old task types to new contracts
+    if (!nextTask.task_type || ['article', 'tool_improvement', 'faq', 'glossary'].includes(nextTask.task_type as any)) {
+        console.log(`[Dispatcher] Mapping legacy task type: ${nextTask.task_type}`);
+        if (nextTask.task_type === 'glossary') nextTask.task_type = 'GLOSSARY_ENTRY';
+        else nextTask.task_type = 'CREATE_CONTENT';
+        await saveRoadmap(refreshedRoadmap);
+    }
+
     let actionTaken = false;
     
     // DISPATCHER
@@ -196,12 +207,19 @@ export async function runDailyCycle(isManual: boolean = false) {
             case 'OPTIMIZE_HOMEPAGE':
                 actionTaken = await handleOptimizationWorkflow(nextTask, refreshedRoadmap);
                 break;
-            case 'CREATE_ARTICLE':
-            case 'UPDATE_ARTICLE':
+            case 'CREATE_CONTENT':
+            case 'FIX_AEO':
+            case 'FIX_GEO':
+            case 'FIX_KEYWORDS':
                 actionTaken = await handleArticleWorkflow(nextTask, refreshedRoadmap);
                 break;
             case 'GLOSSARY_ENTRY':
                 actionTaken = await handleGlossaryWorkflow(nextTask, refreshedRoadmap);
+                break;
+            case 'FIX_TECHNICAL':
+            case 'FIX_MEDIA':
+                // Treat as content update/optimization for now
+                actionTaken = await handleOptimizationWorkflow(nextTask, refreshedRoadmap);
                 break;
             default:
                 console.error(`[Dispatcher] Unknown task type: ${nextTask.task_type}`);

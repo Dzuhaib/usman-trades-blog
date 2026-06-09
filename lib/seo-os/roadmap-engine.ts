@@ -18,10 +18,21 @@ export interface PipelineStep {
   completedAt?: string;
 }
 
+export type TaskType = 
+  | 'CREATE_CONTENT'
+  | 'FIX_AEO'
+  | 'FIX_GEO'
+  | 'FIX_MEDIA'
+  | 'FIX_KEYWORDS'
+  | 'FIX_TECHNICAL'
+  | 'GLOSSARY_ENTRY'
+  | 'TOOL_IMPROVEMENT';
+
 export interface RoadmapTask {
   day: number;
   keyword: string;
-  type: 'article' | 'tool_improvement' | 'faq' | 'glossary';
+  target?: string | null;
+  task_type: TaskType;
   priority: 'high' | 'medium' | 'low';
   status: 'pending' | 'completed' | 'failed';
   publishedUrl?: string;
@@ -73,31 +84,46 @@ export async function updateRoadmapWithNewTasks(newTasks: any[]) {
   if (!roadmap) return;
 
   const tasksToAppend = newTasks.map((t: any, index: number) => {
+    // Map new granular types to simple pipeline steps
     let pipeline: PipelineStep[] = [];
-    if (t.type === 'glossary') {
-        pipeline = [
-            { agent: 'Glossary Agent', status: 'pending', message: 'Generating definition.' },
-            { agent: 'Publish Agent', status: 'pending', message: 'Waiting for deployment.' }
-        ];
-    } else if (t.keyword.toLowerCase().includes('update') || t.keyword.toLowerCase().includes('optimize')) {
-        pipeline = [
-            { agent: 'Technical Auditor', status: 'pending', message: 'Analyzing CTR gaps.' },
-            { agent: 'Review Agent', status: 'pending', message: 'Optimizing meta tags.' },
-            { agent: 'Submission Agent', status: 'pending', message: 'Requesting GSC re-index.' }
-        ];
-    } else {
-        pipeline = [
-            { agent: 'Writer Agent', status: 'pending', message: 'Researching context.' },
-            { agent: 'Review Agent', status: 'pending', message: 'Editorial loop.' },
-            { agent: 'Linking Agent', status: 'pending', message: 'Internal linking.' },
-            { agent: 'Publish Agent', status: 'pending', message: 'Live deployment.' }
-        ];
+    
+    // Assign pipeline based on task_type contract
+    switch (t.task_type) {
+        case 'FIX_AEO':
+        case 'FIX_GEO':
+        case 'FIX_KEYWORDS':
+            pipeline = [
+                { agent: 'ArticleWriter', status: 'pending', message: 'Rewriting content for optimization.' },
+                { agent: 'Review Agent', status: 'pending', message: 'Editorial QA.' },
+                { agent: 'Publish Agent', status: 'pending', message: 'Deployment.' }
+            ];
+            break;
+        case 'FIX_MEDIA':
+            pipeline = [
+                { agent: 'ImageAgent', status: 'pending', message: 'Generating/Optimizing media.' },
+                { agent: 'Publish Agent', status: 'pending', message: 'Deployment.' }
+            ];
+            break;
+        case 'FIX_TECHNICAL':
+            pipeline = [
+                { agent: 'TechnicalAgent', status: 'pending', message: 'Fixing technical issues.' },
+                { agent: 'Submission Agent', status: 'pending', message: 'Requesting indexing.' }
+            ];
+            break;
+        case 'CREATE_CONTENT':
+        default:
+            pipeline = [
+                { agent: 'ArticleWriter', status: 'pending', message: 'Writing.' },
+                { agent: 'Review Agent', status: 'pending', message: 'Editorial QA.' },
+                { agent: 'LinkingAgent', status: 'pending', message: 'Linking.' },
+                { agent: 'Publish Agent', status: 'pending', message: 'Deployment.' }
+            ];
     }
 
     return {
       day: roadmap.tasks.length + index + 1,
       keyword: t.keyword,
-      type: t.type,
+      task_type: t.task_type,
       priority: t.priority,
       status: 'pending' as const,
       expert_note: t.expert_note,
