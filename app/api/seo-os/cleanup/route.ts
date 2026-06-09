@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { cleanupMissingUrls } from '@/lib/seo-os/orchestrator';
+import { cleanupMissingUrls } from '../../../../lib/seo-os/orchestrator';
 import { heavyLimiter, getIdentifier } from '../../../../lib/seo-os/rate-limit';
 
 export const dynamic = 'force-dynamic';

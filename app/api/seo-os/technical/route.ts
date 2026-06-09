@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getTechnicalAudit, resolveTechnicalIssue } from '@/lib/seo-os/technical-engine';
-import { verifyApiAuth } from '@/lib/seo-os/auth';
-import { apiLimiter, getIdentifier } from '@/lib/seo-os/rate-limit';
+import { getTechnicalAudit, resolveTechnicalIssue } from '../../../../lib/seo-os/technical-engine';
+import { verifyApiAuth } from '../../../../lib/seo-os/auth';
+import { apiLimiter, getIdentifier } from '../../../../lib/seo-os/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
