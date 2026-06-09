@@ -129,10 +129,6 @@ export default async function BlogIndex({ searchParams }: PageProps) {
                 <div className="space-y-3 flex-1">
                   <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                     <div className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {post.readTime}
-                    </div>
-                    <div className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
                       {post.date}
                     </div>
@@ -143,10 +139,6 @@ export default async function BlogIndex({ searchParams }: PageProps) {
                       {post.title}
                     </Link>
                   </h2>
-                  
-                  <p className="text-sm text-slate-500 leading-relaxed line-clamp-3">
-                    {post.excerpt}
-                  </p>
                 </div>
                 
                 <div className="pt-4 border-t border-slate-50 flex items-center justify-between">
