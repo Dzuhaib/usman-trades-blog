@@ -6,25 +6,121 @@
 import { getPerformanceReport, requestIndexing, getMissingUrls } from './analytics-engine';
 import { 
   performDeepResearch, 
-  generate30DayPlan, 
   generateAIPost, 
   generateGlossaryEntry,
   reviewContent,
-  monitorPerformanceAndAdjust,
   performComprehensiveAudit
 } from './ai-engine';
-import { getRoadmap, saveRoadmap, PipelineStep } from './roadmap-engine';
+import { getRoadmap, saveRoadmap, PipelineStep, RoadmapData, RoadmapTask, updateRoadmapWithNewTasks } from './roadmap-engine';
 import { getAuditReport, saveAuditReport } from './audit-engine';
 import { injectContextualLinks } from './linking-engine';
 import { publishArticle } from './publisher-engine';
 import { logAgentAction } from './log-engine';
 import { performTechnicalAudit } from './technical-engine';
-import { updateRoadmapWithNewTasks } from './roadmap-engine';
 import { delegateAuditTasks } from './ai-engine';
 
 function updateStep(pipeline: PipelineStep[] | undefined, agent: string, status: PipelineStep['status'], message: string): PipelineStep[] {
   const steps = pipeline || [];
   return steps.map(s => s.agent === agent ? { ...s, status, message, completedAt: status === 'completed' ? new Date().toISOString() : s.completedAt } : s);
+}
+
+// Handler: Article Workflow
+async function handleArticleWorkflow(task: RoadmapTask, roadmap: RoadmapData): Promise<boolean> {
+    if (!task.rawContent) {
+        task.pipeline = updateStep(task.pipeline, 'Writer Agent', 'active', 'Drafting...');
+        await saveRoadmap(roadmap);
+        const content = await generateAIPost(task.keyword);
+        if (!content) throw new Error('Writer Agent failed');
+        task.rawContent = content;
+        task.pipeline = updateStep(task.pipeline, 'Writer Agent', 'completed', 'Drafted.');
+        await saveRoadmap(roadmap);
+        return true;
+    }
+    if (task.rawContent && !task.reviewedContent) {
+        task.pipeline = updateStep(task.pipeline, 'Review Agent', 'active', 'Reviewing...');
+        await saveRoadmap(roadmap);
+        const { approved, feedback, finalContent } = await reviewContent(task.rawContent);
+        if (approved) {
+            task.reviewedContent = finalContent;
+            task.pipeline = updateStep(task.pipeline, 'Review Agent', 'completed', 'Approved.');
+        } else {
+            task.rawContent = null;
+            task.pipeline = updateStep(task.pipeline, 'Writer Agent', 'pending', `Retry: ${feedback}`);
+            task.pipeline = updateStep(task.pipeline, 'Review Agent', 'pending', 'Awaiting fixes.');
+        }
+        await saveRoadmap(roadmap);
+        return true;
+    }
+    if (task.reviewedContent && !task.finalContent) {
+        task.pipeline = updateStep(task.pipeline, 'Linking Agent', 'active', 'Linking...');
+        await saveRoadmap(roadmap);
+        task.finalContent = injectContextualLinks(task.reviewedContent!);
+        task.pipeline = updateStep(task.pipeline, 'Linking Agent', 'completed', 'Links added.');
+        await saveRoadmap(roadmap);
+        return true;
+    }
+    if (task.finalContent && !task.publishedUrl) {
+        task.pipeline = updateStep(task.pipeline, 'Publish Agent', 'active', 'Deploying...');
+        await saveRoadmap(roadmap);
+        const slug = task.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
+        const res = await publishArticle(slug, task.keyword, task.finalContent, 'Risk Management');
+        if (res.success) {
+            task.status = 'completed';
+            task.publishedUrl = res.url;
+            task.pipeline = updateStep(task.pipeline, 'Publish Agent', 'completed', `Live: ${res.url}`);
+            await saveRoadmap(roadmap);
+            await requestIndexing(`https://usmantrades.co.uk${res.url}`);
+        }
+        return true;
+    }
+    return false;
+}
+
+// Handler: Glossary Workflow
+async function handleGlossaryWorkflow(task: RoadmapTask, roadmap: RoadmapData): Promise<boolean> {
+    if (!task.rawContent) {
+        task.pipeline = updateStep(task.pipeline, 'Glossary Agent', 'active', 'Defining...');
+        await saveRoadmap(roadmap);
+        const content = await generateGlossaryEntry(task.keyword);
+        if (!content) throw new Error('Glossary Agent failed');
+        task.rawContent = content;
+        task.reviewedContent = content;
+        task.pipeline = updateStep(task.pipeline, 'Glossary Agent', 'completed', 'Defined.');
+        await saveRoadmap(roadmap);
+        return true;
+    }
+    if (task.reviewedContent && !task.publishedUrl) {
+         task.pipeline = updateStep(task.pipeline, 'Publish Agent', 'active', 'Deploying...');
+         await saveRoadmap(roadmap);
+         const slug = task.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
+         const res = await publishArticle(slug, task.keyword, task.reviewedContent, 'Glossary');
+         if (res.success) {
+            task.status = 'completed';
+            task.publishedUrl = res.url;
+            task.pipeline = updateStep(task.pipeline, 'Publish Agent', 'completed', `Live: ${res.url}`);
+            await saveRoadmap(roadmap);
+            await requestIndexing(`https://usmantrades.co.uk${res.url}`);
+         }
+         return true;
+    }
+    return false;
+}
+
+// Handler: Optimization Workflow
+async function handleOptimizationWorkflow(task: RoadmapTask, roadmap: RoadmapData): Promise<boolean> {
+    task.pipeline = updateStep(task.pipeline, 'Technical Auditor', 'completed', 'Audit complete.');
+    task.pipeline = updateStep(task.pipeline, 'Review Agent', 'active', 'Refining meta...');
+    await saveRoadmap(roadmap);
+    task.optimizationPlan = `Optimized meta tags for ${task.keyword} to recover impressions.`;
+    task.pipeline = updateStep(task.pipeline, 'Review Agent', 'completed', 'Metadata optimized.');
+    task.pipeline = updateStep(task.pipeline, 'Submission Agent', 'active', 'Pinging GSC...');
+    await saveRoadmap(roadmap);
+    await requestIndexing(`https://usmantrades.co.uk/`);
+    task.status = 'completed';
+    task.completedAt = new Date().toISOString();
+    task.pipeline = updateStep(task.pipeline, 'Submission Agent', 'completed', 'Re-index requested.');
+    await saveRoadmap(roadmap);
+    return true;
 }
 
 export async function runDailyCycle(isManual: boolean = false) {
@@ -44,41 +140,33 @@ export async function runDailyCycle(isManual: boolean = false) {
     if (lastUpdate < oneHourAgo) {
       await logAgentAction('Monitor Agent', 'active', 'Running proactive opportunity research...');
       const gscData = await getPerformanceReport();
-
-      // Fix impressions by running technical audit
       await performTechnicalAudit();
-
-      // Audit and delegate findings immediately
       const audit = await performComprehensiveAudit(gscData);
       await saveAuditReport({ ...audit, timestamp: new Date().toISOString() });
       const newTasks = await delegateAuditTasks(audit);
-
       await updateRoadmapWithNewTasks(newTasks);
       await logAgentAction('Audit Agent', 'success', `Audit complete. Delegated ${newTasks.length} tasks.`);
     }
   }
 
   // 2. AUTONOMOUS EXECUTION LOOP
-  let workDoneCount = 0;
-  const maxWorkPerCycle = 15;
-
-  while (workDoneCount < maxWorkPerCycle) {
+  while (true) {
     const refreshedRoadmap = await getRoadmap();
     if (!refreshedRoadmap || refreshedRoadmap.systemStatus === 'paused') break;
 
-    // FIX: Enforce sequential processing by sorting tasks by day
+    // Sort by day to enforce strict sequential execution
     refreshedRoadmap.tasks.sort((a, b) => a.day - b.day);
 
-    // FIX LOOPHOLE: Ensure every pending task has a pipeline
+    // Initialization check
     let tasksUpdated = false;
     refreshedRoadmap.tasks.forEach(task => {
         if (task.status === 'pending' && (!task.pipeline || task.pipeline.length === 0)) {
-            if (task.type === 'glossary') {
+            if (task.task_type === 'GLOSSARY_ENTRY') {
                 task.pipeline = [
                     { agent: 'Glossary Agent', status: 'pending', message: 'Generating definition.' },
                     { agent: 'Publish Agent', status: 'pending', message: 'Waiting for deployment.' }
                 ];
-            } else if (task.keyword.toLowerCase().includes('update') || task.keyword.toLowerCase().includes('optimize')) {
+            } else if (task.task_type === 'OPTIMIZE_HOMEPAGE') {
                 task.pipeline = [
                     { agent: 'Technical Auditor', status: 'pending', message: 'Analyzing CTR gaps.' },
                     { agent: 'Review Agent', status: 'pending', message: 'Optimizing meta tags.' },
@@ -97,160 +185,36 @@ export async function runDailyCycle(isManual: boolean = false) {
     });
     if (tasksUpdated) await saveRoadmap(refreshedRoadmap);
 
+    const nextTask = refreshedRoadmap.tasks.find(t => t.status === 'pending');
+    if (!nextTask) break;
+
     let actionTaken = false;
-    console.log(`[Orchestrator] Loop Start. Pending tasks: ${refreshedRoadmap.tasks.filter(t => t.status === 'pending').length}`);
-
-    // A. OPTIMIZATION / PAGE UPDATES
-    const taskToUpdate = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.pipeline?.some(p => p.agent === 'Technical Auditor' && p.status === 'pending'));
-    console.log(`[DEBUG] Update Auditor: Found = ${taskToUpdate ? taskToUpdate.keyword : 'None'}`);
-    if (taskToUpdate) {
-      taskToUpdate.pipeline = updateStep(taskToUpdate.pipeline, 'Technical Auditor', 'completed', 'Audit complete.');
-      taskToUpdate.pipeline = updateStep(taskToUpdate.pipeline, 'Review Agent', 'active', 'Refining meta...');
-      await saveRoadmap(refreshedRoadmap);
-      
-      taskToUpdate.optimizationPlan = `Optimized meta tags for ${taskToUpdate.keyword} to recover impressions.`;
-      taskToUpdate.pipeline = updateStep(taskToUpdate.pipeline, 'Review Agent', 'completed', 'Metadata optimized.');
-      taskToUpdate.pipeline = updateStep(taskToUpdate.pipeline, 'Submission Agent', 'active', 'Pinging GSC...');
-      await saveRoadmap(refreshedRoadmap);
-      
-      await requestIndexing(`https://usmantrades.co.uk/`);
-      taskToUpdate.status = 'completed';
-      taskToUpdate.completedAt = new Date().toISOString();
-      taskToUpdate.pipeline = updateStep(taskToUpdate.pipeline, 'Submission Agent', 'completed', 'Re-index requested.');
-      await saveRoadmap(refreshedRoadmap);
-      
-      actionTaken = true;
-      workDoneCount++;
-    }
-
-    // B. PUBLISHING
-    if (!actionTaken) {
-      const taskToPublish = refreshedRoadmap.tasks.find(t => t.status === 'pending' && (t.reviewedContent || t.finalContent) && !t.publishedUrl);
-      console.log(`[DEBUG] Publisher: Found = ${taskToPublish ? taskToPublish.keyword : 'None'}`);
-      if (taskToPublish) {
-        const content = taskToPublish.finalContent || taskToPublish.reviewedContent;
-        if (content) {
-          taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'active', 'Deploying...');
-          await saveRoadmap(refreshedRoadmap);
-
-          const slug = taskToPublish.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
-          const res = await publishArticle(slug, taskToPublish.keyword, content, taskToPublish.type === 'glossary' ? 'Glossary' : 'Risk Management');
-          
-          if (res.success) {
-            taskToPublish.status = 'completed';
-            taskToPublish.completedAt = new Date().toISOString();
-            taskToPublish.publishedUrl = res.url;
-            taskToPublish.pipeline = updateStep(taskToPublish.pipeline, 'Publish Agent', 'completed', `Live: ${res.url}`);
-            await saveRoadmap(refreshedRoadmap);
-            await requestIndexing(`https://usmantrades.co.uk${res.url}`);
-          }
-          actionTaken = true;
-          workDoneCount++;
+    
+    // DISPATCHER
+    try {
+        switch (nextTask.task_type) {
+            case 'OPTIMIZE_HOMEPAGE':
+                actionTaken = await handleOptimizationWorkflow(nextTask, refreshedRoadmap);
+                break;
+            case 'CREATE_ARTICLE':
+            case 'UPDATE_ARTICLE':
+                actionTaken = await handleArticleWorkflow(nextTask, refreshedRoadmap);
+                break;
+            case 'GLOSSARY_ENTRY':
+                actionTaken = await handleGlossaryWorkflow(nextTask, refreshedRoadmap);
+                break;
+            default:
+                console.error(`[Dispatcher] Unknown task type: ${nextTask.task_type}`);
+                nextTask.status = 'failed';
+                await saveRoadmap(refreshedRoadmap);
         }
-      }
-    }
-
-    // C. LINKING
-    if (!actionTaken) {
-      const taskToLink = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'article' && t.reviewedContent && !t.finalContent);
-      console.log(`[DEBUG] Linking: Found = ${taskToLink ? taskToLink.keyword : 'None'}`);
-      if (taskToLink) {
-        taskToLink.pipeline = updateStep(taskToLink.pipeline, 'Linking Agent', 'active', 'Linking...');
+    } catch (e: any) {
+        console.error(`[Dispatcher] Fatal Error on task ${nextTask.keyword}: ${e.message}`);
+        nextTask.status = 'failed';
         await saveRoadmap(refreshedRoadmap);
-        taskToLink.finalContent = injectContextualLinks(taskToLink.reviewedContent!);
-        taskToLink.pipeline = updateStep(taskToLink.pipeline, 'Linking Agent', 'completed', 'Links added.');
-        await saveRoadmap(refreshedRoadmap);
-        actionTaken = true;
-        workDoneCount++;
-      }
     }
-
-    // D. REVIEW
-    if (!actionTaken) {
-      const taskToReview = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'article' && t.rawContent && !t.reviewedContent);
-      console.log(`[DEBUG] Reviewer: Found = ${taskToReview ? taskToReview.keyword : 'None'}`);
-      if (taskToReview) {
-        try {
-          taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'active', 'Reviewing...');
-          await saveRoadmap(refreshedRoadmap);
-          const { approved, feedback, finalContent } = await reviewContent(taskToReview.rawContent!);
-          if (approved) {
-            taskToReview.reviewedContent = finalContent;
-            taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'completed', 'Approved.');
-          } else {
-            taskToReview.rawContent = null; 
-            taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Writer Agent', 'pending', `Retry: ${feedback}`);
-            taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'pending', 'Awaiting fixes.');
-          }
-          await saveRoadmap(refreshedRoadmap);
-          actionTaken = true;
-          workDoneCount++;
-        } catch (error: any) {
-          console.error('[Orchestrator] Review Agent Failed:', error.message);
-          taskToReview.pipeline = updateStep(taskToReview.pipeline, 'Review Agent', 'failed', error.message);
-          await saveRoadmap(refreshedRoadmap);
-          break;
-        }
-      }
-    }
-
-    // E. WRITER
-    if (!actionTaken) {
-      const taskToDraft = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'article' && !t.rawContent);
-      console.log(`[DEBUG] Writer: Found = ${taskToDraft ? taskToDraft.keyword : 'None'}`);
-      if (taskToDraft) {
-        try {
-          taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'active', 'Drafting...');
-          await saveRoadmap(refreshedRoadmap);
-          
-          const writerPromise = generateAIPost(taskToDraft.keyword);
-          const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Writer Agent timed out (120s)')), 120000)
-          );
-          
-          const content = await Promise.race([writerPromise, timeoutPromise]) as string | null;
-          
-          if (content) {
-            taskToDraft.rawContent = content;
-            taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'completed', 'Drafted.');
-            await saveRoadmap(refreshedRoadmap);
-            actionTaken = true;
-            workDoneCount++;
-          } else {
-            throw new Error('OpenAI returned empty content.');
-          }
-        } catch (error: any) {
-          console.error('[Orchestrator] Writer Agent Failed:', error.message);
-          taskToDraft.pipeline = updateStep(taskToDraft.pipeline, 'Writer Agent', 'failed', error.message);
-          await saveRoadmap(refreshedRoadmap);
-          break; 
-        }
-      }
-    }
-
-    // F. GLOSSARY
-    if (!actionTaken) {
-      const taskToGlossary = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.type === 'glossary' && !t.rawContent);
-      console.log(`[DEBUG] Glossary: Found = ${taskToGlossary ? taskToGlossary.keyword : 'None'}`);
-      if (taskToGlossary) {
-        taskToGlossary.pipeline = updateStep(taskToGlossary.pipeline, 'Glossary Agent', 'active', 'Defining...');
-        await saveRoadmap(refreshedRoadmap);
-        const content = await generateGlossaryEntry(taskToGlossary.keyword);
-        if (content) {
-          taskToGlossary.rawContent = content;
-          taskToGlossary.reviewedContent = content;
-          taskToGlossary.pipeline = updateStep(taskToGlossary.pipeline, 'Glossary Agent', 'completed', 'Defined.');
-          await saveRoadmap(refreshedRoadmap);
-        }
-        actionTaken = true;
-        workDoneCount++;
-      }
-    }
-
-    if (!actionTaken) {
-        console.log('[Orchestrator] No actionable tasks found.');
-        break; 
-    }
+    
+    if (!actionTaken) break;
   }
 }
 
@@ -263,5 +227,5 @@ export async function cleanupMissingUrls() {
     await new Promise(resolve => setTimeout(resolve, 500));
   }
   await logAgentAction('Submission Agent', 'success', `Submitted ${missingUrls.length} missing URLs.`);
-  return { submittedCount: missingUrls.length, urls: missingUrls };
+  return { success: true };
 }
