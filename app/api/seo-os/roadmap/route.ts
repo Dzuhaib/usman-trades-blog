@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { getRoadmap, saveRoadmap } from '../../../../lib/seo-os/roadmap-engine';
-import { logAgentAction } from '../../../../lib/seo-os/log-engine';
-import { verifyApiAuth } from '../../../../lib/seo-os/auth';
-import { apiLimiter, getIdentifier } from '../../../../lib/seo-os/rate-limit';
+import { getRoadmap, saveRoadmap } from '@/lib/seo-os/roadmap-engine';
+import { logAgentAction } from '@/lib/seo-os/log-engine';
+import { verifyApiAuth } from '@/lib/seo-os/auth';
+import { apiLimiter, getIdentifier } from '@/lib/seo-os/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
