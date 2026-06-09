@@ -184,7 +184,7 @@ export default function Header() {
                           href={sub.href}
                           onClick={() => setMenuOpen(false)}
                           className="flex items-center gap-3 py-1 text-sm text-slate-500 font-bold hover:text-accent no-underline"
-                        >
+                        > 
                           <sub.icon className="w-4 h-4 text-slate-300" />
                           {sub.label}
                         </Link>
