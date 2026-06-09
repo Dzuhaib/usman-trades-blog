@@ -2,10 +2,23 @@ import { NextResponse } from 'next/server';
 import { getPerformanceReport } from '@/lib/seo-os/analytics-engine';
 import { performDeepResearch, generate30DayPlan, monitorPerformanceAndAdjust } from '@/lib/seo-os/ai-engine';
 import { initializeRoadmap, getRoadmap } from '@/lib/seo-os/roadmap-engine';
+import { verifyApiAuth } from '@/lib/seo-os/auth';
+import { heavyLimiter, getIdentifier } from '../../../../lib/seo-os/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
-export async function POST() {
+export async function POST(request: Request) {
+  // Rate limit (heavy — triggers OpenAI)
+  const id = getIdentifier(request);
+  const { success: withinLimit } = await heavyLimiter.limit(id);
+  if (!withinLimit) {
+    return NextResponse.json({ error: 'Too many requests. Strategy generation is rate-limited to 5 times per hour.' }, { status: 429 });
+  }
+
+  // Auth check
+  const auth = verifyApiAuth(request);
+  if (auth instanceof NextResponse) return auth;
+
   try {
     console.log('[API] Stage 1: Initializing Deep Research...');
     
@@ -38,7 +51,7 @@ export async function POST() {
       throw new Error('Strategist failed to convert research into a plan.');
     }
 
-    // 4. Initialize/Save
+    // 5. Initialize/Save
     await initializeRoadmap(newPlan as any);
 
     console.log('[API] Autopilot Strategy Finalized.');

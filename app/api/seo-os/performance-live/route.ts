@@ -1,9 +1,22 @@
 import { NextResponse } from 'next/server';
 import { getPerformanceReport } from '@/lib/seo-os/analytics-engine';
+import { verifyApiAuth } from '@/lib/seo-os/auth';
+import { apiLimiter, getIdentifier } from '../../../../lib/seo-os/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: Request) {
+  // Rate limit
+  const id = getIdentifier(request);
+  const { success: withinLimit } = await apiLimiter.limit(id);
+  if (!withinLimit) {
+    return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
+  }
+
+  // Auth check
+  const auth = verifyApiAuth(request);
+  if (auth instanceof NextResponse) return auth;
+
   console.log('[API] Performance Request Received');
   try {
     const siteUrl = process.env.GSC_SITE_URL || 'https://usmantrades.co.uk/';
@@ -17,23 +30,20 @@ export async function GET() {
   } catch (error: any) {
     console.error('[API] Performance Error:', error.message);
     
-    // Provide a more helpful error message for common issues
-    let userFriendlyError = error.message;
+    // User-friendly error messages — no internal config details exposed
+    let userFriendlyError = 'Failed to fetch performance data. Check server logs.';
     if (error.message.includes('403')) {
-      userFriendlyError = `Access Denied (403): Ensure the service account email is added as a 'Full' user to the property in Google Search Console. [Site: ${process.env.GSC_SITE_URL || 'https://usmantrades.co.uk/'}]`;
+      userFriendlyError = 'Access Denied (403): Ensure the GSC service account has Full access to the property.';
     } else if (error.message.includes('404')) {
-      userFriendlyError = `Property Not Found (404): The site URL "${process.env.GSC_SITE_URL}" was not found in your GSC account. Ensure it matches exactly.`;
+      userFriendlyError = 'Property Not Found (404): The GSC site URL may not match your account property exactly.';
+    } else if (error.message.includes('Missing GSC credentials')) {
+      userFriendlyError = 'GSC credentials are not configured. Set GSC_CLIENT_ID, GSC_CLIENT_SECRET, and GSC_REFRESH_TOKEN in your environment variables.';
     }
 
     return NextResponse.json({ 
       success: false, 
       error: userFriendlyError,
       data: [],
-      debug: {
-        siteUrl: process.env.GSC_SITE_URL,
-        clientEmail: process.env.GSC_CLIENT_EMAIL ? `${process.env.GSC_CLIENT_EMAIL.slice(0, 5)}...${process.env.GSC_CLIENT_EMAIL.slice(-10)}` : 'missing',
-        hasKey: !!process.env.GSC_PRIVATE_KEY
-      }
     }, { status: 500 });
   }
 }

@@ -1,15 +1,39 @@
 import { NextResponse } from 'next/server';
 import { getRoadmap, saveRoadmap } from '@/lib/seo-os/roadmap-engine';
 import { logAgentAction } from '@/lib/seo-os/log-engine';
+import { verifyApiAuth } from '@/lib/seo-os/auth';
+import { apiLimiter, getIdentifier } from '../../../../lib/seo-os/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: Request) {
+  // Rate limit
+  const id = getIdentifier(request);
+  const { success: withinLimit } = await apiLimiter.limit(id);
+  if (!withinLimit) {
+    return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
+  }
+
+  // Auth check
+  const auth = verifyApiAuth(request);
+  if (auth instanceof NextResponse) return auth;
+
   const roadmap = await getRoadmap();
   return NextResponse.json(roadmap);
 }
 
 export async function POST(request: Request) {
+  // Rate limit
+  const id = getIdentifier(request);
+  const { success: withinLimit } = await apiLimiter.limit(id);
+  if (!withinLimit) {
+    return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
+  }
+
+  // Auth check
+  const auth = verifyApiAuth(request);
+  if (auth instanceof NextResponse) return auth;
+
   try {
     const { action, status, task } = await request.json();
     const roadmap = await getRoadmap();
