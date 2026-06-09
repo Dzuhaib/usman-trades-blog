@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { runDailyCycle } from '@/lib/seo-os/orchestrator';
-import { heavyLimiter, getIdentifier } from '../../../../lib/seo-os/rate-limit';
+import { heavyLimiter, getIdentifier } from '@/lib/seo-os/rate-limit';
 
 export const dynamic = 'force-dynamic';
 

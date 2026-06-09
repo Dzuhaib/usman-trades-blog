@@ -3,7 +3,7 @@ import { getPerformanceReport } from '@/lib/seo-os/analytics-engine';
 import { performDeepResearch, generate30DayPlan, monitorPerformanceAndAdjust } from '@/lib/seo-os/ai-engine';
 import { initializeRoadmap, getRoadmap } from '@/lib/seo-os/roadmap-engine';
 import { verifyApiAuth } from '@/lib/seo-os/auth';
-import { heavyLimiter, getIdentifier } from '../../../../lib/seo-os/rate-limit';
+import { heavyLimiter, getIdentifier } from '@/lib/seo-os/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
