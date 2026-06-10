@@ -7,13 +7,17 @@ import 'dotenv/config';
 import { Redis } from '@upstash/redis';
 import { BlogPost } from '@/lib/blogData';
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || '',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || '',
-});
+function getRedis() {
+  return new Redis({
+    url: (process.env.UPSTASH_REDIS_REST_URL || '').replace(/^["']|["']$/g, ''),
+    token: (process.env.UPSTASH_REDIS_REST_TOKEN || '').replace(/^["']|["']$/g, ''),
+  });
+}
+
 const DYNAMIC_POSTS_KEY = 'seo-os:dynamic-posts';
 
 export async function getDynamicPosts(): Promise<BlogPost[]> {
+  const redis = getRedis();
   try {
     const posts = await redis.get<BlogPost[]>(DYNAMIC_POSTS_KEY);
     return posts || [];
@@ -24,6 +28,7 @@ export async function getDynamicPosts(): Promise<BlogPost[]> {
 }
 
 export async function saveDynamicPost(post: BlogPost) {
+  const redis = getRedis();
   const posts = await getDynamicPosts();
   
   // Check if post already exists (update it) or add new one

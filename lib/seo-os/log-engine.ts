@@ -5,10 +5,12 @@
 import 'dotenv/config';
 import { Redis } from '@upstash/redis';
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || '',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || '',
-});
+function getRedis() {
+  return new Redis({
+    url: (process.env.UPSTASH_REDIS_REST_URL || '').replace(/^["']|["']$/g, ''),
+    token: (process.env.UPSTASH_REDIS_REST_TOKEN || '').replace(/^["']|["']$/g, ''),
+  });
+}
 
 export interface AgentLog {
   timestamp: string;
@@ -26,6 +28,7 @@ export interface AgentStatus {
 const LOGS_KEY = 'seo-os:logs';
 
 export async function logAgentAction(agent: string, status: 'active' | 'idle' | 'success' | 'error', message: string) {
+  const redis = getRedis();
   try {
     const logs = await getLogs();
     const newLog: AgentLog = {
@@ -44,6 +47,7 @@ export async function logAgentAction(agent: string, status: 'active' | 'idle' | 
 }
 
 export async function getLogs(): Promise<AgentLog[]> {
+  const redis = getRedis();
   try {
     return (await redis.get<AgentLog[]>(LOGS_KEY)) || [];
   } catch (e) {

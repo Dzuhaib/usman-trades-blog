@@ -6,10 +6,12 @@
 import 'dotenv/config';
 import { Redis } from '@upstash/redis';
 
-const redis = new Redis({
-  url: (process.env.UPSTASH_REDIS_REST_URL || '').replace(/^["']|["']$/g, ''),
-  token: (process.env.UPSTASH_REDIS_REST_TOKEN || '').replace(/^["']|["']$/g, ''),
-});
+function getRedis() {
+  return new Redis({
+    url: (process.env.UPSTASH_REDIS_REST_URL || '').replace(/^["']|["']$/g, ''),
+    token: (process.env.UPSTASH_REDIS_REST_TOKEN || '').replace(/^["']|["']$/g, ''),
+  });
+}
 
 export interface PipelineStep {
   agent: string;
@@ -39,7 +41,6 @@ export interface RoadmapTask {
   completedAt?: string;
   expert_note?: string;
   pipeline?: PipelineStep[];
-  // Dynamic fields for agent state
   rawContent?: string | null;
   reviewedContent?: string | null;
   finalContent?: string | null;
@@ -59,6 +60,7 @@ export interface RoadmapData {
 const ROADMAP_KEY = 'seo-os:roadmap';
 
 export async function getRoadmap(): Promise<RoadmapData | null> {
+  const redis = getRedis();
   try {
     return await redis.get<RoadmapData>(ROADMAP_KEY);
   } catch (e) {
@@ -68,6 +70,7 @@ export async function getRoadmap(): Promise<RoadmapData | null> {
 }
 
 export async function saveRoadmap(data: RoadmapData) {
+  const redis = getRedis();
   const completedCount = data.tasks.filter(t => t.status === 'completed').length;
   data.progress = data.tasks.length > 0 ? Math.round((completedCount / data.tasks.length) * 100) : 0;
   data.updatedAt = new Date().toISOString();
@@ -84,10 +87,7 @@ export async function updateRoadmapWithNewTasks(newTasks: any[]) {
   if (!roadmap) return;
 
   const tasksToAppend = newTasks.map((t: any, index: number) => {
-    // Map new granular types to simple pipeline steps
     let pipeline: PipelineStep[] = [];
-    
-    // Assign pipeline based on task_type contract
     switch (t.task_type) {
         case 'FIX_AEO':
         case 'FIX_GEO':
@@ -131,7 +131,6 @@ export async function updateRoadmapWithNewTasks(newTasks: any[]) {
     };
   });
 
-  // Clear non-completed, non-essential tasks
   roadmap.tasks = [
     ...roadmap.tasks.filter(t => t.status === 'completed'),
     ...tasksToAppend

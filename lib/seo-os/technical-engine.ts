@@ -2,86 +2,58 @@
  * SEO-OS Technical Auditor Engine via Upstash Redis
  */
 
+import 'dotenv/config';
 import { Redis } from '@upstash/redis';
 import { getPerformanceReport } from './analytics-engine';
 
-const redis = Redis.fromEnv();
+function getRedis() {
+  return new Redis({
+    url: (process.env.UPSTASH_REDIS_REST_URL || '').replace(/^["']|["']$/g, ''),
+    token: (process.env.UPSTASH_REDIS_REST_TOKEN || '').replace(/^["']|["']$/g, ''),
+  });
+}
 
 export interface TechnicalIssue {
   id: string;
-  type: 'indexing' | 'meta' | 'speed' | 'link';
-  severity: 'high' | 'medium' | 'low';
-  page: string;
+  url: string;
   issue: string;
-  fix: string;
+  severity: 'high' | 'medium' | 'low';
   status: 'pending' | 'fixed';
-  detectedAt: string;
 }
 
 const AUDIT_KEY = 'seo-os:technical-audit';
 
 export async function getTechnicalAudit(): Promise<TechnicalIssue[]> {
+  const redis = getRedis();
   try {
     return (await redis.get<TechnicalIssue[]>(AUDIT_KEY)) || [];
   } catch (e) {
+    console.error('Redis Fetch Error:', e);
     return [];
   }
 }
 
 export async function saveTechnicalAudit(issues: TechnicalIssue[]) {
-  try {
-    await redis.set(AUDIT_KEY, issues);
-  } catch (e) {
-    console.error('Redis Technical Audit Error:', e);
-  }
+  const redis = getRedis();
+  await redis.set(AUDIT_KEY, issues);
 }
 
 export async function performTechnicalAudit() {
-  const issues: TechnicalIssue[] = await getTechnicalAudit();
-  const gscData = await getPerformanceReport();
+  const reports = await getPerformanceReport();
+  const currentIssues = await getTechnicalAudit();
   
-  // 1. Meta Issues
-  const metaIssues = gscData.filter(r => r.impressions > 100 && r.clicks === 0);
-  for (const item of metaIssues) {
-    if (!issues.find(i => i.page === item.url && i.type === 'meta')) {
-      issues.push({
-        id: `meta-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
-        type: 'meta',
-        severity: 'high',
-        page: item.url,
-        issue: 'Low Click-Through Rate (CTR) despite high impressions.',
-        fix: 'Optimize Meta Title and Description to be more enticing.',
-        status: 'pending',
-        detectedAt: new Date().toISOString()
-      });
-    }
-  }
+  // Logic to identify issues and update audit
+  const newIssues: TechnicalIssue[] = reports
+    .filter(r => r.position > 20)
+    .map(r => ({
+      id: Math.random().toString(36).substring(7),
+      url: r.url,
+      issue: 'Low ranking / High bounce risk',
+      severity: 'medium',
+      status: 'pending'
+    }));
 
-  // 2. Ghost Pages
-  const { BLOG_POSTS } = await import('@/lib/blogData');
-  const validRoutes = new Set([
-    ...BLOG_POSTS.map(p => `/blog/posts/${p.slug}`),
-    '/', '/about', '/contact', '/blog', '/tools'
-  ]);
-  
-  const ghostIssues = gscData.filter(r => !validRoutes.has(r.url) && !r.url.startsWith('/tools/'));
-  for (const item of ghostIssues) {
-    if (!issues.find(i => i.page === item.url && i.type === 'link')) {
-      issues.push({
-        id: `link-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
-        type: 'link',
-        severity: 'medium',
-        page: item.url,
-        issue: 'Orphaned or Legacy URL detected in search results.',
-        fix: 'Set up a 301 redirect to the most relevant current page.',
-        status: 'pending',
-        detectedAt: new Date().toISOString()
-      });
-    }
-  }
-
-  await saveTechnicalAudit(issues.slice(-50));
-  return issues;
+  await saveTechnicalAudit([...currentIssues, ...newIssues]);
 }
 
 export async function resolveTechnicalIssue(id: string) {
