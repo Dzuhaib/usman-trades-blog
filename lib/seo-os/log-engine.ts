@@ -2,6 +2,7 @@
  * SEO-OS Agent Log Engine via Upstash Redis
  */
 
+import 'dotenv/config';
 import { Redis } from '@upstash/redis';
 
 const redis = new Redis({

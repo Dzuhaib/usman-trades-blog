@@ -3,6 +3,7 @@
  * Handles storage of AI-generated articles since Vercel FS is read-only.
  */
 
+import 'dotenv/config';
 import { Redis } from '@upstash/redis';
 import { BlogPost } from '@/lib/blogData';
 
