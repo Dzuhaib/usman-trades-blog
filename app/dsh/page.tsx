@@ -212,7 +212,7 @@ export default function DashboardPage() {
                             btn.disabled = true;
                             const res = await fetch('/api/seo-os/cleanup', { method: 'POST' });
                             const data = await res.json();
-                            alert(data.success ? `Submitted ${data.submittedCount} URLs!` : 'Error: ' + data.error);
+                            alert(data.success ? `Submitted ${data.submittedCount ?? 0} URLs!` : 'Error: ' + data.error);
                             btn.disabled = false;
                           }
                         }}

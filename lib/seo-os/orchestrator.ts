@@ -262,5 +262,5 @@ export async function cleanupMissingUrls() {
     await new Promise(resolve => setTimeout(resolve, 500));
   }
   await logAgentAction('Submission Agent', 'success', `Submitted ${missingUrls.length} missing URLs.`);
-  return { success: true };
+  return { success: true, submittedCount: missingUrls.length };
 }
