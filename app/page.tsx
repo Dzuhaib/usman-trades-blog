@@ -270,13 +270,13 @@ export default async function Home() {
         <div className="max-w-[700px] relative z-10 space-y-6">
           <div className="inline-flex items-center gap-2 text-accent font-bold text-[10px] uppercase tracking-[0.2em]">      
             <ShieldCheck className="w-4 h-4" />
-            Human-Only Editorial Policy
+            Editorial Integrity Policy
           </div>
           <h2 className="text-3xl md:text-5xl font-bold font-serif leading-tight tracking-tight text-white">
-            Human-first trading education. <span className="text-slate-500 italic">No AI fluff.</span>
+            High-integrity trading education. <span className="text-slate-500 italic">Expert-reviewed, AI-assisted.</span>
           </h2>
           <p className="text-slate-400 text-lg leading-relaxed">
-            In an era of AI-generated financial spam, we commit to publishing only high-integrity, human-written content. Every guide in our library is written by experienced analysts who have spent thousands of hours in the markets.
+            In an era of unchecked financial spam, we commit to publishing only high-integrity, expert-reviewed content. Every guide in our library is written or reviewed by experienced analysts who have spent thousands of hours in the markets.
           </p>
           <div className="pt-4">
             <Link href="/about" className="bg-accent hover:bg-accent/90 text-white font-bold text-xs uppercase tracking-widest px-8 py-4 rounded transition-all inline-block">

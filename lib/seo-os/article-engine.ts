@@ -3,16 +3,8 @@
  * Handles storage of AI-generated articles since Vercel FS is read-only.
  */
 
-import 'dotenv/config';
-import { Redis } from '@upstash/redis';
 import { BlogPost } from '@/lib/blogData';
-
-function getRedis() {
-  return new Redis({
-    url: (process.env.UPSTASH_REDIS_REST_URL || '').replace(/^["']|["']$/g, ''),
-    token: (process.env.UPSTASH_REDIS_REST_TOKEN || '').replace(/^["']|["']$/g, ''),
-  });
-}
+import { getRedis } from './redis';
 
 const DYNAMIC_POSTS_KEY = 'seo-os:dynamic-posts';
 

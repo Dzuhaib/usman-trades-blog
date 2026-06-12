@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Mail } from 'lucide-react';
 
 interface AuthorBioProps {
@@ -26,13 +27,13 @@ export default function AuthorBio({ author, updatedAt }: AuthorBioProps) {
             &ldquo;{author.bio}&rdquo;
           </p>
           <div className="flex items-center gap-4 pt-2">
-            <a 
-              href="mailto:zuhaibahmed3213951@gmail.com" 
+            <Link 
+              href="/contact" 
               className="inline-flex items-center gap-2 text-xs font-bold text-slate-900 hover:text-accent transition-colors no-underline"
             >
               <Mail className="w-3.5 h-3.5" />
               Get in touch
-            </a>
+            </Link>
           </div>
         </div>
       </div>

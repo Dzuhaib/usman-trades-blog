@@ -169,7 +169,7 @@ export async function runDailyCycle(isManual: boolean = false) {
                     { agent: 'Glossary Agent', status: 'pending', message: 'Generating definition.' },
                     { agent: 'Publish Agent', status: 'pending', message: 'Waiting for deployment.' }
                 ];
-            } else if (task.task_type === 'OPTIMIZE_HOMEPAGE') {
+            } else if (task.task_type === 'FIX_MEDIA' || task.task_type === 'FIX_TECHNICAL') {
                 task.pipeline = [
                     { agent: 'Technical Auditor', status: 'pending', message: 'Analyzing CTR gaps.' },
                     { agent: 'Review Agent', status: 'pending', message: 'Optimizing meta tags.' },
@@ -191,11 +191,10 @@ export async function runDailyCycle(isManual: boolean = false) {
     const nextTask = refreshedRoadmap.tasks.find(t => t.status === 'pending');
     if (!nextTask) break;
 
-    // LEGACY COMPATIBILITY LAYER: Map old task types to new contracts
-    if (!nextTask.task_type || ['article', 'tool_improvement', 'faq', 'glossary'].includes(nextTask.task_type as any)) {
-        console.log(`[Dispatcher] Mapping legacy task type: ${nextTask.task_type}`);
-        if (nextTask.task_type === 'glossary') nextTask.task_type = 'GLOSSARY_ENTRY';
-        else nextTask.task_type = 'CREATE_CONTENT';
+    const validTaskTypes = ['CREATE_CONTENT', 'FIX_AEO', 'FIX_GEO', 'FIX_MEDIA', 'FIX_KEYWORDS', 'FIX_TECHNICAL', 'GLOSSARY_ENTRY', 'TOOL_IMPROVEMENT'];
+    if (!nextTask.task_type || !validTaskTypes.includes(nextTask.task_type)) {
+        console.log(`[Dispatcher] Mapping unknown task type: ${nextTask.task_type}`);
+        nextTask.task_type = 'CREATE_CONTENT';
         await saveRoadmap(refreshedRoadmap);
     }
 
@@ -204,9 +203,6 @@ export async function runDailyCycle(isManual: boolean = false) {
     // DISPATCHER
     try {
         switch (nextTask.task_type) {
-            case 'OPTIMIZE_HOMEPAGE':
-                actionTaken = await handleOptimizationWorkflow(nextTask, refreshedRoadmap);
-                break;
             case 'CREATE_CONTENT':
             case 'FIX_AEO':
             case 'FIX_GEO':

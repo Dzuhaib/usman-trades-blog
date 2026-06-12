@@ -42,7 +42,7 @@ export default function LiveTicker() {
       <div className="flex items-center justify-between gap-6 overflow-x-auto no-scrollbar scroll-smooth">
         <div className="flex items-center gap-2 border-r border-slate-800 pr-4 shrink-0">
           <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 font-mono">LIVE TICKER</span>
+          <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 font-mono">TICKER <span className="text-[8px] text-slate-600">(SIMULATED)</span></span>
         </div>
         <div className="flex items-center gap-8 text-xs font-mono w-full justify-around">
           {rates.map((item) => (

@@ -38,8 +38,8 @@ export default function Footer() {
           <div className="space-y-4">
             <span className="text-[10px] font-black text-slate-900 tracking-[0.2em] uppercase block">Get In Touch</span>
             <p className="text-sm text-slate-500">
-              Editorial & Support:<br />
-              <a href="mailto:zuhaibahmed3213951@gmail.com" className="text-slate-900 font-bold hover:text-accent transition-colors no-underline">zuhaibahmed3213951@gmail.com</a>
+              General Inquiries:<br />
+               <a href="/contact" className="text-slate-900 font-bold hover:text-accent transition-colors no-underline">Contact us here</a>
             </p>
           </div>
         </div>

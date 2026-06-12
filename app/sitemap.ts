@@ -3,8 +3,22 @@ import { BLOG_POSTS } from '@/lib/blogData';
 import { TOOLS } from '@/lib/toolsData';
 import { getDynamicPosts } from '@/lib/seo-os/article-engine';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // Revalidate every hour
+
+/**
+ * Sitemap Generator
+ * Ensures all static, blog, and dynamic SEO-OS posts are indexed.
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://usmantrades.co.uk';
+
+  // Helper to ensure valid dates for XML serialization
+  const ensureValidDate = (dateStr: string | undefined): Date => {
+    if (!dateStr) return new Date();
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? new Date() : d;
+  };
 
   const staticPages: MetadataRoute.Sitemap = [
     {
@@ -25,7 +39,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.9,
     },
-    // ... rest of static pages
     {
       url: `${baseUrl}/about`,
       lastModified: new Date(),
@@ -66,19 +79,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const blogPosts: MetadataRoute.Sitemap = BLOG_POSTS.map((post) => ({
     url: `${baseUrl}${post.route}`,
-    lastModified: new Date(post.updatedAt),
+    lastModified: ensureValidDate(post.updatedAt),
     changeFrequency: 'monthly',
     priority: 0.8,
   }));
 
-  // Fetch and include dynamic posts from Redis
-  const dynamicPosts = await getDynamicPosts();
-  const dynamicBlogPosts: MetadataRoute.Sitemap = dynamicPosts.map((post) => ({
-    url: `${baseUrl}${post.route}`,
-    lastModified: new Date(post.updatedAt || post.date),
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }));
+  // Fetch and include dynamic posts from Redis with fallback
+  let dynamicBlogPosts: MetadataRoute.Sitemap = [];
+  try {
+    const dynamicPosts = await getDynamicPosts();
+    if (Array.isArray(dynamicPosts)) {
+      dynamicBlogPosts = dynamicPosts.map((post) => ({
+        url: `${baseUrl}${post.route}`,
+        lastModified: ensureValidDate(post.updatedAt || post.date),
+        changeFrequency: 'weekly',
+        priority: 0.8,
+      }));
+    }
+  } catch (error) {
+    console.error('[Sitemap Error] Dynamic Posts Fetch:', error);
+    // Fallback to empty if Redis fails
+  }
 
   const toolPages: MetadataRoute.Sitemap = TOOLS.map((tool) => ({
     url: `${baseUrl}${tool.href}`,

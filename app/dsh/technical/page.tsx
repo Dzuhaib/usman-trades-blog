@@ -80,7 +80,7 @@ export default function TechnicalAuditPage() {
                     <tr key={issue.id} className="hover:bg-slate-50/50 transition-colors">
                       <td className="px-8 py-6">
                         <div className="space-y-1">
-                           <span className="text-xs font-bold text-slate-900 block">{issue.page}</span>
+                           <span className="text-xs font-bold text-slate-900 block">{issue.url}</span>
                            <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded ${
                              issue.severity === 'high' ? 'bg-rose-50 text-rose-500' :
                              issue.severity === 'medium' ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'
@@ -91,7 +91,6 @@ export default function TechnicalAuditPage() {
                       </td>
                       <td className="px-8 py-6">
                         <p className="text-xs text-slate-600 font-medium leading-relaxed">{issue.issue}</p>
-                        <p className="text-[10px] text-accent font-bold mt-1 uppercase">Recommended Fix: {issue.fix}</p>
                       </td>
                       <td className="px-8 py-6 text-right">
                         {issue.status === 'fixed' ? (

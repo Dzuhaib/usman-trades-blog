@@ -2,15 +2,7 @@
  * SEO-OS Agent Log Engine via Upstash Redis
  */
 
-import 'dotenv/config';
-import { Redis } from '@upstash/redis';
-
-function getRedis() {
-  return new Redis({
-    url: (process.env.UPSTASH_REDIS_REST_URL || '').replace(/^["']|["']$/g, ''),
-    token: (process.env.UPSTASH_REDIS_REST_TOKEN || '').replace(/^["']|["']$/g, ''),
-  });
-}
+import { getRedis } from './redis';
 
 export interface AgentLog {
   timestamp: string;

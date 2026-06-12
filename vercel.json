@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/seo-os/cron?token=seo-os-automated-trigger-2026",
+      "path": "/api/seo-os/cron",
       "schedule": "0 0 * * *"
     }
   ]

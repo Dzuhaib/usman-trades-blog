@@ -4,6 +4,7 @@ import { saveDynamicPost, getDynamicPosts } from './article-engine';
 /**
  * Phase 7: Publish Agent
  * Handles data updates to make AI content live via dynamic routing.
+ * DISCLAIMER: Content published via this pipeline is AI-generated and reviewed.
  */
 export async function publishArticle(slug: string, title: string, content: string, category: any) {
   // 1. Determine the best publication time (Strict 24-hour drip-feed)
@@ -38,7 +39,7 @@ export async function publishArticle(slug: string, title: string, content: strin
     slug,
     title,
     excerpt: content.substring(0, 160).replace(/\n/g, ' ') + '...',
-    content, // The full AI-generated article
+    content: `${content}\n\n*Disclaimer: This article was generated with the assistance of AI technology and reviewed by our editorial team.*`, // The full AI-generated article with disclosure
     category: category || 'Risk Management',
     date: formattedDate,
     updatedAt: formattedDate,

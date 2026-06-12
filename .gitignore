@@ -31,9 +31,14 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+.env
+.env.local
+.env.*.local
 google-credentials.json
 gsc-tokens.json
+
+# dump scripts (contain sensitive data)
+dump-redis.*
 
 # vercel
 .vercel

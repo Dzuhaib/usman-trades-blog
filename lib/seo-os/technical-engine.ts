@@ -2,16 +2,9 @@
  * SEO-OS Technical Auditor Engine via Upstash Redis
  */
 
-import 'dotenv/config';
-import { Redis } from '@upstash/redis';
+import { randomUUID } from 'crypto';
 import { getPerformanceReport } from './analytics-engine';
-
-function getRedis() {
-  return new Redis({
-    url: (process.env.UPSTASH_REDIS_REST_URL || '').replace(/^["']|["']$/g, ''),
-    token: (process.env.UPSTASH_REDIS_REST_TOKEN || '').replace(/^["']|["']$/g, ''),
-  });
-}
+import { getRedis } from './redis';
 
 export interface TechnicalIssue {
   id: string;
@@ -41,12 +34,11 @@ export async function saveTechnicalAudit(issues: TechnicalIssue[]) {
 export async function performTechnicalAudit() {
   const reports = await getPerformanceReport();
   const currentIssues = await getTechnicalAudit();
-  
-  // Logic to identify issues and update audit
+
   const newIssues: TechnicalIssue[] = reports
     .filter(r => r.position > 20)
     .map(r => ({
-      id: Math.random().toString(36).substring(7),
+      id: randomUUID(),
       url: r.url,
       issue: 'Low ranking / High bounce risk',
       severity: 'medium',

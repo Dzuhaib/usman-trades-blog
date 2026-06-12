@@ -28,14 +28,14 @@ export default function DelegatedTasksPage() {
     <div className="p-10 space-y-8 font-sans">
       <h1 className="text-3xl font-serif font-bold">Delegated Audit Tasks</h1>
       <div className="grid gap-4">
-        {tasks.filter(t => t.type !== 'article').map((task) => (
+        {tasks.filter(t => t.task_type !== 'CREATE_CONTENT').map((task) => (
           <div key={task.day} 
                onClick={() => setSelectedTask(task)}
                className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-accent transition-all">
             <div>
               <h3 className="font-bold text-lg">{task.keyword}</h3>
               <p className="text-xs text-slate-500 uppercase tracking-widest mt-1">
-                Type: {task.type} | Priority: {task.priority}
+                Type: {task.task_type} | Priority: {task.priority}
               </p>
             </div>
             <div className={`px-4 py-2 rounded-full text-[10px] font-black uppercase ${

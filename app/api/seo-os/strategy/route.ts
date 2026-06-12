@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   }
 
   // Auth check
-  const auth = verifyApiAuth(request);
+  const auth = await verifyApiAuth(request);
   if (auth instanceof NextResponse) return auth;
 
   try {

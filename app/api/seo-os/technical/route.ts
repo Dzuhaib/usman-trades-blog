@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   const { success: withinLimit } = await apiLimiter.limit(id);
   if (!withinLimit) return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
 
-  const auth = verifyApiAuth(request);
+  const auth = await verifyApiAuth(request);
   if (auth instanceof NextResponse) return auth;
 
   try {
@@ -26,12 +26,15 @@ export async function POST(request: Request) {
   const { success: withinLimit } = await apiLimiter.limit(id);
   if (!withinLimit) return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
 
-  const auth = verifyApiAuth(request);
+  const auth = await verifyApiAuth(request);
   if (auth instanceof NextResponse) return auth;
 
   try {
-    const { id: issueId } = await request.json();
-    const success = await resolveTechnicalIssue(issueId);
+    const body = await request.json();
+    if (!body || typeof body.id !== 'string' || body.id.length < 1) {
+      return NextResponse.json({ success: false, error: 'Invalid issue ID.' }, { status: 400 });
+    }
+    const success = await resolveTechnicalIssue(body.id);
     return NextResponse.json({ success });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

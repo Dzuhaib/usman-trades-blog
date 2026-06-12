@@ -25,8 +25,6 @@ function LoginForm() {
         });
 
         if (res.ok) {
-          // Store in localStorage so dashboard pages can attach it as Bearer token to API calls.
-          localStorage.setItem('dsh_pw', password);
           router.push(redirectTo);
           router.refresh();
         } else {

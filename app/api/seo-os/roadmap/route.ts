@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getRoadmap, saveRoadmap } from '@/lib/seo-os/roadmap-engine';
+import { getRoadmap, saveRoadmap, RoadmapTask, TaskType } from '@/lib/seo-os/roadmap-engine';
 import { logAgentAction } from '@/lib/seo-os/log-engine';
 import { verifyApiAuth } from '@/lib/seo-os/auth';
 import { apiLimiter, getIdentifier } from '@/lib/seo-os/rate-limit';
@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   }
 
   // Auth check
-  const auth = verifyApiAuth(request);
+  const auth = await verifyApiAuth(request);
   if (auth instanceof NextResponse) return auth;
 
   const roadmap = await getRoadmap();
@@ -31,16 +31,24 @@ export async function POST(request: Request) {
   }
 
   // Auth check
-  const auth = verifyApiAuth(request);
+  const auth = await verifyApiAuth(request);
   if (auth instanceof NextResponse) return auth;
 
   try {
-    const { action, status, task } = await request.json();
+    const body = await request.json();
+    if (!body || typeof body !== 'object') {
+      return NextResponse.json({ error: 'Invalid request body.' }, { status: 400 });
+    }
+
+    const { action, status, task } = body;
     const roadmap = await getRoadmap();
     
     if (!roadmap) return NextResponse.json({ error: 'No roadmap found' }, { status: 404 });
 
-    if (action === 'toggle-status' && status) {
+    if (action === 'toggle-status') {
+      if (!status || (status !== 'active' && status !== 'paused')) {
+        return NextResponse.json({ error: 'Status must be "active" or "paused".' }, { status: 400 });
+      }
       roadmap.systemStatus = status;
       await saveRoadmap(roadmap);
       
@@ -53,13 +61,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, status: roadmap.systemStatus });
     }
 
-    if (action === 'add-task' && task) {
-      const newTask = {
+    if (action === 'add-task') {
+      if (!task || typeof task !== 'object' || !task.keyword || typeof task.keyword !== 'string') {
+        return NextResponse.json({ error: 'Task must have a valid keyword.' }, { status: 400 });
+      }
+
+      const validTypes = ['article', 'tool_improvement', 'faq', 'glossary'];
+      const validPriorities = ['high', 'medium', 'low'];
+
+      const taskTypeMap: Record<string, TaskType> = {
+        article: 'CREATE_CONTENT',
+        tool_improvement: 'TOOL_IMPROVEMENT',
+        faq: 'CREATE_CONTENT',
+        glossary: 'GLOSSARY_ENTRY',
+      };
+
+      const newTask: RoadmapTask = {
         day: roadmap.tasks.length + 1,
         keyword: task.keyword,
-        type: task.type || 'article',
-        priority: task.priority || 'high',
-        status: 'pending' as const,
+        task_type: taskTypeMap[task.type] || 'CREATE_CONTENT',
+        priority: validPriorities.includes(task.priority) ? task.priority : 'high',
+        status: 'pending',
         expert_note: task.expert_note || 'Manually approved opportunity.',
         pipeline: [
           { agent: 'Writer Agent', status: 'pending' as const, message: 'Waiting for research context.' },

@@ -203,13 +203,13 @@ export default function StrategyPage() {
                     <div className="space-y-2">
                        <h4 className={`text-lg font-bold font-serif line-clamp-1 ${isCompleted ? 'text-blue-900' : 'text-slate-900'}`}>{task.keyword}</h4>
                        <p className={`text-xs line-clamp-2 leading-relaxed italic ${isCompleted ? 'text-blue-600/70' : 'text-slate-500'}`}>
-                          Data-Backed Priority: AI has identified this {task.type} as a {task.priority} priority based on current search trends.
+                          Data-Backed Priority: AI has identified this {task.task_type} as a {task.priority} priority based on current search trends.
                        </p>
                     </div>
 
                     <div className={`flex items-center justify-between pt-4 border-t ${isCompleted ? 'border-blue-100' : 'border-slate-50'}`}>
                        <div className="flex gap-2">
-                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter ${isCompleted ? 'bg-blue-100 text-blue-500' : 'bg-slate-50 text-slate-400'}`}>{task.type}</span>
+                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter ${isCompleted ? 'bg-blue-100 text-blue-500' : 'bg-slate-50 text-slate-400'}`}>{task.task_type}</span>
                           <span className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter ${
                             task.priority === 'high' ? 'bg-rose-50 text-rose-500' : 'bg-blue-50 text-blue-500'
                           }`}>{task.priority}</span>
