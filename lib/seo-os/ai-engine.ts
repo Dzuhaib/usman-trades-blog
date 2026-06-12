@@ -100,11 +100,20 @@ export async function monitorPerformanceAndAdjust(gscData: any[], currentRoadmap
 
 /**
  * Phase 2: Strategist Agent
+ * CRITICAL RULE: Distinguish optimization tasks from creation tasks.
+ * If a page already exists for a keyword, create an optimization task (FIX_*), not a new article.
  */
 export async function generate30DayPlan(researchReport: string, correctionReport?: string): Promise<SEOMap[]> {
   const openai = getOpenAIClient();
   const prompt = `
     Generate a 30-day execution roadmap for Usman Trades.
+
+    CRITICAL RULES FOR TASK ASSIGNMENT:
+    - If the topic relates to an EXISTING page (tool page, blog post, landing page, etc.), 
+      create an optimization task with type "tool_improvement" or "faq" — do NOT create a new article.
+    - Only use type "article" when the topic requires genuinely new content that does not exist.
+    - Prefer optimization over creation. Always check if existing content can be improved first.
+
     Return a JSON object with a "plan" key containing an array of 30 objects.
     Each object: { "day": number, "keyword": string, "type": "article" | "glossary" | "tool_improvement" | "faq", "priority": "high" | "medium" | "low", "expert_note": "..." }.
   `;
@@ -114,7 +123,7 @@ export async function generate30DayPlan(researchReport: string, correctionReport
       model: "gpt-4o",
       messages: [{ 
         role: "system", 
-        content: "You are a Senior SEO Strategist." 
+        content: "You are a Senior SEO Strategist. Your primary rule: optimize existing pages before creating new ones." 
       }, { 
         role: "user", 
         content: prompt 
@@ -155,7 +164,58 @@ export async function generateGlossaryEntry(term: string) {
 }
 
 /**
+ * Optimization Agent: Updates existing pages with SEO/AEO/GEO improvements.
+ * This is the DEFAULT handler — new content is NOT created unless explicitly requested.
+ */
+export async function optimizeExistingPage(keyword: string, existingContent: string, optimizationType: string): Promise<string> {
+  const openai = getOpenAIClient();
+  const systemPrompt = `
+    You are Muhammad Usman, an expert Market Analyst and SEO optimiser.
+
+    CRITICAL RULE: You are OPTIMISING an existing page — NOT writing a new article.
+    Preserve all valuable existing content. Enhance headings, metadata, FAQs, schema, 
+    internal links, and readability according to the requested optimisation type.
+
+    The optimisation type is: "${optimizationType}"
+
+    STRICT RULES:
+    1. Preserve the original structure and valuable content.
+    2. Improve headings, add FAQ sections, enhance readability where needed.
+    3. Add internal links using [LINK_url:label] format (max 5).
+    4. Add image markers [IMAGE_1], [IMAGE_2] where visuals would help.
+    5. DO NOT rewrite the entire page — enhance what exists.
+    6. NO dashes (-) in the output. Use commas or rephrase.
+    7. NO AI-ISMS: Avoid "delve", "tapestry", "embark", "furthermore", "in conclusion".
+    8. Return the FULL optimised page content, not just the changes.
+  `;
+
+  const userPrompt = `
+    OPTIMISATION TYPE: ${optimizationType}
+    TARGET KEYWORD: ${keyword}
+    
+    EXISTING CONTENT TO OPTIMISE:
+    ${existingContent}
+  `;
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ],
+    });
+
+    return response.choices[0].message.content || existingContent;
+  } catch (error) {
+    console.error('Optimization Agent Error:', error);
+    return existingContent;
+  }
+}
+
+/**
  * Phase 4: Writer Agent (E-E-A-T & AEO Focused - ONE SHOT)
+ * Used ONLY for genuinely new content creation, never for optimization tasks.
  */
 export async function generateAIPost(keyword: string) {
   const openai = getOpenAIClient();
@@ -257,7 +317,11 @@ export async function delegateAuditTasks(audit: AuditReport): Promise<SEOMap[]> 
   const prompt = `
     Analyze this SEO Audit Report: ${JSON.stringify(audit)}
     
-    For each issue, create an actionable roadmap task. Map the issue type to the correct task_type:
+    CRITICAL RULE: Always create FIX_* (optimization) tasks instead of CREATE_CONTENT tasks.
+    NEVER create a CREATE_CONTENT task for a page that already exists. 
+    Only use CREATE_CONTENT when the audit identifies a completely missing topic with no existing page.
+
+    Map the issue type to the correct task_type:
     - technical -> FIX_TECHNICAL
     - seo -> FIX_TECHNICAL
     - geo -> FIX_GEO
@@ -272,7 +336,7 @@ export async function delegateAuditTasks(audit: AuditReport): Promise<SEOMap[]> 
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [{ role: "system", content: "You are an expert SEO task delegator. You MUST return valid JSON." }, { role: "user", content: prompt }],
+      messages: [{ role: "system", content: "You are an expert SEO task delegator. Your default is optimization (FIX_*), not creation (CREATE_CONTENT). You MUST return valid JSON." }, { role: "user", content: prompt }],
       response_format: { type: "json_object" },
     });
     const data = JSON.parse(response.choices[0].message.content || '{"tasks": []}');

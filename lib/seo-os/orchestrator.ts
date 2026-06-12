@@ -9,7 +9,8 @@ import {
   generateAIPost, 
   generateGlossaryEntry,
   reviewContent,
-  performComprehensiveAudit
+  performComprehensiveAudit,
+  optimizeExistingPage
 } from './ai-engine';
 import { getRoadmap, saveRoadmap, PipelineStep, RoadmapData, RoadmapTask, updateRoadmapWithNewTasks } from './roadmap-engine';
 import { getAuditReport, saveAuditReport } from './audit-engine';
@@ -107,12 +108,32 @@ async function handleGlossaryWorkflow(task: RoadmapTask, roadmap: RoadmapData): 
 }
 
 // Handler: Optimization Workflow
+// CRITICAL: This modifies existing pages — it does NOT create new articles.
 async function handleOptimizationWorkflow(task: RoadmapTask, roadmap: RoadmapData): Promise<boolean> {
-    task.pipeline = updateStep(task.pipeline, 'Technical Auditor', 'completed', 'Audit complete.');
-    task.pipeline = updateStep(task.pipeline, 'Review Agent', 'active', 'Refining meta...');
+    task.pipeline = updateStep(task.pipeline, 'Review Agent', 'active', `Optimizing existing page for: ${task.keyword}`);
     await saveRoadmap(roadmap);
-    task.optimizationPlan = `Optimized meta tags for ${task.keyword} to recover impressions.`;
-    task.pipeline = updateStep(task.pipeline, 'Review Agent', 'completed', 'Metadata optimized.');
+
+    const { BLOG_POSTS } = await import('@/lib/blogData');
+    const existingPost = BLOG_POSTS.find(p =>
+      p.title.toLowerCase().includes(task.keyword.toLowerCase()) ||
+      p.slug.includes(task.keyword.toLowerCase().replace(/\s+/g, '-'))
+    );
+
+    const existingContent = existingPost?.content || '';
+    const optimizationType = task.task_type === 'FIX_AEO' ? 'AEO (Answer Engine Optimization)' :
+                             task.task_type === 'FIX_GEO' ? 'GEO (Geographic Optimization)' :
+                             task.task_type === 'FIX_KEYWORDS' ? 'Keyword gap and semantic optimization' :
+                             task.task_type === 'FIX_TECHNICAL' ? 'Technical SEO' :
+                             task.task_type === 'FIX_MEDIA' ? 'Media and image optimization' :
+                             'On-page SEO optimization';
+
+    if (existingContent) {
+      task.rawContent = await optimizeExistingPage(task.keyword, existingContent, optimizationType);
+      task.pipeline = updateStep(task.pipeline, 'Review Agent', 'completed', 'Page optimized.');
+    } else {
+      task.pipeline = updateStep(task.pipeline, 'Review Agent', 'completed', 'No existing page found for optimization.');
+    }
+
     task.pipeline = updateStep(task.pipeline, 'Submission Agent', 'active', 'Pinging GSC...');
     await saveRoadmap(roadmap);
     await requestIndexing(`https://usmantrades.co.uk/`);
@@ -204,18 +225,18 @@ export async function runDailyCycle(isManual: boolean = false) {
     try {
         switch (nextTask.task_type) {
             case 'CREATE_CONTENT':
+                actionTaken = await handleArticleWorkflow(nextTask, refreshedRoadmap);
+                break;
             case 'FIX_AEO':
             case 'FIX_GEO':
             case 'FIX_KEYWORDS':
-                actionTaken = await handleArticleWorkflow(nextTask, refreshedRoadmap);
+            case 'FIX_TECHNICAL':
+            case 'FIX_MEDIA':
+            case 'TOOL_IMPROVEMENT':
+                actionTaken = await handleOptimizationWorkflow(nextTask, refreshedRoadmap);
                 break;
             case 'GLOSSARY_ENTRY':
                 actionTaken = await handleGlossaryWorkflow(nextTask, refreshedRoadmap);
-                break;
-            case 'FIX_TECHNICAL':
-            case 'FIX_MEDIA':
-                // Treat as content update/optimization for now
-                actionTaken = await handleOptimizationWorkflow(nextTask, refreshedRoadmap);
                 break;
             default:
                 console.error(`[Dispatcher] Unknown task type: ${nextTask.task_type}`);
