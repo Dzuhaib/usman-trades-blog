@@ -187,6 +187,7 @@ export async function optimizeExistingPage(keyword: string, existingContent: str
     6. NO dashes (-) in the output. Use commas or rephrase.
     7. NO AI-ISMS: Avoid "delve", "tapestry", "embark", "furthermore", "in conclusion".
     8. Return the FULL optimised page content, not just the changes.
+    9. Do not repeat the target keyword more than 3 times total in the entire output.
   `;
 
   const userPrompt = `
@@ -239,22 +240,29 @@ export async function generateAIPost(keyword: string) {
   `;
 
   const userPrompt = `
-    Write an institutional-grade guide for: "${keyword}". 
+    Write a natural, professional guide for: "${keyword}".
     
-    Structure (FOLLOW EXACTLY):
-    1. [AEO Summary]: Direct 45-word answer.
-    2. Introduction: Introduce the topic.
-    3. Main Concept: Technical explanation.
-    4. Practical Example: Realistic trading math scenario.
-    5. Common Mistakes: Institutional perspective.
-    6. Risk Considerations.
-    7. FAQ: 3-5 high-intent questions.
-    8. Related Tools & Articles.
-    9. Conclusion: Summary and takeaways.
+    DO NOT use numbered sections or headings like "Introduction:", "Main Concept:", "AEO Summary:", etc.
+    DO NOT repeat the exact keyword "${keyword}" more than 3 times total in the entire article.
+    Instead, use natural transitions between ideas. The article should read like a real human expert wrote it.
 
-    Include 4 image markers: [IMAGE_1], [IMAGE_2], [IMAGE_3], [IMAGE_4].
-    Include 3-5 strategic [LINK_url:label] placeholders.
-    Include 1 [TOOL_slug] placeholder.
+    What to include naturally within the flow:
+    - Opening paragraph that directly answers the search intent (45-50 words)
+    - Technical depth with practical trader insights
+    - A realistic trading math example with numbers
+    - Common mistakes traders make
+    - Risk management perspective
+    - 3-5 FAQ items at the end
+    - A closing paragraph with takeaways
+
+    Formatting rules:
+    - Place 4 image markers sparingly: [IMAGE_1], [IMAGE_2], [IMAGE_3], [IMAGE_4]
+    - Include 3-5 [LINK_url:label] placeholders where they fit naturally
+    - Include 1 [TOOL_slug] placeholder
+    - NO dash characters anywhere
+    - NO AI buzzwords: "delve", "tapestry", "embark", "furthermore", "in conclusion", "ever-evolving"
+    - Bold key numbers and percentages with **asterisks**
+    - FAQ items use "Q:" and "A:" prefixes naturally
   `;
 
   try {
