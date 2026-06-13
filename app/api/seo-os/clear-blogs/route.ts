@@ -1,14 +1,20 @@
 import { NextResponse } from 'next/server';
 import { getRedis } from '@/lib/seo-os/redis';
+import { verifyApiAuth } from '@/lib/seo-os/auth';
 import { apiLimiter, getIdentifier } from '@/lib/seo-os/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
-  const id = getIdentifier(request);
-  const { success: withinLimit } = await apiLimiter.limit(id);
-  if (!withinLimit) {
-    return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
+  const cronSecret = request.headers.get('x-vercel-cron-secret');
+  if (cronSecret !== process.env.CRON_SECRET) {
+    const id = getIdentifier(request);
+    const { success: withinLimit } = await apiLimiter.limit(id);
+    if (!withinLimit) {
+      return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
+    }
+    const auth = await verifyApiAuth(request);
+    if (auth instanceof NextResponse) return auth;
   }
 
   try {
