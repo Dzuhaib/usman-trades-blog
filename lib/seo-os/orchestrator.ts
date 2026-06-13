@@ -192,11 +192,22 @@ export async function runDailyCycle(isManual: boolean = false) {
     const refreshedRoadmap = await getRoadmap();
     if (!refreshedRoadmap || refreshedRoadmap.systemStatus === 'paused') break;
 
+    const validTaskTypes = ['CREATE_CONTENT', 'FIX_AEO', 'FIX_GEO', 'FIX_MEDIA', 'FIX_KEYWORDS', 'FIX_TECHNICAL', 'GLOSSARY_ENTRY', 'TOOL_IMPROVEMENT'];
+
     // Sort by day to enforce strict sequential execution
     refreshedRoadmap.tasks.sort((a, b) => a.day - b.day);
 
-    // Initialization check
     let tasksUpdated = false;
+
+    // Normalize unknown task types before pipeline init
+    refreshedRoadmap.tasks.forEach(task => {
+        if (!task.task_type || !validTaskTypes.includes(task.task_type)) {
+            task.task_type = 'CREATE_CONTENT';
+            tasksUpdated = true;
+        }
+    });
+
+    // Initialization check
     refreshedRoadmap.tasks.forEach(task => {
         if (task.status === 'pending' && (!task.pipeline || task.pipeline.length === 0)) {
             if (task.task_type === 'GLOSSARY_ENTRY') {
@@ -224,13 +235,6 @@ export async function runDailyCycle(isManual: boolean = false) {
 
     const nextTask = refreshedRoadmap.tasks.find(t => t.status === 'pending');
     if (!nextTask) break;
-
-    const validTaskTypes = ['CREATE_CONTENT', 'FIX_AEO', 'FIX_GEO', 'FIX_MEDIA', 'FIX_KEYWORDS', 'FIX_TECHNICAL', 'GLOSSARY_ENTRY', 'TOOL_IMPROVEMENT'];
-    if (!nextTask.task_type || !validTaskTypes.includes(nextTask.task_type)) {
-        console.log(`[Dispatcher] Mapping unknown task type: ${nextTask.task_type}`);
-        nextTask.task_type = 'CREATE_CONTENT';
-        await saveRoadmap(refreshedRoadmap);
-    }
 
     let actionTaken = false;
     
