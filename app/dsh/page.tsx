@@ -241,6 +241,21 @@ export default function DashboardPage() {
                   <div className="flex-1 max-w-xs bg-white/5 border border-white/10 text-white/60 font-black uppercase tracking-widest text-[10px] py-4 rounded-xl text-center">
                      Idle &mdash; Autopilot Standby
                   </div>
+                  <button
+                   onClick={async () => {
+                     if(confirm('Reset ALL completed tasks to pending and re-run the pipeline?')) {
+                       const res = await fetch('/api/seo-os/reset-tasks', { method: 'POST' });
+                       const data = await res.json();
+                       if (data.success) {
+                         fetch('/api/seo-os/cron').catch(() => {});
+                         loadData();
+                       }
+                     }
+                   }}
+                   className="px-6 py-4 bg-white/10 border border-white/10 rounded-xl hover:bg-white/20 transition-all text-white text-[10px] font-black uppercase tracking-widest"
+                  >
+                     Reset &amp; Re-run All
+                  </button>
                 </div>
               </div>
             )}
@@ -437,24 +452,29 @@ export default function DashboardPage() {
                       ))}
                    </div>
                  ) : (
-                   <div className="text-center py-10 space-y-4">
-                      <Loader2 className="w-8 h-8 text-slate-200 mx-auto animate-spin" />
-                      <p className="text-sm text-slate-400 italic">Initializing expert pipeline for this task...</p>
-                   </div>
-                 )}
+                    <div className="text-center py-10 space-y-4">
+                       <AlertCircle className="w-8 h-8 text-slate-300 mx-auto" />
+                       <p className="text-sm text-slate-400 font-medium">Task pipeline not initialized</p>
+                       <p className="text-[10px] text-slate-400">Pipeline is created when the execution cycle processes this task. Hit <strong>Reset &amp; Re-run All</strong> below to trigger processing.</p>
+                    </div>
+                  )}
               </div>
 
-               <footer className="p-8 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-4">
+               <footer className="p-8 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <button
                    onClick={async () => {
                      if(confirm('Reset ALL completed tasks to pending and re-run the pipeline?')) {
                        const res = await fetch('/api/seo-os/reset-tasks', { method: 'POST' });
                        const data = await res.json();
-                       alert(data.success ? `Reset ${data.resetCount} tasks. Triggering pipeline...` : 'Error: ' + data.error);
                        if (data.success) {
-                         fetch('/api/seo-os/cron').catch(() => {});
                          setSelectedTaskDay(null);
                          loadData();
+                         const cronRes = await fetch('/api/seo-os/cron');
+                         const cronData = await cronRes.json();
+                         alert(`Reset ${data.resetCount} tasks. Pipeline: ${cronData.message || cronData.error}`);
+                         loadData();
+                       } else {
+                         alert('Error: ' + data.error);
                        }
                      }
                    }}
