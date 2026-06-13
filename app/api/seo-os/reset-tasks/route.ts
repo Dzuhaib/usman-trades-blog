@@ -2,13 +2,13 @@ import { NextResponse } from 'next/server';
 import { getRoadmap, saveRoadmap } from '@/lib/seo-os/roadmap-engine';
 import { logAgentAction } from '@/lib/seo-os/log-engine';
 import { verifyApiAuth } from '@/lib/seo-os/auth';
-import { heavyLimiter, getIdentifier } from '@/lib/seo-os/rate-limit';
+import { apiLimiter, getIdentifier } from '@/lib/seo-os/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   const id = getIdentifier(request);
-  const { success: withinLimit } = await heavyLimiter.limit(id);
+  const { success: withinLimit } = await apiLimiter.limit(id);
   if (!withinLimit) {
     return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
   }

@@ -20,12 +20,12 @@ export const apiLimiter = new Ratelimit({
 });
 
 /**
- * Heavy operation limiter — 5 requests per hour per IP.
- * Applied to /cron, /strategy (these trigger expensive AI/OpenAI calls).
+ * Medium operation limiter — 30 requests per hour per IP.
+ * Applied to endpoints that trigger AI calls or write operations (/cron, /strategy, /reset-tasks).
  */
 export const heavyLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(5, '1 h'),
+  limiter: Ratelimit.slidingWindow(30, '1 h'),
   analytics: false,
   prefix: 'ratelimit:heavy',
 });
