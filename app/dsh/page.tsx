@@ -227,6 +227,23 @@ export default function DashboardPage() {
                 </div>
               );
             })}
+
+            {roadmap?.tasks.filter(t => t.status === 'pending').length === 0 && (
+              <div className="bg-white/5 border border-white/10 p-8 rounded-[2rem] space-y-4 relative z-10 text-center">
+                <div className="text-4xl mb-2 opacity-30"><CheckCircle2 className="w-12 h-12 text-white mx-auto" /></div>
+                <h4 className="text-lg font-bold font-serif text-white">All Tasks Processed</h4>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  {roadmap?.tasks.filter(t => t.status === 'completed').length > 0
+                    ? `${roadmap.tasks.filter(t => t.status === 'completed').length} tasks completed. Waiting for the next strategy cycle (midnight).`
+                    : 'No tasks in the queue yet. Strategist will generate tasks on the next cycle.'}
+                </p>
+                <div className="pt-2 flex flex-wrap gap-4 justify-center">
+                  <div className="flex-1 max-w-xs bg-white/5 border border-white/10 text-white/60 font-black uppercase tracking-widest text-[10px] py-4 rounded-xl text-center">
+                     Idle &mdash; Autopilot Standby
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           
           {/* Quick Performance Snapshot */}
