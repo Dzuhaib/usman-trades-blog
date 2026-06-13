@@ -19,6 +19,7 @@ import { publishArticle } from './publisher-engine';
 import { logAgentAction } from './log-engine';
 import { performTechnicalAudit } from './technical-engine';
 import { delegateAuditTasks } from './ai-engine';
+import { saveContentOverride } from './article-engine';
 
 function updateStep(pipeline: PipelineStep[] | undefined, agent: string, status: PipelineStep['status'], message: string): PipelineStep[] {
   const steps = pipeline || [];
@@ -109,17 +110,18 @@ async function handleGlossaryWorkflow(task: RoadmapTask, roadmap: RoadmapData): 
 
 // Handler: Optimization Workflow
 // CRITICAL: This modifies existing pages — it does NOT create new articles.
+// Optimized content is persisted to Redis so it actually takes effect on the live site.
 async function handleOptimizationWorkflow(task: RoadmapTask, roadmap: RoadmapData): Promise<boolean> {
     task.pipeline = updateStep(task.pipeline, 'Review Agent', 'active', `Optimizing existing page for: ${task.keyword}`);
     await saveRoadmap(roadmap);
 
-    const { BLOG_POSTS } = await import('@/lib/blogData');
-    const existingPost = BLOG_POSTS.find(p =>
-      p.title.toLowerCase().includes(task.keyword.toLowerCase()) ||
-      p.slug.includes(task.keyword.toLowerCase().replace(/\s+/g, '-'))
-    );
+    // Extract slug from URL-like keyword (e.g. "/blog/posts/bitcoin-risk-management" → "bitcoin-risk-management")
+    const blogMatch = task.keyword.match(/\/blog\/posts\/(.+)/);
+    const slug = blogMatch ? blogMatch[1] : null;
 
-    const existingContent = existingPost?.content || '';
+    const { BLOG_POSTS } = await import('@/lib/blogData');
+    const existingPost = slug ? BLOG_POSTS.find(p => p.slug === slug) : null;
+
     const optimizationType = task.task_type === 'FIX_AEO' ? 'AEO (Answer Engine Optimization)' :
                              task.task_type === 'FIX_GEO' ? 'GEO (Geographic Optimization)' :
                              task.task_type === 'FIX_KEYWORDS' ? 'Keyword gap and semantic optimization' :
@@ -127,11 +129,18 @@ async function handleOptimizationWorkflow(task: RoadmapTask, roadmap: RoadmapDat
                              task.task_type === 'FIX_MEDIA' ? 'Media and image optimization' :
                              'On-page SEO optimization';
 
-    if (existingContent) {
-      task.rawContent = await optimizeExistingPage(task.keyword, existingContent, optimizationType);
-      task.pipeline = updateStep(task.pipeline, 'Review Agent', 'completed', 'Page optimized.');
+    if (existingPost && existingPost.content) {
+      const optimizedContent = await optimizeExistingPage(task.keyword, existingPost.content, optimizationType);
+      if (optimizedContent) {
+        await saveContentOverride(slug!, { content: optimizedContent });
+        task.pipeline = updateStep(task.pipeline, 'Review Agent', 'completed', `Page optimized and saved to Redis for slug: ${slug}.`);
+      } else {
+        task.pipeline = updateStep(task.pipeline, 'Review Agent', 'completed', 'Optimization returned no content.');
+      }
+    } else if (slug && !existingPost) {
+      task.pipeline = updateStep(task.pipeline, 'Review Agent', 'completed', `No blog post found for slug: ${slug}. Skipped.`);
     } else {
-      task.pipeline = updateStep(task.pipeline, 'Review Agent', 'completed', 'No existing page found for optimization.');
+      task.pipeline = updateStep(task.pipeline, 'Review Agent', 'completed', `Non-blog page (${task.keyword}), no content to optimize. Skipped.`);
     }
 
     task.pipeline = updateStep(task.pipeline, 'Submission Agent', 'active', 'Pinging GSC...');
@@ -195,11 +204,10 @@ export async function runDailyCycle(isManual: boolean = false) {
                     { agent: 'Glossary Agent', status: 'pending', message: 'Generating definition.' },
                     { agent: 'Publish Agent', status: 'pending', message: 'Waiting for deployment.' }
                 ];
-            } else if (task.task_type === 'FIX_MEDIA' || task.task_type === 'FIX_TECHNICAL') {
+            } else if (task.task_type.startsWith('FIX_') || task.task_type === 'TOOL_IMPROVEMENT') {
                 task.pipeline = [
-                    { agent: 'Technical Auditor', status: 'pending', message: 'Analyzing CTR gaps.' },
-                    { agent: 'Review Agent', status: 'pending', message: 'Optimizing meta tags.' },
-                    { agent: 'Submission Agent', status: 'pending', message: 'Requesting GSC re-index.' }
+                    { agent: 'Review Agent', status: 'pending', message: 'Running optimization.' },
+                    { agent: 'Submission Agent', status: 'pending', message: 'Waiting to request re-index.' }
                 ];
             } else {
                 task.pipeline = [

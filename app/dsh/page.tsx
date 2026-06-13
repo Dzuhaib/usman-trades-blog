@@ -427,14 +427,31 @@ export default function DashboardPage() {
                  )}
               </div>
 
-              <footer className="p-8 bg-slate-50 border-t border-slate-100 flex justify-end">
-                 <button 
-                  onClick={() => setSelectedTaskDay(null)}
-                  className="px-8 py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-900 hover:bg-slate-50 transition-all"
-                 >
-                    Close Tracking
-                 </button>
-              </footer>
+               <footer className="p-8 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-4">
+                  <button
+                   onClick={async () => {
+                     if(confirm('Reset ALL completed tasks to pending and re-run the pipeline?')) {
+                       const res = await fetch('/api/seo-os/reset-tasks', { method: 'POST' });
+                       const data = await res.json();
+                       alert(data.success ? `Reset ${data.resetCount} tasks. Triggering pipeline...` : 'Error: ' + data.error);
+                       if (data.success) {
+                         fetch('/api/seo-os/cron').catch(() => {});
+                         setSelectedTaskDay(null);
+                         loadData();
+                       }
+                     }
+                   }}
+                   className="px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                  >
+                     Reset &amp; Re-run All
+                  </button>
+                  <button 
+                   onClick={() => setSelectedTaskDay(null)}
+                   className="px-8 py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-900 hover:bg-slate-50 transition-all"
+                  >
+                     Close Tracking
+                  </button>
+               </footer>
            </div>
         </div>
       )}
