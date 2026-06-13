@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { getRedis } from '@/lib/seo-os/redis';
-import { verifyApiAuth } from '@/lib/seo-os/auth';
 import { apiLimiter, getIdentifier } from '@/lib/seo-os/rate-limit';
 
 export const dynamic = 'force-dynamic';
@@ -11,9 +10,6 @@ export async function POST(request: Request) {
   if (!withinLimit) {
     return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
   }
-
-  const auth = await verifyApiAuth(request);
-  if (auth instanceof NextResponse) return auth;
 
   try {
     const redis = getRedis();
