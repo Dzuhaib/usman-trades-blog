@@ -153,21 +153,26 @@ export async function runDailyCycle(isManual: boolean = false) {
   }
 
   // 1. PROACTIVE RESEARCH (Always active check)
-  const currentRoadmap = await getRoadmap();
-  if (currentRoadmap) {
-    const lastUpdate = new Date(currentRoadmap.updatedAt).getTime();
-    const oneHourAgo = Date.now() - (60 * 60 * 1000);
+  try {
+    const currentRoadmap = await getRoadmap();
+    if (currentRoadmap) {
+      const lastUpdate = new Date(currentRoadmap.updatedAt).getTime();
+      const oneHourAgo = Date.now() - (60 * 60 * 1000);
 
-    if (lastUpdate < oneHourAgo) {
-      await logAgentAction('Monitor Agent', 'active', 'Running proactive opportunity research...');
-      const gscData = await getPerformanceReport();
-      await performTechnicalAudit();
-      const audit = await performComprehensiveAudit(gscData);
-      await saveAuditReport({ ...audit, timestamp: new Date().toISOString() });
-      const newTasks = await delegateAuditTasks(audit);
-      await updateRoadmapWithNewTasks(newTasks);
-      await logAgentAction('Audit Agent', 'success', `Audit complete. Delegated ${newTasks.length} tasks.`);
+      if (lastUpdate < oneHourAgo) {
+        await logAgentAction('Monitor Agent', 'active', 'Running proactive opportunity research...');
+        const gscData = await getPerformanceReport();
+        await performTechnicalAudit();
+        const audit = await performComprehensiveAudit(gscData);
+        await saveAuditReport({ ...audit, timestamp: new Date().toISOString() });
+        const newTasks = await delegateAuditTasks(audit);
+        await updateRoadmapWithNewTasks(newTasks);
+        await logAgentAction('Audit Agent', 'success', `Audit complete. Delegated ${newTasks.length} tasks.`);
+      }
     }
+  } catch (researchError: any) {
+    console.error('[Orchestrator] Proactive research failed (non-fatal):', researchError.message);
+    await logAgentAction('Orchestrator', 'error', `Research skipped: ${researchError.message}`);
   }
 
   // 2. AUTONOMOUS EXECUTION LOOP

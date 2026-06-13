@@ -142,7 +142,10 @@ export default function DashboardPage() {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ action: 'toggle-status', status: newStatus })
                       });
-                      if(res.ok) loadData();
+                      if (res.ok && newStatus === 'active') {
+                        fetch('/api/seo-os/cron').catch(() => {});
+                      }
+                      loadData();
                     }
                   }}
                   className={`text-[10px] font-black uppercase tracking-widest px-6 py-3 rounded-xl transition-all border ${

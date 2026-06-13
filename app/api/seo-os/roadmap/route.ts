@@ -3,7 +3,6 @@ import { getRoadmap, saveRoadmap, RoadmapTask, TaskType } from '@/lib/seo-os/roa
 import { logAgentAction } from '@/lib/seo-os/log-engine';
 import { verifyApiAuth } from '@/lib/seo-os/auth';
 import { apiLimiter, getIdentifier } from '@/lib/seo-os/rate-limit';
-import { runDailyCycle } from '@/lib/seo-os/orchestrator';
 
 export const dynamic = 'force-dynamic';
 
@@ -55,7 +54,6 @@ export async function POST(request: Request) {
       
       if (status === 'active') {
         await logAgentAction('Orchestrator', 'success', 'Professional SEO Experts Activated. System in high-alert mode.');
-        runDailyCycle(true).catch(e => console.error('[Cycle] Background cycle error:', e));
       } else {
         await logAgentAction('Orchestrator', 'idle', 'System Hibernated. Agents on standby.');
       }
