@@ -188,6 +188,8 @@ export async function optimizeExistingPage(keyword: string, existingContent: str
     7. NO AI-ISMS: Avoid "delve", "tapestry", "embark", "furthermore", "in conclusion".
     8. Return the FULL optimised page content, not just the changes.
     9. Do not repeat the target keyword more than 3 times total in the entire output.
+    10. Expand thin sections. Target a 10-15 minute read total.
+    11. GOOGLE ADSENSE: Content must be original, demonstrate E-E-A-T, and provide unique value. No spun or auto-generated phrasing.
   `;
 
   const userPrompt = `
@@ -225,22 +227,23 @@ export async function generateAIPost(keyword: string) {
     YOUR OUTPUT MUST COMPLY WITH ALL RULES IN ONE ATTEMPT. DO NOT REQUIRE REVISION.
 
     STRICT WRITING RULES (ANTI-AI & BLOG STANDARDS):
-    1. LENGTH: 1200-1800 words.
+    1. LENGTH: 3000-4000 words.
     2. NO DASHES: The use of dashes (-) is BANNED.
     3. VOICE: Direct, blunt, technical. Use "I".
     4. AEO: Paragraph 1 is a direct 40-50 word answer.
     5. FORMAT: NO HTML, NO LATEX. Bold plain text for math.
     6. LINKS: 3-5 [LINK_url:label] placeholders.
     7. NO AI-ISMS: Avoid "delve", "tapestry", "embark", "furthermore", "in conclusion".
+    8. GOOGLE ADSENSE: Content must be original, substantive, and provide unique value. No auto-generated or spun content. Must satisfy a genuine user intent with depth and expertise.
     
     PRE-DRAFT CHECKLIST:
     - Are there any dashes? If yes, REWRITE.
-    - Is word count > 1200? If no, EXPAND.
+    - Is word count > 3000? If no, EXPAND with more examples, data, and analysis.
     - Is paragraph 1 a direct answer? If no, REWRITE.
   `;
 
   const userPrompt = `
-    Write a natural, professional guide for: "${keyword}".
+    Write an in-depth, comprehensive guide for: "${keyword}". Target at least 3500 words.
     
     DO NOT use numbered sections or headings like "Introduction:", "Main Concept:", "AEO Summary:", etc.
     DO NOT repeat the exact keyword "${keyword}" more than 3 times total in the entire article.
@@ -249,14 +252,22 @@ export async function generateAIPost(keyword: string) {
     What to include naturally within the flow:
     - Opening paragraph that directly answers the search intent (45-50 words)
     - Technical depth with practical trader insights
-    - A realistic trading math example with numbers
+    - Multiple realistic trading math examples with numbers and **bold** figures
     - Common mistakes traders make
     - Risk management perspective
-    - 3-5 FAQ items at the end
-    - A closing paragraph with takeaways
+    - 4-6 FAQ items at the end
+    - A closing paragraph with actionable takeaways
+    - Add real data points, statistics, and references where applicable
+    - Include at least 3 separate trading scenarios or case examples
+
+    Google AdSense compliance:
+    - Content must be original and provide substantial value
+    - No auto-generated or spun phrasing
+    - Must demonstrate expertise, authority, and trustworthiness (E-E-A-T)
+    - Must satisfy a genuine user search intent with comprehensive depth
 
     Formatting rules:
-    - Place 4 image markers sparingly: [IMAGE_1], [IMAGE_2], [IMAGE_3], [IMAGE_4]
+    - Place 4-5 image markers: [IMAGE_1], [IMAGE_2], [IMAGE_3], [IMAGE_4], [IMAGE_5]
     - Include 3-5 [LINK_url:label] placeholders where they fit naturally
     - Include 1 [TOOL_slug] placeholder
     - NO dash characters anywhere

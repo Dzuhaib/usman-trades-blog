@@ -39,7 +39,7 @@ export async function publishArticle(slug: string, title: string, content: strin
     slug,
     title,
     excerpt: content.substring(0, 160).replace(/\n/g, ' ') + '...',
-    content: `${content}\n\n*Disclaimer: This article was generated with the assistance of AI technology and reviewed by our editorial team.*`, // The full AI-generated article with disclosure
+    content,
     category: category || 'Risk Management',
     date: formattedDate,
     updatedAt: formattedDate,
