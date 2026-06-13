@@ -238,9 +238,6 @@ export default function DashboardPage() {
                     : 'No tasks in the queue yet. Strategist will generate tasks on the next cycle.'}
                 </p>
                 <div className="pt-2 flex flex-wrap gap-4 justify-center">
-                  <div className="flex-1 max-w-xs bg-white/5 border border-white/10 text-white/60 font-black uppercase tracking-widest text-[10px] py-4 rounded-xl text-center">
-                     Idle &mdash; Autopilot Standby
-                  </div>
                   <button
                    onClick={async () => {
                      if(confirm('Reset ALL completed tasks to pending and re-run the pipeline?')) {
@@ -255,6 +252,19 @@ export default function DashboardPage() {
                    className="px-6 py-4 bg-white/10 border border-white/10 rounded-xl hover:bg-white/20 transition-all text-white text-[10px] font-black uppercase tracking-widest"
                   >
                      Reset &amp; Re-run All
+                  </button>
+                  <button
+                   onClick={async () => {
+                     if(confirm('Remove all AI-generated blogs and content overrides from Redis?')) {
+                       const res = await fetch('/api/seo-os/clear-blogs', { method: 'POST' });
+                       const data = await res.json();
+                       alert(data.success ? `Cleared: ${data.cleared.dynamicPosts} dynamic posts, ${data.cleared.contentOverrides} overrides` : 'Error: ' + data.error);
+                       if (data.success) loadData();
+                     }
+                   }}
+                   className="px-6 py-4 bg-rose-500/20 border border-rose-500/30 rounded-xl hover:bg-rose-500/30 transition-all text-rose-400 text-[10px] font-black uppercase tracking-widest"
+                  >
+                     Clear Today's Blogs
                   </button>
                 </div>
               </div>
