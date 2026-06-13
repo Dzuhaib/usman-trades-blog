@@ -10,7 +10,9 @@ import {
   generateGlossaryEntry,
   reviewContent,
   performComprehensiveAudit,
-  optimizeExistingPage
+  optimizeExistingPage,
+  performKeywordResearch,
+  checkGoogleNews
 } from './ai-engine';
 import { getRoadmap, saveRoadmap, PipelineStep, RoadmapData, RoadmapTask, updateRoadmapWithNewTasks } from './roadmap-engine';
 import { getAuditReport, saveAuditReport } from './audit-engine';
@@ -19,21 +21,36 @@ import { publishArticle } from './publisher-engine';
 import { logAgentAction } from './log-engine';
 import { performTechnicalAudit } from './technical-engine';
 import { delegateAuditTasks } from './ai-engine';
-import { saveContentOverride } from './article-engine';
+import { saveContentOverride, getDynamicPosts } from './article-engine';
 
 function updateStep(pipeline: PipelineStep[] | undefined, agent: string, status: PipelineStep['status'], message: string): PipelineStep[] {
   const steps = pipeline || [];
   return steps.map(s => s.agent === agent ? { ...s, status, message, completedAt: status === 'completed' ? new Date().toISOString() : s.completedAt } : s);
 }
 
-// Handler: Article Workflow
+// Handler: Article Workflow with keyword research, SEO titles, and 1-per-day scheduling
 async function handleArticleWorkflow(task: RoadmapTask, roadmap: RoadmapData): Promise<boolean> {
     if (!task.rawContent) {
-        task.pipeline = updateStep(task.pipeline, 'Writer Agent', 'active', 'Drafting...');
+        // KEYWORD RESEARCH PHASE: research first like a human would
+        task.pipeline = updateStep(task.pipeline, 'Writer Agent', 'active', 'Researching keywords and news...');
         await saveRoadmap(roadmap);
-        const content = await generateAIPost(task.keyword);
+
+        const { BLOG_POSTS } = await import('@/lib/blogData');
+        const existingSlugs = BLOG_POSTS.map(p => p.slug);
+        const research = await performKeywordResearch(task.keyword, existingSlugs);
+        const news = await checkGoogleNews(task.keyword);
+        const newsContext = news.slice(0, 3).map(n => `${n.title} (${n.source})`).join('; ');
+        const seoTitle = research.seoTitle || task.keyword;
+
+        await logAgentAction('Research Agent', 'success', `Keyword: ${research.keyword} | Title: ${seoTitle} | News: ${news.length > 0 ? 'Found' : 'None'}`);
+
+        task.pipeline = updateStep(task.pipeline, 'Writer Agent', 'active', `Writing: ${seoTitle}`);
+        await saveRoadmap(roadmap);
+
+        const content = await generateAIPost(task.keyword, seoTitle, newsContext);
         if (!content) throw new Error('Writer Agent failed');
         task.rawContent = content;
+        task.keyword = seoTitle;
         task.pipeline = updateStep(task.pipeline, 'Writer Agent', 'completed', 'Drafted.');
         await saveRoadmap(roadmap);
         return true;
@@ -62,9 +79,22 @@ async function handleArticleWorkflow(task: RoadmapTask, roadmap: RoadmapData): P
         return true;
     }
     if (task.finalContent && !task.publishedUrl) {
+        // 1-ARTICLE-PER-DAY SCHEDULING: check if a post was published in the last 24 hours
+        const dynamicPosts = await getDynamicPosts();
+        if (dynamicPosts.length > 0) {
+            const lastPost = dynamicPosts[0];
+            const lastDate = new Date(lastPost.updatedAt || lastPost.date);
+            const hoursSinceLastPost = (Date.now() - lastDate.getTime()) / (1000 * 60 * 60);
+            if (hoursSinceLastPost < 24) {
+                const nextAvailable = new Date(lastDate.getTime() + 24 * 60 * 60 * 1000);
+                await logAgentAction('Publish Agent', 'idle', `Waiting until ${nextAvailable.toLocaleString()} for next article (1/day drip feed).`);
+                return false;
+            }
+        }
+
         task.pipeline = updateStep(task.pipeline, 'Publish Agent', 'active', 'Deploying...');
         await saveRoadmap(roadmap);
-        const slug = task.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
+        const slug = task.keyword.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '').replace(/-+/g, '-').replace(/^-|-$/g, '');
         const res = await publishArticle(slug, task.keyword, task.finalContent, 'Risk Management');
         if (res.success) {
             task.status = 'completed';
@@ -185,88 +215,88 @@ export async function runDailyCycle(isManual: boolean = false) {
   }
 
   // 2. AUTONOMOUS EXECUTION LOOP
-  let workDoneCount = 0;
-  const maxWorkPerCycle = 100;
+  const validTaskTypes = ['CREATE_CONTENT', 'FIX_AEO', 'FIX_GEO', 'FIX_MEDIA', 'FIX_KEYWORDS', 'FIX_TECHNICAL', 'GLOSSARY_ENTRY', 'TOOL_IMPROVEMENT'];
 
-  while (workDoneCount < maxWorkPerCycle) {
-    const refreshedRoadmap = await getRoadmap();
-    if (!refreshedRoadmap || refreshedRoadmap.systemStatus === 'paused') break;
+  // Phase A: Initialize pipelines for all pending tasks
+  let tasksUpdated = false;
+  const refreshedRoadmap = await getRoadmap();
+  if (!refreshedRoadmap || refreshedRoadmap.systemStatus === 'paused') return { success: false, error: 'Paused' };
 
-    const validTaskTypes = ['CREATE_CONTENT', 'FIX_AEO', 'FIX_GEO', 'FIX_MEDIA', 'FIX_KEYWORDS', 'FIX_TECHNICAL', 'GLOSSARY_ENTRY', 'TOOL_IMPROVEMENT'];
+  refreshedRoadmap.tasks.sort((a, b) => a.day - b.day);
 
-    // Sort by day to enforce strict sequential execution
-    refreshedRoadmap.tasks.sort((a, b) => a.day - b.day);
-
-    let tasksUpdated = false;
-
-    // Normalize unknown task types before pipeline init
-    refreshedRoadmap.tasks.forEach(task => {
-        if (!task.task_type || !validTaskTypes.includes(task.task_type)) {
-            task.task_type = 'CREATE_CONTENT';
-            tasksUpdated = true;
-        }
-    });
-
-    // Initialization check
-    refreshedRoadmap.tasks.forEach(task => {
-        if (task.status === 'pending' && (!task.pipeline || task.pipeline.length === 0)) {
-            if (task.task_type === 'GLOSSARY_ENTRY') {
-                task.pipeline = [
-                    { agent: 'Glossary Agent', status: 'pending', message: 'Generating definition.' },
-                    { agent: 'Publish Agent', status: 'pending', message: 'Waiting for deployment.' }
-                ];
-            } else if (task.task_type.startsWith('FIX_') || task.task_type === 'TOOL_IMPROVEMENT') {
-                task.pipeline = [
-                    { agent: 'Review Agent', status: 'pending', message: 'Running optimization.' },
-                    { agent: 'Submission Agent', status: 'pending', message: 'Waiting to request re-index.' }
-                ];
-            } else {
-                task.pipeline = [
-                    { agent: 'Writer Agent', status: 'pending', message: 'Researching context.' },
-                    { agent: 'Review Agent', status: 'pending', message: 'Editorial loop.' },
-                    { agent: 'Linking Agent', status: 'pending', message: 'Internal linking.' },
-                    { agent: 'Publish Agent', status: 'pending', message: 'Live deployment.' }
-                ];
-            }
-            tasksUpdated = true;
-        }
-    });
-    if (tasksUpdated) await saveRoadmap(refreshedRoadmap);
-
-    const nextTask = refreshedRoadmap.tasks.find(t => t.status === 'pending');
-    if (!nextTask) break;
-
-    let actionTaken = false;
-    
-    // DISPATCHER
-    try {
-        switch (nextTask.task_type) {
-            case 'CREATE_CONTENT':
-                actionTaken = await handleArticleWorkflow(nextTask, refreshedRoadmap);
-                break;
-            case 'FIX_AEO':
-            case 'FIX_GEO':
-            case 'FIX_KEYWORDS':
-            case 'FIX_TECHNICAL':
-            case 'FIX_MEDIA':
-            case 'TOOL_IMPROVEMENT':
-                actionTaken = await handleOptimizationWorkflow(nextTask, refreshedRoadmap);
-                break;
-            case 'GLOSSARY_ENTRY':
-                actionTaken = await handleGlossaryWorkflow(nextTask, refreshedRoadmap);
-                break;
-            default:
-                console.error(`[Dispatcher] Unknown task type: ${nextTask.task_type}`);
-                nextTask.status = 'failed';
-                await saveRoadmap(refreshedRoadmap);
-        }
-    } catch (e: any) {
-        console.error(`[Dispatcher] Fatal Error on task ${nextTask.keyword}: ${e.message}`);
-        nextTask.status = 'failed';
-        await saveRoadmap(refreshedRoadmap);
+  refreshedRoadmap.tasks.forEach(task => {
+    if (!task.task_type || !validTaskTypes.includes(task.task_type)) {
+      task.task_type = 'CREATE_CONTENT';
+      tasksUpdated = true;
     }
-    
-    if (!actionTaken) break;
+    if (task.status === 'pending' && (!task.pipeline || task.pipeline.length === 0)) {
+      if (task.task_type === 'GLOSSARY_ENTRY') {
+        task.pipeline = [
+          { agent: 'Glossary Agent', status: 'pending', message: 'Generating definition.' },
+          { agent: 'Publish Agent', status: 'pending', message: 'Waiting for deployment.' }
+        ];
+      } else if (task.task_type.startsWith('FIX_') || task.task_type === 'TOOL_IMPROVEMENT') {
+        task.pipeline = [
+          { agent: 'Review Agent', status: 'pending', message: 'Running optimization.' },
+          { agent: 'Submission Agent', status: 'pending', message: 'Waiting to request re-index.' }
+        ];
+      } else if (task.task_type === 'CREATE_CONTENT') {
+        task.pipeline = [
+          { agent: 'Research Agent', status: 'pending', message: 'Keyword research phase.' },
+          { agent: 'Writer Agent', status: 'pending', message: 'Writing phase.' },
+          { agent: 'Review Agent', status: 'pending', message: 'Editorial loop.' },
+          { agent: 'Linking Agent', status: 'pending', message: 'Internal linking.' },
+          { agent: 'Publish Agent', status: 'pending', message: 'Live deployment.' }
+        ];
+      }
+      tasksUpdated = true;
+    }
+  });
+  if (tasksUpdated) await saveRoadmap(refreshedRoadmap);
+
+  // Phase B: Process all FIX_* tasks first (batch optimizations are fast)
+  const fixTasks = refreshedRoadmap.tasks.filter(t => t.status === 'pending' && (t.task_type.startsWith('FIX_') || t.task_type === 'TOOL_IMPROVEMENT'));
+  for (const fixTask of fixTasks) {
+    let actionTaken = false;
+    try {
+      switch (fixTask.task_type) {
+        case 'FIX_AEO': case 'FIX_GEO': case 'FIX_KEYWORDS':
+        case 'FIX_TECHNICAL': case 'FIX_MEDIA': case 'TOOL_IMPROVEMENT':
+          actionTaken = await handleOptimizationWorkflow(fixTask, refreshedRoadmap);
+          break;
+        default:
+          fixTask.status = 'failed';
+          await saveRoadmap(refreshedRoadmap);
+      }
+    } catch (e: any) {
+      console.error(`[Dispatcher] Fatal Error on task ${fixTask.keyword}: ${e.message}`);
+      fixTask.status = 'failed';
+      await saveRoadmap(refreshedRoadmap);
+    }
+  }
+
+  // Phase C: Process at most ONE article (subject to 24-hour drip feed)
+  const articleTask = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.task_type === 'CREATE_CONTENT');
+  if (articleTask) {
+    try {
+      await handleArticleWorkflow(articleTask, refreshedRoadmap);
+    } catch (e: any) {
+      console.error(`[Dispatcher] Fatal Error on article ${articleTask.keyword}: ${e.message}`);
+      articleTask.status = 'failed';
+      await saveRoadmap(refreshedRoadmap);
+    }
+  }
+
+  // Phase D: Process at most ONE glossary entry
+  const glossaryTask = refreshedRoadmap.tasks.find(t => t.status === 'pending' && t.task_type === 'GLOSSARY_ENTRY');
+  if (glossaryTask) {
+    try {
+      await handleGlossaryWorkflow(glossaryTask, refreshedRoadmap);
+    } catch (e: any) {
+      console.error(`[Dispatcher] Fatal Error on glossary ${glossaryTask.keyword}: ${e.message}`);
+      glossaryTask.status = 'failed';
+      await saveRoadmap(refreshedRoadmap);
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { AuditReport } from './audit-engine';
+import { getRedis } from './redis';
 
-// Create a singleton for the OpenAI client to avoid re-instantiation
 let openaiClient: OpenAI | null = null;
 
 function getOpenAIClient() {
@@ -22,6 +22,91 @@ export interface SEOMap {
   intent: string;
   type: 'article' | 'tool_improvement' | 'faq' | 'glossary';
   priority: 'high' | 'medium' | 'low';
+}
+
+export interface KeywordResearch {
+  keyword: string;
+  seoTitle: string;
+  searchVolume: string;
+  intent: string;
+  relatedKeywords: string[];
+  existingContentGap: boolean;
+  newsAngle: string;
+}
+
+export interface NewsItem {
+  title: string;
+  source: string;
+  url: string;
+  publishedAt: string;
+}
+
+export async function checkGoogleNews(query: string): Promise<NewsItem[]> {
+  try {
+    const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query + ' trading finance')}&hl=en-US&gl=US`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const response = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeoutId);
+    const text = await response.text();
+    const items: NewsItem[] = [];
+    const titleRegex = /<title>(.+?)<\/title>/g;
+    const linkRegex = /<link>(.+?)<\/link>/g;
+    const pubRegex = /<pubDate>(.+?)<\/pubDate>/g;
+    const titles = Array.from(text.matchAll(titleRegex)).slice(1, 8);
+    const links = Array.from(text.matchAll(linkRegex)).slice(1, 8);
+    const dates = Array.from(text.matchAll(pubRegex)).slice(0, 7);
+    for (let i = 0; i < titles.length; i++) {
+      items.push({
+        title: titles[i][1].replace(/ - .*$/, '').trim(),
+        source: titles[i][1].includes(' - ') ? titles[i][1].split(' - ').pop()!.trim() : 'Google News',
+        url: links[i]?.[1] || '',
+        publishedAt: dates[i]?.[1] || '',
+      });
+    }
+    return items;
+  } catch {
+    return [];
+  }
+}
+
+export async function performKeywordResearch(topic: string, existingSlugs: string[]): Promise<KeywordResearch> {
+  const openai = getOpenAIClient();
+  const news = await checkGoogleNews(topic);
+  const newsContext = news.length > 0 ? `\nRecent news context:\n${news.map(n => `- ${n.title} (${n.source})`).join('\n')}` : '';
+
+  const prompt = `
+    You are a senior SEO strategist and keyword researcher. Research the topic: "${topic}".
+
+    Existing blog post slugs (DO NOT suggest these exact slugs): ${existingSlugs.join(', ') || 'none yet'}.
+
+    ${newsContext}
+
+    Return JSON with:
+    {
+      "keyword": "best keyword phrase for this topic (1-4 words, high search intent)",
+      "seoTitle": "SEO-optimized, click-worthy title (55-60 chars, human-written, includes keyword naturally, no clickbait)",
+      "searchVolume": "High / Medium / Low (estimate based on competition)",
+      "intent": "informational / commercial / transactional",
+      "relatedKeywords": ["3-5 related long-tail keyword phrases"],
+      "existingContentGap": true/false (true if no existing slug covers this well),
+      "newsAngle": "One sentence on how recent news connects to this topic (or empty string if no relevant news)"
+    }
+  `;
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        { role: "system", content: "You are a data-driven SEO keyword researcher. Return valid JSON." },
+        { role: "user", content: prompt }
+      ],
+      response_format: { type: "json_object" },
+    });
+    return JSON.parse(response.choices[0].message.content || '{}');
+  } catch {
+    return { keyword: topic, seoTitle: topic, searchVolume: 'Medium', intent: 'informational', relatedKeywords: [], existingContentGap: true, newsAngle: '' };
+  }
 }
 
 /**
@@ -220,14 +305,17 @@ export async function optimizeExistingPage(keyword: string, existingContent: str
  * Phase 4: Writer Agent (E-E-A-T & AEO Focused - ONE SHOT)
  * Used ONLY for genuinely new content creation, never for optimization tasks.
  */
-export async function generateAIPost(keyword: string) {
+export async function generateAIPost(keyword: string, seoTitle?: string, newsContext?: string) {
   const openai = getOpenAIClient();
+  const title = seoTitle || keyword;
+  const newsSection = newsContext ? `\n\nRelevant recent news context to incorporate naturally:\n${newsContext}` : '';
+
   const systemPrompt = `
     You are Muhammad Usman, an expert Market Analyst. 
     YOUR OUTPUT MUST COMPLY WITH ALL RULES IN ONE ATTEMPT. DO NOT REQUIRE REVISION.
 
     STRICT WRITING RULES (ANTI-AI & BLOG STANDARDS):
-    1. LENGTH: 3000-4000 words.
+    1. LENGTH: 3000-4000 words (aim for 3500+).
     2. NO DASHES: The use of dashes (-) is BANNED.
     3. VOICE: Direct, blunt, technical. Use "I".
     4. AEO: Paragraph 1 is a direct 40-50 word answer.
@@ -243,7 +331,10 @@ export async function generateAIPost(keyword: string) {
   `;
 
   const userPrompt = `
-    Write an in-depth, comprehensive guide for: "${keyword}". Target at least 3500 words.
+    Title: "${title}"
+    Target keyword: "${keyword}"${newsSection}
+    
+    Write an in-depth, comprehensive guide. Target at least 3500 words.
     
     DO NOT use numbered sections or headings like "Introduction:", "Main Concept:", "AEO Summary:", etc.
     DO NOT repeat the exact keyword "${keyword}" more than 3 times total in the entire article.
@@ -255,7 +346,7 @@ export async function generateAIPost(keyword: string) {
     - Multiple realistic trading math examples with numbers and **bold** figures
     - Common mistakes traders make
     - Risk management perspective
-    - 4-6 FAQ items at the end
+    - 5-7 FAQ items at the end
     - A closing paragraph with actionable takeaways
     - Add real data points, statistics, and references where applicable
     - Include at least 3 separate trading scenarios or case examples
@@ -333,12 +424,23 @@ export async function performComprehensiveAudit(gscData: any[]): Promise<AuditRe
  */
 export async function delegateAuditTasks(audit: AuditReport): Promise<SEOMap[]> {
   const openai = getOpenAIClient();
+
+  const { BLOG_POSTS } = await import('@/lib/blogData');
+  const existingRoutes = BLOG_POSTS.map(p => p.route);
+  const existingTitles = BLOG_POSTS.map(p => p.title);
+  const existingContent = BLOG_POSTS.map(p => ({ slug: p.slug, title: p.title, route: p.route, hasContent: !!p.content }));
+
   const prompt = `
     Analyze this SEO Audit Report: ${JSON.stringify(audit)}
     
+    EXISTING PAGES ON SITE (check these for optimization needs):
+    ${JSON.stringify(existingContent)}
+    
     CRITICAL RULE: Always create FIX_* (optimization) tasks instead of CREATE_CONTENT tasks.
-    NEVER create a CREATE_CONTENT task for a page that already exists. 
-    Only use CREATE_CONTENT when the audit identifies a completely missing topic with no existing page.
+    For EVERY existing page in the list above that has an issue in the audit OR could be improved, create a FIX_* task.
+    
+    Only use CREATE_CONTENT when the audit identifies a completely missing topic that is NOT covered by any existing page title.
+    Existing titles: ${JSON.stringify(existingTitles)}
 
     Map the issue type to the correct task_type:
     - technical -> FIX_TECHNICAL
@@ -347,15 +449,18 @@ export async function delegateAuditTasks(audit: AuditReport): Promise<SEOMap[]> 
     - aio -> FIX_AEO
     - media -> FIX_MEDIA
     - keywords -> FIX_KEYWORDS
+
+    Also suggest new content topics (CREATE_CONTENT) for trending keywords NOT covered by existing titles.
     
     Return a JSON object with a "tasks" key.
     Each object: { "day": number, "keyword": string, "task_type": "FIX_TECHNICAL" | "FIX_GEO" | "FIX_AEO" | "FIX_MEDIA" | "FIX_KEYWORDS" | "CREATE_CONTENT", "priority": "high" | "medium" | "low", "expert_note": "..." }.
+    For FIX_* tasks, keyword should be the page URL or slug. For CREATE_CONTENT, keyword should be the new topic.
   `;
 
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [{ role: "system", content: "You are an expert SEO task delegator. Your default is optimization (FIX_*), not creation (CREATE_CONTENT). You MUST return valid JSON." }, { role: "user", content: prompt }],
+      messages: [{ role: "system", content: "You are an expert SEO task delegator. Default to FIX_* tasks for existing pages. Return valid JSON." }, { role: "user", content: prompt }],
       response_format: { type: "json_object" },
     });
     const data = JSON.parse(response.choices[0].message.content || '{"tasks": []}');
