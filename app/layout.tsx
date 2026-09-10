@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import CookieConsent from "@/components/CookieConsent";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -108,6 +109,7 @@ export default function RootLayout({
           async 
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5017133932206570"
           crossOrigin="anonymous"
+          data-ad-format="auto"
         ></script>
       </head>
       <body className="min-h-full flex flex-col bg-white text-primary selection:bg-accent/15 overflow-x-hidden">
@@ -116,6 +118,7 @@ export default function RootLayout({
         <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 py-8 md:px-6 md:py-12">
           {children}
         </main>
+        <CookieConsent />
         <Footer />
       </body>
     </html>

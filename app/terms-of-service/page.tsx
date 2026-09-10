@@ -48,7 +48,17 @@ export default function TermsOfService() {
       </section>
 
       <section className="space-y-4 text-secondary leading-relaxed">
-        <h2 className="text-xl font-bold text-primary">5. Contact Information</h2>
+        <h2 className="text-xl font-bold text-primary">5. Cookies and Tracking Technologies</h2>
+        <p>
+          Our website uses cookies and similar tracking technologies to enhance your experience, analyze site traffic, and serve advertisements (including Google AdSense). By using our website, you agree to the use of cookies as described in our Cookie Policy and Privacy Policy.
+        </p>
+        <p>
+          You can manage your cookie preferences at any time through the cookie consent banner on our website. You may also configure your browser to reject or delete cookies.
+        </p>
+      </section>
+
+      <section className="space-y-4 text-secondary leading-relaxed">
+        <h2 className="text-xl font-bold text-primary">6. Contact Information</h2>
         <p>
           Inquiries regarding our terms of service can be submitted directly to: <a href="mailto:zuhaibahmed3213951@gmail.com" className="text-accent underline font-semibold">zuhaibahmed3213951@gmail.com</a>.
         </p>
