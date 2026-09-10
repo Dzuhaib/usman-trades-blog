@@ -1,18 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getTechnicalAudit, resolveTechnicalIssue } from '@/lib/seo-os/technical-engine';
-import { verifyApiAuth } from '@/lib/seo-os/auth';
-import { apiLimiter, getIdentifier } from '@/lib/seo-os/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: Request) {
-  const id = getIdentifier(request);
-  const { success: withinLimit } = await apiLimiter.limit(id);
-  if (!withinLimit) return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
-
-  const auth = await verifyApiAuth(request);
-  if (auth instanceof NextResponse) return auth;
-
+export async function GET() {
   try {
     const issues = await getTechnicalAudit();
     return NextResponse.json({ success: true, issues });
@@ -22,13 +13,6 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const id = getIdentifier(request);
-  const { success: withinLimit } = await apiLimiter.limit(id);
-  if (!withinLimit) return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
-
-  const auth = await verifyApiAuth(request);
-  if (auth instanceof NextResponse) return auth;
-
   try {
     const body = await request.json();
     if (!body || typeof body.id !== 'string' || body.id.length < 1) {

@@ -1,20 +1,9 @@
 import { NextResponse } from 'next/server';
 import { cleanupMissingUrls } from '@/lib/seo-os/orchestrator';
-import { heavyLimiter, getIdentifier } from '@/lib/seo-os/rate-limit';
-import { verifyApiAuth } from '@/lib/seo-os/auth';
 
 export const dynamic = 'force-dynamic';
 
-export async function POST(request: Request) {
-  const id = getIdentifier(request);
-  const { success: withinLimit } = await heavyLimiter.limit(id);
-  if (!withinLimit) {
-    return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
-  }
-
-  const auth = await verifyApiAuth(request);
-  if (auth instanceof NextResponse) return auth;
-
+export async function POST() {
   try {
     const result = await cleanupMissingUrls();
     return NextResponse.json(result);

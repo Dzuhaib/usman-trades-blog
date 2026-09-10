@@ -4,14 +4,10 @@ import { performComprehensiveAudit, delegateAuditTasks } from '@/lib/seo-os/ai-e
 import { saveAuditReport } from '@/lib/seo-os/audit-engine';
 import { updateRoadmapWithNewTasks } from '@/lib/seo-os/roadmap-engine';
 import { logAgentAction } from '@/lib/seo-os/log-engine';
-import { verifyApiAuth } from '@/lib/seo-os/auth';
 
 export const dynamic = 'force-dynamic';
 
-export async function POST(request: Request) {
-  const auth = await verifyApiAuth(request);
-  if (auth instanceof NextResponse) return auth;
-
+export async function POST() {
   try {
     await logAgentAction('Audit Agent', 'active', 'Manual audit triggered.');
     const gscData = await getPerformanceReport();
