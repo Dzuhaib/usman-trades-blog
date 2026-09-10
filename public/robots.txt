@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Sitemap: https://usmantrades.co.uk/sitemap.xml
+
+# Block sensitive paths
+Disallow: /api/

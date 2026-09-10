@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { BLOG_POSTS, CATEGORIES } from '@/lib/blogData';
-import { getDynamicPosts } from '@/lib/seo-os/article-engine';
 import { getPexelsImage } from '@/lib/pexels';
 import Image from 'next/image';
 import { Calendar, User } from 'lucide-react';
@@ -15,18 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const dynamicPosts = await getDynamicPosts();
-  const combinedPosts = [...BLOG_POSTS, ...dynamicPosts];
-
-  const seenTitles = new Set<string>();
-  const seenSlugs = new Set<string>();
-  const allPosts = combinedPosts.filter(post => {
-    const normalizedTitle = post.title.toLowerCase().replace(/[^a-z0-9]/g, '');
-    if (seenTitles.has(normalizedTitle) || seenSlugs.has(post.slug)) return false;
-    seenTitles.add(normalizedTitle);
-    seenSlugs.add(post.slug);
-    return true;
-  });
+  const allPosts = BLOG_POSTS;
 
   const sortedPosts = allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 

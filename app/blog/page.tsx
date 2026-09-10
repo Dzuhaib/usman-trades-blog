@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { BLOG_POSTS, CATEGORIES, BlogPost } from '@/lib/blogData';
-import { getDynamicPosts } from '@/lib/seo-os/article-engine';
 import { getPexelsImage } from '@/lib/pexels';
 import Image from 'next/image';
 import { Search, Clock, Calendar, User } from 'lucide-react';
@@ -22,25 +21,7 @@ export default async function BlogIndex({ searchParams }: PageProps) {
   const resolvedParams = await searchParams;
   const activeCategory = resolvedParams.category || 'All';
 
-  // Fetch dynamic posts from Redis
-  const dynamicPosts = await getDynamicPosts();
-  
-  // Combine static and dynamic posts (Prefer static BLOG_POSTS by listing them first)
-  const combinedPosts: BlogPost[] = [...BLOG_POSTS, ...dynamicPosts];
-  
-  // De-duplicate by title (normalized) and slug
-  const seenTitles = new Set<string>();
-  const seenSlugs = new Set<string>();
-  
-  const allPosts = combinedPosts.filter(post => {
-    const normalizedTitle = post.title.toLowerCase().replace(/[^a-z0-9]/g, '');
-    if (seenTitles.has(normalizedTitle) || seenSlugs.has(post.slug)) {
-      return false;
-    }
-    seenTitles.add(normalizedTitle);
-    seenSlugs.add(post.slug);
-    return true;
-  });
+  const allPosts: BlogPost[] = BLOG_POSTS;
 
   // Filter posts based on active category
   const filteredPosts = (activeCategory === 'All'

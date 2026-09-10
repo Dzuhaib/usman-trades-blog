@@ -113,21 +113,6 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-white text-primary selection:bg-accent/15 overflow-x-hidden">
         <Header />
         
-        {/* FX Pricing Live Ticker Tape Widget */}
-        <div className="w-full border-b border-slate-100 bg-white overflow-hidden">
-          <iframe 
-            src="https://fxpricing.com/fx-widget/ticker-tape-widget.php?id=1,2,3,5,14,20,1984&border=show&speed=50&click_target=blank&theme=light&tm-cr=FFFFFF&hr-cr=00000013&by-cr=28A745&sl-cr=DC3545&flags=circle&d_mode=compact-name&column=ask,bid,spread&lang=en&font=Arial, sans-serif" 
-            width="100%" 
-            height="85" 
-            style={{ border: 'unset' }}
-            sandbox="allow-scripts allow-same-origin allow-popups"
-          ></iframe>
-          <div id="fx-pricing-widget-copyright" className="text-center text-[13px] font-sans my-2.5 text-[#9db2bd]">
-            <span>Powered by </span>
-            <a href="https://fxpricing.com/" target="_blank" rel="noopener noreferrer" className="no-underline text-[#bb3534] font-semibold">FX Pricing</a>
-          </div>
-        </div>
-
         <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 py-8 md:px-6 md:py-12">
           {children}
         </main>
