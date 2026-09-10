@@ -30,14 +30,14 @@ export const BLOG_POSTS: BlogPost[] = [
     updatedAt: 'May 29, 2026',
     readTime: '12 min read',
     route: '/blog/posts/position-sizing',
-    content: 'Position Sizing Formula: How to Calculate Your Lot Size. Professional trading is about managing mathematical risk, not predicting moves. Retail traders fail primarily due to misunderstanding position sizing. Always risk no more than 1-2% of your account per trade. Lot Size = Risk Amount / (Value per Pip × Stop Loss in Pips).',
+    content: '@/content/blog/position-sizing.md',
     author: {
       name: 'MUHAMMAD USMAN',
       role: 'Senior Market Analyst',
       bio: 'Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles.'
     }
   },
-  {
+{
     slug: 'how-to-invest-in-gold-for-beginners',
     title: 'How to Invest in Gold for Beginners: The Senior Analyst Guide to XAUUSD',
     excerpt: 'Learn how to invest in Gold with this comprehensive beginner\'s guide covering XAUUSD analysis, risk management, and practical trading strategies.',
@@ -46,14 +46,14 @@ export const BLOG_POSTS: BlogPost[] = [
     updatedAt: 'June 16, 2026',
     readTime: '15 min read',
     route: '/blog/posts/how-to-invest-in-gold-for-beginners',
-    content: 'How to Invest in Gold for Beginners: The Senior Analyst Guide to XAUUSD. Gold is the only financial asset that is not someone else\'s liability. To invest in gold successfully, one must transition from a retail mindset to an institutional one. Key drivers include real yields and the US Dollar Index (DXY). Central banks are aggressive net buyers since 2010, and Basel III reclassified physical allocated gold as a Tier 1 Asset.',
+    content: '@/content/blog/how-to-invest-in-gold-for-beginners.md',
     author: {
       name: 'MUHAMMAD USMAN',
       role: 'Senior Market Analyst',
       bio: 'Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles.'
     }
   },
-  {
+{
     slug: 'what-is-forex',
     title: 'What is Forex Trading? A Simple Guide to the Global Market',
     excerpt: 'Learn how the currency markets actually work. We break down liquidity, major pairs, and the hidden costs of trading in plain English with real world examples.',
@@ -62,7 +62,7 @@ export const BLOG_POSTS: BlogPost[] = [
     updatedAt: 'June 1, 2026',
     readTime: '11 min read',
     route: '/blog/posts/what-is-forex',
-    content: 'What is Forex Trading? A Simple Guide to the Global Market. The Foreign Exchange market is the largest financial market in the world with over $7 trillion traded daily. Forex is a decentralized OTC market where participants trade currency pairs. Major players include central banks, commercial banks, hedge funds, and retail traders.',
+    content: '@/content/blog/what-is-forex.md',
     author: {
       name: 'MUHAMMAD USMAN',
       role: 'Senior Market Analyst',
@@ -78,7 +78,7 @@ export const BLOG_POSTS: BlogPost[] = [
     updatedAt: 'June 7, 2026',
     readTime: '12 min read',
     route: '/blog/posts/bitcoin-risk-management',
-    content: 'Bitcoin Risk Management: How to Handle Crypto Volatility. Bitcoin is often called Digital Gold but behaves like a tech stock on steroids. It can move 5-10% in a matter of hours. Use dynamic position sizing based on current ATR. Never use more than 10x leverage on Bitcoin. Limit total crypto exposure to 5-10% of total wealth.',
+    content: '@/content/blog/bitcoin-risk-management.md',
     author: {
       name: 'MUHAMMAD USMAN',
       role: 'Senior Market Analyst',
@@ -94,14 +94,14 @@ export const BLOG_POSTS: BlogPost[] = [
     updatedAt: 'June 4, 2026',
     readTime: '11 min read',
     route: '/blog/posts/trading-mindset',
-    content: 'Trading Psychology: How to Keep a Cool Head in the Market. Trading is 20% strategy and 80% psychology. The market is a giant mirror reflecting your insecurities, greed, and lack of discipline. Key psychological traps include fear (closing winning trades too early), greed (ignoring risk management), revenge trading (attempting to win back losses), and cognitive biases (confirmation bias, recency bias, gambler\'s fallacy). Maintain a probabilistic mindset, keep a trading journal, and follow a pre-trade routine to build emotional discipline.',
+    content: '@/content/blog/trading-mindset.md',
     author: {
       name: 'MUHAMMAD USMAN',
       role: 'Senior Market Analyst',
       bio: 'Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles.'
     }
   },
-  {
+{
     slug: 'support-resistance',
     title: 'Technical Analysis: Finding High-Probability Entry Zones',
     excerpt: 'Move past basic trendlines. Learn how to identify where large institutions are actually trading using supply, demand, and order blocks with real world examples.',
@@ -110,7 +110,7 @@ export const BLOG_POSTS: BlogPost[] = [
     updatedAt: 'June 10, 2026',
     readTime: '11 min read',
     route: '/blog/posts/support-resistance',
-    content: 'Technical Analysis: Finding High-Probability Entry Zones. Technical analysis is the study of human behavior and institutional intent. Indicators like RSI or MACD are lagging - they tell what happened in the past. To find high probability entry zones, we must look at leading price action. Professional analysis focuses on supply and demand zones (not lines), order blocks (the last opposite candle before a strong impulsive move), and market structure (higher highs/lows for bullish, lower highs/lows for bearish). Break of Structure (BOS) is the first signal a trend is ending. Multi-timeframe confluence means daily/4h/15min charts all agree.',
+    content: '@/content/blog/support-resistance.md',
     author: {
       name: 'MUHAMMAD USMAN',
       role: 'Senior Market Analyst',
