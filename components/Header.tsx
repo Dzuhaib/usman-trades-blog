@@ -42,7 +42,6 @@ const navLinks = [
   },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
-  { href: '/cookie-policy', label: 'Cookie' },
 ];
 
 export default function Header() {
