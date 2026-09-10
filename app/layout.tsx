@@ -106,7 +106,7 @@ export default function RootLayout({
         <WebsiteJsonLd />
         <script 
           async 
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9402118821539954"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5017133932206570"
           crossOrigin="anonymous"
         ></script>
       </head>
