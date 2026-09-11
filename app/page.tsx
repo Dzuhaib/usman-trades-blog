@@ -1,9 +1,23 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { BLOG_POSTS, CATEGORIES } from '@/lib/blogData';
+import { TOOLS } from '@/lib/toolsData';
 import { getPexelsImage } from '@/lib/pexels';
 import Image from 'next/image';
-import { Calendar, User } from 'lucide-react';
+import { Calendar, User, Calculator, ShieldAlert, BarChart3, TrendingUp, ArrowLeftRight, Coins, TrendingDown, Lock, Scale, Clock } from 'lucide-react';
+
+const ICON_MAP: Record<string, any> = {
+  'Lot Size Calculator': Calculator,
+  'Risk Calculator': ShieldAlert,
+  'Pip Calculator': BarChart3,
+  'Profit Calculator': TrendingUp,
+  'Risk Reward Calculator': ArrowLeftRight,
+  'Compound Growth': Coins,
+  'Drawdown Calculator': TrendingDown,
+  'Margin Calculator': Lock,
+  'Spread Cost Tool': Scale,
+  'Session Timer': Clock
+};
 
 export const metadata: Metadata = {
   title: 'Usman Trades | Free Forex, Gold and Bitcoin Trading Tools and Education',
@@ -97,6 +111,41 @@ export default async function Home() {
           </article>
         ))}
       </div>
+
+      {/* Tools Section */}
+      <section className="space-y-8 pt-12 border-t border-slate-100">
+        <header className="space-y-4 max-w-[700px]">
+          <h2 className="text-3xl font-bold font-serif text-slate-900 tracking-tight">Trading Tools</h2>
+          <p className="text-lg text-slate-500 leading-relaxed">
+            Our free calculators help you make mathematically sound decisions. Use them to manage risk and plan your trades like a professional.
+          </p>
+        </header>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {TOOLS.map((tool) => {
+            const Icon = ICON_MAP[tool.title] || Calculator;
+            return (
+              <Link key={tool.title} href={tool.href} className="block group">
+                <article className="border border-slate-100 p-6 rounded-2xl bg-white flex flex-col hover:shadow-xl hover:border-accent/10 transition-all duration-300 group">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-[9px] font-black text-accent bg-accent/5 px-3 py-1 rounded-full uppercase tracking-widest">
+                      {tool.badge}
+                    </span>
+                    <div className="p-2 bg-slate-50 rounded-lg group-hover:bg-accent/10 transition-colors">
+                      <Icon className="w-4 h-4 text-slate-400 group-hover:text-accent transition-colors" />
+                    </div>
+                  </div>
+                  <h3 className="text-lg font-bold font-serif text-slate-900 mb-2 group-hover:text-accent transition-colors">
+                    {tool.title}
+                  </h3>
+                  <p className="text-sm text-slate-500 leading-relaxed">
+                    {tool.description}
+                  </p>
+                </article>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
     </div>
   );
 }
