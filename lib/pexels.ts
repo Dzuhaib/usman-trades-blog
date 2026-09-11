@@ -14,7 +14,7 @@ const FALLBACK_IMAGES: Record<string, PexelsImage> = {
   },
   'bitcoin': {
     url: 'https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Physical gold-plated Bitcoin coins representing digital assets and cryptocurrency volatility parameters'
+    alt: 'Bitcoin cryptocurrency risk management with security and volatility charts'
   },
   'risk-management': {
     url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -29,12 +29,11 @@ const FALLBACK_IMAGES: Record<string, PexelsImage> = {
     alt: 'Close up of high-resolution monitor displaying multi-timeframe horizontal support and resistance channels'
   },
   'default': {
-    url: 'https://images.pexels.com/photos/6770610/pexels-photo-6770610.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Clean financial editorial office setup with Bloomberg-style price charts and calculated data tools'
+    url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Financial market trading news and economic data on screens'
   }
 };
 
-// Only unique category fallback images - each slug uses Pexels API instead of these static URLs
 export const SLUG_IMAGES: Record<string, PexelsImage> = {
   'position-sizing': {
     url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -60,12 +59,24 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
     url: 'https://images.pexels.com/photos/187041/pexels-photo-187041.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Technical analysis chart with support and resistance zones highlighted'
   },
+  'cpi-news-and-markets': {
+    url: 'https://images.pexels.com/photos/19867469/pexels-photo-19867469.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Consumer Price Index economic data on financial dashboard'
+  },
+  'ppi-news-and-markets': {
+    url: 'https://images.pexels.com/photos/102152/pexels-photo-102152.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Producer Price Index wholesale data on trading screen'
+  },
+  'which-broker-is-best': {
+    url: 'https://images.pexels.com/photos/7173046/pexels-photo-7173046.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Comparison of forex brokers with charts and financial data on screens'
+  },
 };
 
 const CATEGORY_IMAGES: Record<string, PexelsImage> = {
   'Forex Education': {
-    url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Currency pairs and forex trading charts on professional financial dashboard'
+    url: 'https://images.pexels.com/photos/16902140/pexels-photo-16902140.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Forex trading news update on financial dashboard'
   },
   'Gold (XAUUSD) Analysis': {
     url: 'https://images.pexels.com/photos/47047/gold-ingots-golden-treasure-47047.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -88,7 +99,7 @@ const CATEGORY_IMAGES: Record<string, PexelsImage> = {
     alt: 'Technical analysis chart patterns and trading signals on screen'
   },
   'Broker Reviews': {
-    url: 'https://images.pexels.com/photos/6770610/pexels-photo-6770610.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    url: 'https://images.pexels.com/photos/7173046/pexels-photo-7173046.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Comparison of forex brokers with charts and financial data'
   },
 };
@@ -122,8 +133,9 @@ export async function getPexelImageForPost(slug: string): Promise<PexelsImage> {
   return getImageForSlug(slug);
 }
 
-export async function getPexelsImage(query: string): Promise<PexelsImage> {
+export async function getPexelsImage(query: string, usedUrls?: Set<string>): Promise<PexelsImage> {
   const apiKey = process.env.PEXELS_API_KEY;
+  const sharedUsedUrls = usedUrls || new Set<string>();
 
   if (apiKey && apiKey !== 'your_pexels_api_key_here') {
     try {
@@ -134,40 +146,51 @@ export async function getPexelsImage(query: string): Promise<PexelsImage> {
       if (res.ok) {
         const data = await res.json();
         if (data.photos && data.photos.length > 0) {
-          return {
-            url: data.photos[0].src.large,
-            alt: data.photos[0].alt || `${query} image`
-          };
+          const url = data.photos[0].src.large;
+          if (!sharedUsedUrls.has(url)) {
+            sharedUsedUrls.add(url);
+            return { url, alt: data.photos[0].alt || `${query} image` };
+          }
         }
       }
     } catch (error) {
       console.error('Failed to fetch from Pexels API:', error);
     }
   }
-  return getImageForSlug(query.toLowerCase().trim().split(' ')[0]);
-}
 
-/**
- * Fetches multiple DISTINCT images from Pexels API for each blog post.
- * Each post gets 5 unique images generated from different search queries.
- * Uses a Set to deduplicate URLs and ensure no duplicates across posts.
- */
-const USED_URLS = new Set<string>();
+  const fallback = getImageForSlug(query.toLowerCase().trim().split(' ')[0]);
+  if (!sharedUsedUrls.has(fallback.url)) {
+    sharedUsedUrls.add(fallback.url);
+    return fallback;
+  }
+  return FALLBACK_IMAGES.default;
+}
 
 export async function getPexelsImages(slug: string, count: number = 5, usedUrls?: Set<string>): Promise<PexelsImage[]> {
   const apiKey = process.env.PEXELS_API_KEY;
+  const sharedUsedUrls = usedUrls || new Set<string>();
+
+  const slugImage = SLUG_IMAGES[slug];
+  const category = getCategoryForSlug(slug);
 
   if (!apiKey || apiKey === 'your_pexels_api_key_here') {
-    const slugImg = SLUG_IMAGES[slug] || CATEGORY_IMAGES[getCategoryForSlug(slug)] || FALLBACK_IMAGES.default;
-    const uniqueImages = [slugImg];
+    const slugImg = slugImage || CATEGORY_IMAGES[category] || FALLBACK_IMAGES.default;
+    const uniqueImages: PexelsImage[] = [];
     const altVariants = [
       `${slug} market analysis chart`,
       `${slug} trading data and statistics`,
       `${slug} financial market trends`,
       `${slug} professional trading workspace`
     ];
-    for (let i = 0; i < count - 1 && i < altVariants.length; i++) {
-      uniqueImages.push({ url: slugImg.url, alt: altVariants[i] });
+    uniqueImages.push({ ...slugImg, alt: altVariants[0] });
+    for (let i = 1; i < count && i < altVariants.length; i++) {
+      const fallback = FALLBACK_IMAGES[category] || FALLBACK_IMAGES.default;
+      if (!sharedUsedUrls.has(fallback.url)) {
+        sharedUsedUrls.add(fallback.url);
+        uniqueImages.push({ url: fallback.url, alt: altVariants[i] });
+      } else {
+        uniqueImages.push(FALLBACK_IMAGES.default);
+      }
     }
     while (uniqueImages.length < count) {
       uniqueImages.push(FALLBACK_IMAGES.default);
@@ -183,7 +206,6 @@ export async function getPexelsImages(slug: string, count: number = 5, usedUrls?
     `${slug} trading workspace investment`
   ];
 
-  const sharedUsedUrls = usedUrls || new Set<string>();
   const results: PexelsImage[] = [];
 
   for (let i = 0; i < count && i < queries.length; i++) {
@@ -210,7 +232,7 @@ export async function getPexelsImages(slug: string, count: number = 5, usedUrls?
   }
 
   while (results.length < count) {
-    const fallback = FALLBACK_IMAGES[getCategoryForSlug(slug)] || FALLBACK_IMAGES.default;
+    const fallback = FALLBACK_IMAGES[category] || FALLBACK_IMAGES.default;
     if (!sharedUsedUrls.has(fallback.url)) {
       sharedUsedUrls.add(fallback.url);
       results.push({ ...fallback, alt: `${slug} visual ${results.length + 1}` });

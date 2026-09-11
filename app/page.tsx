@@ -37,9 +37,10 @@ export default async function Home() {
   const featuredPost = sortedPosts[0];
   const recentPosts = sortedPosts.slice(1);
 
+  const usedUrls = new Set<string>();
   const postsWithImages = await Promise.all(
     sortedPosts.map(async (post) => {
-      const pexelsImage = await getPexelsImage(post.title);
+      const pexelsImage = await getPexelsImage(post.slug, usedUrls);
       return { ...post, image: pexelsImage };
     })
   );

@@ -37,7 +37,7 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  const images = await getPexelsImages(slug, 5);
+  const images = await getPexelsImages(slug, 5, new Set<string>());
 
   const blogSchema = generateBlogSchema({
     title: post.title,
