@@ -66,11 +66,11 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
     alt: 'Consumer Price Index economic data on financial dashboard'
   },
   'ppi-news-and-markets': {
-    url: 'https://images.pexels.com/photos/589540/pexels-photo-589540.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Producer Price Index inflation data on trading screen'
   },
   'which-broker-is-best': {
-    url: 'https://images.pexels.com/photos/466458/pexels-photo-466458.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    url: 'https://images.pexels.com/photos/6770610/pexels-photo-6770610.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Comparison of forex brokers with charts and financial data on screens'
   },
 };
@@ -102,7 +102,7 @@ const CATEGORY_IMAGES: Record<string, PexelsImage> = {
     alt: 'Technical analysis chart patterns and trading signals on screen'
   },
   'Broker Reviews': {
-    url: 'https://images.pexels.com/photos/466458/pexels-photo-466458.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    url: 'https://images.pexels.com/photos/6770610/pexels-photo-6770610.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Comparison of forex brokers with charts and financial data'
   },
 };
