@@ -3,7 +3,6 @@ export interface PexelsImage {
   alt: string;
 }
 
-// Only using verified valid Pexels photo IDs
 const FALLBACK_IMAGES: Record<string, PexelsImage> = {
   'forex': {
     url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -35,7 +34,7 @@ const FALLBACK_IMAGES: Record<string, PexelsImage> = {
   }
 };
 
-// Unique images per slug - each uses a different valid Pexels photo ID
+// Only unique category fallback images - each slug uses Pexels API instead of these static URLs
 export const SLUG_IMAGES: Record<string, PexelsImage> = {
   'position-sizing': {
     url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -61,21 +60,8 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
     url: 'https://images.pexels.com/photos/187041/pexels-photo-187041.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Technical analysis chart with support and resistance zones highlighted'
   },
-  'cpi-news-and-markets': {
-    url: 'https://images.pexels.com/photos/6770610/pexels-photo-6770610.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Consumer Price Index economic data on financial dashboard'
-  },
-  'ppi-news-and-markets': {
-    url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Producer Price Index inflation data on trading screen'
-  },
-  'which-broker-is-best': {
-    url: 'https://images.pexels.com/photos/6770610/pexels-photo-6770610.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Comparison of forex brokers with charts and financial data on screens'
-  },
 };
 
-// Category-based fallback images for list views
 const CATEGORY_IMAGES: Record<string, PexelsImage> = {
   'Forex Education': {
     url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -112,55 +98,67 @@ export function getImageForSlug(slug: string): PexelsImage {
 }
 
 export async function getPexelImageForPost(slug: string): Promise<PexelsImage> {
-  const slugImage = SLUG_IMAGES[slug];
-  if (slugImage) return slugImage;
-
   const apiKey = process.env.PEXELS_API_KEY;
-  const cleanQuery = slug.toLowerCase().trim();
 
-  if (!apiKey || apiKey === 'your_pexels_api_key_here') {
-    return getImageForSlug(slug);
-  }
-
-  try {
-    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(cleanQuery)}&per_page=1`, {
-      headers: { Authorization: apiKey },
-      next: { revalidate: 86400 }
-    });
-    if (!res.ok) return getImageForSlug(slug);
-    const data = await res.json();
-    if (data.photos && data.photos.length > 0) {
-      return {
-        url: data.photos[0].src.large,
-        alt: data.photos[0].alt || `${slug} image`
-      };
+  if (apiKey && apiKey !== 'your_pexels_api_key_here') {
+    try {
+      const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(slug)}&per_page=1`, {
+        headers: { Authorization: apiKey },
+        next: { revalidate: 86400 }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.photos && data.photos.length > 0) {
+          return {
+            url: data.photos[0].src.large,
+            alt: data.photos[0].alt || `${slug} image`
+          };
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch from Pexels API:', error);
     }
-  } catch (error) {
-    console.error('Failed to fetch from Pexels API:', error);
   }
   return getImageForSlug(slug);
 }
 
 export async function getPexelsImage(query: string): Promise<PexelsImage> {
-  const slugMatch = query.toLowerCase().trim().split(' ')[0];
-  const slugImage = SLUG_IMAGES[slugMatch];
-  if (slugImage) return slugImage;
+  const apiKey = process.env.PEXELS_API_KEY;
+
+  if (apiKey && apiKey !== 'your_pexels_api_key_here') {
+    try {
+      const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1`, {
+        headers: { Authorization: apiKey },
+        next: { revalidate: 86400 }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.photos && data.photos.length > 0) {
+          return {
+            url: data.photos[0].src.large,
+            alt: data.photos[0].alt || `${query} image`
+          };
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch from Pexels API:', error);
+    }
+  }
   return getImageForSlug(query.toLowerCase().trim().split(' ')[0]);
 }
 
 /**
- * Fetches multiple distinct images dynamically from Pexels API for blog posts.
- * Uses the Pexels API when available, falls back to verified valid Pexels URLs.
+ * Fetches multiple DISTINCT images from Pexels API for each blog post.
+ * Each post gets 5 unique images generated from different search queries.
+ * Uses a Set to deduplicate URLs and ensure no duplicates across posts.
  */
+const USED_URLS = new Set<string>();
+
 export async function getPexelsImages(slug: string, count: number = 5): Promise<PexelsImage[]> {
   const apiKey = process.env.PEXELS_API_KEY;
 
-  const slugImage = SLUG_IMAGES[slug];
-  const category = getCategoryForSlug(slug);
-
   if (!apiKey || apiKey === 'your_pexels_api_key_here') {
-    // Return verified valid fallback images with different alt descriptions
-    const slugImg = slugImage || FALLBACK_IMAGES[category] || FALLBACK_IMAGES.default;
+    const slugImg = SLUG_IMAGES[slug] || CATEGORY_IMAGES[getCategoryForSlug(slug)] || FALLBACK_IMAGES.default;
     const uniqueImages = [slugImg];
     const altVariants = [
       `${slug} market analysis chart`,
@@ -169,10 +167,7 @@ export async function getPexelsImages(slug: string, count: number = 5): Promise<
       `${slug} professional trading workspace`
     ];
     for (let i = 0; i < count - 1 && i < altVariants.length; i++) {
-      uniqueImages.push({
-        url: slugImg.url,
-        alt: altVariants[i]
-      });
+      uniqueImages.push({ url: slugImg.url, alt: altVariants[i] });
     }
     while (uniqueImages.length < count) {
       uniqueImages.push(FALLBACK_IMAGES.default);
@@ -182,38 +177,48 @@ export async function getPexelsImages(slug: string, count: number = 5): Promise<
 
   const queries = [
     slug,
-    `${slug} charts graphs market data`,
-    `${slug} financial statistics analysis`,
-    `${slug} market trends trading`,
-    `${slug} professional trading workspace`
+    `${slug} trading charts graphs analysis`,
+    `${slug} financial data statistics`,
+    `${slug} market trends professional`,
+    `${slug} trading workspace investment`
   ];
 
   const results: PexelsImage[] = [];
+  const usedUrls = new Set<string>();
+
   for (let i = 0; i < count && i < queries.length; i++) {
     try {
       const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(queries[i])}&per_page=1`, {
         headers: { Authorization: apiKey },
         next: { revalidate: 86400 }
       });
-      if (!res.ok) { results.push(getImageForSlug(slug)); continue; }
+      if (!res.ok) { continue; }
       const data = await res.json();
       if (data.photos && data.photos.length > 0) {
-        results.push({
-          url: data.photos[0].src.large,
-          alt: data.photos[0].alt || `${slug} visual ${i + 1}`
-        });
-      } else {
-        results.push(getImageForSlug(slug));
+        const url = data.photos[0].src.large;
+        if (!usedUrls.has(url)) {
+          usedUrls.add(url);
+          results.push({
+            url: url,
+            alt: data.photos[0].alt || `${slug} visual ${i + 1}`
+          });
+        }
       }
     } catch (error) {
-      console.error(`Failed to fetch image ${i}:`, error);
-      results.push(getImageForSlug(slug));
+      console.error(`Failed to fetch image ${i} for ${slug}:`, error);
     }
   }
 
   while (results.length < count) {
-    results.push(FALLBACK_IMAGES.default);
+    const fallback = FALLBACK_IMAGES[getCategoryForSlug(slug)] || FALLBACK_IMAGES.default;
+    if (!usedUrls.has(fallback.url)) {
+      usedUrls.add(fallback.url);
+      results.push({ ...fallback, alt: `${slug} visual ${results.length + 1}` });
+    } else {
+      results.push(FALLBACK_IMAGES.default);
+    }
   }
+
   return results.slice(0, count);
 }
 
