@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { getPexelsImages } from '@/lib/pexels';
+import { getPexelsImages, getPexelsImage } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { getPostBySlug } from '@/lib/seo-os/article-engine';
@@ -37,16 +37,17 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  // Use post title, category, and specific descriptive terms for unique image generation
-  const imageSearchTerms = [
-    post.title,
-    post.category,
-    post.slug.replace(/-/g, ' '),
-    'professional trading',
-    'financial analysis'
-  ].join(' ');
+  const imageQueries = [
+    'forex currency trading charts',
+    'CPI inflation economic data news',
+    'financial market analysis trading',
+    'central bank interest rates economy',
+    'professional forex trader workspace'
+  ];
   
-  const images = await getPexelsImages(imageSearchTerms, 5);
+  const images = await Promise.all(
+    imageQueries.map(query => getPexelsImage(query))
+  );
 
   const blogSchema = generateBlogSchema({
     title: post.title,
