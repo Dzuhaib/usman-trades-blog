@@ -7,8 +7,8 @@ import Image from 'next/image';
 import { Calendar, User, Calculator, ShieldAlert, BarChart3, TrendingUp, ArrowLeftRight, Coins, TrendingDown, Lock, Scale, Clock, ArrowRight, Sparkles, ShieldCheck, BookOpen, TrendingUp as TrendingUpIcon, Globe, DollarSign, PieChart, Target, Award } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
-const LiveTicker = dynamic(() => import('@/components/LiveTicker'), { ssr: false });
-const MiniRiskTerminal = dynamic(() => import('@/components/MiniRiskTerminal'), { ssr: false });
+const LiveTicker = dynamic(() => import('@/components/LiveTicker'));
+const MiniRiskTerminal = dynamic(() => import('@/components/MiniRiskTerminal'));
 
 const ICON_MAP: Record<string, any> = {
   'Lot Size Calculator': Calculator,

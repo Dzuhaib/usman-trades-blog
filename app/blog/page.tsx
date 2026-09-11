@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { BLOG_POSTS, CATEGORIES, BlogPost } from '@/lib/blogData';
-import { getPexelsImage } from '@/lib/pexels';
+import { getPexelsImages, getImageForSlug } from '@/lib/pexels';
 import Image from 'next/image';
 import { Search, Clock, Calendar, User } from 'lucide-react';
 
@@ -32,10 +32,10 @@ export default async function BlogIndex({ searchParams }: PageProps) {
   // Fetch Pexels cover images
   const postsWithImages = await Promise.all(
     filteredPosts.map(async (post) => {
-      const pexelsImage = await getPexelsImage(post.title);
+      const images = await getPexelsImages(post.slug, 1);
       return {
         ...post,
-        image: pexelsImage,
+        image: images[0] || getImageForSlug(post.slug),
       };
     })
   );

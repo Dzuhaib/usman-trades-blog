@@ -9,6 +9,7 @@ export interface BlogPost {
   route: string;
   content?: string;
   author: { name: string; role: string; bio: string; };
+  image?: { url: string; alt: string };
 }
 
 export function getTodayDate(): string {
