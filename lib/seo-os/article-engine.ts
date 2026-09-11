@@ -1,12 +1,22 @@
-/**
- * SEO-OS Article Engine via Upstash Redis
- * Handles storage of AI-generated articles since Vercel FS is read-only.
- */
-
 import { BlogPost } from '@/lib/blogData';
 import { getRedis } from './redis';
+import fs from 'fs';
+import path from 'path';
 
 const DYNAMIC_POSTS_KEY = 'seo-os:dynamic-posts';
+const CONTENT_DIR = path.join(process.cwd(), 'content', 'blog');
+
+function loadMarkdownContent(slug: string): string | null {
+  try {
+    const filePath = path.join(CONTENT_DIR, `${slug}.md`);
+    if (fs.existsSync(filePath)) {
+      return fs.readFileSync(filePath, 'utf8');
+    }
+  } catch (e) {
+    console.error(`Failed to load markdown for ${slug}:`, e);
+  }
+  return null;
+}
 
 export async function getDynamicPosts(): Promise<BlogPost[]> {
   const redis = getRedis();
@@ -23,7 +33,6 @@ export async function saveDynamicPost(post: BlogPost) {
   const redis = getRedis();
   const posts = await getDynamicPosts();
   
-  // Check if post already exists (update it) or add new one
   const existingIdx = posts.findIndex(p => p.slug === post.slug);
   if (existingIdx >= 0) {
     posts[existingIdx] = post;
@@ -76,6 +85,13 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
         title: override.title || staticPost.title,
         excerpt: override.excerpt || staticPost.excerpt,
         updatedAt: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+      };
+    }
+    const markdownContent = loadMarkdownContent(slug);
+    if (markdownContent) {
+      return {
+        ...staticPost,
+        content: markdownContent,
       };
     }
     return staticPost;
