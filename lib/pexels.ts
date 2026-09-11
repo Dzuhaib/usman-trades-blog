@@ -6,63 +6,31 @@ export interface PexelsImage {
 // Fallback images to ensure the site looks gorgeous even if the user has not entered their API key yet.
 const FALLBACK_IMAGES: Record<string, PexelsImage> = {
   'forex': {
-    url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=800',
+    url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Foreign Exchange market currency charts and trading terminals displaying candlestick patterns'
   },
   'gold': {
-    url: 'https://images.pexels.com/photos/47047/gold-ingots-golden-treasure-47047.jpeg?auto=compress&cs=tinysrgb&w=800',
+    url: 'https://images.pexels.com/photos/47047/gold-ingots-golden-treasure-47047.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Physical gold bullion bars stacked neatly as macroeconomic safe-haven stores of value'
   },
   'bitcoin': {
-    url: 'https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg?auto=compress&cs=tinysrgb&w=800',
+    url: 'https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Physical gold-plated Bitcoin coins representing digital assets and cryptocurrency volatility parameters'
   },
   'risk-management': {
-    url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800',
+    url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Financial analyst mapping risk parameters, leverage calculations, and position boundaries on paperwork'
   },
   'trading-psychology': {
-    url: 'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=800',
+    url: 'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Disciplined institutional trader mapping rules-based execution plans to conquer cognitive bias'
   },
   'technical-analysis': {
-    url: 'https://images.pexels.com/photos/187041/pexels-photo-187041.jpeg?auto=compress&cs=tinysrgb&w=800',
+    url: 'https://images.pexels.com/photos/187041/pexels-photo-187041.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Close up of high-resolution monitor displaying multi-timeframe horizontal support and resistance channels'
   },
-  'what-is-forex': {
-    url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=800',
-    alt: 'Currency exchange rates on digital screens in a modern trading office'
-  },
-  'how-to-invest-in-gold-for-beginners': {
-    url: 'https://images.pexels.com/photos/47047/gold-ingots-golden-treasure-47047.jpeg?auto=compress&cs=tinysrgb&w=800',
-    alt: 'Shining gold bars on a dark surface representing wealth and investment'
-  },
-  'position-sizing': {
-    url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800',
-    alt: 'Trader calculating risk on a spreadsheet with risk management tools'
-  },
-  'support-resistance': {
-    url: 'https://images.pexels.com/photos/187041/pexels-photo-187041.jpeg?auto=compress&cs=tinysrgb&w=800',
-    alt: 'Price chart with horizontal support and resistance lines drawn on screen'
-  },
-  'trading-mindset': {
-    url: 'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=800',
-    alt: 'Focused trader sitting calmly at desk with multiple monitors'
-  },
-  'bitcoin-risk-management': {
-    url: 'https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg?auto=compress&cs=tinysrgb&w=800',
-    alt: 'Bitcoin and cryptocurrency coins with security lock symbol'
-  },
-  'cpi-news-and-markets': {
-    url: 'https://images.pexels.com/photos/56935/cpi-data-on-screen.jpeg?auto=compress&cs=tinysrgb&w=800',
-    alt: 'Consumer Price Index data displayed on financial terminal screen'
-  },
-  'ppi-news-and-markets': {
-    url: 'https://images.pexels.com/photos/589540/pexels-photo-589540.jpeg?auto=compress&cs=tinysrgb&w=800',
-    alt: 'Producer Price Index charts and economic data on trading screen'
-  },
   'default': {
-    url: 'https://images.pexels.com/photos/6770610/pexels-photo-6770610.jpeg?auto=compress&cs=tinysrgb&w=800',
+    url: 'https://images.pexels.com/photos/6770610/pexels-photo-6770610.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Clean financial editorial office setup with Bloomberg-style price charts and calculated data tools'
   }
 };
@@ -70,36 +38,36 @@ const FALLBACK_IMAGES: Record<string, PexelsImage> = {
 // Unique fallback images per slug for guaranteed uniqueness across all blog posts
 export const SLUG_IMAGES: Record<string, PexelsImage> = {
   'position-sizing': {
-    url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    url: 'https://images.pexels.com/photos/736912/pexels-photo-736912.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Risk management calculation with leverage and position size on trading calculator'
   },
   'how-to-invest-in-gold-for-beginners': {
-    url: 'https://images.pexels.com/photos/47047/gold-ingots-golden-treasure-47047.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    url: 'https://images.pexels.com/photos/741279/pexels-photo-741279.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Gold investment strategy with bullion bars and financial charts'
   },
   'what-is-forex': {
-    url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    url: 'https://images.pexels.com/photos/463648/pexels-photo-463648.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Forex currency trading on multiple digital screens with exchange rates'
   },
   'bitcoin-risk-management': {
-    url: 'https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    url: 'https://images.pexels.com/photos/4854611/pexels-photo-4854611.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Bitcoin cryptocurrency risk management with security and volatility charts'
   },
   'trading-mindset': {
-    url: 'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    url: 'https://images.pexels.com/photos/289492/pexels-photo-289492.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Calm disciplined trader analyzing market psychology and emotions'
   },
   'support-resistance': {
-    url: 'https://images.pexels.com/photos/187041/pexels-photo-187041.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    url: 'https://images.pexels.com/photos/322970/pexels-photo-322970.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Technical analysis chart with support and resistance zones highlighted'
   },
   'cpi-news-and-markets': {
-    url: 'https://images.pexels.com/photos/56935/cpi-data-on-screen.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Consumer Price Index economic data affecting currency markets'
+    url: 'https://images.pexels.com/photos/255401/pexels-photo-255401.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Consumer Price Index economic data on financial dashboard'
   },
   'ppi-news-and-markets': {
-    url: 'https://images.pexels.com/photos/589540/pexels-photo-589540.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Producer Price Index inflation data on financial trading screen'
+    url: 'https://images.pexels.com/photos/469588/pexels-photo-469588.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Producer Price Index inflation data on trading screen'
   },
 };
 
@@ -179,12 +147,10 @@ export async function getPexelsImage(query: string): Promise<PexelsImage> {
 export async function getPexelsImages(slug: string, count: number = 5): Promise<PexelsImage[]> {
   const apiKey = process.env.PEXELS_API_KEY;
 
-  // If we have a dedicated slug image, use it as the primary and generate variations
   const slugImage = SLUG_IMAGES[slug];
   const category = getCategoryForSlug(slug);
 
   if (!apiKey || apiKey === 'your_pexels_api_key_here') {
-    // Return unique fallback images based on slug and index
     const slugImg = slugImage || FALLBACK_IMAGES[category] || FALLBACK_IMAGES.default;
     const uniqueImages = [slugImg];
     const altVariants = [

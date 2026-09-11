@@ -432,9 +432,9 @@ export default async function Home() {
         </section>
 
         {/* Disclaimer Section */}
-        <section className="space-y-4 pt-8 border-t border-white/5">
-          <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.01] border border-white/10 rounded-2xl p-8 space-y-6 backdrop-blur-sm">
-            <h3 className="text-lg font-bold font-serif text-white flex items-center gap-2">
+        <section className="space-y-4 pt-8 border-t border-slate-100">
+          <div className="bg-slate-50 border border-slate-100 rounded-2xl p-8 space-y-6">
+            <h3 className="text-lg font-bold font-serif text-slate-900 flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-accent" />
               Why Trust Usman Trades?
             </h3>
@@ -447,7 +447,7 @@ export default async function Home() {
                 ].map((point, i) => (
                   <div key={i} className="flex items-start gap-3">
                     <span className="bg-accent text-white font-black mt-0.5 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">{i + 1}</span>
-                    <p className="text-sm text-slate-300 leading-relaxed">{point}</p>
+                    <p className="text-sm text-slate-600 leading-relaxed">{point}</p>
                   </div>
                 ))}
               </div>
@@ -459,7 +459,7 @@ export default async function Home() {
                 ].map((point, i) => (
                   <div key={i} className="flex items-start gap-3">
                     <span className="bg-accent text-white font-black mt-0.5 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">{i + 4}</span>
-                    <p className="text-sm text-slate-300 leading-relaxed">{point}</p>
+                    <p className="text-sm text-slate-600 leading-relaxed">{point}</p>
                   </div>
                 ))}
               </div>
