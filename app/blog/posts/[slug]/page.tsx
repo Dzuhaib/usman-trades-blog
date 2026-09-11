@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { getPexelsImages, getPexelsImage } from '@/lib/pexels';
+import { getPexelsImage } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { getPostBySlug } from '@/lib/seo-os/article-engine';
@@ -37,14 +37,24 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
+  // Generate unique image queries based on post title, category, and slug
+  const postKeywords = [
+    post.title,
+    post.category,
+    post.slug.replace(/-/g, ' '),
+    'professional trading',
+    'financial market analysis'
+  ].join(' ');
+
+  // Generate unique search queries per image index based on post context
   const imageQueries = [
-    'forex currency trading charts',
-    'CPI inflation economic data news',
-    'financial market analysis trading',
-    'central bank interest rates economy',
-    'professional forex trader workspace'
+    postKeywords + ' charts graphs',
+    postKeywords + ' data statistics',
+    postKeywords + ' market trends',
+    postKeywords + ' economy finance',
+    postKeywords + ' trader workspace'
   ];
-  
+
   const images = await Promise.all(
     imageQueries.map(query => getPexelsImage(query))
   );
