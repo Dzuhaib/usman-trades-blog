@@ -29,10 +29,11 @@ export default async function BlogIndex({ searchParams }: PageProps) {
     : allPosts.filter(post => post.category === activeCategory))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  // Fetch Pexels cover images
+  // Fetch Pexels cover images with deduplication across all posts
+  const usedUrls = new Set<string>();
   const postsWithImages = await Promise.all(
     filteredPosts.map(async (post) => {
-      const images = await getPexelsImages(post.slug, 1);
+      const images = await getPexelsImages(post.slug, 1, usedUrls);
       return {
         ...post,
         image: images[0] || getImageForSlug(post.slug),

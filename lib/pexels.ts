@@ -154,7 +154,7 @@ export async function getPexelsImage(query: string): Promise<PexelsImage> {
  */
 const USED_URLS = new Set<string>();
 
-export async function getPexelsImages(slug: string, count: number = 5): Promise<PexelsImage[]> {
+export async function getPexelsImages(slug: string, count: number = 5, usedUrls?: Set<string>): Promise<PexelsImage[]> {
   const apiKey = process.env.PEXELS_API_KEY;
 
   if (!apiKey || apiKey === 'your_pexels_api_key_here') {
@@ -183,8 +183,8 @@ export async function getPexelsImages(slug: string, count: number = 5): Promise<
     `${slug} trading workspace investment`
   ];
 
+  const sharedUsedUrls = usedUrls || new Set<string>();
   const results: PexelsImage[] = [];
-  const usedUrls = new Set<string>();
 
   for (let i = 0; i < count && i < queries.length; i++) {
     try {
@@ -196,8 +196,8 @@ export async function getPexelsImages(slug: string, count: number = 5): Promise<
       const data = await res.json();
       if (data.photos && data.photos.length > 0) {
         const url = data.photos[0].src.large;
-        if (!usedUrls.has(url)) {
-          usedUrls.add(url);
+        if (!sharedUsedUrls.has(url)) {
+          sharedUsedUrls.add(url);
           results.push({
             url: url,
             alt: data.photos[0].alt || `${slug} visual ${i + 1}`
@@ -211,8 +211,8 @@ export async function getPexelsImages(slug: string, count: number = 5): Promise<
 
   while (results.length < count) {
     const fallback = FALLBACK_IMAGES[getCategoryForSlug(slug)] || FALLBACK_IMAGES.default;
-    if (!usedUrls.has(fallback.url)) {
-      usedUrls.add(fallback.url);
+    if (!sharedUsedUrls.has(fallback.url)) {
+      sharedUsedUrls.add(fallback.url);
       results.push({ ...fallback, alt: `${slug} visual ${results.length + 1}` });
     } else {
       results.push(FALLBACK_IMAGES.default);
