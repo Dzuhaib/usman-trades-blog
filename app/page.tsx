@@ -50,29 +50,32 @@ export default async function Home() {
   return (
     <div className="space-y-0 py-0">
       {/* Hero Section */}
-      <section className="relative bg-slate-950 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-blue-500/10 blur-[100px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
+      <section className="relative bg-gradient-to-br from-[#0a0e27] via-[#0f1639] to-[#0a0e27] text-white overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-[#0f1639] to-slate-950"></div>
+        <div className="absolute top-0 right-0 w-[28rem] h-[28rem] bg-accent/15 blur-[150px] rounded-full translate-x-1/3 -translate-y-1/3"></div>
+        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 blur-[120px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
+        <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-accent/8 blur-[180px] rounded-full translate-x-1/4 translate-y-1/4"></div>
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 0.5px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         
-        <div className="mx-auto max-w-[1200px] px-6 md:px-12 py-16 md:py-24 relative z-10">
+        <div className="mx-auto max-w-[1200px] px-6 md:px-12 py-20 md:py-32 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="flex items-center gap-3">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span className="text-[10px] uppercase font-black tracking-[0.2em] text-accent">Live Market Data</span>
+            <div className="space-y-10">
+              <div className="inline-flex items-center gap-2.5 bg-accent/10 border border-accent/20 rounded-full px-4 py-1.5">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="text-[11px] uppercase font-black tracking-[0.2em] text-accent">Live Market Data</span>
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-serif leading-tight tracking-tight">
-                Trade Smarter, Not Harder
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold font-serif leading-[1.1] tracking-tight text-white">
+                Trade Smarter,{' '}
+                <span className="bg-gradient-to-r from-accent to-blue-400 bg-clip-text text-transparent">Not Harder</span>
               </h1>
-              <p className="text-lg text-slate-400 leading-relaxed">
+              <p className="text-lg text-slate-300 leading-relaxed max-w-lg">
                 Professional trading education and free calculators for Forex, Gold, and Bitcoin. Built by a senior market analyst with over a decade of experience.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link href="/blog" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-6 py-3.5 rounded-xl transition-all no-underline hover:shadow-lg hover:shadow-accent/20 text-sm">
+                <Link href="/blog" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-7 py-3.5 rounded-xl transition-all no-underline hover:shadow-lg hover:shadow-accent/30 text-sm">
                   Explore Education <ArrowRight className="w-4 h-4" />
                 </Link>
-                <Link href="/tools" className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-3.5 rounded-xl transition-all no-underline text-sm border border-slate-700">
+                <Link href="/tools" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold px-7 py-3.5 rounded-xl transition-all no-underline text-sm border border-white/20 backdrop-blur-sm">
                   Open Tools <Sparkles className="w-4 h-4" />
                 </Link>
               </div>
@@ -80,26 +83,18 @@ export default async function Home() {
             
             {/* Quick Stats */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 text-center">
-                <DollarSign className="w-6 h-6 text-accent mx-auto mb-3" />
-                <div className="text-3xl font-bold font-serif">$7T+</div>
-                <div className="text-xs text-slate-400 mt-1">Daily Forex Volume</div>
-              </div>
-              <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 text-center">
-                <BookOpen className="w-6 h-6 text-accent mx-auto mb-3" />
-                <div className="text-3xl font-bold font-serif">8</div>
-                <div className="text-xs text-slate-400 mt-1">Expert Guides</div>
-              </div>
-              <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 text-center">
-                <Calculator className="w-6 h-6 text-accent mx-auto mb-3" />
-                <div className="text-3xl font-bold font-serif">10</div>
-                <div className="text-xs text-slate-400 mt-1">Free Tools</div>
-              </div>
-              <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 text-center">
-                <ShieldCheck className="w-6 h-6 text-accent mx-auto mb-3" />
-                <div className="text-3xl font-bold font-serif">100%</div>
-                <div className="text-xs text-slate-400 mt-1">Free Forever</div>
-              </div>
+              {[
+                { icon: DollarSign, value: '$7T+', label: 'Daily Forex Volume', color: 'from-emerald-500/20 to-emerald-600/5' },
+                { icon: BookOpen, value: '8+', label: 'Expert Guides', color: 'from-accent/20 to-accent/5' },
+                { icon: Calculator, value: '10', label: 'Free Tools', color: 'from-blue-500/20 to-blue-600/5' },
+                { icon: ShieldCheck, value: '100%', label: 'Free Forever', color: 'from-amber-500/20 to-amber-600/5' },
+              ].map((stat, index) => (
+                <div key={index} className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:border-accent/30 transition-all duration-300 hover:shadow-lg hover:shadow-accent/5">
+                  <stat.icon className="w-6 h-6 text-accent mx-auto mb-3" />
+                  <div className="text-3xl font-bold font-serif bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">{stat.value}</div>
+                  <div className="text-xs text-slate-400 mt-1 font-medium">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -117,12 +112,12 @@ export default async function Home() {
         
         {/* Featured Article */}
         {featuredImage && (
-          <section className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold font-serif text-slate-900 flex items-center gap-2">
-                <Sparkles className="w-6 h-6 text-accent" />
-                Featured Guide
-              </h2>
+<section className="space-y-6 pt-8 border-t border-white/5">
+             <div className="flex items-center justify-between">
+               <h2 className="text-2xl font-bold font-serif text-slate-900 flex items-center gap-2">
+                 <Sparkles className="w-6 h-6 text-accent" />
+                 Featured Guide
+               </h2>
               <Link href="/blog" className="text-sm font-bold text-accent hover:underline no-underline">
                 View All <ArrowRight className="w-4 h-4 inline" />
               </Link>
@@ -183,7 +178,7 @@ export default async function Home() {
                 <Link
                   key={category}
                   href={`/blog?category=${encodeURIComponent(category)}`}
-                  className="text-[10px] font-bold px-3 py-1.5 rounded-full border border-slate-200 text-slate-500 hover:border-accent hover:text-accent transition-all no-underline uppercase tracking-wider"
+                  className="text-[10px] font-bold px-3 py-1.5 rounded-full border border-white/20 text-slate-600 hover:border-accent hover:text-accent hover:bg-accent/5 transition-all no-underline uppercase tracking-wider"
                 >
                   {category}
                 </Link>
@@ -191,64 +186,64 @@ export default async function Home() {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {recentPostsWithImages.map((post, index) => (
-              <article key={post.slug} className="group flex flex-col space-y-5">
-                <Link href={post.route} className="block relative aspect-[16/10] w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 shadow-sm">
-                  <Image
-                    src={post.image.url}
-                    alt={post.image.alt}
-                    fill
-                    priority={index < 1}
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[9px] font-black text-slate-900 uppercase tracking-widest shadow-sm">
-                      {post.category}
-                    </span>
-                  </div>
-                </Link>
-                <div className="space-y-3 flex-1 flex flex-col">
-                  <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
-                      {post.date}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {post.readTime}
-                    </div>
-                  </div>
-                  <h3 className="text-lg font-bold font-serif text-slate-900 leading-tight group-hover:text-accent transition-colors line-clamp-2">
-                    <Link href={post.route} className="no-underline">{post.title}</Link>
-                  </h3>
-                </div>
-                <div className="pt-4 border-t border-slate-50 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[8px] font-black text-slate-400 uppercase">
-                      {post.author.name.split(' ').map(n => n[0]).join('')}
-                    </div>
-                    <span className="text-[11px] font-bold text-slate-600">{post.author.name}</span>
-                  </div>
-                  <Link href={post.route} className="text-[11px] font-black text-accent uppercase tracking-[0.1em] no-underline hover:text-accent-dark transition-colors">
-                    Read &rarr;
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+             {recentPostsWithImages.map((post, index) => (
+               <article key={post.slug} className="group flex flex-col space-y-5">
+                 <Link href={post.route} className="block relative aspect-[16/10] w-full rounded-2xl overflow-hidden border border-white/10 bg-white shadow-sm hover:shadow-xl transition-all duration-300">
+                   <Image
+                     src={post.image.url}
+                     alt={post.image.alt}
+                     fill
+                     priority={index < 1}
+                     className="object-cover transition-transform duration-700 group-hover:scale-105"
+                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                   />
+                   <div className="absolute top-4 left-4">
+                     <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[9px] font-black text-slate-900 uppercase tracking-widest shadow-sm">
+                       {post.category}
+                     </span>
+                   </div>
+                 </Link>
+                 <div className="space-y-3 flex-1 flex flex-col">
+                   <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                     <div className="flex items-center gap-1">
+                       <Calendar className="w-3 h-3" />
+                       {post.date}
+                     </div>
+                     <div className="flex items-center gap-1">
+                       <Clock className="w-3 h-3" />
+                       {post.readTime}
+                     </div>
+                   </div>
+                   <h3 className="text-lg font-bold font-serif text-slate-900 leading-tight group-hover:text-accent transition-colors line-clamp-2">
+                     <Link href={post.route} className="no-underline">{post.title}</Link>
+                   </h3>
+                 </div>
+                 <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                   <div className="flex items-center gap-2">
+                     <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[8px] font-black text-slate-400 uppercase">
+                       {post.author.name.split(' ').map(n => n[0]).join('')}
+                     </div>
+                     <span className="text-[11px] font-bold text-slate-600">{post.author.name}</span>
+                   </div>
+                   <Link href={post.route} className="text-[11px] font-black text-accent uppercase tracking-[0.1em] no-underline hover:text-accent-dark transition-colors">
+                     Read &rarr;
+                   </Link>
+                 </div>
+               </article>
+             ))}
+           </div>
         </section>
 
         {/* Market Analysis Section */}
-        <section className="space-y-8 pt-12 border-t border-slate-100">
+        <section className="space-y-8 pt-12 border-t border-white/5">
           <h2 className="text-2xl font-bold font-serif text-slate-900 flex items-center gap-2">
             <Target className="w-6 h-6 text-accent" />
             Risk Management Toolkit
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-8 space-y-6">
+              <div className="bg-white border border-white/10 rounded-2xl p-8 space-y-6 shadow-sm">
                 <div>
                   <h3 className="text-xl font-bold font-serif text-slate-900 mb-3">Master Your Risk Before Every Trade</h3>
                   <p className="text-slate-600 leading-relaxed">
@@ -256,57 +251,57 @@ export default async function Home() {
                   </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-                        <Calculator className="w-5 h-5 text-accent" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-slate-900 text-sm">Position Sizing</h4>
-                        <p className="text-[10px] text-slate-500">Calculate exact lot sizes based on risk</p>
-                      </div>
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">Never risk more than you can afford. Calculate the correct position size for every trade based on your account balance and stop loss distance.</p>
-                    <Link href="/tools/lot-size-calculator" className="text-[11px] font-bold text-accent hover:underline no-underline">Open Lot Size Calculator &rarr;</Link>
-                  </div>
-                  <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-blue-50/10 flex items-center justify-center">
-                        <ShieldAlert className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-slate-900 text-sm">Risk Management</h4>
-                        <p className="text-[10px] text-slate-500">Know your exact cash exposure</p>
-                      </div>
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">Calculate exactly how much cash you are risking before entering any trade. Set your risk percentage and let the calculator do the math.</p>
-                    <Link href="/tools/risk-calculator" className="text-[11px] font-bold text-blue-600 hover:underline no-underline">Open Risk Calculator &rarr;</Link>
-                  </div>
-                  <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-50/10 flex items-center justify-center">
-                        <BarChart3 className="w-5 h-5 text-emerald-600" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-slate-900 text-sm">Pip Valuation</h4>
-                        <p className="text-[10px] text-slate-500">Understand pip value across assets</p>
-                      </div>
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">Every pip matters. Understand the monetary value of each price movement across different lot sizes and currency pairs with our Pip Calculator.</p>
-                    <Link href="/tools/pip-calculator" className="text-[11px] font-bold text-emerald-600 hover:underline no-underline">Open Pip Calculator &rarr;</Link>
-                  </div>
-                  <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-purple-50/10 flex items-center justify-center">
-                        <ArrowLeftRight className="w-5 h-5 text-purple-600" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-slate-900 text-sm">Risk Reward Ratio</h4>
-                        <p className="text-[10px] text-slate-500">Validate every trade setup</p>
-                      </div>
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">Analyze whether a trade setup offers sufficient reward relative to the risk taken. Aim for setups with at least 1:2 or higher risk reward ratios.</p>
-                    <Link href="/tools/risk-reward-calculator" className="text-[11px] font-bold text-purple-600 hover:underline no-underline">Open Risk Reward &rarr;</Link>
+<div className="bg-white border border-white/20 rounded-xl p-5 space-y-3 shadow-sm">
+                     <div className="flex items-center gap-3">
+                       <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                         <Calculator className="w-5 h-5 text-accent" />
+                       </div>
+                       <div>
+                         <h4 className="font-bold text-slate-900 text-sm">Position Sizing</h4>
+                         <p className="text-[10px] text-slate-500">Calculate exact lot sizes based on risk</p>
+                       </div>
+                     </div>
+                     <p className="text-xs text-slate-600 leading-relaxed">Never risk more than you can afford. Calculate the correct position size for every trade based on your account balance and stop loss distance.</p>
+                     <Link href="/tools/lot-size-calculator" className="text-[11px] font-bold text-accent hover:underline no-underline">Open Lot Size Calculator &rarr;</Link>
+                   </div>
+                   <div className="bg-white border border-white/20 rounded-xl p-5 space-y-3 shadow-sm">
+                     <div className="flex items-center gap-3">
+                       <div className="w-10 h-10 rounded-xl bg-blue-50/10 flex items-center justify-center">
+                         <ShieldAlert className="w-5 h-5 text-blue-600" />
+                       </div>
+                       <div>
+                         <h4 className="font-bold text-slate-900 text-sm">Risk Management</h4>
+                         <p className="text-[10px] text-slate-500">Know your exact cash exposure</p>
+                       </div>
+                     </div>
+                     <p className="text-xs text-slate-600 leading-relaxed">Calculate exactly how much cash you are risking before entering any trade. Set your risk percentage and let the calculator do the math.</p>
+                     <Link href="/tools/risk-calculator" className="text-[11px] font-bold text-blue-600 hover:underline no-underline">Open Risk Calculator &rarr;</Link>
+                   </div>
+                   <div className="bg-white border border-white/20 rounded-xl p-5 space-y-3 shadow-sm">
+                     <div className="flex items-center gap-3">
+                       <div className="w-10 h-10 rounded-xl bg-emerald-50/10 flex items-center justify-center">
+                         <BarChart3 className="w-5 h-5 text-emerald-600" />
+                       </div>
+                       <div>
+                         <h4 className="font-bold text-slate-900 text-sm">Pip Valuation</h4>
+                         <p className="text-[10px] text-slate-500">Understand pip value across assets</p>
+                       </div>
+                     </div>
+                     <p className="text-xs text-slate-600 leading-relaxed">Every pip matters. Understand the monetary value of each price movement across different lot sizes and currency pairs with our Pip Calculator.</p>
+                     <Link href="/tools/pip-calculator" className="text-[11px] font-bold text-emerald-600 hover:underline no-underline">Open Pip Calculator &rarr;</Link>
+                   </div>
+                   <div className="bg-white border border-white/20 rounded-xl p-5 space-y-3 shadow-sm">
+                     <div className="flex items-center gap-3">
+                       <div className="w-10 h-10 rounded-xl bg-purple-50/10 flex items-center justify-center">
+                         <ArrowLeftRight className="w-5 h-5 text-purple-600" />
+                       </div>
+                       <div>
+                         <h4 className="font-bold text-slate-900 text-sm">Risk Reward Ratio</h4>
+                         <p className="text-[10px] text-slate-500">Validate every trade setup</p>
+                       </div>
+                     </div>
+                     <p className="text-xs text-slate-600 leading-relaxed">Analyze whether a trade setup offers sufficient reward relative to the risk taken. Aim for setups with at least 1:2 or higher risk reward ratios.</p>
+                     <Link href="/tools/risk-reward-calculator" className="text-[11px] font-bold text-purple-600 hover:underline no-underline">Open Risk Reward &rarr;</Link>
                   </div>
                 </div>
               </div>
@@ -320,7 +315,7 @@ export default async function Home() {
         </section>
 
         {/* Complete Tools Grid */}
-        <section className="space-y-8 pt-12 border-t border-slate-100">
+        <section className="space-y-8 pt-12 border-t border-white/5">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold font-serif text-slate-900 flex items-center gap-2">
               <Calculator className="w-6 h-6 text-accent" />
@@ -358,13 +353,13 @@ export default async function Home() {
         </section>
 
         {/* Learning Paths */}
-        <section className="space-y-8 pt-12 border-t border-slate-100">
+        <section className="space-y-8 pt-12 border-t border-white/5">
           <h2 className="text-2xl font-bold font-serif text-slate-900 flex items-center gap-2">
             <PieChart className="w-6 h-6 text-accent" />
             Learning Paths
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Link href="/blog?category=Forex+Education" className="block group border border-slate-100 rounded-2xl p-6 bg-white hover:shadow-xl hover:border-accent/10 transition-all duration-300">
+            <Link href="/blog?category=Forex+Education" className="block group border border-white/10 rounded-2xl p-6 bg-white hover:shadow-xl hover:border-accent/20 transition-all duration-300">
               <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
                 <Globe className="w-6 h-6 text-accent" />
               </div>
@@ -374,7 +369,7 @@ export default async function Home() {
                 4 Guides <ArrowRight className="w-3 h-3" />
               </span>
             </Link>
-            <Link href="/blog?category=Risk+Management" className="block group border border-slate-100 rounded-2xl p-6 bg-white hover:shadow-xl hover:border-accent/10 transition-all duration-300">
+            <Link href="/blog?category=Risk+Management" className="block group border border-white/10 rounded-2xl p-6 bg-white hover:shadow-xl hover:border-accent/20 transition-all duration-300">
               <div className="w-12 h-12 rounded-2xl bg-blue-50/10 flex items-center justify-center mb-4">
                 <ShieldCheck className="w-6 h-6 text-blue-600" />
               </div>
@@ -384,7 +379,7 @@ export default async function Home() {
                 2 Guides <ArrowRight className="w-3 h-3" />
               </span>
             </Link>
-            <Link href="/blog?category=Trading+Psychology" className="block group border border-slate-100 rounded-2xl p-6 bg-white hover:shadow-xl hover:border-accent/10 transition-all duration-300">
+            <Link href="/blog?category=Trading+Psychology" className="block group border border-white/10 rounded-2xl p-6 bg-white hover:shadow-xl hover:border-accent/20 transition-all duration-300">
               <div className="w-12 h-12 rounded-2xl bg-purple-50/10 flex items-center justify-center mb-4">
                 <Target className="w-6 h-6 text-purple-600" />
               </div>
@@ -398,36 +393,37 @@ export default async function Home() {
         </section>
 
         {/* Trust Section */}
-        <section className="space-y-8 pt-12 border-t border-slate-100">
-          <div className="bg-slate-950 text-white rounded-3xl p-8 md:p-12 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-accent/20 blur-[100px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
-            <div className="relative z-10 space-y-8">
-              <h2 className="text-3xl font-bold font-serif">Built for Traders, By a Trader</h2>
-              <p className="text-slate-400 leading-relaxed max-w-2xl text-lg">
+        <section className="space-y-8 pt-12 border-t border-white/5">
+          <div className="relative bg-gradient-to-br from-[#0f1639] via-[#111838] to-[#0f1639] rounded-3xl p-8 md:p-14 overflow-hidden border border-white/5">
+            <div className="absolute top-0 right-0 w-80 h-80 bg-accent/15 blur-[150px] rounded-full translate-x-1/3 -translate-y-1/3"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600/10 blur-[120px] rounded-full -translate-x-1/3 translate-y-1/3"></div>
+            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 0.5px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+            <div className="relative z-10 space-y-10">
+              <div className="flex items-center gap-3">
+                <span className="w-1 h-8 bg-accent rounded-full"></span>
+                <h2 className="text-3xl md:text-4xl font-bold font-serif bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">Built for Traders, By a Trader</h2>
+              </div>
+              <p className="text-slate-300 leading-relaxed max-w-2xl text-lg">
                 All content and tools are created by MUHAMMAD USMAN, a senior market analyst with 12+ years of experience specializing in XAUUSD and global liquidity cycles. Every guide is human written, mathematically verified, and designed for real world application.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 text-center">
-                  <Award className="w-8 h-8 text-accent mx-auto mb-3" />
-                  <div className="text-2xl font-bold font-serif">12+</div>
-                  <div className="text-xs text-slate-400 mt-1">Years Experience</div>
-                </div>
-                <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 text-center">
-                  <BookOpen className="w-8 h-8 text-accent mx-auto mb-3" />
-                  <div className="text-2xl font-bold font-serif">8+</div>
-                  <div className="text-xs text-slate-400 mt-1">Expert Guides</div>
-                </div>
-                <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 text-center">
-                  <ShieldCheck className="w-8 h-8 text-accent mx-auto mb-3" />
-                  <div className="text-2xl font-bold font-serif">0</div>
-                  <div className="text-xs text-slate-400 mt-1">Hidden Fees</div>
-                </div>
+                {[
+                  { icon: Award, value: '12+', label: 'Years Experience', gradient: 'from-accent to-blue-500' },
+                  { icon: BookOpen, value: '8+', label: 'Expert Guides', gradient: 'from-blue-500 to-cyan-500' },
+                  { icon: ShieldCheck, value: '0', label: 'Hidden Fees', gradient: 'from-cyan-500 to-emerald-500' },
+                ].map((stat, index) => (
+                  <div key={index} className="bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/10 rounded-xl p-6 text-center hover:border-accent/25 transition-all duration-300 hover:shadow-lg hover:shadow-accent/5">
+                    <stat.icon className="w-8 h-8 text-accent mx-auto mb-4" />
+                    <div className="text-3xl font-bold font-serif bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">{stat.value}</div>
+                    <div className="text-xs text-slate-400 mt-2 font-medium uppercase tracking-wider">{stat.label}</div>
+                  </div>
+                ))}
               </div>
               <div className="pt-4 flex flex-wrap gap-4">
-                <Link href="/about" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-6 py-3.5 rounded-xl transition-all no-underline text-sm">
+                <Link href="/about" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-7 py-3.5 rounded-xl transition-all no-underline hover:shadow-lg hover:shadow-accent/30 text-sm">
                   Read Our Story <ArrowRight className="w-4 h-4" />
                 </Link>
-                <Link href="/editorial-policy" className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-3.5 rounded-xl transition-all no-underline text-sm border border-slate-700">
+                <Link href="/editorial-policy" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white font-bold px-7 py-3.5 rounded-xl transition-all no-underline text-sm border border-white/20 backdrop-blur-sm">
                   Editorial Policy
                 </Link>
               </div>
@@ -436,40 +432,36 @@ export default async function Home() {
         </section>
 
         {/* Disclaimer Section */}
-        <section className="space-y-4 pt-8 border-t border-slate-100">
-          <div className="bg-slate-50 border border-slate-100 rounded-2xl p-8 space-y-4">
-            <h3 className="text-lg font-bold font-serif text-slate-900 flex items-center gap-2">
+        <section className="space-y-4 pt-8 border-t border-white/5">
+          <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.01] border border-white/10 rounded-2xl p-8 space-y-6 backdrop-blur-sm">
+            <h3 className="text-lg font-bold font-serif text-white flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-accent" />
               Why Trust Usman Trades?
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <span className="text-accent font-black mt-0.5">1.</span>
-                  <p className="text-sm text-slate-600 leading-relaxed">All content is human written by a senior market analyst with real world experience. No AI generated fluff.</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-accent font-black mt-0.5">2.</span>
-                  <p className="text-sm text-slate-600 leading-relaxed">Every formula and calculation is mathematically verified against industry standards.</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-accent font-black mt-0.5">3.</span>
-                  <p className="text-sm text-slate-600 leading-relaxed">We do not accept payments from brokers to promote their services. Our advice is independent and unbiased.</p>
-                </div>
+                {[
+                  'All content is human written by a senior market analyst with real world experience. No AI generated fluff.',
+                  'Every formula and calculation is mathematically verified against industry standards.',
+                  'We do not accept payments from brokers to promote their services. Our advice is independent and unbiased.',
+                ].map((point, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <span className="bg-accent text-white font-black mt-0.5 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">{i + 1}</span>
+                    <p className="text-sm text-slate-300 leading-relaxed">{point}</p>
+                  </div>
+                ))}
               </div>
               <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <span className="text-accent font-black mt-0.5">4.</span>
-                  <p className="text-sm text-slate-600 leading-relaxed">All tools perform calculations locally in your browser. Your data is never stored or transmitted.</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-accent font-black mt-0.5">5.</span>
-                  <p className="text-sm text-slate-600 leading-relaxed">We never guarantee profits or promise specific outcomes. Trading involves significant risk.</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-accent font-black mt-0.5">6.</span>
-                  <p className="text-sm text-slate-600 leading-relaxed">Our educational library covers Forex, Gold, Bitcoin, risk management, and trading psychology.</p>
-                </div>
+                {[
+                  'All tools perform calculations locally in your browser. Your data is never stored or transmitted.',
+                  'We never guarantee profits or promise specific outcomes. Trading involves significant risk.',
+                  'Our educational library covers Forex, Gold, Bitcoin, risk management, and trading psychology.',
+                ].map((point, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <span className="bg-accent text-white font-black mt-0.5 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">{i + 4}</span>
+                    <p className="text-sm text-slate-300 leading-relaxed">{point}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
