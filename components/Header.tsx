@@ -56,8 +56,8 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full border-b border-slate-100 bg-white sticky top-0 z-50 transition-all duration-300">
-      <nav className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-5">
+<header className="w-full border-b border-slate-100 bg-white sticky top-0 z-50 transition-all duration-300">
+       <nav className="mx-auto flex max-w-[1200px] items-center justify-between px-4 md:px-6 py-4">
         <Link href="/" className="text-xl font-bold text-slate-900 no-underline tracking-tight hover:opacity-80 transition-opacity font-serif italic">
           Usman Trades<span className="text-accent not-italic">.</span>
         </Link>
@@ -160,8 +160,8 @@ export default function Header() {
 
       {/* Mobile nav */}
       {menuOpen && (
-        <div className="border-t border-slate-100 bg-white px-6 py-6 md:hidden animate-in fade-in slide-in-from-top-4 duration-300">
-          <div className="space-y-4">
+        <div className="border-t border-slate-100 bg-white px-4 md:px-6 py-4 md:py-6 md:hidden">
+          <div className="space-y-3">
             {navLinks.map((link) => {
               const active = isActive(link.href);
               
@@ -170,20 +170,20 @@ export default function Header() {
                   <Link
                     href={link.href}
                     onClick={() => !link.submenu && setMenuOpen(false)}
-                    className={`block py-2 text-base font-bold no-underline transition-colors ${
+                    className={`block py-2 text-base font-bold no-underline transition-colors min-h-[44px] flex items-center ${
                       active ? 'text-accent' : 'text-slate-900 hover:text-accent'
                     }`}
                   >
                     {link.label}
                   </Link>
                   {link.submenu && (
-                    <div className="pl-4 space-y-3 border-l-2 border-slate-50 py-1">
+                    <div className="pl-4 space-y-2 border-l-2 border-slate-50 py-1">
                       {link.submenu.map((sub) => (
                         <Link
                           key={sub.href}
                           href={sub.href}
                           onClick={() => setMenuOpen(false)}
-                          className="flex items-center gap-3 py-1 text-sm text-slate-500 font-bold hover:text-accent no-underline"
+                          className="flex items-center gap-3 py-2 text-sm text-slate-500 font-bold hover:text-accent no-underline min-h-[44px]"
                         > 
                           <sub.icon className="w-4 h-4 text-slate-300" />
                           {sub.label}

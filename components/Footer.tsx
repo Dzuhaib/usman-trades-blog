@@ -4,8 +4,8 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full border-t border-slate-100 bg-slate-50 mt-auto">
-      <div className="mx-auto max-w-[1200px] px-6 py-12 md:py-16">
+<footer className="w-full border-t border-slate-100 bg-slate-50 mt-auto">
+       <div className="mx-auto max-w-[1200px] px-4 md:px-6 py-10 md:py-16">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
           {/* Column 1: Mission */}
           <div className="md:col-span-2 space-y-4">

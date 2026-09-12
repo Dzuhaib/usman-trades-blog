@@ -38,19 +38,19 @@ export default function LiveTicker() {
   }, []);
 
   return (
-    <section className="bg-slate-950 border border-slate-800 rounded-lg p-3 text-white overflow-hidden shadow-inner select-none">
-      <div className="flex items-center justify-between gap-6 overflow-x-auto no-scrollbar scroll-smooth">
-        <div className="flex items-center gap-2 border-r border-slate-800 pr-4 shrink-0">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 font-mono">TICKER <span className="text-[8px] text-slate-600">(SIMULATED)</span></span>
+    <section className="bg-slate-950 border border-slate-800 rounded-lg p-2 md:p-3 text-white overflow-hidden shadow-inner select-none">
+      <div className="flex items-center justify-between gap-4 overflow-x-auto no-scrollbar scroll-smooth">
+        <div className="flex items-center gap-2 border-r border-slate-800 pr-3 shrink-0">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span className="text-[10px] md:text-[11px] uppercase font-bold tracking-widest text-slate-400 font-mono">TICKER <span className="text-[8px] md:text-[9px] text-slate-600">(SIMULATED)</span></span>
         </div>
-        <div className="flex items-center gap-8 text-xs font-mono w-full justify-around">
+        <div className="flex items-center gap-4 md:gap-6 text-[10px] md:text-xs font-mono w-full justify-around">
           {rates.map((item) => (
-            <div key={item.symbol} className="flex items-center gap-2 shrink-0">
+            <div key={item.symbol} className="flex items-center gap-1.5 md:gap-2 shrink-0">
               <span className="text-slate-400 font-bold">{item.symbol}</span>
               <span className="text-white font-semibold">{item.rate}</span>
               <span
-                className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                className={`text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded ${
                   item.isPositive ? 'bg-emerald-950 text-emerald-400' : 'bg-rose-950 text-rose-400'
                 }`}
               >
