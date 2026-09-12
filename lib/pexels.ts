@@ -75,6 +75,10 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
     url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Consumer Price Index data affecting gold and XAU/USD trading'
   },
+  'fomc-xau-usd-gold': {
+    url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Federal Reserve Chairman press conference on interest rates'
+  },
 };
 
 const CATEGORY_IMAGES: Record<string, PexelsImage> = {
@@ -260,6 +264,7 @@ function getCategoryForSlug(slug: string): string {
     'ppi-news-and-markets': 'forex',
     'which-broker-is-best': 'Broker Reviews',
     'us-cpi-xau-usd-gold': 'Forex Education',
+    'fomc-xau-usd-gold': 'Forex Education',
   };
   return slugToCategory[slug] || 'default';
 }

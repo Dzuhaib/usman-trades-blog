@@ -19,6 +19,18 @@ export function getTodayDate(): string {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "fomc-xau-usd-gold",
+    title: "How FOMC News Affects XAU/USD and Gold Prices",
+    excerpt: "A comprehensive guide to understanding how Federal Reserve monetary policy decisions impact gold prices and the XAU/USD currency pair. Learn about the relationship between interest rates, Treasury yields, the US dollar, and FOMC policy.",
+    category: "Forex Education",
+    date: "September 14, 2026",
+    updatedAt: "September 14, 2026",
+    readTime: "35 min read",
+    route: "/blog/posts/fomc-xau-usd-gold",
+    content: "How FOMC news affects XAU/USD and gold prices is a critical topic for every forex and gold trader. The Federal Open Market Committee is the most important monetary policy body in the United States, and its decisions have a direct and profound impact on gold prices. This guide covers every aspect of the FOMC-to-gold relationship, from basic definitions to advanced trading strategies.",
+    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+  },
+  {
     slug: "us-cpi-xau-usd-gold",
     title: "How US CPI Data Affects XAU/USD and Gold Prices",
     excerpt: "A comprehensive guide to understanding how US Consumer Price Index data impacts gold prices and the XAU/USD currency pair. Learn about the relationship between inflation, interest rates, the US dollar, and Treasury yields.",
