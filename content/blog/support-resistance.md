@@ -274,6 +274,16 @@ In low volatility or consolidating markets, support and resistance levels may be
 
 ## Institutional Order Flow and Support and Resistance
 
+---
+
+**Recommended Tools:**
+- [Project your profit targets with the Profit Calculator](/tools/profit-calculator)
+- [Validate your entry zones with the Risk Reward Calculator](/tools/risk-reward-calculator)
+- [Calculate your lot size for precision entries](/tools/lot-size-calculator)
+- [Understand pip value across different pairs with the Pip Calculator](/tools/pip-calculator)
+- [Calculate your risk per trade with the Risk Calculator](/tools/risk-calculator)
+
+
 Understanding how institutional order flow interacts with support and resistance is the final piece of the puzzle for any serious trader. Institutions are the dominant force in financial markets, and their order flow ultimately determines where support and resistance levels form and how they behave.
 
 Institutions accumulate positions over extended periods at specific price levels, creating zones of concentrated buying or selling interest that become support or resistance. These accumulation zones are not visible on standard charts, but they can be inferred through careful analysis of price behavior, volume patterns, and market structure.

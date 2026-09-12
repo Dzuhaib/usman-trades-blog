@@ -425,6 +425,16 @@ Remember that the goal of position sizing is not to maximize profits on any sing
 
 ## Summary
 
+---
+
+**Recommended Tools:**
+- [Use the Lot Size Calculator to automate this calculation](/tools/lot-size-calculator)
+- [Check the Risk Calculator to manage your cash exposure per trade](/tools/risk-calculator)
+- [Use the Risk Reward Calculator to validate your trade setups](/tools/risk-reward-calculator)
+- [Calculate your drawdown risk with the Drawdown Calculator](/tools/drawdown-calculator)
+- [Verify your margin requirements with the Margin Calculator](/tools/margin-calculator)
+
+
 1. Always determine your Risk Amount before entering a trade
 2. Calculate your stop loss distance based on your trading strategy and market conditions
 3. Use the position sizing formula to calculate the appropriate lot size
