@@ -19,6 +19,18 @@ export function getTodayDate(): string {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "us-cpi-xau-usd-gold",
+    title: "How US CPI Data Affects XAU/USD and Gold Prices",
+    excerpt: "A comprehensive guide to understanding how US Consumer Price Index data impacts gold prices and the XAU/USD currency pair. Learn about the relationship between inflation, interest rates, the US dollar, and Treasury yields.",
+    category: "Forex Education",
+    date: "September 13, 2026",
+    updatedAt: "September 13, 2026",
+    readTime: "28 min read",
+    route: "/blog/posts/us-cpi-xau-usd-gold",
+    content: "How US CPI data affects XAU/USD and gold prices is a critical topic for every forex and commodity trader. The Consumer Price Index is the most important monthly economic release for gold markets, and understanding its impact requires a comprehensive grasp of inflation dynamics, Federal Reserve monetary policy, and Treasury yield movements. This guide covers every aspect of the CPI-to-gold relationship, from basic definitions to advanced trading strategies.",
+    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+  },
+  {
     slug: "position-sizing",
     title: "Position Sizing Formula: How to Calculate Your Lot Size",
     excerpt: "Professional trading is not about predicting the next move. It is about managing the mathematical risk of every execution you take. The most common reason retail traders fail within their first year is not a lack of strategy, but a fundamental misunderstanding of position sizing. If you are entering trades based on a gut feeling about lot size, or worse, using the same lot size for every trade regardless of the stop loss distance, you are essentially gambling against a house that has better odds than you. In this guide, we will break down the exact mathematical formula used by institutional risk managers to ensure that no single trade can ever cause a catastrophic drawdown to your account. ## The Foundation: Why Pips Do Not Matter, But Dollars Do Many beginners focus on how many pips they won or lost. In reality, pips are a relative measure. A 50 pip...",
