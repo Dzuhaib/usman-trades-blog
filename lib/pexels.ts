@@ -28,6 +28,22 @@ const FALLBACK_IMAGES: Record<string, PexelsImage> = {
     url: 'https://images.pexels.com/photos/187041/pexels-photo-187041.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Close up of high-resolution monitor displaying multi-timeframe horizontal support and resistance channels'
   },
+  'nfp-xau-usd-gold': {
+    url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Nonfarm Payrolls economic report on financial dashboard with gold investment analysis'
+  },
+  'nfp-image-2': {
+    url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Professional trader analyzing job market data and employment statistics on multiple screens'
+  },
+  'nfp-image-3': {
+    url: 'https://images.pexels.com/photos/4383217/pexels-photo-4383217.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Gold coins and investment portfolio with Federal Reserve interest rate indicators'
+  },
+  'nfp-image-4': {
+    url: 'https://images.pexels.com/photos/5123456/pexels-photo-5123456.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'US Bureau of Labor Statistics employment data and workforce market analysis chart'
+  },
   'default': {
     url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Financial market trading news and economic data on screens'
@@ -75,13 +91,13 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
     url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Consumer Price Index data affecting gold and XAU/USD trading'
   },
-   'fomc-xau-usd-gold': {
-     url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg?auto=compress&cs=tinysrgb&w=1200',
-     alt: 'Federal Reserve Chairman press conference on interest rates'
-   },
+'fomc-xau-usd-gold': {
+      url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      alt: 'Federal Reserve Chairman press conference on interest rates'
+    },
     'nfp-xau-usd-gold': {
-      url: 'https://images.pexels.com/photos/3773073/pexels-photo-3773073.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      alt: 'Nonfarm Payrolls economic data report affecting gold and XAU/USD trading'
+      url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      alt: 'Nonfarm Payrolls economic report on financial dashboard with gold investment analysis'
     },
     'xau-usd-technical-analysis': {
       url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -190,7 +206,7 @@ export async function getPexelsImages(slug: string, count: number = 5, usedUrls?
   const category = getCategoryForSlug(slug);
 
   if (!apiKey || apiKey === 'your_pexels_api_key_here') {
-    const slugImg = slugImage || CATEGORY_IMAGES[category] || FALLBACK_IMAGES.default;
+    const slugImg = slugImage || CATEGORY_IMAGES[category] || FALLBACK_IMAGES[slug] || FALLBACK_IMAGES.default;
     const uniqueImages: PexelsImage[] = [];
     const altVariants = [
       `${slug} market analysis chart`,
@@ -200,7 +216,7 @@ export async function getPexelsImages(slug: string, count: number = 5, usedUrls?
     ];
     uniqueImages.push({ ...slugImg, alt: altVariants[0] });
     for (let i = 1; i < count && i < altVariants.length; i++) {
-      const fallback = FALLBACK_IMAGES[category] || FALLBACK_IMAGES.default;
+      const fallback = FALLBACK_IMAGES[`nfp-image-${i}`] || FALLBACK_IMAGES[category] || FALLBACK_IMAGES.default;
       if (!sharedUsedUrls.has(fallback.url)) {
         sharedUsedUrls.add(fallback.url);
         uniqueImages.push({ url: fallback.url, alt: altVariants[i] });
