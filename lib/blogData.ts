@@ -19,6 +19,18 @@ export function getTodayDate(): string {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "xau-usd-technical-analysis",
+    title: "Gold/XAU/USD Technical Analysis — Key Support at $4,356 and Resistance at $4,422–$4,447",
+    excerpt: "A comprehensive technical analysis of XAU/USD focusing on the critical $4,356 support and $4,422–$4,447 resistance zones. Learn about moving averages, MACD, Ichimoku Cloud, and Head and Shoulders patterns.",
+    category: "Technical Analysis",
+    date: "September 15, 2026",
+    updatedAt: "September 15, 2026",
+    readTime: "22 min read",
+    route: "/blog/posts/xau-usd-technical-analysis",
+    content: "Gold is currently trading in a delicate balance between buyers and sellers around the $4,393 level. The market structure has shifted bearish in recent sessions, and traders are closely watching two critical price zones that will likely determine the next major move. Support sits firmly at $4,356, while resistance has formed a ceiling at $4,422 to $4,447.",
+    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+  },
+  {
     slug: "fomc-xau-usd-gold",
     title: "How FOMC News Affects XAU/USD and Gold Prices",
     excerpt: "A comprehensive guide to understanding how Federal Reserve monetary policy decisions impact gold prices and the XAU/USD currency pair. Learn about the relationship between interest rates, Treasury yields, the US dollar, and FOMC policy.",
