@@ -19,6 +19,18 @@ export function getTodayDate(): string {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "nfp-xau-usd-gold",
+    title: "How Nonfarm Payrolls (NFP) Affects Gold and XAU/USD",
+    excerpt: "A comprehensive guide to understanding how Nonfarm Payrolls data impacts gold prices and the XAU/USD currency pair. Learn about the relationship between employment data, Federal Reserve policy, interest rates, Treasury yields, and the US dollar.",
+    category: "Forex Education",
+    date: "September 15, 2026",
+    updatedAt: "September 15, 2026",
+    readTime: "38 min read",
+    route: "/blog/posts/nfp-xau-usd-gold",
+    content: "The Nonfarm Payrolls report is arguably the most impactful economic release that moves gold and the XAU/USD pair every single month. While many traders focus on inflation data or central bank meetings, the NFP release has a unique ability to reshape the entire interest rate outlook within minutes of hitting the wires. For anyone who trades gold, understanding how this report moves XAU/USD is not optional; it is essential.",
+    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+  },
+  {
     slug: "xau-usd-technical-analysis",
     title: "Gold/XAU/USD Technical Analysis — Key Support at $4,356 and Resistance at $4,422–$4,447",
     excerpt: "A comprehensive technical analysis of XAU/USD focusing on the critical $4,356 support and $4,422–$4,447 resistance zones. Learn about moving averages, MACD, Ichimoku Cloud, and Head and Shoulders patterns.",

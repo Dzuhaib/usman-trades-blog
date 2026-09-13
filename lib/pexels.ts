@@ -79,11 +79,15 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
      url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg?auto=compress&cs=tinysrgb&w=1200',
      alt: 'Federal Reserve Chairman press conference on interest rates'
    },
-   'xau-usd-technical-analysis': {
-     url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg?auto=compress&cs=tinysrgb&w=1200',
-     alt: 'Gold trading chart with technical analysis indicators and price levels'
-   },
- };
+    'nfp-xau-usd-gold': {
+      url: 'https://images.pexels.com/photos/3773073/pexels-photo-3773073.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      alt: 'Nonfarm Payrolls economic data report affecting gold and XAU/USD trading'
+    },
+    'xau-usd-technical-analysis': {
+      url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      alt: 'Gold trading chart with technical analysis indicators and price levels'
+    },
+};
 
 const CATEGORY_IMAGES: Record<string, PexelsImage> = {
   'Forex Education': {
@@ -269,6 +273,7 @@ function getCategoryForSlug(slug: string): string {
     'which-broker-is-best': 'Broker Reviews',
     'us-cpi-xau-usd-gold': 'Forex Education',
     'fomc-xau-usd-gold': 'Forex Education',
+    'nfp-xau-usd-gold': 'Forex Education',
     'xau-usd-technical-analysis': 'Technical Analysis',
    };
    return slugToCategory[slug] || 'default';
