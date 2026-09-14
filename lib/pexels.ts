@@ -108,8 +108,8 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
     alt: 'Risk reward ratio calculation with balance scale and trading charts'
   },
   'drawdown-recovery-trading': {
-    url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Drawdown recovery strategy with trading chart and loss recovery planning'
+    url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Trading loss recovery and drawdown analysis chart'
   },
   'pip-value-guide': {
     url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=1200',

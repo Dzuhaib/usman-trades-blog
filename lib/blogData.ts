@@ -33,7 +33,7 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
   'ppi-news-and-markets': { url: 'https://images.pexels.com/photos/102152/pexels-photo-102152.jpeg', alt: 'Producer Price Index wholesale data on trading screen' },
   'which-broker-is-best': { url: 'https://images.pexels.com/photos/7173046/pexels-photo-7173046.jpeg', alt: 'Comparison of forex brokers with charts and financial data on screens' },
   'risk-reward-ratio': { url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg', alt: 'Risk reward ratio calculation with balance scale and trading charts' },
-  'drawdown-recovery-trading': { url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg', alt: 'Drawdown recovery strategy with trading chart and loss recovery planning' },
+  'drawdown-recovery-trading': { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg', alt: 'Trading loss recovery and drawdown analysis chart' },
   'pip-value-guide': { url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg', alt: 'Pip value calculation on forex trading terminal with currency charts' },
   'compound-growth-trading': { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Compound growth trading account chart showing exponential wealth building' },
 };
