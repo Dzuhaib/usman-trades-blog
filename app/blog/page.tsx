@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { BLOG_POSTS, CATEGORIES, BlogPost, BLOG_POST_IMAGES } from '@/lib/blogData';
-import { getImageForSlug } from '@/lib/pexels';
+import { BLOG_POSTS, CATEGORIES, BlogPost } from '@/lib/blogData';
 import { Search, Clock, Calendar, User } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -16,6 +15,14 @@ interface PageProps {
   searchParams: Promise<{ category?: string }>;
 }
 
+const POSTS_WITH_IMAGES: Record<string, { url: string; alt: string }> = {
+  'what-moves-gold-prices': { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Gold bullion bars with rising chart graph showing gold price drivers' },
+  'nfp-xau-usd-gold': { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg', alt: 'Nonfarm Payrolls economic report on financial dashboard with gold investment' },
+  'fomc-xau-usd-gold': { url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg', alt: 'Federal Reserve Chairman press conference on interest rates' },
+  'us-cpi-xau-usd-gold': { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg', alt: 'Consumer Price Index data affecting gold and XAU/USD trading' },
+  'xau-usd-technical-analysis': { url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg', alt: 'Gold trading chart with technical analysis indicators and price levels' },
+};
+
 export default async function BlogIndex({ searchParams }: PageProps) {
   const resolvedParams = await searchParams;
   const activeCategory = resolvedParams.category || 'All';
@@ -28,10 +35,10 @@ export default async function BlogIndex({ searchParams }: PageProps) {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const postsWithImages = filteredPosts.map((post) => {
-    const directImage = BLOG_POST_IMAGES[post.slug];
+    const directImage = POSTS_WITH_IMAGES[post.slug];
     return {
       ...post,
-      image: directImage || post.image || getImageForSlug(post.slug),
+      image: directImage || post.image || { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Financial market trading news' },
     };
   });
 

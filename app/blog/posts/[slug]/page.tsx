@@ -1,10 +1,8 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { BLOG_POST_IMAGES } from '@/lib/blogData';
-import { getImageForSlug } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { getPostBySlug } from '@/lib/seo-os/article-engine';
@@ -21,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
   if (!post) return { title: 'Post Not Found' };
 
-  const slugImage = BLOG_POST_IMAGES[slug] || getImageForSlug(slug);
+  const slugImage = BLOG_POST_IMAGES[slug] || { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Gold trading analysis' };
   const featuredImage = post.image || slugImage;
 
   return {
@@ -41,7 +39,7 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  const slugImage = BLOG_POST_IMAGES[slug] || getImageForSlug(slug);
+  const slugImage = BLOG_POST_IMAGES[slug] || { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Gold trading analysis' };
   const featuredImage = post.image || slugImage;
 
   const blogSchema = generateBlogSchema({
@@ -57,13 +55,13 @@ export default async function BlogPostPage({ params }: Props) {
   // Split content by image placeholders [IMAGE_X]
   const contentParts = post.content ? post.content.split(/\[IMAGE_\d+\]/) : [post.excerpt];
   
-  // Build images array: featured + 4 additional from FALLBACK_IMAGES
+  // Build images array: featured + 4 additional from Pexels
   const allImages: { url: string; alt: string }[] = [
     featuredImage,
-    { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: `${slug} trading data analysis` },
-    { url: 'https://images.pexels.com/photos/4383217/pexels-photo-4383217.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: `${slug} investment portfolio` },
-    { url: 'https://images.pexels.com/photos/5123456/pexels-photo-5123456.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: `${slug} market trends` },
-    { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: `${slug} financial market` },
+    { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg', alt: `${slug} trading data analysis` },
+    { url: 'https://images.pexels.com/photos/4383217/pexels-photo-4383217.jpeg', alt: `${slug} investment portfolio` },
+    { url: 'https://images.pexels.com/photos/5123456/pexels-photo-5123456.jpeg', alt: `${slug} market trends` },
+    { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: `${slug} financial market` },
   ];
 
   return (
@@ -103,13 +101,10 @@ export default async function BlogPostPage({ params }: Props) {
               <SmartText text={part} />
               {allImages[index] && (
                 <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden relative my-12">
-                  <Image 
-                    src={allImages[index].url} 
-                    alt={allImages[index].alt} 
-                    fill 
-                    className="object-cover" 
-                    sizes="(max-width: 768px) 100vw, 720px"
-                    priority={index === 0}
+                  <img
+                    src={allImages[index].url}
+                    alt={allImages[index].alt}
+                    className="w-full h-full object-cover"
                   />
                 </div>
               )}
