@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { BLOG_POSTS, CATEGORIES, BlogPost } from '@/lib/blogData';
 import { getImageForSlug } from '@/lib/pexels';
 import Image from 'next/image';

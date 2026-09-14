@@ -65,9 +65,6 @@ export default async function BlogPostPage({ params }: Props) {
     { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: `${slug} financial market` },
   ];
 
-  // Split content by image placeholders [IMAGE_X]
-  const contentParts = post.content ? post.content.split(/\[IMAGE_\d+\]/) : [post.excerpt];
-  
   return (
     <>
       <script
