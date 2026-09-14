@@ -27,19 +27,21 @@ export const BLOG_POSTS: BlogPost[] = [
     updatedAt: "September 15, 2026",
     readTime: "45 min read",
     route: "/blog/posts/what-moves-gold-prices",
-    content: "Gold is one of the most actively traded assets in the world, and its price rarely stays still for long. Every single day, billions of dollars worth of gold change hands as traders, investors, and central banks react to shifting economic conditions, political developments, and market sentiment.",
+    image: { url: "https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Gold bullion bars with rising chart graph showing gold price drivers" },
+    content: "Gold is one of the most actively traded assets in the world, and its price rarely stays still for long.",
     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
   },
   {
     slug: "nfp-xau-usd-gold",
     title: "How Nonfarm Payrolls (NFP) Affects Gold and XAU/USD",
-    excerpt: "A comprehensive guide to understanding how Nonfarm Payrolls data impacts gold prices and the XAU/USD currency pair. Learn about the relationship between employment data, Federal Reserve policy, interest rates, Treasury yields, and the US dollar.",
+    excerpt: "A comprehensive guide to understanding how Nonfarm Payrolls data impacts gold prices and the XAU/USD currency pair.",
     category: "Forex Education",
     date: "September 15, 2026",
     updatedAt: "September 15, 2026",
     readTime: "38 min read",
     route: "/blog/posts/nfp-xau-usd-gold",
-    content: "The Nonfarm Payrolls report is arguably the most impactful economic release that moves gold and the XAU/USD pair every single month. While many traders focus on inflation data or central bank meetings, the NFP release has a unique ability to reshape the entire interest rate outlook within minutes of hitting the wires. For anyone who trades gold, understanding how this report moves XAU/USD is not optional; it is essential.",
+    image: { url: "https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Nonfarm Payrolls economic report on financial dashboard with gold investment" },
+    content: "The Nonfarm Payrolls report is arguably the most impactful economic release that moves gold and the XAU/USD pair every single month.",
     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
   },
   {
