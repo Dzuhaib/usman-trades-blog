@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { BLOG_POSTS, CATEGORIES, BlogPost, BLOG_POST_IMAGES } from '@/lib/blogData';
 import { getImageForSlug } from '@/lib/pexels';
-import Image from 'next/image';
 import { Search, Clock, Calendar, User } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -88,14 +87,11 @@ export default async function BlogIndex({ searchParams }: PageProps) {
                 className="group flex flex-col space-y-5"
               >
                 <Link href={post.route} className="block relative aspect-[16/10] w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 shadow-sm">
-                  <Image
-                    src={post.image.url}
-                    alt={post.image.alt}
-                    fill
-                    priority={index < 2}
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
+                    <img
+                      src={post.image.url}
+                      alt={post.image.alt}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
                   <div className="absolute top-4 left-4">
                     <span className="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[9px] font-black text-slate-900 uppercase tracking-widest shadow-sm">
                       {post.category}
