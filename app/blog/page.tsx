@@ -164,10 +164,10 @@ export default async function BlogIndex({ searchParams }: PageProps) {
       </div>
 
       {/* AEO/FAQ Section for Blog Index */}
-      <section className="bg-slate-900 text-white rounded-3xl p-10 md:p-16 space-y-12">
+      <section className="bg-slate-50 border border-slate-100 text-slate-900 rounded-3xl p-10 md:p-16 space-y-12">
         <div className="max-w-[600px] space-y-4">
           <h2 className="text-3xl font-bold font-serif tracking-tight">Education FAQ</h2>
-          <p className="text-slate-400 text-sm leading-relaxed">
+          <p className="text-slate-500 text-sm leading-relaxed">
             Quick answers to common questions about our editorial approach and trading philosophy.
           </p>
         </div>
@@ -193,7 +193,7 @@ export default async function BlogIndex({ searchParams }: PageProps) {
           ].map((faq, i) => (
             <div key={i} className="space-y-3">
               <h3 className="text-lg font-bold font-serif text-accent">{faq.q}</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+              <p className="text-slate-600 text-sm leading-relaxed">{faq.a}</p>
             </div>
           ))}
         </div>
