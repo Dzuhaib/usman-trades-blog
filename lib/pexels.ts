@@ -32,15 +32,15 @@ const FALLBACK_IMAGES: Record<string, PexelsImage> = {
     url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Nonfarm Payrolls economic report on financial dashboard with gold investment analysis'
   },
-  'nfp-image-2': {
+  'nfp-image-1': {
     url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Professional trader analyzing job market data and employment statistics on multiple screens'
   },
-  'nfp-image-3': {
+  'nfp-image-2': {
     url: 'https://images.pexels.com/photos/4383217/pexels-photo-4383217.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Gold coins and investment portfolio with Federal Reserve interest rate indicators'
   },
-  'nfp-image-4': {
+  'nfp-image-3': {
     url: 'https://images.pexels.com/photos/5123456/pexels-photo-5123456.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'US Bureau of Labor Statistics employment data and workforce market analysis chart'
   },
