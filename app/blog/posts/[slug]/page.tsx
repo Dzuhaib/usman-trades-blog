@@ -6,7 +6,7 @@ import { BLOG_POSTS, BLOG_POST_IMAGES, CATEGORIES, BlogPost } from '@/lib/blogDa
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { getPostBySlug } from '@/lib/seo-os/article-engine';
-import { generateBlogSchema } from '@/lib/seo-os/schema-engine';
+import { generateBlogSchema, generateBreadcrumbSchema } from '@/lib/seo-os/schema-engine';
 import SmartText from '@/components/SmartText';
 
 interface Props {
@@ -95,6 +95,14 @@ export default async function BlogPostPage({ params }: Props) {
 
   const relatedPosts = getRelatedPosts(slug, post.category);
 
+  // Breadcrumb items shared by the visible nav and the JSON-LD schema
+  const breadcrumbItems = [
+    { label: 'Library', href: '/blog' },
+    { label: post.category, href: '/blog?category=' + encodeURIComponent(post.category) },
+    { label: post.title, href: post.route },
+  ];
+  const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbItems);
+
   // Extract this post's own FAQs from its content for schema
   const faqs = extractFAQs(post.content);
   const faqSchema = faqs.length > 0 ? buildFAQSchema(faqs) : null;
@@ -117,6 +125,10 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {faqSchema && (
         <script
           type="application/ld+json"
@@ -124,11 +136,7 @@ export default async function BlogPostPage({ params }: Props) {
         />
       )}
       <article className="max-w-[720px] mx-auto space-y-12 py-8 px-4">
-        <Breadcrumbs items={[
-          { label: 'Library', href: '/blog' },
-          { label: post.category, href: '/blog?category=' + post.category },
-          { label: post.title, href: post.route }
-        ]} />
+        <Breadcrumbs items={breadcrumbItems} />
 
         {/* Article Header */}
         <header className="border-b border-border pb-8 space-y-4">

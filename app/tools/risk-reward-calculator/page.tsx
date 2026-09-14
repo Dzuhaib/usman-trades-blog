@@ -113,7 +113,7 @@ export default async function RiskRewardPage() {
               A risk reward ratio compares the amount of money you are willing to lose on a trade to the amount of money you expect to make. For example, if you risk $100 to make $200, your ratio is 1 to 2. This simple number is one of the most powerful metrics in a trader&apos;s arsenal.
             </p>
             <p>
-              Having a positive ratio means you can be wrong more than half of the time and still build your account balance. Many professional traders prioritize setups that offer a high reward relative to the risk. This allows them to handle losing streaks without feeling emotional stress or damaging their long term growth. For a deeper understanding, read our complete guide on <Link href="/blog/risk-reward-ratio" className="text-accent underline">Risk Reward Ratio in Trading</Link>.
+              Having a positive ratio means you can be wrong more than half of the time and still build your account balance. Many professional traders prioritize setups that offer a high reward relative to the risk. This allows them to handle losing streaks without feeling emotional stress or damaging their long term growth. For a deeper understanding, read our complete guide on <Link href="/blog/posts/risk-reward-ratio" className="text-accent underline">Risk Reward Ratio in Trading</Link>.
             </p>
             <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
               <img src={image1.url} alt="Strategic planning and business decision making" className="w-full h-full object-cover" />
@@ -190,7 +190,7 @@ export default async function RiskRewardPage() {
 
         <footer className="border-t border-slate-100 pt-8 flex justify-between items-center text-sm">
           <Link href="/tools" className="text-slate-500 no-underline hover:text-slate-900 font-bold uppercase tracking-widest">All Utility Tools</Link>
-          <Link href="/blog/risk-reward-ratio" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest">Read Risk Reward Guide &rarr;</Link>
+          <Link href="/blog/posts/risk-reward-ratio" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest">Read Risk Reward Guide &rarr;</Link>
         </footer>
       </article>
     </>

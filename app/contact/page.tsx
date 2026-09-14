@@ -1,4 +1,20 @@
 import type { Metadata } from 'next';
+import { InstagramIcon, FacebookIcon } from '@/components/SocialIcons';
+
+const SOCIAL_LINKS = [
+  {
+    href: 'https://www.instagram.com/joyfx.official/',
+    label: 'Instagram',
+    handle: '@joyfx.official',
+    icon: InstagramIcon,
+  },
+  {
+    href: 'https://www.facebook.com/profile.php?id=61588218661763',
+    label: 'Facebook',
+    handle: 'Usman Trades',
+    icon: FacebookIcon,
+  },
+];
 
 export const metadata: Metadata = {
   title: 'Contact Usman Trades | Get in Touch With Our Team',
@@ -36,6 +52,27 @@ export default function Contact() {
             <p className="text-sm text-secondary">
               We typically review incoming inquiries within 24–48 hours, Monday through Friday, GMT.
             </p>
+          </div>
+        </div>
+
+        <div className="border border-border p-6 rounded-[4px] bg-surface space-y-4">
+          <span className="text-xs font-semibold text-muted tracking-wider uppercase block">Follow Us</span>
+          <div className="flex flex-col sm:flex-row gap-3">
+            {SOCIAL_LINKS.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 border border-border px-4 py-3 rounded-[4px] hover:border-accent transition-colors no-underline"
+              >
+                <social.icon className="w-5 h-5 text-accent" />
+                <span>
+                  <span className="block text-sm font-bold text-primary">{social.label}</span>
+                  <span className="block text-xs text-muted">{social.handle}</span>
+                </span>
+              </a>
+            ))}
           </div>
         </div>
 

@@ -1,4 +1,18 @@
 import Link from 'next/link';
+import { InstagramIcon, FacebookIcon } from '@/components/SocialIcons';
+
+const SOCIAL_LINKS = [
+  {
+    href: 'https://www.instagram.com/joyfx.official/',
+    label: 'Instagram',
+    icon: InstagramIcon,
+  },
+  {
+    href: 'https://www.facebook.com/profile.php?id=61588218661763',
+    label: 'Facebook',
+    icon: FacebookIcon,
+  },
+];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -41,6 +55,20 @@ export default function Footer() {
               General Inquiries:<br />
                <a href="/contact" className="text-slate-900 font-bold hover:text-accent transition-colors no-underline">Contact us here</a>
             </p>
+            <div className="space-y-2.5 pt-1">
+              {SOCIAL_LINKS.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-sm text-slate-500 hover:text-accent transition-colors font-medium no-underline"
+                >
+                  <social.icon className="w-4 h-4" />
+                  {social.label}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
