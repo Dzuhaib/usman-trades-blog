@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://usmantrades.co.uk';
+  const baseUrl = 'https://www.usmantrades.co.uk';
 
   const ensureValidDate = (dateStr: string | undefined): Date => {
     if (!dateStr) return new Date();

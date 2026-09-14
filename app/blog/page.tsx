@@ -28,7 +28,7 @@ const blogSchema = {
     'position': index + 1,
     'name': post.title,
     'description': post.excerpt,
-    'url': `https://usmantrades.co.uk${post.route}`,
+    'url': `https://www.usmantrades.co.uk${post.route}`,
     'image': POST_IMAGES[post.slug]?.url,
   })),
 };

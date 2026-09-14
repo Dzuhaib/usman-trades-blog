@@ -4,11 +4,14 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
+import AdSlot from "@/components/AdSlot";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
+
+const SITE_URL = "https://www.usmantrades.co.uk";
 
 export const metadata: Metadata = {
   title: {
@@ -16,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | Usman Trades",
   },
   description: "Usman Trades is a free trading education platform with professional calculators for Forex, Gold (XAUUSD), and Bitcoin. Learn position sizing, risk management, and technical analysis with simple guides written for real people.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://usmantrades.co.uk"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || SITE_URL),
   alternates: {
     canonical: "./",
   },
@@ -44,13 +47,13 @@ export const metadata: Metadata = {
     "pip value calculator",
     "compound growth trading",
   ],
-  authors: [{ name: "Usman Trades", url: "https://usmantrades.co.uk" }],
+  authors: [{ name: "Usman Trades", url: SITE_URL }],
   creator: "Usman Trades",
   publisher: "Usman Trades",
   openGraph: {
     title: "Usman Trades | Free Forex Education, Gold and Bitcoin Trading Tools and Education",
     description: "Access free professional trading calculators and simple educational guides for Forex, Gold, and Bitcoin. Learn position sizing, risk management, and price action analysis.",
-    url: "https://usmantrades.co.uk",
+    url: SITE_URL,
     siteName: "Usman Trades",
     locale: "en_GB",
     type: "website",
@@ -76,22 +79,38 @@ export const metadata: Metadata = {
   },
 };
 
+// Google Consent Mode v2 — defaults denied, updated by CookieConsent
+function ConsentModeScript() {
+  const script = `
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500
+    });
+  `;
+  return <script dangerouslySetInnerHTML={{ __html: script }} />;
+}
+
 // JSON-LD Structured Data for the entire website
 function WebsiteJsonLd() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Usman Trades",
-    url: "https://usmantrades.co.uk",
+    url: SITE_URL,
     description: "Free trading education platform with professional calculators for Forex, Gold, and Bitcoin.",
     publisher: {
       "@type": "Organization",
       name: "Usman Trades",
-      url: "https://usmantrades.co.uk",
+      url: SITE_URL,
     },
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://usmantrades.co.uk/blog?category={search_term_string}",
+      target: `${SITE_URL}/blog?category={search_term_string}`,
       "query-input": "required name=search_term_string",
     },
   };
@@ -112,35 +131,21 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <head>
+        <ConsentModeScript />
         <WebsiteJsonLd />
-        <script 
-          async 
+        <script
+          async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5017133932206570"
           crossOrigin="anonymous"
-          data-ad-format="auto"
         ></script>
       </head>
       <body className="min-h-full flex flex-col bg-white text-primary selection:bg-accent/15 overflow-x-hidden">
         <Header />
-        
+
         <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 py-8 md:px-6 md:py-12">
-          <div className="my-4 mx-auto max-w-[728px]">
-            <ins className="adsbygoogle"
-              style={{ display: 'block' }}
-              data-ad-client="ca-pub-5017133932206570"
-              data-ad-slot="5017133932206570"
-              data-ad-format="auto"
-              data-full-width-responsive="true"></ins>
-          </div>
+          <AdSlot slot="6622183398" />
           {children}
-          <div className="my-4 mx-auto max-w-[728px]">
-            <ins className="adsbygoogle"
-              style={{ display: 'block' }}
-              data-ad-client="ca-pub-5017133932206570"
-              data-ad-slot="5017133932206571"
-              data-ad-format="auto"
-              data-full-width-responsive="true"></ins>
-          </div>
+          <AdSlot slot="6622183398" />
         </main>
         <CookieConsent />
         <Footer />
@@ -148,3 +153,4 @@ export default function RootLayout({
     </html>
   );
 }
+

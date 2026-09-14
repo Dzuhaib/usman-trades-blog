@@ -37,44 +37,41 @@ function getRelatedPosts(slug: string, category: string): BlogPost[] {
     .slice(0, RELATED_POSTS_LIMIT);
 }
 
-const FAQ_SCHEMA = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
+// Extract FAQ pairs from the post's own markdown content:
+// "## Frequently Asked Questions" followed by "### Question" + answer paragraphs
+function extractFAQs(content?: string): { q: string; a: string }[] {
+  if (!content) return [];
+  const faqSection = content.split(/## Frequently Asked Questions/i)[1];
+  if (!faqSection) return [];
+  const faqs: { q: string; a: string }[] = [];
+  const blocks = faqSection.split(/^### /m).slice(1);
+  for (const block of blocks) {
+    const lines = block.trim().split('\n');
+    const q = lines[0].trim();
+    const a = lines
+      .slice(1)
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (q && a) faqs.push({ q, a });
+  }
+  return faqs;
+}
+
+function buildFAQSchema(faqs: { q: string; a: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
       '@type': 'Question',
-      name: 'What is the best risk reward ratio for beginners?',
+      name: faq.q,
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Many educators suggest starting with a 1 to 2 ratio. This provides a safety net while you learn market mechanics and build your discipline.',
+        text: faq.a,
       },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can a risk reward ratio be too high?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. While a 1 to 10 ratio looks amazing, it is very difficult to achieve because the market is more likely to hit your stop loss before reaching such a distant target.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Does this tool work for short selling?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Absolutely. The calculator detects if your take profit is below your entry and adjusts the math for a sell trade automatically.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What is the risk reward ratio formula?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Risk Reward Ratio = (Take Profit Price minus Entry Price) divided by (Entry Price minus Stop Loss Price). A 1 to 2 ratio means you risk $1 to make $2.',
-      },
-    },
-  ],
-};
+    })),
+  };
+}
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
@@ -93,10 +90,14 @@ export default async function BlogPostPage({ params }: Props) {
     date: post.date,
     updatedAt: post.updatedAt,
     route: post.route,
-    author: { name: post.author.name, url: 'https://usmantrades.co.uk/about' },
+    author: { name: post.author.name, url: 'https://www.usmantrades.co.uk/about' },
   });
 
   const relatedPosts = getRelatedPosts(slug, post.category);
+
+  // Extract this post's own FAQs from its content for schema
+  const faqs = extractFAQs(post.content);
+  const faqSchema = faqs.length > 0 ? buildFAQSchema(faqs) : null;
 
   // Split content by image placeholders [IMAGE_X]
   const contentParts = post.content ? post.content.split(/\[IMAGE_\d+\]/) : [post.excerpt];
@@ -116,10 +117,12 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }}
-      />
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
       <article className="max-w-[720px] mx-auto space-y-12 py-8 px-4">
         <Breadcrumbs items={[
           { label: 'Library', href: '/blog' },

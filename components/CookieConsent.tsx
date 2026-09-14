@@ -2,13 +2,37 @@
 
 import { useState, useEffect } from 'react';
 
+declare global {
+  interface Window {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
+function updateConsent(granted: boolean) {
+  if (typeof window === 'undefined') return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function gtag(...args: unknown[]) {
+    window.dataLayer!.push(args);
+  };
+  const state = granted ? 'granted' : 'denied';
+  window.gtag('consent', 'update', {
+    ad_storage: state,
+    ad_user_data: state,
+    ad_personalization: state,
+    analytics_storage: state,
+  });
+}
+
 export default function CookieConsent() {
   const [accepted, setAccepted] = useState(false);
 
   useEffect(() => {
     const consent = localStorage.getItem('cookie_consent');
-    if (consent === 'accepted') {
+    if (consent) {
       setAccepted(true);
+      // Restore previously granted consent (non-personalized if declined)
+      updateConsent(consent === 'accepted');
     }
   }, []);
 
@@ -16,11 +40,13 @@ export default function CookieConsent() {
 
   const handleAccept = () => {
     localStorage.setItem('cookie_consent', 'accepted');
+    updateConsent(true);
     setAccepted(true);
   };
 
   const handleDecline = () => {
     localStorage.setItem('cookie_consent', 'declined');
+    updateConsent(false);
     setAccepted(true);
   };
 
