@@ -1,9 +1,7 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Metadata } from 'next';
-import { getPexelsImage } from '@/lib/pexels';
-import SessionTimer from './SessionTimer';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import SessionTimer from './SessionTimer';
 
 export const metadata: Metadata = {
   title: "Live Trading Session Timer | Global Forex Market Hours",
@@ -11,14 +9,22 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/tools/session-timer',
   },
+  keywords: "session timer, trading hours calculator, forex market hours, trading session tracker, market overlap tool",
 };
 
-export default async function SessionTimerPage() {
-  const image1 = await getPexelsImage('global city skyline');
-  const image2 = await getPexelsImage('world map digital');
+const image1 = { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Global city skylines representing major financial centers' };
+const image2 = { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg', alt: 'Digital world map showing global financial connectivity' };
 
+const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does the market close on weekends?","acceptedAnswer":{"@type":"Answer","text":"Yes. For Forex and Gold, the market closes on Friday evening and reopens on Sunday afternoon (UTC). However, Bitcoin and other cryptocurrencies trade 24 hours a day, 7 days a week."}},{"@type":"Question","name":"What time zone does this tool use?","acceptedAnswer":{"@type":"Answer","text":"Our tool uses Coordinated Universal Time (UTC). This is the standard used by major banks and institutional traders to ensure everyone is looking at the same market clock."}},{"@type":"Question","name":"When is the best time to trade?","acceptedAnswer":{"@type":"Answer","text":"For most people, the London and New York overlap is the best time due to the high volume. However, the best time for you depends on your specific strategy and your personal schedule."}}]};
+
+export default async function SessionTimerPage() {
   return (
-    <article className="max-w-[800px] mx-auto space-y-12 py-8">
+      <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <article className="max-w-[800px] mx-auto space-y-12 py-8">
       <Breadcrumbs items={[
         { label: 'Tools', href: '/tools' },
         { label: 'Session Timer', href: '/tools/session-timer' }
@@ -45,12 +51,7 @@ export default async function SessionTimerPage() {
             Knowing which session is active helps you choose the right strategy. For example, a breakout strategy might work better during the London open, while a range trading approach might be more suitable for the late Tokyo session. Our timer keeps you synchronized with the global flow of capital regardless of your local time zone.
           </p>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image1.url} 
-              alt="Global city skylines representing major financial centers" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image1.url} alt={image1.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -88,12 +89,7 @@ export default async function SessionTimerPage() {
             </div>
           </div>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image2.url} 
-              alt="Digital world map showing global financial connectivity" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image2.url} alt={image2.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -121,5 +117,6 @@ export default async function SessionTimerPage() {
         <Link href="/blog" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest">Learning Library &rarr;</Link>
       </footer>
     </article>
+      </>
   );
 }

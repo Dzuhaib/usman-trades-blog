@@ -1,9 +1,7 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Metadata } from 'next';
-import { getPexelsImage } from '@/lib/pexels';
-import CompoundGrowthCalculator from './CompoundGrowthCalculator';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import CompoundGrowthCalculator from './CompoundGrowthCalculator';
 
 export const metadata: Metadata = {
   title: "Trading Compound Growth Calculator | Project Your Account Growth",
@@ -11,14 +9,22 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/tools/compound-growth-calculator',
   },
+  keywords: "compound growth calculator, trading compounding tool, account growth calculator, forex compounding, investment growth planner",
 };
 
-export default async function CompoundGrowthPage() {
-  const image1 = await getPexelsImage('wealth accumulation growth');
-  const image2 = await getPexelsImage('financial chart analysis');
+const image1 = { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Concept of wealth accumulation and compounding growth' };
+const image2 = { url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg', alt: 'Financial charts and long term growth analysis' };
 
+const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is a 10% monthly return realistic?","acceptedAnswer":{"@type":"Answer","text":"While some months might offer high returns, maintaining 10% every single month is extremely difficult and requires taking significant risk. Professional traders often aim for more conservative targets to ensure account longevity."}},{"@type":"Question","name":"How often should I reinvest my profits?","acceptedAnswer":{"@type":"Answer","text":"Reinvesting after every trade or every month is the most common approach. This calculator assumes monthly reinvestment, which provides a realistic view of how a trading account grows over time."}},{"@type":"Question","name":"Can I lose money while compounding?","acceptedAnswer":{"@type":"Answer","text":"Yes. Compounding works in both directions. If you have a losing streak and your account balance drops, your future gains will be based on that smaller balance. This is why risk management is the most important part of the process."}}]};
+
+export default async function CompoundGrowthPage() {
   return (
-    <article className="max-w-[800px] mx-auto space-y-12 py-8">
+      <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <article className="max-w-[800px] mx-auto space-y-12 py-8">
       <Breadcrumbs items={[
         { label: 'Tools', href: '/tools' },
         { label: 'Compound Growth Calculator', href: '/tools/compound-growth-calculator' }
@@ -45,12 +51,7 @@ export default async function CompoundGrowthPage() {
             This strategy requires a shift in mindset. Instead of looking for one lucky trade, you look for a series of high probability setups that protect your capital while allowing for steady growth. The goal is to avoid large losses that interrupt the compounding process. By keeping your drawdowns small, you allow the math of growth to work in your favor.
           </p>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image1.url} 
-              alt="Concept of wealth accumulation and compounding growth" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image1.url} alt={image1.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -95,12 +96,7 @@ export default async function CompoundGrowthPage() {
             </div>
           </div>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image2.url} 
-              alt="Financial charts and long term growth analysis" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image2.url} alt={image2.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -128,5 +124,6 @@ export default async function CompoundGrowthPage() {
         <Link href="/tools/drawdown-calculator" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest">Drawdown Calculator &rarr;</Link>
       </footer>
     </article>
+      </>
   );
 }

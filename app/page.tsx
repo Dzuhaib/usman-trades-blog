@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { BLOG_POSTS, CATEGORIES } from '@/lib/blogData';
+import { BLOG_POSTS, CATEGORIES, BLOG_POST_IMAGES } from '@/lib/blogData';
 import { TOOLS } from '@/lib/toolsData';
-import { getPexelsImage } from '@/lib/pexels';
 import Image from 'next/image';
-import { Calendar, User, Calculator, ShieldAlert, BarChart3, TrendingUp, ArrowLeftRight, Coins, TrendingDown, Lock, Scale, Clock, ArrowRight, Sparkles, ShieldCheck, BookOpen, TrendingUp as TrendingUpIcon, Globe, DollarSign, PieChart, Target, Award } from 'lucide-react';
+import { Calendar, Clock, User, Calculator, ShieldAlert, BarChart3, TrendingUp, ArrowLeftRight, Coins, TrendingDown, Lock, Scale, Clock as ClockIcon, ArrowRight, Sparkles, ShieldCheck, BookOpen, TrendingUp as TrendingUpIcon, Globe, DollarSign, PieChart, Target, Award } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 const LiveTicker = dynamic(() => import('@/components/LiveTicker'));
@@ -37,13 +36,13 @@ export default async function Home() {
   const featuredPost = sortedPosts[0];
   const recentPosts = sortedPosts.slice(1);
 
-  const usedUrls = new Set<string>();
-  const postsWithImages = await Promise.all(
-    sortedPosts.map(async (post) => {
-      const pexelsImage = await getPexelsImage(post.slug, usedUrls);
-      return { ...post, image: pexelsImage };
-    })
-  );
+  const postsWithImages = sortedPosts.map((post) => {
+    const directImage = BLOG_POST_IMAGES[post.slug];
+    return {
+      ...post,
+      image: directImage || { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Financial market trading news' },
+    };
+  });
 
   const featuredImage = postsWithImages[0]?.image;
   const recentPostsWithImages = postsWithImages.slice(1);

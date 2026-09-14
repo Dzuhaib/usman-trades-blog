@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { BLOG_POST_IMAGES } from '@/lib/blogData';
+import { BLOG_POSTS, BLOG_POST_IMAGES, CATEGORIES, BlogPost } from '@/lib/blogData';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { getPostBySlug } from '@/lib/seo-os/article-engine';
@@ -19,17 +19,62 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
   if (!post) return { title: 'Post Not Found' };
 
-  const slugImage = BLOG_POST_IMAGES[slug] || { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Gold trading analysis' };
-  const featuredImage = post.image || slugImage;
-
   return {
     title: `${post.title} | Usman Trades`,
     description: post.excerpt,
+    keywords: [post.category, post.title.split(' ').slice(0, 3).join(' '), 'trading', 'forex', 'gold', 'XAUUSD', 'risk management'],
     alternates: {
       canonical: `/blog/posts/${slug}`,
     },
   };
 }
+
+const RELATED_POSTS_LIMIT = 3;
+
+function getRelatedPosts(slug: string, category: string): BlogPost[] {
+  return BLOG_POSTS
+    .filter(p => p.slug !== slug && p.category === category)
+    .slice(0, RELATED_POSTS_LIMIT);
+}
+
+const FAQ_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the best risk reward ratio for beginners?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Many educators suggest starting with a 1 to 2 ratio. This provides a safety net while you learn market mechanics and build your discipline.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can a risk reward ratio be too high?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. While a 1 to 10 ratio looks amazing, it is very difficult to achieve because the market is more likely to hit your stop loss before reaching such a distant target.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does this tool work for short selling?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Absolutely. The calculator detects if your take profit is below your entry and adjusts the math for a sell trade automatically.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the risk reward ratio formula?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Risk Reward Ratio = (Take Profit Price minus Entry Price) divided by (Entry Price minus Stop Loss Price). A 1 to 2 ratio means you risk $1 to make $2.',
+      },
+    },
+  ],
+};
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
@@ -39,8 +84,7 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  const slugImage = BLOG_POST_IMAGES[slug] || { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Gold trading analysis' };
-  const featuredImage = post.image || slugImage;
+  const featuredImage = BLOG_POST_IMAGES[slug] || post.image || { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Gold trading analysis' };
 
   const blogSchema = generateBlogSchema({
     title: post.title,
@@ -49,13 +93,15 @@ export default async function BlogPostPage({ params }: Props) {
     date: post.date,
     updatedAt: post.updatedAt,
     route: post.route,
-    author: post.author,
+    author: { name: post.author.name, url: 'https://usmantrades.co.uk/about' },
   });
+
+  const relatedPosts = getRelatedPosts(slug, post.category);
 
   // Split content by image placeholders [IMAGE_X]
   const contentParts = post.content ? post.content.split(/\[IMAGE_\d+\]/) : [post.excerpt];
   
-  // Build images array: featured + 4 additional from Pexels
+  // Build images array: featured + 4 additional
   const allImages: { url: string; alt: string }[] = [
     featuredImage,
     { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg', alt: `${slug} trading data analysis` },
@@ -69,6 +115,10 @@ export default async function BlogPostPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }}
       />
       <article className="max-w-[720px] mx-auto space-y-12 py-8 px-4">
         <Breadcrumbs items={[
@@ -114,10 +164,32 @@ export default async function BlogPostPage({ params }: Props) {
 
         <AuthorBio author={post.author} updatedAt={post.updatedAt} />
 
+        {/* Related Posts */}
+        {relatedPosts.length > 0 && (
+          <section className="space-y-6 pt-8 border-t border-border">
+            <h2 className="text-2xl font-bold font-serif text-slate-900">Related Guides</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {relatedPosts.map((relatedPost) => (
+                <Link
+                  key={relatedPost.slug}
+                  href={relatedPost.route}
+                  className="block p-4 border border-slate-200 rounded-xl hover:border-accent hover:bg-slate-50 transition-all no-underline"
+                >
+                  <h3 className="font-bold text-slate-900 text-sm">{relatedPost.title}</h3>
+                  <p className="text-xs text-slate-500 mt-1">{relatedPost.category} &bull; {relatedPost.readTime}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Footer Navigation */}
         <footer className="border-t border-border pt-8 flex flex-col sm:flex-row sm:justify-between items-center gap-4 text-sm pb-12">
           <Link href="/blog" className="text-secondary no-underline hover:text-primary transition-colors">
             &larr; Back to Library
+          </Link>
+          <Link href="/tools" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest text-sm">
+            Try Our Tools &rarr;
           </Link>
         </footer>
       </article>

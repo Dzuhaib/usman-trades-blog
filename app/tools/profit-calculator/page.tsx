@@ -1,9 +1,7 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Metadata } from 'next';
-import { getPexelsImage } from '@/lib/pexels';
-import ProfitCalculator from './ProfitCalculator';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import ProfitCalculator from './ProfitCalculator';
 
 export const metadata: Metadata = {
   title: "Trading Profit Calculator | Estimate Your Trade Outcomes",
@@ -11,14 +9,22 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/tools/profit-calculator',
   },
+  keywords: "trading profit calculator, profit calculator, forex profit tool, trading returns calculator, reward risk calculator",
 };
 
-export default async function ProfitCalculatorPage() {
-  const image1 = await getPexelsImage('financial growth success');
-  const image2 = await getPexelsImage('trading desk setup');
+const image1 = { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Financial growth and successful trading outcomes' };
+const image2 = { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg', alt: 'Professional trading desk with multiple monitors' };
 
+const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does this calculator include broker fees?","acceptedAnswer":{"@type":"Answer","text":"No. This tool calculates gross profit based on price movement. To find your net profit, you must subtract any spreads, commissions, or swap fees charged by your broker."}},{"@type":"Question","name":"Why does my profit change when I trade different pairs?","acceptedAnswer":{"@type":"Answer","text":"Profit depends on the value of a pip, which can vary across different currency pairs. This tool accounts for those differences to give you an accurate dollar amount."}},{"@type":"Question","name":"What is a good reward to risk ratio?","acceptedAnswer":{"@type":"Answer","text":"Many professionals aim for at least a 2 to 1 ratio, meaning they stand to gain twice as much as they are willing to lose. This allows you to remain profitable even if you lose half of your trades."}}]};
+
+export default async function ProfitCalculatorPage() {
   return (
-    <article className="max-w-[800px] mx-auto space-y-12 py-8">
+      <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <article className="max-w-[800px] mx-auto space-y-12 py-8">
       <Breadcrumbs items={[
         { label: 'Tools', href: '/tools' },
         { label: 'Profit Calculator', href: '/tools/profit-calculator' }
@@ -45,12 +51,7 @@ export default async function ProfitCalculatorPage() {
             If a trade only offers a tiny profit but requires a large stop loss, it might not be worth taking even if you think the price will move in your direction. Professional traders look for setups where the potential reward is significantly higher than the potential loss. Our tool allows you to experiment with different exit points to find the best balance for your strategy.
           </p>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image1.url} 
-              alt="Financial growth and successful trading outcomes" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image1.url} alt={image1.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -88,12 +89,7 @@ export default async function ProfitCalculatorPage() {
             </div>
           </div>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image2.url} 
-              alt="Professional trading desk with multiple monitors" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image2.url} alt={image2.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -121,5 +117,6 @@ export default async function ProfitCalculatorPage() {
         <Link href="/tools/lot-size-calculator" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest">Lot Size Calculator &rarr;</Link>
       </footer>
     </article>
+      </>
   );
 }

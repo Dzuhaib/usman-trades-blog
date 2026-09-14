@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Metadata } from 'next';
-import { getPexelsImage } from '@/lib/pexels';
 import { generateWebPageSchema } from '@/lib/seo-os/schema-engine';
 import SmartText from '@/components/SmartText';
+import Breadcrumbs from '@/components/Breadcrumbs';
+import LotSizeCalculator from './LotSizeCalculator';
 
 export const metadata: Metadata = {
   title: "Lot Size Calculator | How to Calculate Position Size Safely",
@@ -11,26 +11,30 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/tools/lot-size-calculator',
   },
+  keywords: "lot size calculator, position size calculator, forex lot tool, trade size calculator, risk-based position sizing",
 };
 
-import Breadcrumbs from '@/components/Breadcrumbs';
-import LotSizeCalculator from './LotSizeCalculator';
+const image1 = { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Trading planning and risk management illustration' };
+const image2 = { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg', alt: 'Financial calculation and lot size planning' };
+
+const pageSchema = generateWebPageSchema({
+  name: "Lot Size Calculator",
+  description: "Free trading tool to calculate the exact trade size based on your account balance and stop loss pips.",
+  url: "/tools/lot-size-calculator",
+});
+
+const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is a standard lot in Forex?","acceptedAnswer":{"@type":"Answer","text":"A standard lot represents 100,000 units of the base currency. For most pairs, this means every pip of movement is worth about $10."}},{"@type":"Question","name":"How much should I risk per trade?","acceptedAnswer":{"@type":"Answer","text":"Most experienced traders recommend risking no more than 1% or 2% of your account balance. This allows you to handle several losses in a row without damaging your capital too much."}},{"@type":"Question","name":"Does this tool work for micro lots?","acceptedAnswer":{"@type":"Answer","text":"Yes. The calculator provides the exact decimal value. For example, 0.01 is one micro lot, and 0.10 is one mini lot. You can use these values with any broker."}}]};
 
 export default async function LotSizeCalculatorPage() {
-  const image1 = await getPexelsImage('trading planning');
-  const image2 = await getPexelsImage('financial calculation');
-
-  const pageSchema = generateWebPageSchema({
-    name: "Lot Size Calculator",
-    description: "Free trading tool to calculate the exact trade size based on your account balance and stop loss pips.",
-    url: "/tools/lot-size-calculator",
-  });
-
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <article className="max-w-[800px] mx-auto space-y-12 py-8">
         <Breadcrumbs items={[
@@ -59,12 +63,7 @@ export default async function LotSizeCalculatorPage() {
               <SmartText text="By using a calculator, you ensure that your risk stays consistent. If you decide to risk 1% of your account, you will lose exactly 1% whether your stop loss is 10 pips or 100 pips away. This consistency is what allows professional traders to survive losing streaks and stay in the game long enough to see their strategy work." />
             </p>
             <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-              <Image 
-                src={image1.url} 
-                alt="Trading planning and risk management illustration" 
-                fill 
-                className="object-cover"
-              />
+              <img src={image1.url} alt={image1.alt} className="w-full h-full object-cover" />
             </div>
           </section>
 

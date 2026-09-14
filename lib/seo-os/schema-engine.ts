@@ -22,7 +22,7 @@ export function generateBlogSchema(post: {
   date: string;
   updatedAt: string;
   route: string;
-  author: { name: string };
+  author: { name: string; url?: string };
 }) {
   return {
     "@context": "https://schema.org",
@@ -35,7 +35,7 @@ export function generateBlogSchema(post: {
     "author": {
       "@type": "Person",
       "name": post.author.name,
-      "url": ORG_CONFIG.url,
+      "url": post.author.url || ORG_CONFIG.url,
     },
     "publisher": {
       "@type": "Organization",

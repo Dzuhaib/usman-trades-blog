@@ -15,7 +15,23 @@ interface PageProps {
   searchParams: Promise<{ category?: string }>;
 }
 
-const POSTS_WITH_IMAGES = BLOG_POST_IMAGES;
+const POST_IMAGES = BLOG_POST_IMAGES;
+
+const blogSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  'name': 'Trading Education Library',
+  'description': 'Comprehensive guides on Forex, Gold, Bitcoin trading, risk management, and technical analysis.',
+  'numberOfItems': BLOG_POSTS.length,
+  'itemListElement': BLOG_POSTS.map((post, index) => ({
+    '@type': 'ListItem',
+    'position': index + 1,
+    'name': post.title,
+    'description': post.excerpt,
+    'url': `https://usmantrades.co.uk${post.route}`,
+    'image': POST_IMAGES[post.slug]?.url,
+  })),
+};
 
 export default async function BlogIndex({ searchParams }: PageProps) {
   const resolvedParams = await searchParams;
@@ -29,7 +45,7 @@ export default async function BlogIndex({ searchParams }: PageProps) {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const postsWithImages = filteredPosts.map((post) => {
-    const directImage = POSTS_WITH_IMAGES[post.slug];
+    const directImage = POST_IMAGES[post.slug];
     return {
       ...post,
       image: directImage || post.image || { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Financial market trading news' },
@@ -37,7 +53,12 @@ export default async function BlogIndex({ searchParams }: PageProps) {
   });
 
   return (
-    <div className="space-y-16 py-8">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+      />
+      <div className="space-y-16 py-8">
       {/* Page Header */}
       <header className="space-y-6 max-w-[700px]">
         <h1 className="text-4xl md:text-5xl font-bold font-serif text-slate-900 tracking-tight">Trading Education Library</h1>
@@ -178,5 +199,6 @@ export default async function BlogIndex({ searchParams }: PageProps) {
         </div>
       </section>
     </div>
+    </>
   );
 }

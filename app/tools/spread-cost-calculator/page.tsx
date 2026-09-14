@@ -1,9 +1,7 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Metadata } from 'next';
-import { getPexelsImage } from '@/lib/pexels';
-import SpreadCostCalculator from './SpreadCostCalculator';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import SpreadCostCalculator from './SpreadCostCalculator';
 
 export const metadata: Metadata = {
   title: "Trading Spread Cost Calculator | Calculate Real Trading Costs",
@@ -11,14 +9,22 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/tools/spread-cost-calculator',
   },
+  keywords: "spread cost calculator, trading spread tool, bid ask calculator, forex spread calculator, trading cost calculator",
 };
 
-export default async function SpreadCostPage() {
-  const image1 = await getPexelsImage('financial expense math');
-  const image2 = await getPexelsImage('exchange rate board');
+const image1 = { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg', alt: 'Conceptual representation of financial expenses and spread calculation' };
+const image2 = { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg', alt: 'Financial exchange rate board showing bid and ask prices' };
 
+const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why do some pairs have higher spreads?","acceptedAnswer":{"@type":"Answer","text":"Pairs that are traded less frequently (minor or exotic pairs) usually have higher spreads because there are fewer participants willing to buy and sell at any given time. Major pairs like EUR/USD have the tightest spreads."}},{"@type":"Question","name":"Is a commission better than a spread?","acceptedAnswer":{"@type":"Answer","text":"Many professional \"ECN\" brokers charge a fixed commission instead of a large spread. In these cases, you still have a tiny spread cost plus the commission. Both should be factored into your total expense calculation."}},{"@type":"Question","name":"Does this tool work for crypto?","acceptedAnswer":{"@type":"Answer","text":"Yes. Bitcoin spreads are usually quoted in whole dollars rather than pips. The calculator adjusts the math to show you the dollar cost of entering a BTC position."}}]};
+
+export default async function SpreadCostPage() {
   return (
-    <article className="max-w-[800px] mx-auto space-y-12 py-8">
+      <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <article className="max-w-[800px] mx-auto space-y-12 py-8">
       <Breadcrumbs items={[
         { label: 'Tools', href: '/tools' },
         { label: 'Spread Cost Calculator', href: '/tools/spread-cost-calculator' }
@@ -45,12 +51,7 @@ export default async function SpreadCostPage() {
             While a spread might only be one or two pips, it can add up to a significant amount of money over time, especially if you trade frequently or use large position sizes. By knowing your spread cost upfront, you can factor it into your reward to risk calculations and ensure that your strategy remains profitable after all expenses.
           </p>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image1.url} 
-              alt="Conceptual representation of financial expenses and spread calculation" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image1.url} alt={image1.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -88,12 +89,7 @@ export default async function SpreadCostPage() {
             </div>
           </div>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image2.url} 
-              alt="Financial exchange rate board showing bid and ask prices" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image2.url} alt={image2.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -106,7 +102,7 @@ export default async function SpreadCostPage() {
             </div>
             <div className="space-y-2">
               <h3 className="font-bold text-slate-900">Is a commission better than a spread?</h3>
-              <p className="text-base">Many professional "ECN" brokers charge a fixed commission instead of a large spread. In these cases, you still have a tiny spread cost plus the commission. Both should be factored into your total expense calculation.</p>
+              <p className="text-base">Many professional \"ECN\" brokers charge a fixed commission instead of a large spread. In these cases, you still have a tiny spread cost plus the commission. Both should be factored into your total expense calculation.</p>
             </div>
             <div className="space-y-2">
               <h3 className="font-bold text-slate-900">Does this tool work for crypto?</h3>
@@ -121,5 +117,6 @@ export default async function SpreadCostPage() {
         <Link href="/tools/compound-growth-calculator" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest">Growth Calculator &rarr;</Link>
       </footer>
     </article>
+      </>
   );
 }

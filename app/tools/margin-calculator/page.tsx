@@ -1,9 +1,7 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Metadata } from 'next';
-import { getPexelsImage } from '@/lib/pexels';
-import MarginCalculator from './MarginCalculator';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import MarginCalculator from './MarginCalculator';
 
 export const metadata: Metadata = {
   title: "Trading Margin Calculator | Calculate Leverage Requirements",
@@ -11,14 +9,22 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/tools/margin-calculator',
   },
+  keywords: "margin calculator, leverage calculator, forex margin tool, trading margin requirements, margin trading calculator",
 };
 
-export default async function MarginPage() {
-  const image1 = await getPexelsImage('financial leverage concept');
-  const image2 = await getPexelsImage('banking vault safety');
+const image1 = { url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg', alt: 'Conceptual representation of financial leverage and market exposure' };
+const image2 = { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Safe vault representing financial security and collateral' };
 
+const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the difference between margin and equity?","acceptedAnswer":{"@type":"Answer","text":"Margin is the amount locked by the broker, while equity is your total balance including your current open profits or losses. Free margin is what you have left to open new trades."}},{"@type":"Question","name":"Does leverage increase the cost of a trade?","acceptedAnswer":{"@type":"Answer","text":"No. Leverage only changes the amount of margin you need to provide. Costs like spreads and commissions are usually based on the position size, regardless of your leverage."}},{"@type":"Question","name":"Why is gold margin higher than forex?","acceptedAnswer":{"@type":"Answer","text":"Many brokers require more margin for volatile assets like Gold or Bitcoin to protect themselves from sudden market gaps. This tool helps you see those requirements before you enter."}}]};
+
+export default async function MarginPage() {
   return (
-    <article className="max-w-[800px] mx-auto space-y-12 py-8">
+      <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <article className="max-w-[800px] mx-auto space-y-12 py-8">
       <Breadcrumbs items={[
         { label: 'Tools', href: '/tools' },
         { label: 'Margin Calculator', href: '/tools/margin-calculator' }
@@ -45,12 +51,7 @@ export default async function MarginPage() {
             The amount of margin you need depends on the leverage offered by your broker. For example, if you have 1 to 100 leverage, you only need to provide 1% of the total position value as margin. While this allows for higher potential returns, it also increases the risk of a "margin call" if the market moves against you and your usable capital runs low.
           </p>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image1.url} 
-              alt="Conceptual representation of financial leverage and market exposure" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image1.url} alt={image1.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -88,12 +89,7 @@ export default async function MarginPage() {
             </div>
           </div>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image2.url} 
-              alt="Safe vault representing financial security and collateral" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image2.url} alt={image2.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -121,5 +117,6 @@ export default async function MarginPage() {
         <Link href="/tools/spread-cost-calculator" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest">Spread Calculator &rarr;</Link>
       </footer>
     </article>
+      </>
   );
 }

@@ -1,9 +1,7 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Metadata } from 'next';
-import { getPexelsImage } from '@/lib/pexels';
-import RiskCalculator from './RiskCalculator';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import RiskCalculator from './RiskCalculator';
 
 export const metadata: Metadata = {
   title: "Trading Risk Calculator | Calculate Your Monetary Risk",
@@ -11,14 +9,22 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/tools/risk-calculator',
   },
+  keywords: "risk calculator, trading risk tool, money management forex, position risk calculator, stop loss calculator",
 };
 
-export default async function RiskCalculatorPage() {
-  const image1 = await getPexelsImage('financial risk management');
-  const image2 = await getPexelsImage('stock market candles');
+const image1 = { url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg', alt: 'Professional risk management and financial calculation' };
+const image2 = { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg', alt: 'Stock market candles and technical analysis chart' };
 
+const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Should I risk the same amount on every trade?","acceptedAnswer":{"@type":"Answer","text":"Most experts suggest keeping your risk percentage the same for every trade. This creates a smooth equity curve and prevents one single loss from wiping out multiple wins."}},{"@type":"Question","name":"What happens if I don't use a stop loss?","acceptedAnswer":{"@type":"Answer","text":"Trading without a stop loss means your risk is theoretically unlimited. This is the fastest way to lose an entire trading account. Always define your risk before you enter."}},{"@type":"Question","name":"Does this tool work for Gold and Bitcoin?","acceptedAnswer":{"@type":"Answer","text":"Yes. The calculator adjusts for the specific price movements of Gold and Bitcoin, which are different than standard Forex pairs."}}]};
+
+export default async function RiskCalculatorPage() {
   return (
-    <article className="max-w-[800px] mx-auto space-y-12 py-8">
+      <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <article className="max-w-[800px] mx-auto space-y-12 py-8">
       <Breadcrumbs items={[
         { label: 'Tools', href: '/tools' },
         { label: 'Risk Calculator', href: '/tools/risk-calculator' }
@@ -45,12 +51,7 @@ export default async function RiskCalculatorPage() {
             Monetary risk is the actual dollar amount you are comfortable losing if that technical level is hit. Professionals find the technical level first and then adjust their trade size to match their monetary limit. This calculator bridge the gap between where the market moves and how your account balance reacts.
           </p>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image1.url} 
-              alt="Professional risk management and financial calculation" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image1.url} alt={image1.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -89,12 +90,7 @@ export default async function RiskCalculatorPage() {
             </div>
           </div>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image2.url} 
-              alt="Stock market candles and technical analysis chart" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image2.url} alt={image2.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -106,7 +102,7 @@ export default async function RiskCalculatorPage() {
               <p className="text-base">Most experts suggest keeping your risk percentage the same for every trade. This creates a smooth equity curve and prevents one single loss from wiping out multiple wins.</p>
             </div>
             <div className="space-y-2">
-              <h3 className="font-bold text-slate-900">What happens if I don&apos;t use a stop loss?</h3>
+              <h3 className="font-bold text-slate-900">What happens if I don't use a stop loss?</h3>
               <p className="text-base">Trading without a stop loss means your risk is theoretically unlimited. This is the fastest way to lose an entire trading account. Always define your risk before you enter.</p>
             </div>
             <div className="space-y-2">
@@ -122,5 +118,6 @@ export default async function RiskCalculatorPage() {
         <Link href="/tools/pip-calculator" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest">Pip Calculator &rarr;</Link>
       </footer>
     </article>
+      </>
   );
 }

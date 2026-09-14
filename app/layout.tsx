@@ -124,7 +124,23 @@ export default function RootLayout({
         <Header />
         
         <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 py-8 md:px-6 md:py-12">
+          <div className="my-4 mx-auto max-w-[728px]">
+            <ins className="adsbygoogle"
+              style={{ display: 'block' }}
+              data-ad-client="ca-pub-5017133932206570"
+              data-ad-slot="5017133932206570"
+              data-ad-format="auto"
+              data-full-width-responsive="true"></ins>
+          </div>
           {children}
+          <div className="my-4 mx-auto max-w-[728px]">
+            <ins className="adsbygoogle"
+              style={{ display: 'block' }}
+              data-ad-client="ca-pub-5017133932206570"
+              data-ad-slot="5017133932206571"
+              data-ad-format="auto"
+              data-full-width-responsive="true"></ins>
+          </div>
         </main>
         <CookieConsent />
         <Footer />

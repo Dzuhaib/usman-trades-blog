@@ -1,9 +1,7 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Metadata } from 'next';
-import { getPexelsImage } from '@/lib/pexels';
-import PipValueCalculator from './PipValueCalculator';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import PipValueCalculator from './PipValueCalculator';
 
 export const metadata: Metadata = {
   title: "Pip Value Calculator | Calculate Point Value for Forex and Gold",
@@ -11,14 +9,22 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/tools/pip-calculator',
   },
+  keywords: "pip value calculator, forex pip calculator, gold pip calculator, trading calculator, currency pair pip value",
 };
 
-export default async function PipValueCalculatorPage() {
-  const image1 = await getPexelsImage('currency mathematics');
-  const image2 = await getPexelsImage('gold market bars');
+const image1 = { url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg', alt: 'Financial mathematics and currency exchange concepts' };
+const image2 = { url: 'https://images.pexels.com/photos/47047/gold-ingots-golden-treasure-47047.jpeg', alt: 'Gold market bars and financial asset valuation' };
 
+const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does pip value stay the same forever?","acceptedAnswer":{"@type":"Answer","text":"For pairs like EUR/USD, the value is fixed if your account is in USD. For JPY or GBP pairs, the value changes slightly as the exchange rate moves."}},{"@type":"Question","name":"Why should I care about pip value?","acceptedAnswer":{"@type":"Answer","text":"If you don't know your pip value, you cannot calculate your risk accurately. Knowing this number is the only way to ensure your stop loss respects your risk limits."}},{"@type":"Question","name":"What is the difference between a pip and a point?","acceptedAnswer":{"@type":"Answer","text":"A pip is usually the fourth decimal place, while a point is the fifth decimal place (also called a pipette). There are 10 points in every 1 pip."}}]};
+
+export default async function PipValueCalculatorPage() {
   return (
-    <article className="max-w-[800px] mx-auto space-y-12 py-8">
+      <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <article className="max-w-[800px] mx-auto space-y-12 py-8">
       <Breadcrumbs items={[
         { label: 'Tools', href: '/tools' },
         { label: 'Pip Value Calculator', href: '/tools/pip-calculator' }
@@ -45,12 +51,7 @@ export default async function PipValueCalculatorPage() {
             The value of a pip tells you how much money you gain or lose for every point the market moves. This value changes based on the size of your trade. A larger position means every pip is worth more money. By understanding this relationship, you can better manage the volatility of the markets.
           </p>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image1.url} 
-              alt="Financial mathematics and currency exchange concepts" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image1.url} alt={image1.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -91,12 +92,7 @@ export default async function PipValueCalculatorPage() {
             </div>
           </div>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image2.url} 
-              alt="Gold market bars and financial asset valuation" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image2.url} alt={image2.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -109,7 +105,7 @@ export default async function PipValueCalculatorPage() {
             </div>
             <div className="space-y-2">
               <h3 className="font-bold text-slate-900">Why should I care about pip value?</h3>
-              <p className="text-base">If you don&apos;t know your pip value, you cannot calculate your risk accurately. Knowing this number is the only way to ensure your stop loss respects your risk limits.</p>
+              <p className="text-base">If you don't know your pip value, you cannot calculate your risk accurately. Knowing this number is the only way to ensure your stop loss respects your risk limits.</p>
             </div>
             <div className="space-y-2">
               <h3 className="font-bold text-slate-900">What is the difference between a pip and a point?</h3>
@@ -124,5 +120,6 @@ export default async function PipValueCalculatorPage() {
         <Link href="/tools/profit-calculator" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest">Profit Calculator &rarr;</Link>
       </footer>
     </article>
+      </>
   );
 }

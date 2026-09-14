@@ -1,9 +1,7 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Metadata } from 'next';
-import { getPexelsImage } from '@/lib/pexels';
-import DrawdownCalculator from './DrawdownCalculator';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import DrawdownCalculator from './DrawdownCalculator';
 
 export const metadata: Metadata = {
   title: "Trading Drawdown Calculator | Understanding Recovery Math",
@@ -11,14 +9,22 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/tools/drawdown-calculator',
   },
+  keywords: "drawdown calculator, trading drawdown tool, recovery calculator, account drawdown, loss recovery trading",
 };
 
-export default async function DrawdownPage() {
-  const image1 = await getPexelsImage('financial recovery math');
-  const image2 = await getPexelsImage('downward trend chart');
+const image1 = { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg', alt: 'Mathematical representation of financial recovery and drawdown' };
+const image2 = { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg', alt: 'Downward trend chart showing market volatility' };
 
+const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is some drawdown normal?","acceptedAnswer":{"@type":"Answer","text":"Yes. Even the best strategies have periods where they lose money. Professional traders expect drawdowns and build their plans to handle them without emotion."}},{"@type":"Question","name":"When should I stop trading during a drawdown?","acceptedAnswer":{"@type":"Answer","text":"Many traders use a \"circuit breaker\" rule. If they lose a certain percentage of their account in a week or month, they stop trading to review their strategy and clear their head."}},{"@type":"Question","name":"How do I recover from a 50% loss?","acceptedAnswer":{"@type":"Answer","text":"The best way is to slow down. Trying to \"make it all back\" quickly usually leads to more mistakes. Focus on following your process and let the small wins build up over time."}}]};
+
+export default async function DrawdownPage() {
   return (
-    <article className="max-w-[800px] mx-auto space-y-12 py-8">
+      <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <article className="max-w-[800px] mx-auto space-y-12 py-8">
       <Breadcrumbs items={[
         { label: 'Tools', href: '/tools' },
         { label: 'Drawdown Calculator', href: '/tools/drawdown-calculator' }
@@ -45,12 +51,7 @@ export default async function DrawdownPage() {
             The reason depth matters is due to the asymmetrical nature of mathematical recovery. If you lose 10% of your account, you need an 11% gain to get back to where you started. However, if you lose 50% of your account, you need a 100% gain just to break even. This tool helps you visualize these requirements so you can better appreciate the value of tight risk management.
           </p>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image1.url} 
-              alt="Mathematical representation of financial recovery and drawdown" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image1.url} alt={image1.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -113,12 +114,7 @@ export default async function DrawdownPage() {
             </div>
           </div>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
-            <Image 
-              src={image2.url} 
-              alt="Downward trend chart showing market volatility" 
-              fill 
-              className="object-cover"
-            />
+            <img src={image2.url} alt={image2.alt} className="w-full h-full object-cover" />
           </div>
         </section>
 
@@ -146,5 +142,6 @@ export default async function DrawdownPage() {
         <Link href="/tools/margin-calculator" className="text-accent font-bold no-underline hover:text-accent-dark uppercase tracking-widest">Margin Calculator &rarr;</Link>
       </footer>
     </article>
+      </>
   );
 }
