@@ -1,7 +1,5 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
 import { BLOG_POSTS, CATEGORIES, BlogPost } from '@/lib/blogData';
-import { getPexelsImages, getImageForSlug } from '@/lib/pexels';
+import { getImageForSlug } from '@/lib/pexels';
 import Image from 'next/image';
 import { Search, Clock, Calendar, User } from 'lucide-react';
 
@@ -23,22 +21,18 @@ export default async function BlogIndex({ searchParams }: PageProps) {
 
   const allPosts: BlogPost[] = BLOG_POSTS;
 
-  // Filter posts based on active category
   const filteredPosts = (activeCategory === 'All'
     ? allPosts
     : allPosts.filter(post => post.category === activeCategory))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  const usedUrls = new Set<string>();
-  const postsWithImages = await Promise.all(
-    filteredPosts.map(async (post) => {
-      const images = await getPexelsImages(post.slug, 1, usedUrls);
-      return {
-        ...post,
-        image: post.image || images[0] || getImageForSlug(post.slug),
-      };
-    })
-  );
+  const postsWithImages = filteredPosts.map((post) => {
+    const slugImage = getImageForSlug(post.slug);
+    return {
+      ...post,
+      image: post.image || slugImage,
+    };
+  });
 
   return (
     <div className="space-y-16 py-8">

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { getPexelsImages, getImageForSlug } from '@/lib/pexels';
+import { getImageForSlug } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { getPostBySlug } from '@/lib/seo-os/article-engine';
@@ -19,6 +19,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(slug);
   
   if (!post) return { title: 'Post Not Found' };
+
+  const slugImage = getImageForSlug(slug);
+  const featuredImage = post.image || slugImage;
 
   return {
     title: `${post.title} | Usman Trades`,
@@ -37,17 +40,30 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  const images = await getPexelsImages(slug, 5, new Set<string>());
+  const slugImage = getImageForSlug(slug);
+  const featuredImage = post.image || slugImage;
 
   const blogSchema = generateBlogSchema({
     title: post.title,
     excerpt: post.excerpt,
-    image: images[0]?.url || getImageForSlug(slug).url,
+    image: featuredImage.url,
     date: post.date,
     updatedAt: post.updatedAt,
     route: post.route,
     author: post.author,
   });
+
+  // Split content by image placeholders [IMAGE_X]
+  const contentParts = post.content ? post.content.split(/\[IMAGE_\d+\]/) : [post.excerpt];
+  
+  // Build images array: featured + 4 additional from FALLBACK_IMAGES
+  const allImages: { url: string; alt: string }[] = [
+    featuredImage,
+    { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: `${slug} trading data analysis` },
+    { url: 'https://images.pexels.com/photos/4383217/pexels-photo-4383217.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: `${slug} investment portfolio` },
+    { url: 'https://images.pexels.com/photos/5123456/pexels-photo-5123456.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: `${slug} market trends` },
+    { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: `${slug} financial market` },
+  ];
 
   // Split content by image placeholders [IMAGE_X]
   const contentParts = post.content ? post.content.split(/\[IMAGE_\d+\]/) : [post.excerpt];
@@ -87,11 +103,11 @@ export default async function BlogPostPage({ params }: Props) {
           {contentParts.map((part, index) => (
             <React.Fragment key={index}>
               <SmartText text={part} />
-              {images[index] && index < images.length && (
+              {allImages[index] && (
                 <div className="w-full aspect-[16/9] bg-surface border border-border rounded-[4px] overflow-hidden relative my-12">
                   <Image 
-                    src={images[index].url} 
-                    alt={`${post.title} - Visual ${index + 1}`} 
+                    src={allImages[index].url} 
+                    alt={allImages[index].alt} 
                     fill 
                     className="object-cover" 
                     sizes="(max-width: 768px) 100vw, 720px"
