@@ -68,8 +68,8 @@ const FALLBACK_IMAGES: Record<string, PexelsImage> = {
 
 export const SLUG_IMAGES: Record<string, PexelsImage> = {
   'position-sizing': {
-    url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Risk management calculation with leverage and position size on trading calculator'
+    url: 'https://images.pexels.com/photos/6157668/pexels-photo-6157668.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Risk management position sizing calculator with financial planning charts'
   },
   'how-to-invest-in-gold-for-beginners': {
     url: 'https://images.pexels.com/photos/47047/gold-ingots-golden-treasure-47047.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -112,8 +112,8 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
     alt: 'Trading loss recovery and drawdown analysis chart'
   },
   'pip-value-guide': {
-    url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Pip value calculation on forex trading terminal with currency charts'
+    url: 'https://images.pexels.com/photos/6157669/pexels-photo-6157669.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Pip value calculation and currency exchange mathematics on trading terminal'
   },
   'compound-growth-trading': {
     url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg?auto=compress&cs=tinysrgb&w=1200',

@@ -23,7 +23,7 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
   'fomc-xau-usd-gold': { url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg', alt: 'Federal Reserve Chairman press conference on interest rates' },
   'us-cpi-xau-usd-gold': { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg', alt: 'Consumer Price Index data affecting gold and XAU/USD trading' },
   'xau-usd-technical-analysis': { url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg', alt: 'Gold trading chart with technical analysis indicators and price levels' },
-  'position-sizing': { url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg', alt: 'Risk management calculation with leverage and position size on trading calculator' },
+  'position-sizing': { url: 'https://images.pexels.com/photos/6157668/pexels-photo-6157668.jpeg', alt: 'Risk management position sizing calculator with financial planning charts' },
   'how-to-invest-in-gold-for-beginners': { url: 'https://images.pexels.com/photos/47047/gold-ingots-golden-treasure-47047.jpeg', alt: 'Gold investment strategy with bullion bars and financial charts' },
   'what-is-forex': { url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg', alt: 'Forex currency trading on multiple digital screens with exchange rates' },
   'bitcoin-risk-management': { url: 'https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg', alt: 'Bitcoin cryptocurrency risk management with security and volatility charts' },
@@ -34,7 +34,7 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
   'which-broker-is-best': { url: 'https://images.pexels.com/photos/7173046/pexels-photo-7173046.jpeg', alt: 'Comparison of forex brokers with charts and financial data on screens' },
   'risk-reward-ratio': { url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg', alt: 'Risk reward ratio calculation with balance scale and trading charts' },
   'drawdown-recovery-trading': { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg', alt: 'Trading loss recovery and drawdown analysis chart' },
-  'pip-value-guide': { url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg', alt: 'Pip value calculation on forex trading terminal with currency charts' },
+  'pip-value-guide': { url: 'https://images.pexels.com/photos/6157669/pexels-photo-6157669.jpeg', alt: 'Pip value calculation and currency exchange mathematics on trading terminal' },
   'compound-growth-trading': { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Compound growth trading account chart showing exponential wealth building' },
 };
 
