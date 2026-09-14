@@ -32,15 +32,31 @@ const FALLBACK_IMAGES: Record<string, PexelsImage> = {
     url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Nonfarm Payrolls economic report on financial dashboard with gold investment analysis'
   },
-  'nfp-image-1': {
+  'what-moves-gold-prices': {
+    url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Gold bullion bars with rising chart graph showing gold price drivers and market factors'
+  },
+  'nfp-xau-usd-gold-image-1': {
     url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Professional trader analyzing job market data and employment statistics on multiple screens'
   },
-  'nfp-image-2': {
+  'nfp-xau-usd-gold-image-2': {
     url: 'https://images.pexels.com/photos/4383217/pexels-photo-4383217.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Gold coins and investment portfolio with Federal Reserve interest rate indicators'
   },
-  'nfp-image-3': {
+  'nfp-xau-usd-gold-image-3': {
+    url: 'https://images.pexels.com/photos/5123456/pexels-photo-5123456.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'US Bureau of Labor Statistics employment data and workforce market analysis chart'
+  },
+  'what-moves-gold-prices-image-1': {
+    url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Professional trader analyzing gold market factors and economic indicators'
+  },
+  'what-moves-gold-prices-image-2': {
+    url: 'https://images.pexels.com/photos/4383217/pexels-photo-4383217.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Gold coins and investment portfolio with Federal Reserve interest rate indicators'
+  },
+  'what-moves-gold-prices-image-3': {
     url: 'https://images.pexels.com/photos/5123456/pexels-photo-5123456.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'US Bureau of Labor Statistics employment data and workforce market analysis chart'
   },
@@ -99,11 +115,15 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
       url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg?auto=compress&cs=tinysrgb&w=1200',
       alt: 'Nonfarm Payrolls economic report on financial dashboard with gold investment analysis'
     },
+'what-moves-gold-prices': {
+      url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      alt: 'Gold bullion bars with rising chart graph showing gold price drivers and market factors'
+    },
     'xau-usd-technical-analysis': {
       url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg?auto=compress&cs=tinysrgb&w=1200',
       alt: 'Gold trading chart with technical analysis indicators and price levels'
     },
-};
+  };
 
 const CATEGORY_IMAGES: Record<string, PexelsImage> = {
   'Forex Education': {
@@ -216,7 +236,7 @@ export async function getPexelsImages(slug: string, count: number = 5, usedUrls?
     ];
     uniqueImages.push({ ...slugImg, alt: altVariants[0] });
     for (let i = 1; i < count && i < altVariants.length; i++) {
-      const fallback = FALLBACK_IMAGES[`nfp-image-${i}`] || FALLBACK_IMAGES[category] || FALLBACK_IMAGES.default;
+      const fallback = FALLBACK_IMAGES[`${slug}-image-${i}`] || FALLBACK_IMAGES[category] || FALLBACK_IMAGES.default;
       if (!sharedUsedUrls.has(fallback.url)) {
         sharedUsedUrls.add(fallback.url);
         uniqueImages.push({ url: fallback.url, alt: altVariants[i] });
@@ -290,6 +310,7 @@ function getCategoryForSlug(slug: string): string {
     'us-cpi-xau-usd-gold': 'Forex Education',
     'fomc-xau-usd-gold': 'Forex Education',
     'nfp-xau-usd-gold': 'Forex Education',
+    'what-moves-gold-prices': 'Forex Education',
     'xau-usd-technical-analysis': 'Technical Analysis',
    };
    return slugToCategory[slug] || 'default';

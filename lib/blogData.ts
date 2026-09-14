@@ -19,6 +19,18 @@ export function getTodayDate(): string {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "what-moves-gold-prices",
+    title: "What Moves Gold Prices? 10 Key Factors",
+    excerpt: "A comprehensive guide to understanding the ten major factors that influence gold prices and XAU/USD. Learn about interest rates, Federal Reserve policy, the US dollar, inflation, Treasury yields, and more.",
+    category: "Forex Education",
+    date: "September 15, 2026",
+    updatedAt: "September 15, 2026",
+    readTime: "45 min read",
+    route: "/blog/posts/what-moves-gold-prices",
+    content: "Gold is one of the most actively traded assets in the world, and its price rarely stays still for long. Every single day, billions of dollars worth of gold change hands as traders, investors, and central banks react to shifting economic conditions, political developments, and market sentiment.",
+    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+  },
+  {
     slug: "nfp-xau-usd-gold",
     title: "How Nonfarm Payrolls (NFP) Affects Gold and XAU/USD",
     excerpt: "A comprehensive guide to understanding how Nonfarm Payrolls data impacts gold prices and the XAU/USD currency pair. Learn about the relationship between employment data, Federal Reserve policy, interest rates, Treasury yields, and the US dollar.",
