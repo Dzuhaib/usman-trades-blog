@@ -23,6 +23,10 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
   'fomc-xau-usd-gold': { url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg', alt: 'Federal Reserve Chairman press conference on interest rates' },
   'us-cpi-xau-usd-gold': { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg', alt: 'Consumer Price Index data affecting gold and XAU/USD trading' },
   'xau-usd-technical-analysis': { url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg', alt: 'Gold trading chart with technical analysis indicators and price levels' },
+  'risk-reward-ratio': { url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg', alt: 'Risk reward ratio calculation with balance scale and trading charts' },
+  'drawdown-recovery-trading': { url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg', alt: 'Drawdown recovery strategy with trading chart and loss recovery planning' },
+  'pip-value-guide': { url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg', alt: 'Pip value calculation on forex trading terminal with currency charts' },
+  'compound-growth-trading': { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Compound growth trading account chart showing exponential wealth building' },
 };
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -194,6 +198,54 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: "16 min read",
     route: "/blog/posts/which-broker-is-best",
     content: "Choosing the right forex broker is one of the most important decisions you will ever make as a trader. The broker you select directly impacts your trading costs, execution speed, available tools, and ultimately your profitability. With hundreds of forex brokers in the market, each offering different features, spreads, and conditions, it can be overwhelming to find the one that best matches your trading style and goals.\n\nIn this comprehensive guide, we will analyze the top forex brokers available to traders worldwide. We will break down their spreads, commissions, leverage options, available currency pairs, and crucially, how each broker handles trading during high-impact news events.",
+    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+  },
+  {
+    slug: "risk-reward-ratio",
+    title: "Risk Reward Ratio in Trading: How to Use It Effectively",
+    excerpt: "A comprehensive guide to understanding and applying the risk reward ratio in trading. Learn the formula, how to use a risk reward ratio calculator, and strategies for Forex, Gold, and Bitcoin markets.",
+    category: "Risk Management",
+    date: "September 14, 2026",
+    updatedAt: "September 14, 2026",
+    readTime: "28 min read",
+    route: "/blog/posts/risk-reward-ratio",
+    content: "Professional trading is not about winning every trade. It is about ensuring that your winning trades are significantly larger than your losing trades. The risk reward ratio is the mathematical foundation of this principle, and understanding how to calculate and apply it is the most important skill you can develop as a trader.",
+    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+  },
+  {
+    slug: "drawdown-recovery-trading",
+    title: "Drawdown Recovery: How to Bounce Back from Trading Losses",
+    excerpt: "A comprehensive guide to understanding drawdown in trading and implementing strategies to recover from consecutive losses. Learn the mathematics of drawdown recovery and how to use a drawdown calculator effectively.",
+    category: "Risk Management",
+    date: "September 13, 2026",
+    updatedAt: "September 13, 2026",
+    readTime: "32 min read",
+    route: "/blog/posts/drawdown-recovery-trading",
+    content: "Drawdown is the inevitable reality of trading. Every trader, regardless of experience level, will face periods of consecutive losses that erode their account balance. Understanding how to recover from it is just as important as knowing how to prevent it.",
+    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+  },
+  {
+    slug: "pip-value-guide",
+    title: "Pip Value Guide: How to Calculate Pip Value Accurately",
+    excerpt: "A comprehensive guide to understanding and calculating pip value for Forex, Gold, and Bitcoin. Learn the formula, how to use a pip calculator, and why accurate pip value calculation is essential for risk management.",
+    category: "Forex Education",
+    date: "September 12, 2026",
+    updatedAt: "September 12, 2026",
+    readTime: "25 min read",
+    route: "/blog/posts/pip-value-guide",
+    content: "Understanding pip value is one of the most fundamental skills every forex trader must master. A pip, or percentage in point, is the smallest price movement in a currency pair, and its monetary value determines exactly how much you make or lose on each trade.",
+    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+  },
+  {
+    slug: "compound-growth-trading",
+    title: "Compound Growth in Trading: Building Wealth Through Consistency",
+    excerpt: "A comprehensive guide to understanding compound growth principles in trading. Learn how consistent small gains create exponential wealth, and how to use a compound growth calculator to project your account path.",
+    category: "Risk Management",
+    date: "September 11, 2026",
+    updatedAt: "September 11, 2026",
+    readTime: "30 min read",
+    route: "/blog/posts/compound-growth-trading",
+    content: "Most traders focus on individual trades and forget about the bigger picture of their account growth. The concept of compound growth is the engine that transforms small, consistent gains into substantial wealth over time.",
     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
   }
 ];

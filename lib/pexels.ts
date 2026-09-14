@@ -103,6 +103,22 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
     url: 'https://images.pexels.com/photos/7173046/pexels-photo-7173046.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Comparison of forex brokers with charts and financial data on screens'
   },
+  'risk-reward-ratio': {
+    url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Risk reward ratio calculation with balance scale and trading charts'
+  },
+  'drawdown-recovery-trading': {
+    url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Drawdown recovery strategy with trading chart and loss recovery planning'
+  },
+  'pip-value-guide': {
+    url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Pip value calculation on forex trading terminal with currency charts'
+  },
+  'compound-growth-trading': {
+    url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Compound growth trading account chart showing exponential wealth building'
+  },
   'us-cpi-xau-usd-gold': {
     url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Consumer Price Index data affecting gold and XAU/USD trading'
@@ -330,15 +346,19 @@ function getCategoryForSlug(slug: string): string {
     'what-is-forex': 'forex',
     'bitcoin-risk-management': 'bitcoin',
     'trading-mindset': 'trading-psychology',
-    'support-resistance': 'technical-analysis',
-    'cpi-news-and-markets': 'forex',
-    'ppi-news-and-markets': 'forex',
-    'which-broker-is-best': 'Broker Reviews',
-    'us-cpi-xau-usd-gold': 'Forex Education',
-    'fomc-xau-usd-gold': 'Forex Education',
-    'nfp-xau-usd-gold': 'Forex Education',
-    'what-moves-gold-prices': 'Forex Education',
-    'xau-usd-technical-analysis': 'Technical Analysis',
-   };
-   return slugToCategory[slug] || 'default';
+   'support-resistance': 'technical-analysis',
+   'cpi-news-and-markets': 'forex',
+   'ppi-news-and-markets': 'forex',
+   'which-broker-is-best': 'Broker Reviews',
+   'us-cpi-xau-usd-gold': 'Forex Education',
+   'fomc-xau-usd-gold': 'Forex Education',
+   'nfp-xau-usd-gold': 'Forex Education',
+   'what-moves-gold-prices': 'Forex Education',
+   'xau-usd-technical-analysis': 'Technical Analysis',
+   'risk-reward-ratio': 'Risk Management',
+   'drawdown-recovery-trading': 'Risk Management',
+   'pip-value-guide': 'Forex Education',
+   'compound-growth-trading': 'Risk Management',
+  };
+  return slugToCategory[slug] || 'default';
  }
