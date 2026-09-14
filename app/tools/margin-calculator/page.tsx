@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 const image1 = { url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg', alt: 'Conceptual representation of financial leverage and market exposure' };
-const image2 = { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Safe vault representing financial security and collateral' };
+const image2 = { url: 'https://images.pexels.com/photos/14866072/pexels-photo-14866072.jpeg', alt: 'Safe vault representing financial security and collateral' };
 
 const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the difference between margin and equity?","acceptedAnswer":{"@type":"Answer","text":"Margin is the amount locked by the broker, while equity is your total balance including your current open profits or losses. Free margin is what you have left to open new trades."}},{"@type":"Question","name":"Does leverage increase the cost of a trade?","acceptedAnswer":{"@type":"Answer","text":"No. Leverage only changes the amount of margin you need to provide. Costs like spreads and commissions are usually based on the position size, regardless of your leverage."}},{"@type":"Question","name":"Why is gold margin higher than forex?","acceptedAnswer":{"@type":"Answer","text":"Many brokers require more margin for volatile assets like Gold or Bitcoin to protect themselves from sudden market gaps. This tool helps you see those requirements before you enter."}}]};
 

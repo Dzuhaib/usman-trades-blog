@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   keywords: "trading profit calculator, profit calculator, forex profit tool, trading returns calculator, reward risk calculator",
 };
 
-const image1 = { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Financial growth and successful trading outcomes' };
-const image2 = { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg', alt: 'Professional trading desk with multiple monitors' };
+const image1 = { url: 'https://images.pexels.com/photos/39368611/pexels-photo-39368611.jpeg', alt: 'Financial growth and successful trading outcomes' };
+const image2 = { url: 'https://images.pexels.com/photos/5831264/pexels-photo-5831264.jpeg', alt: 'Professional trading desk with multiple monitors' };
 
 const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does this calculator include broker fees?","acceptedAnswer":{"@type":"Answer","text":"No. This tool calculates gross profit based on price movement. To find your net profit, you must subtract any spreads, commissions, or swap fees charged by your broker."}},{"@type":"Question","name":"Why does my profit change when I trade different pairs?","acceptedAnswer":{"@type":"Answer","text":"Profit depends on the value of a pip, which can vary across different currency pairs. This tool accounts for those differences to give you an accurate dollar amount."}},{"@type":"Question","name":"What is a good reward to risk ratio?","acceptedAnswer":{"@type":"Answer","text":"Many professionals aim for at least a 2 to 1 ratio, meaning they stand to gain twice as much as they are willing to lose. This allows you to remain profitable even if you lose half of your trades."}}]};
 

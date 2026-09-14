@@ -29,12 +29,12 @@ const FALLBACK_IMAGES: Record<string, PexelsImage> = {
     alt: 'Close up of high-resolution monitor displaying multi-timeframe horizontal support and resistance channels'
   },
   'nfp-xau-usd-gold': {
-    url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Nonfarm Payrolls economic report on financial dashboard with gold investment analysis'
+    url: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Laptop with charts and resume on desk showing jobs data and business analysis'
   },
   'what-moves-gold-prices': {
-    url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Gold bullion bars with rising chart graph showing gold price drivers and market factors'
+    url: 'https://images.pexels.com/photos/33539235/pexels-photo-33539235.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Gold bullion bars stacked neatly symbolizing wealth investment and financial security'
   },
   'nfp-xau-usd-gold-image-1': {
     url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -68,8 +68,8 @@ const FALLBACK_IMAGES: Record<string, PexelsImage> = {
 
 export const SLUG_IMAGES: Record<string, PexelsImage> = {
   'position-sizing': {
-    url: 'https://images.pexels.com/photos/6157668/pexels-photo-6157668.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Risk management position sizing calculator with financial planning charts'
+    url: 'https://images.pexels.com/photos/8297150/pexels-photo-8297150.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Hands writing in notebook while using calculator for position sizing and finance planning'
   },
   'how-to-invest-in-gold-for-beginners': {
     url: 'https://images.pexels.com/photos/47047/gold-ingots-golden-treasure-47047.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -112,8 +112,8 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
     alt: 'Trading loss recovery and drawdown analysis chart'
   },
   'pip-value-guide': {
-    url: 'https://images.pexels.com/photos/6157669/pexels-photo-6157669.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: 'Pip value calculation and currency exchange mathematics on trading terminal'
+    url: 'https://images.pexels.com/photos/6771426/pexels-photo-6771426.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Laptop screen with trading charts calculator and currency coins for pip value calculation'
   },
   'compound-growth-trading': {
     url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -126,14 +126,6 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
 'fomc-xau-usd-gold': {
       url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg?auto=compress&cs=tinysrgb&w=1200',
       alt: 'Federal Reserve Chairman press conference on interest rates'
-    },
-    'nfp-xau-usd-gold': {
-      url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      alt: 'Nonfarm Payrolls economic report on financial dashboard with gold investment analysis'
-    },
-'what-moves-gold-prices': {
-      url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      alt: 'Gold bullion bars with rising chart graph showing gold price drivers and market factors'
     },
     'xau-usd-technical-analysis': {
       url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg?auto=compress&cs=tinysrgb&w=1200',

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 const image1 = { url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg', alt: 'Professional risk management and financial calculation' };
-const image2 = { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg', alt: 'Stock market candles and technical analysis chart' };
+const image2 = { url: 'https://images.pexels.com/photos/35118208/pexels-photo-35118208.jpeg', alt: 'Stock market candles and technical analysis chart' };
 
 const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Should I risk the same amount on every trade?","acceptedAnswer":{"@type":"Answer","text":"Most experts suggest keeping your risk percentage the same for every trade. This creates a smooth equity curve and prevents one single loss from wiping out multiple wins."}},{"@type":"Question","name":"What happens if I don't use a stop loss?","acceptedAnswer":{"@type":"Answer","text":"Trading without a stop loss means your risk is theoretically unlimited. This is the fastest way to lose an entire trading account. Always define your risk before you enter."}},{"@type":"Question","name":"Does this tool work for Gold and Bitcoin?","acceptedAnswer":{"@type":"Answer","text":"Yes. The calculator adjusts for the specific price movements of Gold and Bitcoin, which are different than standard Forex pairs."}}]};
 

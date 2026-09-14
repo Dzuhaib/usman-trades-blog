@@ -18,12 +18,12 @@ export function getTodayDate(): string {
 }
 
 export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
-  'what-moves-gold-prices': { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Gold bullion bars with rising chart graph showing gold price drivers' },
-  'nfp-xau-usd-gold': { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg', alt: 'Nonfarm Payrolls economic report on financial dashboard with gold investment' },
+  'what-moves-gold-prices': { url: 'https://images.pexels.com/photos/33539235/pexels-photo-33539235.jpeg', alt: 'Gold bullion bars stacked neatly symbolizing wealth investment and financial security' },
+  'nfp-xau-usd-gold': { url: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg', alt: 'Laptop with charts and resume on desk showing jobs data and business analysis' },
   'fomc-xau-usd-gold': { url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg', alt: 'Federal Reserve Chairman press conference on interest rates' },
   'us-cpi-xau-usd-gold': { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg', alt: 'Consumer Price Index data affecting gold and XAU/USD trading' },
   'xau-usd-technical-analysis': { url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg', alt: 'Gold trading chart with technical analysis indicators and price levels' },
-  'position-sizing': { url: 'https://images.pexels.com/photos/6157668/pexels-photo-6157668.jpeg', alt: 'Risk management position sizing calculator with financial planning charts' },
+  'position-sizing': { url: 'https://images.pexels.com/photos/8297150/pexels-photo-8297150.jpeg', alt: 'Hands writing in notebook while using calculator for position sizing and finance planning' },
   'how-to-invest-in-gold-for-beginners': { url: 'https://images.pexels.com/photos/47047/gold-ingots-golden-treasure-47047.jpeg', alt: 'Gold investment strategy with bullion bars and financial charts' },
   'what-is-forex': { url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg', alt: 'Forex currency trading on multiple digital screens with exchange rates' },
   'bitcoin-risk-management': { url: 'https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg', alt: 'Bitcoin cryptocurrency risk management with security and volatility charts' },
@@ -34,7 +34,7 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
   'which-broker-is-best': { url: 'https://images.pexels.com/photos/7173046/pexels-photo-7173046.jpeg', alt: 'Comparison of forex brokers with charts and financial data on screens' },
   'risk-reward-ratio': { url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg', alt: 'Risk reward ratio calculation with balance scale and trading charts' },
   'drawdown-recovery-trading': { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg', alt: 'Trading loss recovery and drawdown analysis chart' },
-  'pip-value-guide': { url: 'https://images.pexels.com/photos/6157669/pexels-photo-6157669.jpeg', alt: 'Pip value calculation and currency exchange mathematics on trading terminal' },
+  'pip-value-guide': { url: 'https://images.pexels.com/photos/6771426/pexels-photo-6771426.jpeg', alt: 'Laptop screen with trading charts calculator and currency coins for pip value calculation' },
   'compound-growth-trading': { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Compound growth trading account chart showing exponential wealth building' },
 };
 
@@ -48,7 +48,7 @@ export const BLOG_POSTS: BlogPost[] = [
     updatedAt: "September 15, 2026",
     readTime: "45 min read",
     route: "/blog/posts/what-moves-gold-prices",
-    image: { url: "https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Gold bullion bars with rising chart graph showing gold price drivers" },
+    image: { url: "https://images.pexels.com/photos/33539235/pexels-photo-33539235.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Gold bullion bars stacked neatly symbolizing wealth investment and financial security" },
     content: "Gold is one of the most actively traded assets in the world, and its price rarely stays still for long.",
     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
   },
@@ -61,7 +61,7 @@ export const BLOG_POSTS: BlogPost[] = [
     updatedAt: "September 15, 2026",
     readTime: "38 min read",
     route: "/blog/posts/nfp-xau-usd-gold",
-    image: { url: "https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Nonfarm Payrolls economic report on financial dashboard with gold investment" },
+    image: { url: "https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Laptop with charts and resume on desk showing jobs data and business analysis" },
     content: "The Nonfarm Payrolls report is arguably the most impactful economic release that moves gold and the XAU/USD pair every single month.",
     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
   },

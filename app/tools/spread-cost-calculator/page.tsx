@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 const image1 = { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg', alt: 'Conceptual representation of financial expenses and spread calculation' };
-const image2 = { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg', alt: 'Financial exchange rate board showing bid and ask prices' };
+const image2 = { url: 'https://images.pexels.com/photos/12960362/pexels-photo-12960362.jpeg', alt: 'Financial exchange rate board showing bid and ask prices' };
 
 const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why do some pairs have higher spreads?","acceptedAnswer":{"@type":"Answer","text":"Pairs that are traded less frequently (minor or exotic pairs) usually have higher spreads because there are fewer participants willing to buy and sell at any given time. Major pairs like EUR/USD have the tightest spreads."}},{"@type":"Question","name":"Is a commission better than a spread?","acceptedAnswer":{"@type":"Answer","text":"Many professional \"ECN\" brokers charge a fixed commission instead of a large spread. In these cases, you still have a tiny spread cost plus the commission. Both should be factored into your total expense calculation."}},{"@type":"Question","name":"Does this tool work for crypto?","acceptedAnswer":{"@type":"Answer","text":"Yes. Bitcoin spreads are usually quoted in whole dollars rather than pips. The calculator adjusts the math to show you the dollar cost of entering a BTC position."}}]};
 

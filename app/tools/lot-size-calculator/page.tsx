@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   keywords: "lot size calculator, position size calculator, forex lot tool, trade size calculator, risk-based position sizing",
 };
 
-const image1 = { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Trading planning and risk management illustration' };
+const image1 = { url: 'https://images.pexels.com/photos/33175667/pexels-photo-33175667.jpeg', alt: 'Trading planning and risk management illustration' };
 const image2 = { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg', alt: 'Financial calculation and lot size planning' };
 
 const pageSchema = generateWebPageSchema({

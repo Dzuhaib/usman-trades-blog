@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   keywords: "session timer, trading hours calculator, forex market hours, trading session tracker, market overlap tool",
 };
 
-const image1 = { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Global city skylines representing major financial centers' };
-const image2 = { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg', alt: 'Digital world map showing global financial connectivity' };
+const image1 = { url: 'https://images.pexels.com/photos/7412098/pexels-photo-7412098.jpeg', alt: 'Global city skylines representing major financial centers' };
+const image2 = { url: 'https://images.pexels.com/photos/7412102/pexels-photo-7412102.jpeg', alt: 'Digital world map showing global financial connectivity' };
 
 const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does the market close on weekends?","acceptedAnswer":{"@type":"Answer","text":"Yes. For Forex and Gold, the market closes on Friday evening and reopens on Sunday afternoon (UTC). However, Bitcoin and other cryptocurrencies trade 24 hours a day, 7 days a week."}},{"@type":"Question","name":"What time zone does this tool use?","acceptedAnswer":{"@type":"Answer","text":"Our tool uses Coordinated Universal Time (UTC). This is the standard used by major banks and institutional traders to ensure everyone is looking at the same market clock."}},{"@type":"Question","name":"When is the best time to trade?","acceptedAnswer":{"@type":"Answer","text":"For most people, the London and New York overlap is the best time due to the high volume. However, the best time for you depends on your specific strategy and your personal schedule."}}]};
 

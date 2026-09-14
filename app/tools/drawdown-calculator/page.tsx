@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 const image1 = { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg', alt: 'Mathematical representation of financial recovery and drawdown' };
-const image2 = { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg', alt: 'Downward trend chart showing market volatility' };
+const image2 = { url: 'https://images.pexels.com/photos/38963051/pexels-photo-38963051.jpeg', alt: 'Downward trend chart showing market volatility' };
 
 const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is some drawdown normal?","acceptedAnswer":{"@type":"Answer","text":"Yes. Even the best strategies have periods where they lose money. Professional traders expect drawdowns and build their plans to handle them without emotion."}},{"@type":"Question","name":"When should I stop trading during a drawdown?","acceptedAnswer":{"@type":"Answer","text":"Many traders use a \"circuit breaker\" rule. If they lose a certain percentage of their account in a week or month, they stop trading to review their strategy and clear their head."}},{"@type":"Question","name":"How do I recover from a 50% loss?","acceptedAnswer":{"@type":"Answer","text":"The best way is to slow down. Trying to \"make it all back\" quickly usually leads to more mistakes. Focus on following your process and let the small wins build up over time."}}]};
 

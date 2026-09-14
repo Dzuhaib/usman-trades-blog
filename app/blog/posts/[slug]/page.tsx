@@ -84,7 +84,7 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  const featuredImage = BLOG_POST_IMAGES[slug] || post.image || { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg', alt: 'Gold trading analysis' };
+  const featuredImage = BLOG_POST_IMAGES[slug] || post.image || { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Gold trading analysis' };
 
   const blogSchema = generateBlogSchema({
     title: post.title,
