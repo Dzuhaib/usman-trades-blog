@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { notFound } from 'next/navigation';
+import { BLOG_POST_IMAGES } from '@/lib/blogData';
 import { getImageForSlug } from '@/lib/pexels';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
   if (!post) return { title: 'Post Not Found' };
 
-  const slugImage = getImageForSlug(slug);
+  const slugImage = BLOG_POST_IMAGES[slug] || getImageForSlug(slug);
   const featuredImage = post.image || slugImage;
 
   return {
@@ -40,7 +41,7 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  const slugImage = getImageForSlug(slug);
+  const slugImage = BLOG_POST_IMAGES[slug] || getImageForSlug(slug);
   const featuredImage = post.image || slugImage;
 
   const blogSchema = generateBlogSchema({

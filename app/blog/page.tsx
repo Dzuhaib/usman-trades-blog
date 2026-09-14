@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { BLOG_POSTS, CATEGORIES, BlogPost } from '@/lib/blogData';
+import { BLOG_POSTS, CATEGORIES, BlogPost, BLOG_POST_IMAGES } from '@/lib/blogData';
 import { getImageForSlug } from '@/lib/pexels';
 import Image from 'next/image';
 import { Search, Clock, Calendar, User } from 'lucide-react';
@@ -29,10 +29,10 @@ export default async function BlogIndex({ searchParams }: PageProps) {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const postsWithImages = filteredPosts.map((post) => {
-    const slugImage = getImageForSlug(post.slug);
+    const directImage = BLOG_POST_IMAGES[post.slug];
     return {
       ...post,
-      image: post.image || slugImage,
+      image: directImage || post.image || getImageForSlug(post.slug),
     };
   });
 

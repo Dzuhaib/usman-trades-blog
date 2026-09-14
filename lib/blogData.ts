@@ -17,6 +17,14 @@ export function getTodayDate(): string {
   return new Date().toLocaleDateString("en-US", options);
 }
 
+export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
+  'what-moves-gold-prices': { url: 'https://images.pexels.com/photos/2879837/pexels-photo-2879837.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Gold bullion bars with rising chart graph showing gold price drivers' },
+  'nfp-xau-usd-gold': { url: 'https://images.pexels.com/photos/4370598/pexels-photo-4370598.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Nonfarm Payrolls economic report on financial dashboard with gold investment' },
+  'fomc-xau-usd-gold': { url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Federal Reserve Chairman press conference on interest rates' },
+  'us-cpi-xau-usd-gold': { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Consumer Price Index data affecting gold and XAU/USD trading' },
+  'xau-usd-technical-analysis': { url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Gold trading chart with technical analysis indicators and price levels' },
+};
+
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "what-moves-gold-prices",
