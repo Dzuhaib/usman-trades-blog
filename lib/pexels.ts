@@ -225,6 +225,33 @@ export async function getPexelsImages(slug: string, count: number = 5, usedUrls?
   const slugImage = SLUG_IMAGES[slug];
   const category = getCategoryForSlug(slug);
 
+  if (slugImage && !usedUrls?.has(slugImage.url)) {
+    const uniqueImages: PexelsImage[] = [];
+    const altVariants = [
+      `${slug} market analysis chart`,
+      `${slug} trading data and statistics`,
+      `${slug} financial market trends`,
+      `${slug} professional trading workspace`
+    ];
+    if (!sharedUsedUrls.has(slugImage.url)) {
+      sharedUsedUrls.add(slugImage.url);
+    }
+    uniqueImages.push({ ...slugImage, alt: altVariants[0] });
+    for (let i = 1; i < count && i < altVariants.length; i++) {
+      const fallback = FALLBACK_IMAGES[`${slug}-image-${i}`] || FALLBACK_IMAGES[category] || FALLBACK_IMAGES.default;
+      if (!sharedUsedUrls.has(fallback.url)) {
+        sharedUsedUrls.add(fallback.url);
+        uniqueImages.push({ url: fallback.url, alt: altVariants[i] });
+      } else {
+        uniqueImages.push(FALLBACK_IMAGES.default);
+      }
+    }
+    while (uniqueImages.length < count) {
+      uniqueImages.push(FALLBACK_IMAGES.default);
+    }
+    return uniqueImages.slice(0, count);
+  }
+
   if (!apiKey || apiKey === 'your_pexels_api_key_here') {
     const slugImg = slugImage || CATEGORY_IMAGES[category] || FALLBACK_IMAGES[slug] || FALLBACK_IMAGES.default;
     const uniqueImages: PexelsImage[] = [];
