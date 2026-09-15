@@ -21,6 +21,7 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
   'what-moves-gold-prices': { url: 'https://images.pexels.com/photos/33539235/pexels-photo-33539235.jpeg', alt: 'Gold bullion bars stacked neatly symbolizing wealth investment and financial security' },
   'nfp-xau-usd-gold': { url: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg', alt: 'Laptop with charts and resume on desk showing jobs data and business analysis' },
   'fomc-xau-usd-gold': { url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg', alt: 'Federal Reserve Chairman press conference on interest rates' },
+  'fed-rate-cuts-xau-usd': { url: 'https://images.pexels.com/photos/7412098/pexels-photo-7412098.jpeg', alt: 'Global financial markets and central bank decision making' },
   'us-cpi-xau-usd-gold': { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg', alt: 'Consumer Price Index data affecting gold and XAU/USD trading' },
   'xau-usd-technical-analysis': { url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg', alt: 'Gold trading chart with technical analysis indicators and price levels' },
   'position-sizing': { url: 'https://images.pexels.com/photos/8297150/pexels-photo-8297150.jpeg', alt: 'Hands writing in notebook while using calculator for position sizing and finance planning' },
@@ -45,6 +46,12 @@ export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string 
     { url: 'https://images.pexels.com/photos/39353380/pexels-photo-39353380.jpeg', alt: 'Candlestick chart showing XAU/USD momentum for RSI and MACD analysis' },
     { url: 'https://images.pexels.com/photos/5833757/pexels-photo-5833757.jpeg', alt: 'Trader combining RSI MACD and moving averages across multiple chart screens' },
     { url: 'https://images.pexels.com/photos/6801636/pexels-photo-6801636.jpeg', alt: 'Risk management tools including calculator and charts for gold trading' },
+  ],
+  'fed-rate-cuts-xau-usd': [
+    { url: 'https://images.pexels.com/photos/14866072/pexels-photo-14866072.jpeg', alt: 'Global city skylines symbolizing financial markets and economic shifts' },
+    { url: 'https://images.pexels.com/photos/39368611/pexels-photo-39368611.jpeg', alt: 'Financial growth and successful trading outcomes on multiple screens' },
+    { url: 'https://images.pexels.com/photos/5831264/pexels-photo-5831264.jpeg', alt: 'Professional trading desk with multiple monitors and charts' },
+    { url: 'https://images.pexels.com/photos/14866072/pexels-photo-14866072.jpeg', alt: 'Digital world map showing global financial connectivity' },
   ],
 };
 
@@ -277,6 +284,19 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: "32 min read",
     route: "/blog/posts/rsi-macd-moving-averages-xauusd",
     content: "Technical indicators give gold traders a structured way to read price behaviour instead of reacting to every candle in isolation. This guide explains how RSI, MACD and moving averages work on XAU/USD and how to combine them.",
+    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+  },
+  {
+    slug: "fed-rate-cuts-xau-usd",
+    title: "How Fed Rate Cuts Affect XAU/USD",
+    excerpt: "A comprehensive guide to understanding how Federal Reserve rate cuts impact gold prices and the XAU/USD currency pair. Learn about the relationship between interest rates, Treasury yields, the US dollar, and gold.",
+    category: "Gold (XAUUSD) Analysis",
+    date: "September 15, 2026",
+    updatedAt: "September 15, 2026",
+    readTime: "48 min read",
+    route: "/blog/posts/fed-rate-cuts-xau-usd",
+    image: { url: "https://images.pexels.com/photos/7412098/pexels-photo-7412098.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Global financial markets and central bank decision making" },
+    content: "The Federal Reserve's decision to cut interest rates is one of the biggest events on the economic calendar for gold traders.",
     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
   }
 ];

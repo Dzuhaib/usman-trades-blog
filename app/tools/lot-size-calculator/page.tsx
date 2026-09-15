@@ -23,6 +23,31 @@ const pageSchema = generateWebPageSchema({
   url: "/tools/lot-size-calculator",
 });
 
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Calculate Your Lot Size",
+  "description": "Learn how to determine the correct position size for your trades across Forex, Gold, and Bitcoin.",
+  "totalTime": "PT3M",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Set Your Account Balance and Risk",
+      "text": "Enter your current account balance and the percentage you are willing to risk on the trade."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Define Your Stop Loss Distance",
+      "text": "Input the distance in pips or dollars between your entry price and your stop loss level."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Review the Recommended Lot Size",
+      "text": "The calculator will display the exact lot size that keeps your risk within your defined limits."
+    }
+  ]
+};
+
 const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is a standard lot in Forex?","acceptedAnswer":{"@type":"Answer","text":"A standard lot represents 100,000 units of the base currency. For most pairs, this means every pip of movement is worth about $10."}},{"@type":"Question","name":"How much should I risk per trade?","acceptedAnswer":{"@type":"Answer","text":"Most experienced traders recommend risking no more than 1% or 2% of your account balance. This allows you to handle several losses in a row without damaging your capital too much."}},{"@type":"Question","name":"Does this tool work for micro lots?","acceptedAnswer":{"@type":"Answer","text":"Yes. The calculator provides the exact decimal value. For example, 0.01 is one micro lot, and 0.10 is one mini lot. You can use these values with any broker."}}]};
 
 export default async function LotSizeCalculatorPage() {
@@ -31,6 +56,10 @@ export default async function LotSizeCalculatorPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
       <script
         type="application/ld+json"
@@ -44,6 +73,7 @@ export default async function LotSizeCalculatorPage() {
 
         <header className="border-b border-slate-100 pb-8 space-y-4">
           <h1 className="text-4xl font-bold font-serif text-slate-900 md:text-5xl tracking-tight">Lot Size Calculator</h1>
+          <p className="text-sm text-slate-400">Last Updated: September 2026</p>
           <p className="text-lg text-slate-600 leading-relaxed">
             <SmartText text="The most important part of trading isn't finding the perfect entry. It is making sure you don't risk too much of your money on a single trade. Our lot size tool tells you exactly how many units to buy or sell so you stay within your risk limits." />
           </p>
@@ -112,19 +142,50 @@ export default async function LotSizeCalculatorPage() {
           </section>
 
           <section className="space-y-6">
+            <h2 className="text-2xl font-bold font-serif text-slate-900">Lot Size Calculator for Gold and Bitcoin</h2>
+            <p>
+              While Forex pairs are the most common asset class for lot size calculations, Gold and Bitcoin require special considerations due to their different pricing structures and volatility profiles. Gold trades in ounces, with a single standard lot representing 100 ounces. Bitcoin trades in whole units or fractions, with the price per unit often exceeding tens of thousands of dollars.
+            </p>
+            <p>
+              For Gold, the lot size calculator adjusts the position size based on the dollar value of price movements. A one dollar move in gold translates to $100 for a standard lot, making risk management critical. For Bitcoin, the absolute price level means that even small percentage movements can result in significant dollar gains or losses. The calculator accounts for these differences automatically.
+            </p>
+            <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl space-y-4">
+              <h3 className="font-bold text-slate-900">Asset-Specific Lot Size Considerations</h3>
+              <ul className="space-y-2 list-disc list-inside text-slate-600">
+                <li><strong>Forex:</strong> Standard lot is 100,000 units; pip value is typically $10</li>
+                <li><strong>Gold:</strong> Standard lot is 100 ounces; dollar movement per pip is $100</li>
+                <li><strong>Bitcoin:</strong> Position size is measured in BTC units; risk is based on dollar price movement</li>
+              </ul>
+            </div>
+          </section>
+
+          <section className="space-y-6">
+            <h2 className="text-2xl font-bold font-serif text-slate-900">Risk Management and Lot Size</h2>
+            <p>
+              The lot size calculator is fundamentally a risk management tool. By determining the correct position size before entering a trade, you ensure that your risk is always known and controlled. This is the cornerstone of professional trading: never entering a position without knowing exactly how much you stand to lose.
+            </p>
+            <p>
+              The 1% rule is the most widely recommended approach among professional traders. If you have a $10,000 account, you should never risk more than $100 on a single trade. The lot size calculator makes this rule effortless to implement. You input your account balance, your risk percentage, and your stop loss distance, and the tool tells you exactly how many lots to trade.
+            </p>
+            <p>
+              Some traders use a fixed dollar risk model instead of a percentage-based model. In this approach, you risk the same dollar amount on every trade regardless of your account balance. While simpler to calculate, this approach has a downside: as your account grows, your risk percentage decreases, which can slow compounding. Conversely, as your account shrinks, your risk percentage increases, which can accelerate losses. The percentage-based model is generally preferred for these reasons.
+            </p>
+          </section>
+
+          <section className="space-y-6">
             <h2 className="text-2xl font-bold font-serif text-slate-900">Common Questions about Lot Sizes</h2>
             <div className="space-y-6">
               <div className="space-y-2">
                 <h3 className="font-bold text-slate-900">What is a standard lot in Forex?</h3>
-                <p className="text-base"><SmartText text="A standard lot represents 100,000 units of the base currency. For most pairs, this means every pip of movement is worth about $10." /></p>
+                <p className="text-base">A standard lot represents 100,000 units of the base currency. For most pairs, this means every pip of movement is worth about $10.</p>
               </div>
               <div className="space-y-2">
                 <h3 className="font-bold text-slate-900">How much should I risk per trade?</h3>
-                <p className="text-base"><SmartText text="Most experienced traders recommend risking no more than 1% or 2% of your account balance. This allows you to handle several losses in a row without damaging your capital too much." /></p>
+                <p className="text-base">Most experienced traders recommend risking no more than 1% or 2% of your account balance. This allows you to handle several losses in a row without damaging your capital too much.</p>
               </div>
               <div className="space-y-2">
                 <h3 className="font-bold text-slate-900">Does this tool work for micro lots?</h3>
-                <p className="text-base"><SmartText text="Yes. The calculator provides the exact decimal value. For example, 0.01 is one micro lot, and 0.10 is one mini lot. You can use these values with any broker." /></p>
+                <p className="text-base">Yes. The calculator provides the exact decimal value. For example, 0.01 is one micro lot, and 0.10 is one mini lot. You can use these values with any broker.</p>
               </div>
             </div>
           </section>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { generateWebPageSchema } from '@/lib/seo-os/schema-engine';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import DrawdownCalculator from './DrawdownCalculator';
 
@@ -15,11 +16,50 @@ export const metadata: Metadata = {
 const image1 = { url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg', alt: 'Mathematical representation of financial recovery and drawdown' };
 const image2 = { url: 'https://images.pexels.com/photos/38963051/pexels-photo-38963051.jpeg', alt: 'Downward trend chart showing market volatility' };
 
+const pageSchema = generateWebPageSchema({
+  name: "Trading Drawdown Calculator",
+  description: "Understand the math behind recovering from trading losses. Calculate exactly how much you need to gain to get back to breakeven after a drawdown.",
+  url: "/tools/drawdown-calculator",
+});
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Use the Drawdown Calculator",
+  "description": "Learn how to calculate the recovery required after trading losses and why capital preservation matters.",
+  "totalTime": "PT2M",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Enter Your Drawdown Percentage",
+      "text": "Input the percentage your account has declined from its peak. This could be the result of a single bad trade or a series of losses."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Review the Recovery Requirement",
+      "text": "The calculator will show you the exact percentage gain needed to return to your previous account balance."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Adjust Your Risk Management",
+      "text": "Use this information to tighten your risk parameters and prevent future deep drawdowns."
+    }
+  ]
+};
+
 const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is some drawdown normal?","acceptedAnswer":{"@type":"Answer","text":"Yes. Even the best strategies have periods where they lose money. Professional traders expect drawdowns and build their plans to handle them without emotion."}},{"@type":"Question","name":"When should I stop trading during a drawdown?","acceptedAnswer":{"@type":"Answer","text":"Many traders use a \"circuit breaker\" rule. If they lose a certain percentage of their account in a week or month, they stop trading to review their strategy and clear their head."}},{"@type":"Question","name":"How do I recover from a 50% loss?","acceptedAnswer":{"@type":"Answer","text":"The best way is to slow down. Trying to \"make it all back\" quickly usually leads to more mistakes. Focus on following your process and let the small wins build up over time."}}]};
 
 export default async function DrawdownPage() {
   return (
       <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -31,7 +71,8 @@ export default async function DrawdownPage() {
       ]} />
 
       <header className="border-b border-slate-100 pb-8 space-y-4">
-        <h1 className="text-4xl font-bold font-serif text-slate-900 md:text-5xl tracking-tight">Drawdown Calculator</h1>
+        <h1 className="text-4xl font-bold font-serif text-slate-900 md:text-5xl tracking-tight">Trading Drawdown Calculator</h1>
+        <p className="text-sm text-slate-400">Last Updated: September 2026</p>
         <p className="text-lg text-slate-600 leading-relaxed">
           The hardest part of trading is not making money. It is keeping the money you have already made. A drawdown is a natural part of the business, but if it gets too deep, the math required to recover becomes extremely difficult. This tool shows you the hidden cost of large losses and why protecting your downside is your most important job.
         </p>
@@ -115,6 +156,46 @@ export default async function DrawdownPage() {
           </div>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
             <img src={image2.url} alt={image2.alt} className="w-full h-full object-cover" />
+          </div>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">The Emotional Cost of Drawdowns</h2>
+          <p>
+            Beyond the mathematics, drawdowns take a significant toll on a trader's emotional wellbeing. After a deep drawdown, it is common to experience fear, doubt, and frustration. These emotions can lead to second-guessing your strategy, moving your stop losses, or abandoning your plan entirely. Understanding that drawdowns are a statistical inevitability rather than a personal failure can help you maintain emotional equilibrium.
+          </p>
+          <p>
+            Many professional traders keep a trading journal specifically to track their drawdowns. By recording the emotional state during each drawdown period, they can identify patterns in their behavior and develop coping strategies. This practice turns a potentially devastating experience into a learning opportunity that strengthens your overall trading psychology.
+          </p>
+          <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl space-y-4">
+            <h3 className="font-bold text-slate-900">Emotional Recovery After a Drawdown</h3>
+            <ul className="space-y-2 list-disc list-inside text-slate-600">
+              <li>Accept the loss as part of the trading process</li>
+              <li>Review your trades objectively without judgment</li>
+              <li>Reduce position sizes temporarily to rebuild confidence</li>
+              <li>Stick to your predefined trading plan</li>
+              <li>Remember that drawdowns are temporary and recoverable</li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">Drawdown and Position Sizing</h2>
+          <p>
+            The relationship between position sizing and drawdown depth is direct and unforgiving. When you risk too much on a single trade, you dramatically increase the potential depth of a drawdown. Professional traders understand that position sizing is not just about maximizing gains but about controlling the maximum possible loss in any given scenario.
+          </p>
+          <p>
+            A practical approach is to use a variable position sizing strategy that adjusts based on your current drawdown level. When you are in a profitable period, you can afford to take slightly larger positions. When you are experiencing a drawdown, you should reduce your position sizes to limit further losses and give your account time to recover. This dynamic approach helps smooth the equity curve and keeps drawdowns shallow.
+          </p>
+          <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl space-y-4">
+            <h3 className="font-bold text-slate-900">Position Sizing Rules During Drawdowns</h3>
+            <ul className="space-y-2 list-disc list-inside text-slate-600">
+              <li>Reduce risk per trade by 50% during a drawdown</li>
+              <li>Never add to a losing position to average down</li>
+              <li>Take a break from trading if your drawdown exceeds your weekly limit</li>
+              <li>Increase position size gradually as your account recovers</li>
+              <li>Always calculate position size before entering a trade</li>
+            </ul>
           </div>
         </section>
 

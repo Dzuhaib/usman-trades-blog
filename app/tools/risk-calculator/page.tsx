@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { generateWebPageSchema } from '@/lib/seo-os/schema-engine';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import RiskCalculator from './RiskCalculator';
 
@@ -15,11 +16,50 @@ export const metadata: Metadata = {
 const image1 = { url: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg', alt: 'Professional risk management and financial calculation' };
 const image2 = { url: 'https://images.pexels.com/photos/35118208/pexels-photo-35118208.jpeg', alt: 'Stock market candles and technical analysis chart' };
 
+const pageSchema = generateWebPageSchema({
+  name: "Trading Risk Calculator",
+  description: "Calculate the exact dollar amount you are risking on your next trade. Works for Forex, Gold, and Bitcoin.",
+  url: "/tools/risk-calculator",
+});
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Calculate Trading Risk",
+  "description": "Learn how to determine your exact dollar risk before entering a trade.",
+  "totalTime": "PT2M",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Define Your Entry and Stop Loss",
+      "text": "Identify the price level where your trade idea is invalid and set your stop loss there."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Set Your Risk Percentage",
+      "text": "Choose what percentage of your account you are willing to risk, typically 1% or 2%."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Review the Calculated Risk",
+      "text": "The calculator will display the exact dollar amount you stand to lose if your stop loss is hit."
+    }
+  ]
+};
+
 const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Should I risk the same amount on every trade?","acceptedAnswer":{"@type":"Answer","text":"Most experts suggest keeping your risk percentage the same for every trade. This creates a smooth equity curve and prevents one single loss from wiping out multiple wins."}},{"@type":"Question","name":"What happens if I don't use a stop loss?","acceptedAnswer":{"@type":"Answer","text":"Trading without a stop loss means your risk is theoretically unlimited. This is the fastest way to lose an entire trading account. Always define your risk before you enter."}},{"@type":"Question","name":"Does this tool work for Gold and Bitcoin?","acceptedAnswer":{"@type":"Answer","text":"Yes. The calculator adjusts for the specific price movements of Gold and Bitcoin, which are different than standard Forex pairs."}}]};
 
 export default async function RiskCalculatorPage() {
   return (
       <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -32,6 +72,7 @@ export default async function RiskCalculatorPage() {
 
       <header className="border-b border-slate-100 pb-8 space-y-4">
         <h1 className="text-4xl font-bold font-serif text-slate-900 md:text-5xl tracking-tight">Trading Risk Calculator</h1>
+        <p className="text-sm text-slate-400">Last Updated: September 2026</p>
         <p className="text-lg text-slate-600 leading-relaxed">
           Successful trading is more about managing the risk of being wrong than it is about predicting the future. Professional traders focus on how much they could lose before they think about how much they could make. This tool shows you the cash impact of your stop loss levels instantly.
         </p>
@@ -91,6 +132,49 @@ export default async function RiskCalculatorPage() {
           </div>
           <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 my-8">
             <img src={image2.url} alt={image2.alt} className="w-full h-full object-cover" />
+          </div>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">Risk Management Strategies for Forex and Gold</h2>
+          <p>
+            Effective risk management is the single most important skill a trader can develop. While technical analysis and trading strategies are important, they mean nothing if you cannot manage the risk on each trade. The risk calculator is your first line of defense against catastrophic losses.
+          </p>
+          <p>
+            In Forex trading, the high leverage available can make risk management feel optional. A 1:100 leverage means that a 1% move against you wipes out 100% of your margin. This is why professional traders use the risk calculator to ensure they never expose more than a small percentage of their account on any single trade.
+          </p>
+          <p>
+            Gold trading presents a different challenge. While gold typically has lower leverage than Forex pairs, its volatility can be just as dangerous. A sudden $50 move in gold can result in a significant loss if your position size is not properly calculated. The risk calculator accounts for these asset-specific characteristics so you can trade with confidence.
+          </p>
+          <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl space-y-4">
+            <h3 className="font-bold text-slate-900">Asset-Specific Risk Considerations</h3>
+            <ul className="space-y-2 list-disc list-inside text-slate-600">
+              <li><strong>Forex:</strong> High leverage available; risk is measured in pips and account currency</li>
+              <li><strong>Gold:</strong> Higher volatility per lot; dollar risk is more significant per point</li>
+              <li><strong>Bitcoin:</strong> Extreme volatility; risk percentages should be lower than other assets</li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">The Mathematics of Risk and Reward</h2>
+          <p>
+            Every trade you enter is a mathematical equation with two variables: the probability of success and the amount you stand to gain or lose. Even with a 50% win rate, you can be profitable if your average win is larger than your average loss. This is the foundation of the risk reward ratio.
+          </p>
+          <p>
+            For example, if you risk $100 to make $200, you only need to be right 34% of the time to break even. If you risk $100 to make $100, you need to be right 50% of the time just to break even. The risk calculator helps you visualize these numbers before you enter, so you can decide whether the trade is worth taking.
+          </p>
+          <p>
+            Many traders make the mistake of focusing only on the win rate. A high win rate means nothing if your losses are larger than your wins. By using the risk calculator consistently, you train yourself to think in terms of risk first and reward second, which is the mindset of a professional trader.
+          </p>
+          <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl space-y-4">
+            <h3 className="font-bold text-slate-900">Risk Reward Quick Reference</h3>
+            <ul className="space-y-2 list-disc list-inside text-slate-600">
+              <li>1:1 ratio requires 50% win rate to break even</li>
+              <li>1:2 ratio requires 34% win rate to break even</li>
+              <li>1:3 ratio requires 25% win rate to break even</li>
+              <li>Always aim for at least a 1:2 risk reward ratio</li>
+            </ul>
           </div>
         </section>
 

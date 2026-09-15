@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { generateWebPageSchema } from '@/lib/seo-os/schema-engine';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PipValueCalculator from './PipValueCalculator';
 
@@ -15,11 +16,50 @@ export const metadata: Metadata = {
 const image1 = { url: 'https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg', alt: 'Financial mathematics and currency exchange concepts' };
 const image2 = { url: 'https://images.pexels.com/photos/47047/gold-ingots-golden-treasure-47047.jpeg', alt: 'Gold market bars and financial asset valuation' };
 
+const pageSchema = generateWebPageSchema({
+  name: "Trading Pip Value Calculator",
+  description: "Calculate the exact dollar value of every pip movement in your trades. Works for all major currency pairs, Gold, and Bitcoin.",
+  url: "/tools/pip-calculator",
+});
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Calculate Pip Value",
+  "description": "Learn how to determine the monetary value of each pip movement for accurate trade planning.",
+  "totalTime": "PT2M",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Select Your Asset",
+      "text": "Choose whether you are trading a Forex pair, Gold, or Bitcoin to determine the correct pip calculation method."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Enter Your Position Size",
+      "text": "Input the lot size you are trading or planning to trade."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Review Your Pip Value",
+      "text": "The calculator will display the exact dollar value of each pip movement for your selected position size."
+    }
+  ]
+};
+
 const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does pip value stay the same forever?","acceptedAnswer":{"@type":"Answer","text":"For pairs like EUR/USD, the value is fixed if your account is in USD. For JPY or GBP pairs, the value changes slightly as the exchange rate moves."}},{"@type":"Question","name":"Why should I care about pip value?","acceptedAnswer":{"@type":"Answer","text":"If you don't know your pip value, you cannot calculate your risk accurately. Knowing this number is the only way to ensure your stop loss respects your risk limits."}},{"@type":"Question","name":"What is the difference between a pip and a point?","acceptedAnswer":{"@type":"Answer","text":"A pip is usually the fourth decimal place, while a point is the fifth decimal place (also called a pipette). There are 10 points in every 1 pip."}}]};
 
 export default async function PipValueCalculatorPage() {
   return (
       <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -31,7 +71,8 @@ export default async function PipValueCalculatorPage() {
       ]} />
 
       <header className="border-b border-slate-100 pb-8 space-y-4">
-        <h1 className="text-4xl font-bold font-serif text-slate-900 md:text-5xl tracking-tight">Pip Value Calculator</h1>
+        <h1 className="text-4xl font-bold font-serif text-slate-900 md:text-5xl tracking-tight">Trading Pip Value Calculator</h1>
+        <p className="text-sm text-slate-400">Last Updated: September 2026</p>
         <p className="text-lg text-slate-600 leading-relaxed">
           The speed at which your account balance changes depends entirely on the value of a single pip. Whether you trade Forex, Gold, or Bitcoin, knowing your pip value is essential for accurate trade planning. This tool calculates the exact dollar value of market movements for any position size.
         </p>
@@ -97,6 +138,38 @@ export default async function PipValueCalculatorPage() {
         </section>
 
         <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">Pip Value Across Different Account Currencies</h2>
+          <p>
+            The examples we have discussed so far assume your trading account is denominated in US dollars. In reality, many traders have accounts in GBP, EUR, AUD, or other currencies. When your account currency differs from the quote currency of the pair you are trading, the pip value calculation requires an additional conversion step.
+          </p>
+          <p>
+            For example, if you have a GBP-denominated account and trade EUR/USD, the pip value calculated in USD must be converted to GBP using the current GBP/USD exchange rate. This means your actual pip value in GBP terms will fluctuate not only with the EUR/USD pair but also with the GBP/USD rate. Our calculator handles all currency conversions automatically, ensuring that your risk calculations are accurate regardless of your account currency.
+          </p>
+          <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl space-y-4">
+            <h3 className="font-bold text-slate-900">Pip Value Calculation by Account Currency</h3>
+            <ul className="space-y-2 list-disc list-inside text-slate-600">
+              <li><strong>USD Account:</strong> Pip values are calculated directly in USD for most pairs</li>
+              <li><strong>EUR Account:</strong> USD pip values are converted to EUR using the EUR/USD rate</li>
+              <li><strong>GBP Account:</strong> USD pip values are converted to GBP using the GBP/USD rate</li>
+              <li><strong>JPY Account:</strong> Additional conversion may be required depending on the pair</li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold font-serif text-slate-900">Using Pip Value for Trade Planning</h2>
+          <p>
+            Knowing your pip value is not just an academic exercise. It is a practical tool that you should use every time you plan a trade. By combining your pip value with your stop loss distance, you can calculate your exact dollar risk before entering the trade. This allows you to make informed decisions about whether a setup is worth taking based on your risk parameters.
+          </p>
+          <p>
+            For example, if your pip value is $10 per standard lot and your stop loss is 30 pips away, your risk on one lot is $300. If you have a $10,000 account and follow the 1% rule, you can afford to risk $100, which means you should trade 0.33 lots rather than a full lot. This simple calculation, done before every trade, ensures that you never risk more than your account can handle.
+          </p>
+          <p>
+            Advanced traders also use pip value analysis to compare the relative risk of different pairs. A pair with a higher pip value per lot represents more risk per unit of position size. By understanding these differences, you can allocate your risk budget more efficiently across multiple trades and diversify your exposure appropriately.
+          </p>
+        </section>
+
+        <section className="space-y-6">
           <h2 className="text-2xl font-bold font-serif text-slate-900">Frequently Asked Questions</h2>
           <div className="space-y-6">
             <div className="space-y-2">
@@ -105,7 +178,7 @@ export default async function PipValueCalculatorPage() {
             </div>
             <div className="space-y-2">
               <h3 className="font-bold text-slate-900">Why should I care about pip value?</h3>
-              <p className="text-base">If you don't know your pip value, you cannot calculate your risk accurately. Knowing this number is the only way to ensure your stop loss respects your risk limits.</p>
+              <p className="text-base">If you do not know your pip value, you cannot calculate your risk accurately. Knowing this number is the only way to ensure your stop loss respects your risk limits.</p>
             </div>
             <div className="space-y-2">
               <h3 className="font-bold text-slate-900">What is the difference between a pip and a point?</h3>

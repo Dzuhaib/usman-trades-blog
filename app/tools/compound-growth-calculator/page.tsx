@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { generateWebPageSchema } from '@/lib/seo-os/schema-engine';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import CompoundGrowthCalculator from './CompoundGrowthCalculator';
 
@@ -15,11 +16,50 @@ export const metadata: Metadata = {
 const image1 = { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Concept of wealth accumulation and compounding growth' };
 const image2 = { url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg', alt: 'Financial charts and long term growth analysis' };
 
+const pageSchema = generateWebPageSchema({
+  name: "Trading Compound Growth Calculator",
+  description: "Project your trading account growth over time through consistent compounding. Calculate future balances based on monthly returns and starting capital.",
+  url: "/tools/compound-growth-calculator",
+});
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Use the Compound Growth Calculator",
+  "description": "Learn how to project your trading account growth through the power of compounding.",
+  "totalTime": "PT3M",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Enter Your Starting Balance",
+      "text": "Input the current amount of money in your trading account to establish your baseline."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Set Your Monthly Return Target",
+      "text": "Enter the average percentage gain you aim to achieve each month through disciplined trading."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Review Your Projected Growth",
+      "text": "The calculator will display your projected account balance over your chosen time horizon, showing the exponential effect of compounding."
+    }
+  ]
+};
+
 const faqSchema = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is a 10% monthly return realistic?","acceptedAnswer":{"@type":"Answer","text":"While some months might offer high returns, maintaining 10% every single month is extremely difficult and requires taking significant risk. Professional traders often aim for more conservative targets to ensure account longevity."}},{"@type":"Question","name":"How often should I reinvest my profits?","acceptedAnswer":{"@type":"Answer","text":"Reinvesting after every trade or every month is the most common approach. This calculator assumes monthly reinvestment, which provides a realistic view of how a trading account grows over time."}},{"@type":"Question","name":"Can I lose money while compounding?","acceptedAnswer":{"@type":"Answer","text":"Yes. Compounding works in both directions. If you have a losing streak and your account balance drops, your future gains will be based on that smaller balance. This is why risk management is the most important part of the process."}}]};
 
 export default async function CompoundGrowthPage() {
   return (
       <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -31,7 +71,8 @@ export default async function CompoundGrowthPage() {
       ]} />
 
       <header className="border-b border-slate-100 pb-8 space-y-4">
-        <h1 className="text-4xl font-bold font-serif text-slate-900 md:text-5xl tracking-tight">Compound Growth Calculator</h1>
+        <h1 className="text-4xl font-bold font-serif text-slate-900 md:text-5xl tracking-tight">Trading Compound Growth Calculator</h1>
+        <p className="text-sm text-slate-400">Last Updated: September 2026</p>
         <p className="text-lg text-slate-600 leading-relaxed">
           The most powerful force in the financial world is compounding. Many traders focus on getting rich quickly, but true wealth is built through consistent, small gains that build on top of each other over time. This tool helps you visualize your potential account path based on your monthly goals and discipline.
         </p>
@@ -101,22 +142,55 @@ export default async function CompoundGrowthPage() {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-2xl font-bold font-serif text-slate-900">Frequently Asked Questions</h2>
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <h3 className="font-bold text-slate-900">Is a 10% monthly return realistic?</h3>
-              <p className="text-base">While some months might offer high returns, maintaining 10% every single month is extremely difficult and requires taking significant risk. Professional traders often aim for more conservative targets to ensure account longevity.</p>
+            <h2 className="text-2xl font-bold font-serif text-slate-900">The Psychology of Compounding</h2>
+            <p>
+              Compounding is as much a mental challenge as it is a mathematical one. The temptation to withdraw profits after a winning streak is powerful, but doing so breaks the chain that makes compounding effective. Traders who understand this psychological aspect develop the discipline to leave their gains invested, allowing the exponential curve to do its work.
+            </p>
+            <p>
+              One of the most common mistakes traders make is expecting linear growth when the reality is exponential. In the early months, the gains may seem modest and discouraging. It is only after months or years of consistent reinvestment that the curve begins to steepen dramatically. This is why patience is perhaps the most valuable trait a compound growth trader can possess.
+            </p>
+            <p>
+              Another psychological hurdle is dealing with the inevitable losing months. Even the best strategies will have periods where the monthly return is negative. The key is not to abandon the compounding strategy during these periods. Instead, focus on reducing risk, reviewing your approach, and staying the course. The math of compounding works best when you give it time to recover from setbacks.
+            </p>
+          </section>
+
+          <section className="space-y-6">
+            <h2 className="text-2xl font-bold font-serif text-slate-900">The Role of Consistency Over Intensity</h2>
+            <p>
+              Many new traders believe that the path to wealth requires finding the ultimate strategy that produces massive returns every month. The truth is that consistent, moderate returns compounded over time will almost always outperform sporadic big winners. A trader who averages 3% per month with low drawdowns will build a larger account over a year than someone who makes 20% in one month and then loses 15% the next two months.
+            </p>
+            <p>
+              This is why the compound growth calculator is such a valuable tool. It strips away the excitement and shows you the raw mathematics of consistency. When you see that a modest 2% monthly return can grow your account by over 26% in a year, the appeal of high risk, high reward trades diminishes significantly.
+            </p>
+            <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl space-y-4">
+              <h3 className="font-bold text-slate-900">Key Principles for Compounding Success</h3>
+              <ul className="space-y-2 list-disc list-inside text-slate-600">
+                <li>Reinvest all profits to maintain the compounding chain</li>
+                <li>Aim for consistent monthly returns rather than occasional home runs</li>
+                <li>Keep drawdowns shallow to protect the compounding base</li>
+                <li>Be patient and give the exponential curve time to develop</li>
+                <li>Review and adjust your strategy periodically, but do not abandon compounding</li>
+              </ul>
             </div>
-            <div className="space-y-2">
-              <h3 className="font-bold text-slate-900">How often should I reinvest my profits?</h3>
-              <p className="text-base">Reinvesting after every trade or every month is the most common approach. This calculator assumes monthly reinvestment, which provides a realistic view of how a trading account grows over time.</p>
+          </section>
+
+          <section className="space-y-6">
+            <h2 className="text-2xl font-bold font-serif text-slate-900">Frequently Asked Questions</h2>
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <h3 className="font-bold text-slate-900">Is a 10% monthly return realistic?</h3>
+                <p className="text-base">While some months might offer high returns, maintaining 10% every single month is extremely difficult and requires taking significant risk. Professional traders often aim for more conservative targets to ensure account longevity.</p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-bold text-slate-900">How often should I reinvest my profits?</h3>
+                <p className="text-base">Reinvesting after every trade or every month is the most common approach. This calculator assumes monthly reinvestment, which provides a realistic view of how a trading account grows over time.</p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-bold text-slate-900">Can I lose money while compounding?</h3>
+                <p className="text-base">Yes. Compounding works in both directions. If you have a losing streak and your account balance drops, your future gains will be based on that smaller balance. This is why risk management is the most important part of the process.</p>
+              </div>
             </div>
-            <div className="space-y-2">
-              <h3 className="font-bold text-slate-900">Can I lose money while compounding?</h3>
-              <p className="text-base">Yes. Compounding works in both directions. If you have a losing streak and your account balance drops, your future gains will be based on that smaller balance. This is why risk management is the most important part of the process.</p>
-            </div>
-          </div>
-        </section>
+          </section>
       </div>
 
       <footer className="border-t border-slate-100 pt-8 flex justify-between items-center text-sm">
