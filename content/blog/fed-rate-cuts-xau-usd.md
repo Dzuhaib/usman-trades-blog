@@ -445,11 +445,11 @@ The dollar is the other half of XAU/USD. If the dollar is not weakening after a 
 
 ### Entering Immediately During Extreme Volatility
 
-The first few minutes after an FOMC announcement are extremely volatile. Spreads widen, slippage increases, and false breakouts are common. Entering immediately is one of the riskiest strategies available.
+The first few minutes after an FOMC announcement are extremely volatile. Spreads widen, slippage increases, and false breakouts are common. Entering immediately carries extreme risk.
 
 ### Using Excessive Leverage
 
-Fed events can produce 2 to 5 percent moves in gold within minutes. Using high leverage means a small adverse move can wipe out your account. Conservative leverage and small position sizes are essential.
+Fed events can produce 2 to 5 percent moves in gold within minutes. Using high leverage means a small adverse move can wipe out your account. Keep leverage conservative and position sizes small.
 
 ---
 
@@ -625,3 +625,4 @@ Risk management around Fed events is not optional — it is the most important p
 
 
 Trading around FOMC events is one of the most challenging but potentially rewarding activities in the gold market. The key is preparation, patience, and a clear understanding of what actually drives gold prices when the Fed changes direction on rates. Not every rate cut is a green light to buy gold, and not every hold is a reason to sell. The full picture — expectations, guidance, yields, the dollar, and technical structure — is what determines the real outcome. Keep your risk controlled, stay informed, and let the market confirm its direction before you commit.
+

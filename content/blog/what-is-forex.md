@@ -155,7 +155,7 @@ GDP is typically reported quarterly and is closely watched by traders because it
 
 The US Non-Farm Payrolls report, released on the first Friday of every month, is arguably the single most impactful economic indicator in the Forex market. It measures the change in the number of employed people in the US, excluding the farming industry, government employees, and private household workers.
 
-The NFP report provides critical insight into the health of the US labor market, which directly influences Federal Reserve policy decisions. A strong NFP figure suggests a robust economy and increases the likelihood of interest rate hikes, which strengthens the US Dollar. A weak NFP figure has the opposite effect. The NFP release routinely causes massive intraday volatility, with EUR/USD moving 100 to 200 pips within minutes of the announcement.
+The NFP report provides important insight into the health of the US labor market, which directly influences Federal Reserve policy decisions. A strong NFP figure suggests a robust economy and increases the likelihood of interest rate hikes, which strengthens the US Dollar. A weak NFP figure has the opposite effect. The NFP release routinely causes massive intraday volatility, with EUR/USD moving 100 to 200 pips within minutes of the announcement.
 
 ### Interest Rate Decisions
 
@@ -185,7 +185,7 @@ For example, if you have a $10,000 account, you should risk no more than $100 to
 
 Every trade should have a clearly defined risk-to-reward ratio. This ratio compares the potential profit of a trade to the potential loss. A 1:2 risk-to-reward ratio means you are risking $1 to make $2. Professional traders aim for a minimum of 1:2, and many prefer 1:3 or better.
 
-The beauty of a favorable risk-to-reward ratio is that you can be wrong more often than you are right and still be profitable. With a 1:3 risk-to-reward ratio, you only need to win 33% of your trades to break even. This is why disciplined traders focus as much on the potential reward as they do on the probability of winning.
+One benefit of a favorable risk-to-reward ratio is that you can be wrong more often than you are right and still be profitable. With a 1:3 risk-to-reward ratio, you only need to win 33% of your trades to break even. This is why disciplined traders focus as much on the potential reward as they do on the probability of winning.
 
 ### Stop Loss Discipline
 
@@ -342,3 +342,5 @@ A: Yes, but professional analysis should always be done on a larger screen where
 If you are learning Forex, use the Lot Size Calculator and Risk Calculator on Usman Trades to practice proper position sizing before risking real money.
 
 Forex is not a get rich quick scheme. It is a high level skill that requires patience, study, and an iron clad grip on your emotions. Treat it like a business, and it will pay you like a business.
+
+
