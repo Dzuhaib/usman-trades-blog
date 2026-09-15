@@ -38,7 +38,7 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
   'pip-value-guide': { url: 'https://images.pexels.com/photos/6771426/pexels-photo-6771426.jpeg', alt: 'Laptop screen with trading charts calculator and currency coins for pip value calculation' },
   'compound-growth-trading': { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Compound growth trading account chart showing exponential wealth building' },
    'rsi-macd-moving-averages-xauusd': { url: 'https://images.pexels.com/photos/30268013/pexels-photo-30268013.jpeg', alt: 'Analysing a bullish gold price chart with RSI MACD and moving average indicators' },
-   'fomc-bitcoin': { url: 'https://images.pexels.com/photos/3282088/pexels-photo-3282088.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Bitcoin cryptocurrency coin on dark background with glowing edges' },
+   'fomc-bitcoin': { url: 'https://images.pexels.com/photos/4837612/pexels-photo-4837612.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Bitcoin cryptocurrency coin on dark background with glowing edges' },
 };
 
 export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string }[]> = {
@@ -98,7 +98,7 @@ export const BLOG_POSTS: BlogPost[] = [
     updatedAt: "September 16, 2026",
     readTime: "60 min read",
     route: "/blog/posts/fomc-bitcoin",
-    image: { url: "https://images.pexels.com/photos/3282088/pexels-photo-3282088.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Bitcoin cryptocurrency coin on dark background with glowing edges" },
+    image: { url: "https://images.pexels.com/photos/4837612/pexels-photo-4837612.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Bitcoin cryptocurrency coin on dark background with glowing edges" },
     content: "The Federal Open Market Committee is the most powerful monetary policy body in the United States, and its decisions send shockwaves through every financial market. Bitcoin, despite being a decentralised digital asset with no central bank governing it, reacts sharply to FOMC announcements.",
     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
   },
