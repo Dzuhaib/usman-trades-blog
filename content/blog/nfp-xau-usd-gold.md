@@ -774,14 +774,14 @@ For longer term planning, the Compound Growth Calculator helps you project your 
 
 This content is for educational purposes only. Trading gold, forex, and other financial instruments involves significant risk and may not be suitable for all investors. Past performance is not indicative of future results. Always conduct your own research and consider consulting with a financial advisor before making investment decisions. Never risk more than you can afford to lose.
 
-**Recommended Tools:**
-- [Calculate the real cost of trading NFP with the Spread Cost Tool](/tools/spread-cost-calculator)
-- [Manage your risk exposure with the Risk Calculator](/tools/risk-calculator)
-- [Learn position sizing for news trades in the Position Sizing Guide](/blog/position-sizing)
-- [Calculate your trade size for NFP reactions with the Lot Size Calculator](/tools/lot-size-calculator)
-- [Track NFP release times with the Session Timer](/tools/session-timer)
+---
 
+## Related Tools for Position Management
 
+Traders should utilize the following calculators available on Usman Trades to quantify risk and optimize execution:
 
-
-
+- **[Calculate the real cost of trading NFP with the Spread Cost Tool](/tools/spread-cost-calculator)**
+- **[Manage your risk exposure with the Risk Calculator](/tools/risk-calculator)**
+- **[Learn position sizing for news trades in the Position Sizing Guide](/blog/position-sizing)**
+- **[Calculate your trade size for NFP reactions with the Lot Size Calculator](/tools/lot-size-calculator)**
+- **[Track NFP release times with the Session Timer](/tools/session-timer)**
