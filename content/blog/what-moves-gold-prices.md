@@ -1,6 +1,8 @@
-# What Moves Gold Prices? 10 Key Factors
+# Gold XAU/USD Macro Drivers: Fed Policy, USD, Real Yields
 
-Gold is one of the most actively traded assets in the world, and its price rarely stays still for long. Every single day, billions of dollars worth of gold change hands as traders, investors, and central banks react to shifting economic conditions, political developments, and market sentiment. For anyone trading XAU/USD, understanding what moves gold prices is not optional knowledge; it is the foundation of every profitable trade.
+
+
+To understand how FOMC news specifically affects gold, see our [How FOMC Affects Gold](/blog/posts/fomc-xau-usd-gold) guide. For CPI-related analysis, check [How US CPI Data Affects XAU/USD](/blog/posts/us-cpi-xau-usd-gold). Every single day, billions of dollars worth of gold change hands as traders, investors, and central banks react to shifting economic conditions, political developments, and market sentiment. For anyone trading XAU/USD, understanding what moves gold prices is not optional knowledge; it is the foundation of every profitable trade.
 
 This analysis, we will break down the ten most important factors that influence gold prices. From interest rates and Federal Reserve policy to central bank purchases and investor sentiment, each factor plays a unique role in shaping the direction of the gold market. We will also explore how these factors interact with each other, how to distinguish between short-term catalysts and long-term trends, and how forex traders can track these drivers effectively.
 
@@ -518,6 +520,19 @@ This content is for educational purposes only. Trading gold, forex, and other fi
 
 ---
 
+## Frequently Asked Questions
+
+### What are the latest gold XAU/USD macro drivers?
+The latest gold XAU/USD macro drivers include Federal Reserve policy and rate expectations, the US Dollar strength, real yields on Treasury bonds, inflation prints, and geopolitical risk. When the Fed signals rate cuts, gold tends to rise because the opportunity cost of holding it decreases. A stronger Dollar pressures gold, while a weaker Dollar supports it. Real yields that fall negative make gold the superior store of value.
+
+### What is gold XAU/USD technical analysis today?
+Gold XAU/USD technical analysis today depends on the current market structure, key support and resistance levels, and momentum indicators such as RSI, MACD, and moving averages. Technical analysis provides traders with a structured way to read price behaviour instead of reacting to every candle in isolation.
+
+---
+
+
+---
+
 ## Related Tools for Position Management
 
 Traders should utilize the following calculators available on Usman Trades to quantify risk and optimize execution:
@@ -527,3 +542,6 @@ Traders should utilize the following calculators available on Usman Trades to qu
 - **[Learn position sizing in the Position Sizing Guide](/blog/position-sizing)**
 - **[Calculate your trade size for gold reactions with the Lot Size Calculator](/tools/lot-size-calculator)**
 - **[Track gold market hours with the Session Timer](/tools/session-timer)**
+
+
+
