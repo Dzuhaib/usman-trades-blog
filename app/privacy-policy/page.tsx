@@ -29,7 +29,7 @@ export default function PrivacyPolicy() {
       <section className="space-y-4 text-secondary leading-relaxed">
         <h2 className="text-xl font-bold text-primary">2. Data Controller</h2>
         <p>
-          The data controller for Usman Trades is MUHAMMAD USMAN, located at usmantrades.co.uk. For any data protection inquiries, please contact us at <a href="mailto:zuhaibahmed3213951@gmail.com" className="text-accent underline font-semibold">zuhaibahmed3213951@gmail.com</a>.
+          The data controller for Usman Trades is MUHAMMAD USMAN, located at DHA Phase 5, Karachi, Pakistan. For any data protection inquiries, please contact us at <a href="mailto:zuhaibahmed3213951@gmail.com" className="text-accent underline font-semibold">zuhaibahmed3213951@gmail.com</a> or call <a href="tel:+923390349804" className="text-accent underline font-semibold">+923390349804</a>.
         </p>
       </section>
 

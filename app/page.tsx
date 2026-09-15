@@ -404,7 +404,7 @@ export default async function Home() {
                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold font-serif bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">Built for Traders, By a Trader</h2>
               </div>
               <p className="text-sm md:text-lg text-slate-300 leading-relaxed max-w-2xl">
-                All content and tools are created by MUHAMMAD USMAN, a senior market analyst with 12+ years of experience specializing in XAUUSD and global liquidity cycles. Every guide is human written, mathematically verified, and designed for real world application.
+                All content and tools are created by MUHAMMAD USMAN, a senior market analyst with 12+ years of experience specializing in XAUUSD and global liquidity cycles. Every guide is researched, mathematically verified, and designed for real world application.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                 {[
@@ -441,7 +441,7 @@ export default async function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <div className="space-y-3">
                 {[
-                  'All content is human written by a senior market analyst with real world experience. No AI generated fluff.',
+                  'All content is researched and written by a senior market analyst with real world experience.',
                   'Every formula and calculation is mathematically verified against industry standards.',
                   'We do not accept payments from brokers to promote their services. Our advice is independent and unbiased.',
                 ].map((point, i) => (

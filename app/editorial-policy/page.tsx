@@ -5,7 +5,7 @@ import { ShieldCheck, UserCheck, BookOpen, PenTool } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Editorial Policy | Our Commitment to High Integrity Content',
-  description: 'Read the Usman Trades Editorial Policy. We commit to human written, mathematically accurate, and independent trading education without AI generated fluff.',
+  description: 'Read the Usman Trades Editorial Policy. We commit to thoroughly researched, mathematically accurate, and independent trading education.',
   alternates: {
     canonical: '/editorial-policy',
   },
@@ -53,7 +53,7 @@ export default function EditorialPolicy() {
           <div className="bg-slate-50 border border-slate-100 rounded-2xl p-8 md:p-10 space-y-4">
             <h2 className="text-xl font-bold text-slate-900">What is the Usman Trades Editorial Policy?</h2>
             <p className="text-slate-600 leading-relaxed">
-              Our policy is a strict set of rules that governs how we create content. We prioritize human authorship over automation, mathematical proof over speculation, and educational clarity over marketing hype. We do not publish AI generated articles or unverified trading signals.
+              Our policy is a strict set of rules that governs how we create content. We prioritize human authorship over automation, mathematical proof over speculation, and educational clarity over marketing hype. Every guide is researched and written by experienced analysts with verified, accurate information.
             </p>
           </div>
 
@@ -64,7 +64,7 @@ export default function EditorialPolicy() {
                 <h3 className="text-xl font-bold">1. Human Centric Authorship</h3>
               </div>
               <p className="text-slate-600 leading-relaxed">
-                Every piece of educational material on this platform is written by a real person with actual market experience. We strictly forbid the use of artificial intelligence tools to generate our core articles. We believe that AI lacks the nuanced understanding and biological risk awareness required to teach trading effectively. When you read a guide here, you are reading the thoughts of an experienced analyst.
+                Every piece of educational material on this platform is researched and written by a real person with actual market experience. Our content follows a rigorous editorial process involving experienced analysts to ensure accuracy, clarity, and practical usefulness. We focus on delivering trustworthy, well-sourced educational content.
               </p>
             </div>
 

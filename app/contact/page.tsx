@@ -48,6 +48,12 @@ export default function Contact() {
             </a>
           </div>
           <div>
+            <span className="text-xs font-semibold text-muted tracking-wider uppercase block mb-1">Phone</span>
+            <a href="tel:+923390349804" className="text-lg font-bold text-accent hover:underline">
+              +923390349804
+            </a>
+          </div>
+          <div>
             <span className="text-xs font-semibold text-muted tracking-wider uppercase block mb-1">Availability</span>
             <p className="text-sm text-secondary">
               We typically review incoming inquiries within 24–48 hours, Monday through Friday, GMT.

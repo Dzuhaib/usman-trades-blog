@@ -53,8 +53,8 @@ export default function About() {
             <ShieldCheck className="w-5 h-5" />
             <h2 className="text-xl font-bold text-slate-900">Our Core Principles</h2>
           </div>
-          <div className="grid gap-6">
-            <div className="space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
               <h3 className="font-bold text-slate-900">1. Mathematics Over Emotion</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
                 Trading is a game of probabilities. We believe every decision should be backed by math—from your lot size to your reward-to-risk ratio. Our calculators are built to remove the emotional guesswork that leads to big losses.
@@ -63,14 +63,39 @@ export default function About() {
             <div className="space-y-2">
               <h3 className="font-bold text-slate-900">2. Editorial Integrity</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
-                We commit to high-integrity, human-written content only. We do not use AI generators to churn out articles. Every guide in our library is written and reviewed by experienced analysts to ensure accuracy and clarity.
+                We commit to high-integrity, thoroughly researched content. Every guide in our library is written and reviewed by experienced analysts to ensure accuracy, clarity, and practical usefulness for real traders.
               </p>
             </div>
             <div className="space-y-2">
               <h3 className="font-bold text-slate-900">3. Absolute Transparency</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
-                We are an independent educational resource. We do not sell signals, we do not operate speculative VIP groups, and we do not act as an introducing broker for high-spread entities. We exist solely to help you understand the markets better.
+                We are an independent educational resource based in DHA Phase 5, Karachi, Pakistan. We do not sell signals, we do not operate speculative VIP groups, and we do not act as an introducing broker for high-spread entities. We exist solely to help you understand the markets better.
               </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="space-y-6">
+          <div className="flex items-center gap-3 text-accent">
+            <ShieldCheck className="w-5 h-5" />
+            <h2 className="text-xl font-bold text-slate-900">Contact Information</h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <h3 className="font-bold text-slate-900 text-sm">Location</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">DHA Phase 5, Karachi, Pakistan</p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-bold text-slate-900 text-sm">Phone</h3>
+              <p className="text-slate-600 text-sm leading-relaxed"><a href="tel:+923390349804" className="text-accent underline">+923390349804</a></p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-bold text-slate-900 text-sm">Email</h3>
+              <p className="text-slate-600 text-sm leading-relaxed"><a href="mailto:zuhaibahmed3213951@gmail.com" className="text-accent underline">zuhaibahmed3213951@gmail.com</a></p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-bold text-slate-900 text-sm">Founder</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">MUHAMMAD USMAN, Lead Analyst</p>
             </div>
           </div>
         </section>
