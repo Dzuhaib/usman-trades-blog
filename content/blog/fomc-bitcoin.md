@@ -106,6 +106,8 @@ The combination of these factors means that FOMC announcements are among the hig
 
 ---
 
+[IMAGE_2]
+
 ## How a Hawkish FOMC Can Affect Bitcoin
 
 A hawkish FOMC is one that signals tighter monetary policy — higher interest rates for longer, reduced liquidity, and a more cautious stance on inflation. This environment is generally unfavourable for Bitcoin and can trigger significant downward pressure on BTC/USD.
@@ -614,6 +616,8 @@ Identifying major support and resistance levels on the BTC/USD chart is essentia
 
 ---
 
+[IMAGE_3]
+
 ## How to Trade Bitcoin Around FOMC News
 
 ### Preparing Before the Announcement
@@ -769,6 +773,8 @@ In this scenario, the rate decision was unexpected — for example, the Fed hike
 In this scenario, the FOMC delivers mixed signals — for example, a rate cut accompanied by hawkish forward guidance, or a rate hold with a dovish statement and a hawkish press conference. The mixed signals can produce whipsaw price action in BTC/USD, where the market rallies on one component and sells off on another. This scenario is the most difficult to trade because the direction of the market is unclear, and traders should be prepared for rapid reversals and false signals.
 
 ---
+
+[IMAGE_4]
 
 ## Other Factors That Can Override the FOMC Reaction
 
