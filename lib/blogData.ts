@@ -98,7 +98,7 @@ export const BLOG_POSTS: BlogPost[] = [
     updatedAt: "September 16, 2026",
     readTime: "60 min read",
     route: "/blog/posts/fomc-bitcoin",
-    image: { url: "https://images.pexels.com/photos/1820423/pexels-photo-1820423.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Bitcoin cryptocurrency trading on digital chart during Federal Reserve announcement" },
+    image: { url: "https://images.pexels.com/photos/3282088/pexels-photo-3282088.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Bitcoin cryptocurrency coin on dark background with glowing edges" },
     content: "The Federal Open Market Committee is the most powerful monetary policy body in the United States, and its decisions send shockwaves through every financial market. Bitcoin, despite being a decentralised digital asset with no central bank governing it, reacts sharply to FOMC announcements.",
     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
   },
