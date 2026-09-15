@@ -57,7 +57,34 @@ export default function SmartText({ text }: SmartTextProps) {
     }
     parts = tempParts;
 
-    // 2. Handle Internal Link Placeholders [LINK_url:label]
+    // 2b. Handle Markdown Links [text](url)
+    const mdLinkParts: (string | React.ReactNode)[] = [];
+    for (const part of parts) {
+      if (typeof part !== 'string') {
+        mdLinkParts.push(part);
+        continue;
+      }
+      const mdSegments = part.split(/(\[.*?\]\(.*?\))/);
+      for (const segment of mdSegments) {
+        const mdMatch = segment.match(/^\[(.+?)\]\((.+?)\)$/);
+        if (mdMatch) {
+          mdLinkParts.push(
+            <Link
+              key={Math.random()}
+              href={mdMatch[2]}
+              className="text-accent hover:underline font-medium"
+            >
+              {mdMatch[1]}
+            </Link>
+          );
+        } else if (segment) {
+          mdLinkParts.push(segment);
+        }
+      }
+    }
+    parts = mdLinkParts;
+
+    // 3. Handle Internal Link Placeholders [LINK_url:label]
     const linkParts: (string | React.ReactNode)[] = [];
     for (const part of parts) {
       if (typeof part !== 'string') {
@@ -71,9 +98,9 @@ export default function SmartText({ text }: SmartTextProps) {
           const content = segment.slice(6, -1);
           const [href, label] = content.split(':');
           linkParts.push(
-            <Link 
-              key={Math.random()} 
-              href={href} 
+            <Link
+              key={Math.random()}
+              href={href}
               className="text-accent hover:underline font-medium"
             >
               {label}
@@ -86,7 +113,7 @@ export default function SmartText({ text }: SmartTextProps) {
     }
     parts = linkParts;
 
-    // 3. Handle Auto-Keywords (Strict 5 total links limit)
+    // 4. Handle Auto-Keywords (Strict 5 total links limit)
     const sortedLinks = [...LINK_MAP].sort((a, b) => b.keyword.length - a.keyword.length);
     let autoLinksInjected = parts.filter(p => React.isValidElement(p)).length;
 
