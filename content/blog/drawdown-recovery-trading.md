@@ -10,15 +10,15 @@ There are three types of drawdown: absolute drawdown, which measures the decline
 
 ## The Mathematics of Drawdown Recovery
 
-The most important concept in drawdown recovery is that the percentage gain required to recover increases exponentially as the drawdown deepens. A 10% drawdown requires an 11.1% gain to recover. A 20% drawdown requires a 25% gain. A 50% drawdown requires a 100% gain. And a 75% drawdown requires a 300% gain. This is why preventing large drawdowns is infinitely more important than trying to recover from them.
+The primary concept in drawdown recovery is that the percentage gain required to recover increases exponentially as the drawdown deepens. A 10% drawdown requires an 11.1% gain to recover. A 20% drawdown requires a 25% gain. A 50% drawdown requires a 100% gain. And a 75% drawdown requires a 300% gain. This is why preventing large drawdowns is infinitely more important than trying to recover from them.
 
-Real World Example: A trader with a $10,000 account experiences a 50% drawdown, leaving them with $5,000. To recover to $10,000, they need to make $5,000 on a $5,000 base, which is a 100% return. This is extremely difficult to achieve consistently, especially while also managing the psychological stress of having lost half the account. A better approach is to reduce position sizes during drawdown periods and focus on preserving the remaining capital.
+Real World Example: A trader with a $10,000 account experiences a 50% drawdown, leaving them with $5,000. To recover to $10,000, they should make $5,000 on a $5,000 base, which is a 100% return. This is extremely difficult to achieve consistently, especially while also managing the psychological stress of having lost half the account. A better approach is to reduce position sizes during drawdown periods and focus on preserving the remaining capital.
 
 ## The Drawdown Calculator: Your Recovery Tool
 
-A drawdown calculator is an essential tool that helps you quantify exactly how much you have lost and what you need to gain to recover. It takes your peak account balance, your current balance, and your risk per trade to calculate the exact drawdown percentage and the number of winning trades required to recover. This tool removes the guesswork from recovery planning and gives you a clear, mathematical path back to profitability.
+A drawdown calculator is an essential tool that helps you quantify exactly how much you have lost and what it is necessary to gain to recover. It takes your peak account balance, your current balance, and your risk per trade to calculate the exact drawdown percentage and the number of winning trades required to recover. This tool removes the guesswork from recovery planning and gives you a clear, mathematical path back to profitability.
 
-Our drawdown calculator also shows you the impact of different risk levels on recovery time. By adjusting the risk per trade parameter, you can see how reducing your position size during a losing streak can shorten your recovery period and protect your remaining capital. This is the most practical application of the drawdown calculator in a real trading scenario.
+Our drawdown calculator also shows you the impact of different risk levels on recovery time. By adjusting the risk per trade parameter, readers can see how reducing your position size during a losing streak can shorten your recovery period and protect your remaining capital. This is the most practical application of the drawdown calculator in a real trading scenario.
 
 ## Why Drawdowns Happen
 
@@ -36,7 +36,7 @@ Real World Example: A trader with a $20,000 account experiences a 25% drawdown, 
 
 ## The Drawdown Recovery Calculator Approach
 
-Using a drawdown calculator during a losing streak gives you objective data about your recovery path. The calculator tells you exactly how many consecutive winning trades you need at your current risk level to recover, and how changing your risk level affects the recovery timeline. This removes the emotional guesswork and helps you stick to your plan.
+Using a drawdown calculator during a losing streak gives you objective data about your recovery path. The calculator tells you exactly how many consecutive winning trades it is necessary at your current risk level to recover, and how changing your risk level affects the recovery timeline. This removes the emotional guesswork and helps you stick to your plan.
 
 The calculator also shows you the danger zone. If your drawdown exceeds 30%, recovery becomes significantly harder. At 50%, it becomes extremely difficult without taking on excessive risk. The calculator helps you identify these danger zones before they happen, allowing you to take proactive measures to protect your account.
 
@@ -62,8 +62,9 @@ Most professional traders set a maximum drawdown limit between 15% and 20% of th
 
 ### Can a drawdown calculator predict future losses?
 
-A drawdown calculator cannot predict the future, but it can show you the mathematical reality of your current situation. By inputting your current account balance and risk level, it shows you exactly how many winning trades you need to recover and how long it might take based on your historical performance. This information helps you make objective decisions rather than emotional ones.
+A drawdown calculator cannot predict the future, but it can show you the mathematical reality of your current situation. By inputting your current account balance and risk level, it shows you exactly how many winning trades it is necessary to recover and how long it might take based on your historical performance. This information helps you make objective decisions rather than emotional ones.
 
 ### Does the drawdown calculator work for all markets?
 
-Yes. Whether you are trading Forex, Gold, Bitcoin, or stocks, the drawdown calculator works the same way because it is based on account equity and percentage risk. The market you trade affects your win rate and risk reward ratio, but the fundamental mathematics of drawdown recovery are the same across all markets.
+Yes. Whether traders are trading Forex, Gold, Bitcoin, or stocks, the drawdown calculator works the same way because it is based on account equity and percentage risk. The market you trade affects your win rate and risk reward ratio, but the fundamental mathematics of drawdown recovery are the same across all markets.
+

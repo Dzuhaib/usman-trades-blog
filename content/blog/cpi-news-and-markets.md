@@ -17,7 +17,7 @@ Central banks like the Federal Reserve and the European Central Bank use CPI dat
 
 Currency values are fundamentally tied to interest rate expectations. When a country has higher interest rates, its currency becomes more attractive to foreign investors seeking better returns. This is why CPI data creates such massive volatility in Forex pairs.
 
-If the US CPI comes in hotter than expected, it signals that the Federal Reserve may need to keep rates high or even raise them further. The US Dollar typically strengthens immediately. If CPI comes in cooler than expected, it suggests the Fed might cut rates, and the Dollar weakens.
+If the US CPI comes in hotter than expected, it signals that the Federal Reserve may should keep rates high or even raise them further. The US Dollar typically strengthens immediately. If CPI comes in cooler than expected, it suggests the Fed might cut rates, and the Dollar weakens.
 
 Real World Example: In November 2022, the US Bureau of Labor Statistics released CPI data showing inflation at 7.1 percent year over year, which was significantly below the expected 7.3 percent. The US Dollar Index crashed over 100 pips within minutes. The EUR/USD surged more than 200 pips in a single trading session. Traders who were positioned correctly made substantial profits, while those caught on the wrong side of the trade experienced painful losses.
 
@@ -67,7 +67,7 @@ Trading around CPI data requires precise calculations and disciplined risk manag
 
 ### Risk Calculator
 
-Before entering any trade around a CPI release, you must know exactly how much cash you are risking. The Risk Calculator on Usman Trades lets you input your account balance, the percentage you are willing to risk, and the stop loss distance in pips. It instantly calculates the position size so you never over leverage before a major data release.
+Before entering any trade around a CPI release, traders must know exactly how much cash you are risking. The Risk Calculator on Usman Trades lets you input your account balance, the percentage you are willing to risk, and the stop loss distance in pips. It instantly calculates the position size so you never over leverage before a major data release.
 
 ### Lot Size Calculator
 
@@ -111,7 +111,7 @@ CPI trading carries unique risks that every trader must understand before partic
 
 First, slippage is almost guaranteed during CPI releases. The speed of the market movement means your order may fill at a price far worse than what you expected. This is especially true for market orders. Using limit orders or pending orders can help, but they are not immune to slippage either.
 
-Second, liquidity can dry up momentarily during the initial spike. This means your stop loss might not fill at the level you set. The gap between your intended exit and actual exit can be larger than expected. This is why position sizing is so critical, because the wider potential slippage means you need a smaller position to keep your risk the same.
+Second, liquidity can dry up momentarily during the initial spike. This means your stop loss might not fill at the level you set. The gap between your intended exit and actual exit can be larger than expected. This is why position sizing is so critical, because the wider potential slippage means it is necessary a smaller position to keep your risk the same.
 
 Third, the market can reverse just as quickly as it moved. A hot CPI print that initially strengthens the Dollar can see the Dollar weaken just as quickly if the market decides the data is not significant enough to change the overall monetary policy outlook.
 
@@ -131,19 +131,19 @@ A: The US Dollar pairs are most affected. This includes EUR/USD, GBP/USD, USD/JP
 
 **Q: Is CPI more important than Non Farm Payrolls for Forex?**
 
-A: Both are extremely important. CPI and Non Farm Payrolls are the two most market moving economic releases. Their relative importance can vary depending on the current economic climate. When inflation is the primary concern for central banks, CPI has a bigger impact. When employment is the primary concern, Non Farm Payrolls dominates.
+A: Both are critical. CPI and Non Farm Payrolls are the two most market moving economic releases. Their relative importance can vary depending on the current economic climate. When inflation is the primary concern for central banks, CPI has a bigger impact. When employment is the primary concern, Non Farm Payrolls dominates.
 
 **Q: Can I use the Profit Calculator to plan my CPI trades?**
 
-A: Yes, the Profit Calculator on Usman Trades is a great tool for planning your trades around CPI. You can input your target price and lot size to see what your potential profit would be, helping you decide if the risk reward ratio justifies the trade.
+A: Yes, the Profit Calculator on Usman Trades is a significant tool for planning your trades around CPI. You can input your target price and lot size to see what your potential profit would be, helping you decide if the risk reward ratio justifies the trade.
 
 ## Related Articles
 
-If you found this guide useful, you may also want to explore these educational resources on Usman Trades.
+If you found this guide useful, you may also aim to explore these educational resources on Usman Trades.
 
 For a foundational understanding of how the currency markets work, check out our guide on What is Forex Trading. It covers the basics of currency pairs, market participants, and the 24 hour trading cycle.
 
-If you want to learn how to manage your risk when trading news events, our Position Sizing guide provides the exact formula and real world examples you need.
+If traders aim to learn how to manage your risk when trading news events, our Position Sizing guide provides the exact formula and real world examples it is necessary.
 
 Understanding the psychology of trading around high impact news is just as important as the technical setup. Our Trading Psychology guide covers the emotional challenges that traders face during volatile market conditions.
 
@@ -192,3 +192,4 @@ A: Visit the Usman Trades blog library for comprehensive guides on Forex, Gold, 
 
 
 This content is for educational purposes only. Trading Forex and other financial instruments involves significant risk and may not be suitable for all investors. Past performance is not indicative of future results. Always conduct your own research and consider consulting with a financial advisor before making investment decisions.
+

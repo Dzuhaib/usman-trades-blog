@@ -36,7 +36,7 @@ Gold is priced globally in US dollars, which means the two are linked by an inve
 
 ### Why volatility matters when analysing gold
 
-Gold can travel a large distance in a short time, especially around economic releases. A single data point can move price by dozens of dollars within minutes. This means stop losses must be placed with the volatility in mind. A stop that would be safe on a major currency pair may be far too tight for gold, resulting in premature exits before the real move develops.
+Gold can travel a large distance in a short time, especially around economic releases. A single data point can move price by dozens of dollars within minutes. This means stop losses tends to be placed with the volatility in mind. A stop that would be safe on a major currency pair may be far too tight for gold, resulting in premature exits before the real move develops.
 
 ### Importance of combining technical analysis with fundamental market conditions
 
@@ -216,7 +216,7 @@ Gold trends can be powerful and long lasting. Moving averages help traders stay 
 
 ### Identifying the overall trend
 
-When price is consistently above a rising moving average, the trend is up. When price is consistently below a falling moving average, the trend is down. This simple observation filters out a great deal of unnecessary analysis.
+When price is consistently above a rising moving average, the trend is up. When price is consistently below a falling moving average, the trend is down. This simple observation filters out a significant deal of unnecessary analysis.
 
 ### Price above vs below a moving average
 
@@ -492,7 +492,7 @@ Leverage amplifies both gains and losses. Using too much leverage turns a manage
 
 ### Gold's volatility
 
-Because gold can move fast, risk must be sized with that speed in mind. A position that feels small on a quiet day may feel enormous during a news release.
+Because gold can move fast, risk tends to be sized with that speed in mind. A position that feels small on a quiet day may feel enormous during a news release.
 
 ### Avoiding excessive exposure
 
@@ -597,3 +597,4 @@ Recognise the range early by watching for flat moving averages and clear horizon
 ## Conclusion
 
 RSI, MACD and moving averages are useful tools for XAU/USD technical analysis. Each one provides a different type of information. Moving averages reveal the trend, RSI measures momentum, and MACD confirms momentum and highlights potential shifts. The strongest analysis comes from combining indicator signals with market structure, support and resistance, and an awareness of the economic calendar. Traders should treat indicators as confirmation tools rather than guaranteed prediction systems. Used with discipline and solid risk management, they can improve consistency and help you stay aligned with the dominant direction of the gold market.
+
