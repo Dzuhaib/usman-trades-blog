@@ -39,7 +39,7 @@ export default function AuthorBio({ author, updatedAt }: AuthorBioProps) {
       </div>
       
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-4 text-[11px] font-bold text-slate-400 uppercase tracking-[0.15em]">
-        <span>Editorial Policy: High-integrity, human-written content only.</span>
+        <span>Editorial Policy: Thoroughly researched, expert-reviewed content only.</span>
         <span>Last Updated: {updatedAt}</span>
       </div>
     </div>
