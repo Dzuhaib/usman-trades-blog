@@ -38,7 +38,7 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
   'pip-value-guide': { url: 'https://images.pexels.com/photos/6771426/pexels-photo-6771426.jpeg', alt: 'Laptop screen with trading charts calculator and currency coins for pip value calculation' },
   'compound-growth-trading': { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Compound growth trading account chart showing exponential wealth building' },
    'rsi-macd-moving-averages-xauusd': { url: 'https://images.pexels.com/photos/30268013/pexels-photo-30268013.jpeg', alt: 'Analysing a bullish gold price chart with RSI MACD and moving average indicators' },
-   'fomc-bitcoin': { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Bitcoin price chart and candlestick trading data on digital screens' },
+   'fomc-bitcoin': { url: 'https://images.pexels.com/photos/1820423/pexels-photo-1820423.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Bitcoin BTC USD price chart on trading screen' },
 };
 
 export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string }[]> = {
@@ -55,10 +55,10 @@ export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string 
       { url: 'https://images.pexels.com/photos/14866072/pexels-photo-14866072.jpeg', alt: 'Digital world map showing global financial connectivity' },
    ],
    'fomc-bitcoin': [
-      { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg', alt: 'Bitcoin price chart and candlestick trading data on digital screens' },
-      { url: 'https://images.pexels.com/photos/5833757/pexels-photo-5833757.jpeg', alt: 'Bitcoin trading charts on multiple monitors' },
-      { url: 'https://images.pexels.com/photos/39368611/pexels-photo-39368611.jpeg', alt: 'Bitcoin financial growth and trading outcomes on screens' },
-      { url: 'https://images.pexels.com/photos/28682357/pexels-photo-28682357.jpeg', alt: 'Bitcoin and blockchain data visualization on financial dashboard' },
+      { url: 'https://images.pexels.com/photos/1820423/pexels-photo-1820423.jpeg', alt: 'Bitcoin BTC USD price chart on trading screen' },
+      { url: 'https://images.pexels.com/photos/2591671/pexels-photo-2591671.jpeg', alt: 'Bitcoin cryptocurrency price chart on phone' },
+      { url: 'https://images.pexels.com/photos/3183175/pexels-photo-3183175.jpeg', alt: 'Bitcoin mining and digital currency on computer' },
+      { url: 'https://images.pexels.com/photos/4383217/pexels-photo-4383217.jpeg', alt: 'Cryptocurrency portfolio with Bitcoin charts' },
    ],
 };
 
@@ -98,7 +98,7 @@ export const BLOG_POSTS: BlogPost[] = [
     updatedAt: "September 16, 2026",
     readTime: "60 min read",
     route: "/blog/posts/fomc-bitcoin",
-    image: { url: "https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Bitcoin price chart and candlestick trading data on digital screens" },
+    image: { url: "https://images.pexels.com/photos/1820423/pexels-photo-1820423.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Bitcoin BTC USD price chart on trading screen" },
     content: "The Federal Open Market Committee is the most powerful monetary policy body in the United States, and its decisions send shockwaves through every financial market. Bitcoin, despite being a decentralised digital asset with no central bank governing it, reacts sharply to FOMC announcements.",
     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
   },
