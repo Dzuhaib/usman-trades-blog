@@ -38,7 +38,7 @@ export default function SmartText({ text }: SmartTextProps) {
 
     let parts: (string | React.ReactNode)[] = [cleanContent];
     
-    // 1. Handle Bold (**text**)
+    // 1. Handle Bold (**text**) and Markdown Links [text](url) inside bold
     let tempParts: (string | React.ReactNode)[] = [];
     for (const part of parts) {
       if (typeof part !== 'string') {
@@ -48,16 +48,21 @@ export default function SmartText({ text }: SmartTextProps) {
       const segments = part.split(/(\*\*.*?\*\*)/);
       for (const segment of segments) {
         if (segment.startsWith('**') && segment.endsWith('**')) {
-          tempParts.push(<strong key={Math.random()} className="font-bold text-slate-900">{segment.slice(2, -2)}</strong>);
+          const inner = segment.slice(2, -2);
+          const mdMatch = inner.match(/^\[(.+?)\]\((.+?)\)$/);
+          if (mdMatch) {
+            tempParts.push(<strong key={Math.random()} className="font-bold text-slate-900"><Link href={mdMatch[2]} className="text-accent hover:underline font-medium">{mdMatch[1]}</Link></strong>);
+          } else {
+            tempParts.push(<strong key={Math.random()} className="font-bold text-slate-900">{inner}</strong>);
+          }
         } else if (segment) {
-          // Clean paragraph-level symbols like hashtags or stars
           tempParts.push(segment.replace(/[#*]/g, ''));
         }
       }
     }
     parts = tempParts;
 
-    // 2b. Handle Markdown Links [text](url)
+    // 2. Handle Markdown Links [text](url) outside bold
     const mdLinkParts: (string | React.ReactNode)[] = [];
     for (const part of parts) {
       if (typeof part !== 'string') {
