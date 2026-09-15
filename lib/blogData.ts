@@ -38,7 +38,7 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
   'pip-value-guide': { url: 'https://images.pexels.com/photos/6771426/pexels-photo-6771426.jpeg', alt: 'Laptop screen with trading charts calculator and currency coins for pip value calculation' },
   'compound-growth-trading': { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Compound growth trading account chart showing exponential wealth building' },
    'rsi-macd-moving-averages-xauusd': { url: 'https://images.pexels.com/photos/30268013/pexels-photo-30268013.jpeg', alt: 'Analysing a bullish gold price chart with RSI MACD and moving average indicators' },
-   'fomc-bitcoin': { url: 'https://images.pexels.com/photos/1820423/pexels-photo-1820423.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Bitcoin cryptocurrency trading on digital chart during Federal Reserve announcement' },
+   'fomc-bitcoin': { url: 'https://images.pexels.com/photos/3282088/pexels-photo-3282088.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Bitcoin cryptocurrency coin on dark background with glowing edges' },
 };
 
 export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string }[]> = {
@@ -55,10 +55,10 @@ export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string 
       { url: 'https://images.pexels.com/photos/14866072/pexels-photo-14866072.jpeg', alt: 'Digital world map showing global financial connectivity' },
    ],
    'fomc-bitcoin': [
-      { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg', alt: 'Bitcoin trading charts and technical analysis on digital screens' },
-      { url: 'https://images.pexels.com/photos/4383217/pexels-photo-4383217.jpeg', alt: 'Cryptocurrency portfolio management with digital assets on multiple displays' },
-      { url: 'https://images.pexels.com/photos/3184288/pexels-photo-3184288.jpeg', alt: 'Focused trader analyzing Bitcoin price movements on financial charts' },
-      { url: 'https://images.pexels.com/photos/3758522/pexels-photo-3758522.jpeg', alt: 'Bitcoin mining and digital currency concept with financial data visualization' },
+      { url: 'https://images.pexels.com/photos/3183175/pexels-photo-3183175.jpeg', alt: 'Bitcoin cryptocurrency coin on digital display' },
+      { url: 'https://images.pexels.com/photos/2591671/pexels-photo-2591671.jpeg', alt: 'Bitcoin currency symbol and digital wallet concept' },
+      { url: 'https://images.pexels.com/photos/4383217/pexels-photo-4383217.jpeg', alt: 'Cryptocurrency portfolio with blockchain network visualization' },
+      { url: 'https://images.pexels.com/photos/4837612/pexels-photo-4837612.jpeg', alt: 'Bitcoin and blockchain technology digital finance concept' },
    ],
 };
 
