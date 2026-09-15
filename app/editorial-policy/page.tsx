@@ -16,7 +16,7 @@ export default function EditorialPolicy() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "Editorial Policy",
-    "description": "The official editorial standards for Usman Trades, focusing on human written content and mathematical accuracy.",
+    "description": "The official editorial standards for Usman Trades, focusing on thoroughly researched content and mathematical accuracy.",
     "publisher": {
       "@type": "Organization",
       "name": "Usman Trades",
@@ -44,7 +44,7 @@ export default function EditorialPolicy() {
             Our Editorial <span className="text-accent italic">Commitment.</span>
           </h1>
           <p className="text-lg text-slate-500 leading-relaxed">
-            We believe that financial education must be grounded in reality, accuracy, and human experience. Our policy ensures that every guide you read is trustworthy and useful.
+            We believe that financial education must be grounded in reality, accuracy, and real-world experience. Our policy ensures that every guide you read is trustworthy and useful.
           </p>
         </header>
 
@@ -53,7 +53,7 @@ export default function EditorialPolicy() {
           <div className="bg-slate-50 border border-slate-100 rounded-2xl p-8 md:p-10 space-y-4">
             <h2 className="text-xl font-bold text-slate-900">What is the Usman Trades Editorial Policy?</h2>
             <p className="text-slate-600 leading-relaxed">
-              Our policy is a strict set of rules that governs how we create content. We prioritize human authorship over automation, mathematical proof over speculation, and educational clarity over marketing hype. Every guide is researched and written by experienced analysts with verified, accurate information.
+              Our policy is a strict set of rules that governs how we create content. We prioritize expert authorship over automation, mathematical proof over speculation, and educational clarity over marketing hype. Every guide is researched and written by experienced analysts with verified, accurate information.
             </p>
           </div>
 
@@ -61,7 +61,7 @@ export default function EditorialPolicy() {
             <div className="space-y-4">
               <div className="flex items-center gap-3 text-slate-900">
                 <UserCheck className="w-5 h-5 text-accent" />
-                <h3 className="text-xl font-bold">1. Human Centric Authorship</h3>
+                <h3 className="text-xl font-bold">1. Expert Authorship</h3>
               </div>
               <p className="text-slate-600 leading-relaxed">
                 Every piece of educational material on this platform is researched and written by a real person with actual market experience. Our content follows a rigorous editorial process involving experienced analysts to ensure accuracy, clarity, and practical usefulness. We focus on delivering trustworthy, well-sourced educational content.
