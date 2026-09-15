@@ -37,22 +37,29 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
   'drawdown-recovery-trading': { url: 'https://images.pexels.com/photos/7947749/pexels-photo-7947749.jpeg', alt: 'Close-up of a magnifying glass over financial data charts and metrics on printed paper' },
   'pip-value-guide': { url: 'https://images.pexels.com/photos/6771426/pexels-photo-6771426.jpeg', alt: 'Laptop screen with trading charts calculator and currency coins for pip value calculation' },
   'compound-growth-trading': { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Compound growth trading account chart showing exponential wealth building' },
-  'rsi-macd-moving-averages-xauusd': { url: 'https://images.pexels.com/photos/30268013/pexels-photo-30268013.jpeg', alt: 'Analysing a bullish gold price chart with RSI MACD and moving average indicators' },
+   'rsi-macd-moving-averages-xauusd': { url: 'https://images.pexels.com/photos/30268013/pexels-photo-30268013.jpeg', alt: 'Analysing a bullish gold price chart with RSI MACD and moving average indicators' },
+   'fomc-bitcoin': { url: 'https://images.pexels.com/photos/1820423/pexels-photo-1820423.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Bitcoin cryptocurrency trading on digital chart during Federal Reserve announcement' },
 };
 
 export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string }[]> = {
-  'rsi-macd-moving-averages-xauusd': [
-    { url: 'https://images.pexels.com/photos/38877604/pexels-photo-38877604.jpeg', alt: 'Gold price chart with trend lines and volume used to read moving averages' },
-    { url: 'https://images.pexels.com/photos/39353380/pexels-photo-39353380.jpeg', alt: 'Candlestick chart showing XAU/USD momentum for RSI and MACD analysis' },
-    { url: 'https://images.pexels.com/photos/5833757/pexels-photo-5833757.jpeg', alt: 'Trader combining RSI MACD and moving averages across multiple chart screens' },
-    { url: 'https://images.pexels.com/photos/6801636/pexels-photo-6801636.jpeg', alt: 'Risk management tools including calculator and charts for gold trading' },
-  ],
-  'fed-rate-cuts-xau-usd': [
-    { url: 'https://images.pexels.com/photos/14866072/pexels-photo-14866072.jpeg', alt: 'Global city skylines symbolizing financial markets and economic shifts' },
-    { url: 'https://images.pexels.com/photos/39368611/pexels-photo-39368611.jpeg', alt: 'Financial growth and successful trading outcomes on multiple screens' },
-    { url: 'https://images.pexels.com/photos/5831264/pexels-photo-5831264.jpeg', alt: 'Professional trading desk with multiple monitors and charts' },
-    { url: 'https://images.pexels.com/photos/14866072/pexels-photo-14866072.jpeg', alt: 'Digital world map showing global financial connectivity' },
-  ],
+   'rsi-macd-moving-averages-xauusd': [
+      { url: 'https://images.pexels.com/photos/38877604/pexels-photo-38877604.jpeg', alt: 'Gold price chart with trend lines and volume used to read moving averages' },
+      { url: 'https://images.pexels.com/photos/39353380/pexels-photo-39353380.jpeg', alt: 'Candlestick chart showing XAU/USD momentum for RSI and MACD analysis' },
+      { url: 'https://images.pexels.com/photos/5833757/pexels-photo-5833757.jpeg', alt: 'Trader combining RSI MACD and moving averages across multiple chart screens' },
+      { url: 'https://images.pexels.com/photos/6801636/pexels-photo-6801636.jpeg', alt: 'Risk management tools including calculator and charts for gold trading' },
+   ],
+   'fed-rate-cuts-xau-usd': [
+      { url: 'https://images.pexels.com/photos/14866072/pexels-photo-14866072.jpeg', alt: 'Global city skylines symbolizing financial markets and economic shifts' },
+      { url: 'https://images.pexels.com/photos/39368611/pexels-photo-39368611.jpeg', alt: 'Financial growth and successful trading outcomes on multiple screens' },
+      { url: 'https://images.pexels.com/photos/5831264/pexels-photo-5831264.jpeg', alt: 'Professional trading desk with multiple monitors and charts' },
+      { url: 'https://images.pexels.com/photos/14866072/pexels-photo-14866072.jpeg', alt: 'Digital world map showing global financial connectivity' },
+   ],
+   'fomc-bitcoin': [
+      { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg', alt: 'Bitcoin trading charts and technical analysis on digital screens' },
+      { url: 'https://images.pexels.com/photos/4383217/pexels-photo-4383217.jpeg', alt: 'Cryptocurrency portfolio management with digital assets on multiple displays' },
+      { url: 'https://images.pexels.com/photos/3184288/pexels-photo-3184288.jpeg', alt: 'Focused trader analyzing Bitcoin price movements on financial charts' },
+      { url: 'https://images.pexels.com/photos/3758522/pexels-photo-3758522.jpeg', alt: 'Bitcoin mining and digital currency concept with financial data visualization' },
+   ],
 };
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -80,6 +87,19 @@ export const BLOG_POSTS: BlogPost[] = [
     route: "/blog/posts/nfp-xau-usd-gold",
     image: { url: "https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Laptop with charts and resume on desk showing jobs data and business analysis" },
     content: "The Nonfarm Payrolls report is arguably the most impactful economic release that moves gold and the XAU/USD pair every single month.",
+    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+  },
+{
+    slug: "fomc-bitcoin",
+    title: "How FOMC News Affects Bitcoin",
+    excerpt: "Master FOMC trading for Bitcoin. Learn how Federal Reserve decisions, rate hikes, and dot plots move BTC/USD, with real examples and proven risk management strategies.",
+    category: "Bitcoin Trading",
+    date: "September 16, 2026",
+    updatedAt: "September 16, 2026",
+    readTime: "60 min read",
+    route: "/blog/posts/fomc-bitcoin",
+    image: { url: "https://images.pexels.com/photos/1820423/pexels-photo-1820423.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Bitcoin cryptocurrency trading on digital chart during Federal Reserve announcement" },
+    content: "The Federal Open Market Committee is the most powerful monetary policy body in the United States, and its decisions send shockwaves through every financial market. Bitcoin, despite being a decentralised digital asset with no central bank governing it, reacts sharply to FOMC announcements.",
     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
   },
   {
