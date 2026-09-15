@@ -36,6 +36,16 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
   'drawdown-recovery-trading': { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg', alt: 'Trading loss recovery and drawdown analysis chart' },
   'pip-value-guide': { url: 'https://images.pexels.com/photos/6771426/pexels-photo-6771426.jpeg', alt: 'Laptop screen with trading charts calculator and currency coins for pip value calculation' },
   'compound-growth-trading': { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Compound growth trading account chart showing exponential wealth building' },
+  'rsi-macd-moving-averages-xauusd': { url: 'https://images.pexels.com/photos/30268013/pexels-photo-30268013.jpeg', alt: 'Analysing a bullish gold price chart with RSI MACD and moving average indicators' },
+};
+
+export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string }[]> = {
+  'rsi-macd-moving-averages-xauusd': [
+    { url: 'https://images.pexels.com/photos/38877604/pexels-photo-38877604.jpeg', alt: 'Gold price chart with trend lines and volume used to read moving averages' },
+    { url: 'https://images.pexels.com/photos/39353380/pexels-photo-39353380.jpeg', alt: 'Candlestick chart showing XAU/USD momentum for RSI and MACD analysis' },
+    { url: 'https://images.pexels.com/photos/5833757/pexels-photo-5833757.jpeg', alt: 'Trader combining RSI MACD and moving averages across multiple chart screens' },
+    { url: 'https://images.pexels.com/photos/6801636/pexels-photo-6801636.jpeg', alt: 'Risk management tools including calculator and charts for gold trading' },
+  ],
 };
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -255,6 +265,18 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: "30 min read",
     route: "/blog/posts/compound-growth-trading",
     content: "Most traders focus on individual trades and forget about the bigger picture of their account growth. The concept of compound growth is the engine that transforms small, consistent gains into substantial wealth over time.",
+    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+  },
+  {
+    slug: "rsi-macd-moving-averages-xauusd",
+    title: "How RSI, MACD and Moving Averages Work for XAU/USD",
+    excerpt: "A complete guide to using RSI, MACD and moving averages for gold analysis. Learn how each indicator works on XAU/USD, how to combine them for stronger confirmation, and how to manage risk around major news events.",
+    category: "Technical Analysis",
+    date: "September 15, 2026",
+    updatedAt: "September 15, 2026",
+    readTime: "32 min read",
+    route: "/blog/posts/rsi-macd-moving-averages-xauusd",
+    content: "Technical indicators give gold traders a structured way to read price behaviour instead of reacting to every candle in isolation. This guide explains how RSI, MACD and moving averages work on XAU/USD and how to combine them.",
     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
   }
 ];

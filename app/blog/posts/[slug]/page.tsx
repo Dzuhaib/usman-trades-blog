@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { BLOG_POSTS, BLOG_POST_IMAGES, CATEGORIES, BlogPost } from '@/lib/blogData';
+import { BLOG_POSTS, BLOG_POST_IMAGES, BLOG_POST_INLINE_IMAGES, CATEGORIES, BlogPost } from '@/lib/blogData';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AuthorBio from '@/components/AuthorBio';
 import { getPostBySlug } from '@/lib/seo-os/article-engine';
@@ -110,14 +110,14 @@ export default async function BlogPostPage({ params }: Props) {
   // Split content by image placeholders [IMAGE_X]
   const contentParts = post.content ? post.content.split(/\[IMAGE_\d+\]/) : [post.excerpt];
   
-  // Build images array: featured + 4 additional
-  const allImages: { url: string; alt: string }[] = [
-    featuredImage,
+  // Build images array: featured + per-post inline images (or shared fallback)
+  const inlineImages = BLOG_POST_INLINE_IMAGES[slug] ?? [
     { url: 'https://images.pexels.com/photos/3231234/pexels-photo-3231234.jpeg', alt: `${slug} trading data analysis` },
     { url: 'https://images.pexels.com/photos/4383217/pexels-photo-4383217.jpeg', alt: `${slug} investment portfolio` },
     { url: 'https://images.pexels.com/photos/5123456/pexels-photo-5123456.jpeg', alt: `${slug} market trends` },
     { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: `${slug} financial market` },
   ];
+  const allImages: { url: string; alt: string }[] = [featuredImage, ...inlineImages];
 
   return (
     <>

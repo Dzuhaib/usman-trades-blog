@@ -119,6 +119,10 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
     url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Compound growth trading account chart showing exponential wealth building'
   },
+  'rsi-macd-moving-averages-xauusd': {
+    url: 'https://images.pexels.com/photos/30268013/pexels-photo-30268013.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Analysing a bullish gold price chart with RSI MACD and moving average indicators'
+  },
   'us-cpi-xau-usd-gold': {
     url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Consumer Price Index data affecting gold and XAU/USD trading'
@@ -351,6 +355,7 @@ function getCategoryForSlug(slug: string): string {
    'drawdown-recovery-trading': 'Risk Management',
    'pip-value-guide': 'Forex Education',
    'compound-growth-trading': 'Risk Management',
+   'rsi-macd-moving-averages-xauusd': 'Technical Analysis',
   };
   return slugToCategory[slug] || 'default';
  }
