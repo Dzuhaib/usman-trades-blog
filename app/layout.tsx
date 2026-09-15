@@ -4,7 +4,6 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
-import AdSlot from "@/components/AdSlot";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -133,19 +132,11 @@ export default function RootLayout({
       <head>
         <ConsentModeScript />
         <WebsiteJsonLd />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5017133932206570"
-          crossOrigin="anonymous"
-        ></script>
       </head>
       <body className="min-h-full flex flex-col bg-white text-primary selection:bg-accent/15 overflow-x-hidden">
         <Header />
-
         <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 py-8 md:px-6 md:py-12">
-          <AdSlot slot="6622183398" />
           {children}
-          <AdSlot slot="6622183398" />
         </main>
         <CookieConsent />
         <Footer />
