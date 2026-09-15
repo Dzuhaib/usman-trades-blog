@@ -90,8 +90,8 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "fomc-xau-usd-gold",
     title: "How FOMC News Affects XAU/USD and Gold Prices",
-    excerpt: "A comprehensive guide to understanding how Federal Reserve monetary policy decisions impact gold prices and the XAU/USD currency pair. Learn about the relationship between interest rates, Treasury yields, the US dollar, and FOMC policy.",
-    category: "Forex Education",
+    excerpt: "Master FOMC trading around gold. Learn how Federal Reserve decisions, rate hikes, and dot plots move XAU/USD, with real examples and proven risk management strategies.",
+    category: "Gold (XAUUSD) Analysis",
     date: "September 14, 2026",
     updatedAt: "September 14, 2026",
     readTime: "35 min read",

@@ -508,7 +508,7 @@ Entering a trade during the extreme volatility of the FOMC announcement is one o
 
 ### Using Excessive Leverage
 
-FOMC events can produce 2 to 5 percent moves in gold within minutes. Using excessive leverage means that even a small adverse move can trigger a margin call or wipe out your account. Conservative leverage and small position sizes are essential when trading around FOMC events.
+FOMC events can produce 2 to 5 percent moves in gold within minutes. Using excessive leverage means that even a small adverse move can trigger a margin call or wipe out your account. Conservative leverage and small position sizes are essential when trading around FOMC events. To understand how drawdowns compound after FOMC losses, see our [Drawdown Recovery Guide](/blog/drawdown-recovery-trading) and use the [Drawdown Calculator](/tools/drawdown-calculator) to model your recovery path.
 
 ### Assuming a Predictable Gold Reaction
 
@@ -522,7 +522,7 @@ Effective risk management is the most important aspect of trading FOMC events. T
 
 ### Position Sizing
 
-Position sizing around FOMC events should be significantly smaller than normal trading sizes. Many professional traders reduce their position size by 50 percent or more when trading around high-impact economic releases. This ensures that even if the trade goes against them, the loss is manageable.
+Position sizing around FOMC events should be significantly smaller than normal trading sizes. Many professional traders reduce their position size by 50 percent or more when trading around high-impact economic releases. This ensures that even if the trade goes against them, the loss is manageable. Use our [Risk Reward Calculator](/tools/risk-reward-calculator) to determine the optimal risk percentage for each FOMC trade.
 
 ### Stop-Loss Considerations
 
@@ -646,6 +646,8 @@ The third important takeaway is that risk management is paramount when trading F
 - [Calculate your lot size for FOMC trades with the Lot Size Calculator](/tools/lot-size-calculator)
 - [Estimate your potential profit with the Profit Calculator](/tools/profit-calculator)
 - [Validate your risk reward ratio with the Risk Reward Calculator](/tools/risk-reward-calculator)
+- [Model your drawdown recovery with the Drawdown Calculator](/tools/drawdown-calculator)
+- [Learn how to recover from FOMC losses in the Drawdown Recovery Guide](/blog/drawdown-recovery-trading)
 
 
 FOMC events are powerful catalysts that can create significant trading opportunities in XAU/USD, but they also carry significant risk. The key to success is preparation: study the market expectations, monitor rate probabilities, watch Treasury yields and the US Dollar Index, and have a clear trading plan before the FOMC meeting. Do not enter trades immediately after the announcement without waiting for confirmation, do not use excessive leverage, and always have a stop-loss in place. By understanding the full chain of causation from FOMC decisions to gold prices, and by managing risk appropriately, you can capitalize on these high-impact events while protecting your capital from the inherent volatility. The FOMC is not just about the rate decision—it is about the entire package of information that shapes the market's understanding of future monetary policy.
