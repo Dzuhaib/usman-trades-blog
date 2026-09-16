@@ -726,6 +726,25 @@ Traders should avoid making decisions based on a single whale transaction or ale
 
 ---
 
+## Frequently Asked Questions
+
+### What counts as a Bitcoin whale transaction?
+A Bitcoin whale transaction is any on-chain transfer involving a large amount of BTC that originates from or is directed toward a wallet of significant size. While there is no universal threshold, most analysts consider wallets holding 1,000 to 5,000 BTC as whale-level. The definition is relative to market conditions and the prevailing volume.
+
+### Does every large Bitcoin transfer to an exchange mean selling?
+No. A deposit to an exchange is a necessary but not sufficient condition for a sale. The whale might be preparing to use lending products, rebalancing their portfolio across platforms, or testing the deposit process. Without confirming actual selling through volume and price action, a deposit alone does not reveal intent.
+
+### Why do whale withdrawals from exchanges matter?
+Large withdrawals from exchanges to private wallets reduce the immediately available selling supply. This is generally interpreted as a bullish signal because coins are being moved into long-term storage. However, withdrawals can also be custodial in nature, meaning the coins are moving between custody providers without any trading intent.
+
+### Can whale activity alone be used to trade Bitcoin?
+No. Whale activity should be treated as one input in a multi-factor analysis framework. A single whale transaction does not guarantee a specific price outcome. Traders should confirm whale signals with price action, trading volume, liquidity conditions, open interest, and broader market data before entering any position.
+
+### What is the difference between OTC and open-market whale sales?
+OTC (over-the-counter) transactions are executed through desks or brokers and do not hit the public order book, meaning they have no direct price impact. Open-market sales are executed on exchange order books and consume available liquidity, directly moving the price. Many whale-sized trades occur OTC and are never visible in exchange reserves.
+
+---
+
 ## Related Tools for Position Management
 
 Traders should utilize the following calculators available on Usman Trades to quantify risk and optimize execution when trading around whale-driven moves:
