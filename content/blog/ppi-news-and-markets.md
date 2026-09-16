@@ -192,7 +192,7 @@ Traders should utilize the following calculators available on Usman Trades to qu
 
 - **[Calculate the real cost of trading PPI with the Spread Cost Tool](/tools/spread-cost-calculator)**
 - **[Manage your risk exposure with the Risk Calculator](/tools/risk-calculator)**
-- **[Learn position sizing for news trades in the Position Sizing Guide](/blog/position-sizing)**
+- **[Learn position sizing for news trades in the Position Sizing Guide](/blog/posts/position-sizing)**
 - **[Calculate your trade size for PPI reactions with the Lot Size Calculator](/tools/lot-size-calculator)**
 - **[Track PPI release times with the Session Timer](/tools/session-timer)**
 

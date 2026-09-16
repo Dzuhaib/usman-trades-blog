@@ -127,15 +127,19 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
     url: 'https://images.pexels.com/photos/28682356/pexels-photo-28682356.jpeg?auto=compress&cs=tinysrgb&w=1200',
     alt: 'Consumer Price Index data affecting gold and XAU/USD trading'
   },
-'fomc-xau-usd-gold': {
-      url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      alt: 'Federal Reserve Chairman press conference on interest rates'
-    },
-    'xau-usd-technical-analysis': {
-      url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      alt: 'Gold trading chart with technical analysis indicators and price levels'
-    },
-  };
+ 'fomc-xau-usd-gold': {
+       url: 'https://images.pexels.com/photos/6950208/pexels-photo-6950208.jpeg?auto=compress&cs=tinysrgb&w=1200',
+       alt: 'Federal Reserve Chairman press conference on interest rates'
+     },
+     'xau-usd-technical-analysis': {
+       url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg?auto=compress&cs=tinysrgb&w=1200',
+       alt: 'Gold trading chart with technical analysis indicators and price levels'
+     },
+     'how-bitcoin-whale-transactions-affect-price': {
+       url: '/blog images/blog2/pexels-rdne-8369685.jpg',
+       alt: 'Bitcoin whale transaction on trading screen showing large BTC transfer'
+     },
+   };
 
 const CATEGORY_IMAGES: Record<string, PexelsImage> = {
   'Forex Education': {
@@ -355,7 +359,8 @@ function getCategoryForSlug(slug: string): string {
    'drawdown-recovery-trading': 'Risk Management',
    'pip-value-guide': 'Forex Education',
    'compound-growth-trading': 'Risk Management',
-   'rsi-macd-moving-averages-xauusd': 'Technical Analysis',
-  };
+ 'rsi-macd-moving-averages-xauusd': 'Technical Analysis',
+    'how-bitcoin-whale-transactions-affect-price': 'Bitcoin Trading',
+   };
   return slugToCategory[slug] || 'default';
  }

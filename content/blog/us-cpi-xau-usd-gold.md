@@ -556,7 +556,7 @@ Yes, CPI data moves gold prices because it directly influences Federal Reserve m
 Traders should utilize the following calculators available on Usman Trades to quantify risk and optimize execution:
 
 - **[Calculate your exact cash risk with the Risk Calculator](/tools/risk-calculator)**
-- **[Learn the position sizing formula in the Position Sizing Guide](/blog/position-sizing)**
+- **[Learn the position sizing formula in the Position Sizing Guide](/blog/posts/position-sizing)**
 - **[Calculate your lot size for gold trades with the Lot Size Calculator](/tools/lot-size-calculator)**
 - **[Project your gold trading profit with the Profit Calculator](/tools/profit-calculator)**
 - **[Track optimal gold trading sessions with the Session Timer](/tools/session-timer)**

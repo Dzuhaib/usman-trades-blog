@@ -38,8 +38,9 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
   'pip-value-guide': { url: 'https://images.pexels.com/photos/6771426/pexels-photo-6771426.jpeg', alt: 'Laptop screen with trading charts calculator and currency coins for pip value calculation' },
   'compound-growth-trading': { url: 'https://images.pexels.com/photos/14902702/pexels-photo-14902702.jpeg', alt: 'Compound growth trading account chart showing exponential wealth building' },
    'rsi-macd-moving-averages-xauusd': { url: 'https://images.pexels.com/photos/30268013/pexels-photo-30268013.jpeg', alt: 'Analysing a bullish gold price chart with RSI MACD and moving average indicators' },
-   'fomc-bitcoin': { url: '/blog images/pexels-thales13-38796151.jpg', alt: 'Bitcoin BTC USD price chart on trading screen' },
-};
+    'fomc-bitcoin': { url: '/blog images/pexels-thales13-38796151.jpg', alt: 'Bitcoin BTC USD price chart on trading screen' },
+    'how-bitcoin-whale-transactions-affect-price': { url: '/blog images/blog2/pexels-rdne-8369685.jpg', alt: 'Bitcoin whale transaction on trading screen showing large BTC transfer' },
+  };
 
 export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string }[]> = {
    'rsi-macd-moving-averages-xauusd': [
@@ -54,12 +55,17 @@ export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string 
       { url: 'https://images.pexels.com/photos/5831264/pexels-photo-5831264.jpeg', alt: 'Professional trading desk with multiple monitors and charts' },
       { url: 'https://images.pexels.com/photos/14866072/pexels-photo-14866072.jpeg', alt: 'Digital world map showing global financial connectivity' },
    ],
-   'fomc-bitcoin': [
-      { url: '/blog images/pexels-thales13-38375328.jpg', alt: 'Bitcoin price chart on trading screen' },
-      { url: '/blog images/pexels-rdne-8370752.jpg', alt: 'Bitcoin BTC trading data on phone' },
-      { url: '/blog images/pexels-ds-stories-7267610.jpg', alt: 'Bitcoin cryptocurrency on digital display' },
-   ],
-};
+    'fomc-bitcoin': [
+       { url: '/blog images/pexels-thales13-38375328.jpg', alt: 'Bitcoin price chart on trading screen' },
+       { url: '/blog images/pexels-rdne-8370752.jpg', alt: 'Bitcoin BTC trading data on phone' },
+       { url: '/blog images/pexels-ds-stories-7267610.jpg', alt: 'Bitcoin cryptocurrency on digital display' },
+    ],
+    'how-bitcoin-whale-transactions-affect-price': [
+       { url: '/blog images/blog2/pexels-jakubzerdzicki-31738809.jpg', alt: 'Bitcoin whale monitoring large BTC transactions on trading dashboard' },
+       { url: '/blog images/blog2/pexels-alphatradezone-5831252.jpg', alt: 'Bitcoin price chart showing whale transaction impact on market' },
+       { url: '/blog images/blog2/pexels-alphatradezone-5834243.jpg', alt: 'Cryptocurrency whale wallet analysis and blockchain data visualization' },
+    ],
+  };
 
 export const BLOG_POSTS: BlogPost[] = [
   {
@@ -305,19 +311,32 @@ export const BLOG_POSTS: BlogPost[] = [
     content: "Technical indicators give gold traders a structured way to read price behaviour instead of reacting to every candle in isolation. This guide explains how RSI, MACD and moving averages work on XAU/USD and how to combine them.",
     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
   },
-  {
-    slug: "fed-rate-cuts-xau-usd",
-    title: "How Fed Rate Cuts Affect XAU/USD",
-    excerpt: "A comprehensive guide to understanding how Federal Reserve rate cuts impact gold prices and the XAU/USD currency pair. Learn about the relationship between interest rates, Treasury yields, the US dollar, and gold.",
-    category: "Gold (XAUUSD) Analysis",
-    date: "September 15, 2026",
-    updatedAt: "September 15, 2026",
-    readTime: "48 min read",
-    route: "/blog/posts/fed-rate-cuts-xau-usd",
-    image: { url: "https://images.pexels.com/photos/7412098/pexels-photo-7412098.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Global financial markets and central bank decision making" },
-    content: "The Federal Reserve's decision to cut interest rates is one of the biggest events on the economic calendar for gold traders.",
-    author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
-  }
-];
+{
+     slug: "fed-rate-cuts-xau-usd",
+     title: "How Fed Rate Cuts Affect XAU/USD",
+     excerpt: "A comprehensive guide to understanding how Federal Reserve rate cuts impact gold prices and the XAU/USD currency pair. Learn about the relationship between interest rates, Treasury yields, the US dollar, and gold.",
+     category: "Gold (XAUUSD) Analysis",
+     date: "September 15, 2026",
+     updatedAt: "September 15, 2026",
+     readTime: "48 min read",
+     route: "/blog/posts/fed-rate-cuts-xau-usd",
+     image: { url: "https://images.pexels.com/photos/7412098/pexels-photo-7412098.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Global financial markets and central bank decision making" },
+     content: "The Federal Reserve's decision to cut interest rates is one of the biggest events on the economic calendar for gold traders.",
+     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+   },
+   {
+     slug: "how-bitcoin-whale-transactions-affect-price",
+     title: "How Bitcoin Whale Transactions Affect Price",
+     excerpt: "A comprehensive guide to understanding how large Bitcoin holders impact market price through liquidity shifts, exchange inflows and outflows, and sentiment-driven volatility. Learn to track whale activity and avoid common mistakes.",
+     category: "Bitcoin Trading",
+     date: "September 16, 2026",
+     updatedAt: "September 16, 2026",
+     readTime: "55 min read",
+     route: "/blog/posts/how-bitcoin-whale-transactions-affect-price",
+     image: { url: "/blog images/blog2/pexels-rdne-8369685.jpg", alt: "Bitcoin whale transaction on trading screen showing large BTC transfer" },
+     content: "A single Bitcoin transaction worth tens of millions of dollars can move the market in seconds. When a wallet holding thousands of BTC suddenly transfers funds to an exchange, the price often reacts before anyone even knows who made the move.",
+     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+   }
+ ];
 
 export const CATEGORIES = ["All", "Forex Education", "Gold (XAUUSD) Analysis", "Bitcoin Trading", "Risk Management", "Trading Psychology", "Technical Analysis", "Broker Reviews"];
