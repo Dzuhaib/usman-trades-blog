@@ -85,7 +85,7 @@ export default async function Home() {
             <div className="grid grid-cols-2 gap-3 md:gap-4">
               {[
                 { icon: DollarSign, value: '$7T+', label: 'Daily Forex Volume', color: 'from-emerald-500/20 to-emerald-600/5' },
-                { icon: BookOpen, value: '8+', label: 'Expert Guides', color: 'from-accent/20 to-accent/5' },
+                { icon: BookOpen, value: BLOG_POSTS.length + '+', label: 'Expert Guides', color: 'from-accent/20 to-accent/5' },
                 { icon: Calculator, value: '10', label: 'Free Tools', color: 'from-blue-500/20 to-blue-600/5' },
                 { icon: ShieldCheck, value: '100%', label: 'Free Forever', color: 'from-amber-500/20 to-amber-600/5' },
               ].map((stat, index) => (
@@ -409,7 +409,7 @@ export default async function Home() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                 {[
                   { icon: Award, value: '12+', label: 'Years Experience', gradient: 'from-accent to-blue-500' },
-                  { icon: BookOpen, value: '8+', label: 'Expert Guides', gradient: 'from-blue-500 to-cyan-500' },
+                  { icon: BookOpen, value: BLOG_POSTS.length + '+', label: 'Expert Guides', gradient: 'from-blue-500 to-cyan-500' },
                   { icon: ShieldCheck, value: '0', label: 'Hidden Fees', gradient: 'from-cyan-500 to-emerald-500' },
                 ].map((stat, index) => (
                   <div key={index} className="bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/10 rounded-xl md:rounded-xl p-4 md:p-6 text-center hover:border-accent/25 transition-all duration-300 hover:shadow-lg hover:shadow-accent/5">
