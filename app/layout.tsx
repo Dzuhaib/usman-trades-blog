@@ -10,7 +10,7 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-const SITE_URL = "https://www.usmantrades.co.uk";
+const SITE_URL = "https://usmantrades.co.uk";
 
 export const metadata: Metadata = {
   title: {

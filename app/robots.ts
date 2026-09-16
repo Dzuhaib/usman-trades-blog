@@ -49,6 +49,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
       },
     ],
-    sitemap: 'https://www.usmantrades.co.uk/sitemap.xml',
+    sitemap: 'https://usmantrades.co.uk/sitemap.xml',
   };
 }
