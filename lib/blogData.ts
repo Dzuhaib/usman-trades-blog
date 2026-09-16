@@ -40,6 +40,7 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
    'rsi-macd-moving-averages-xauusd': { url: 'https://images.pexels.com/photos/30268013/pexels-photo-30268013.jpeg', alt: 'Analysing a bullish gold price chart with RSI MACD and moving average indicators' },
     'fomc-bitcoin': { url: '/blog images/pexels-thales13-38796151.jpg', alt: 'Bitcoin BTC USD price chart on trading screen' },
     'how-bitcoin-whale-transactions-affect-price': { url: '/blog images/blog2/pexels-rdne-8369685.jpg', alt: 'Bitcoin whale transaction on trading screen showing large BTC transfer' },
+    'fed-press-conference-xau-usd': { url: '/blog images/blog3/XAUUSD chart showing press conference volatility.png', alt: 'XAUUSD gold price chart showing press conference volatility' },
   };
 
 export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string }[]> = {
@@ -60,12 +61,19 @@ export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string 
        { url: '/blog images/pexels-rdne-8370752.jpg', alt: 'Bitcoin BTC trading data on phone' },
        { url: '/blog images/pexels-ds-stories-7267610.jpg', alt: 'Bitcoin cryptocurrency on digital display' },
     ],
-    'how-bitcoin-whale-transactions-affect-price': [
-       { url: '/blog images/blog2/pexels-jakubzerdzicki-31738809.jpg', alt: 'Bitcoin whale monitoring large BTC transactions on trading dashboard' },
-       { url: '/blog images/blog2/pexels-alphatradezone-5831252.jpg', alt: 'Bitcoin price chart showing whale transaction impact on market' },
-       { url: '/blog images/blog2/pexels-alphatradezone-5834243.jpg', alt: 'Cryptocurrency whale wallet analysis and blockchain data visualization' },
-    ],
-  };
+'how-bitcoin-whale-transactions-affect-price': [
+        { url: '/blog images/blog2/pexels-jakubzerdzicki-31738809.jpg', alt: 'Bitcoin whale monitoring large BTC transactions on trading dashboard' },
+        { url: '/blog images/blog2/pexels-alphatradezone-5831252.jpg', alt: 'Bitcoin price chart showing whale transaction impact on market' },
+        { url: '/blog images/blog2/pexels-alphatradezone-5834243.jpg', alt: 'Cryptocurrency whale wallet analysis and blockchain data visualization' },
+     ],
+     'fed-press-conference-xau-usd': [
+        { url: '/blog images/blog3/Fed Chair press conference image.jpg', alt: 'Fed Chair press conference during FOMC meeting' },
+        { url: '/blog images/blog3/Gold price action during FOMC events.png', alt: 'Gold price action during FOMC events on trading screen' },
+        { url: '/blog images/blog3/Trading desk setup during FOMC events.jpg', alt: 'Trading desk setup during FOMC events with multiple monitors' },
+        { url: '/blog images/blog3/USD index and gold correlation chart.png', alt: 'USD index and gold correlation chart showing inverse relationship' },
+        { url: '/blog images/blog3/XAUUSD chart showing press conference volatility.png', alt: 'XAUUSD chart showing press conference volatility and gold price movements' },
+     ],
+   };
 
 export const BLOG_POSTS: BlogPost[] = [
   {
@@ -324,19 +332,32 @@ export const BLOG_POSTS: BlogPost[] = [
      content: "The Federal Reserve's decision to cut interest rates is one of the biggest events on the economic calendar for gold traders.",
      author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
    },
-   {
-     slug: "how-bitcoin-whale-transactions-affect-price",
-     title: "How Bitcoin Whale Transactions Affect Price",
-     excerpt: "A comprehensive guide to understanding how large Bitcoin holders impact market price through liquidity shifts, exchange inflows and outflows, and sentiment-driven volatility. Learn to track whale activity and avoid common mistakes.",
-     category: "Bitcoin Trading",
-     date: "September 16, 2026",
-     updatedAt: "September 16, 2026",
-     readTime: "55 min read",
-     route: "/blog/posts/how-bitcoin-whale-transactions-affect-price",
-     image: { url: "/blog images/blog2/pexels-rdne-8369685.jpg", alt: "Bitcoin whale transaction on trading screen showing large BTC transfer" },
-     content: "A single Bitcoin transaction worth tens of millions of dollars can move the market in seconds. When a wallet holding thousands of BTC suddenly transfers funds to an exchange, the price often reacts before anyone even knows who made the move.",
-     author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
-   }
- ];
+{
+      slug: "how-bitcoin-whale-transactions-affect-price",
+      title: "How Bitcoin Whale Transactions Affect Price",
+      excerpt: "A comprehensive guide to understanding how large Bitcoin holders impact market price through liquidity shifts, exchange inflows and outflows, and sentiment-driven volatility. Learn to track whale activity and avoid common mistakes.",
+      category: "Bitcoin Trading",
+      date: "September 16, 2026",
+      updatedAt: "September 16, 2026",
+      readTime: "55 min read",
+      route: "/blog/posts/how-bitcoin-whale-transactions-affect-price",
+      image: { url: "/blog images/blog2/pexels-rdne-8369685.jpg", alt: "Bitcoin whale transaction on trading screen showing large BTC transfer" },
+      content: "A single Bitcoin transaction worth tens of millions of dollars can move the market in seconds. When a wallet holding thousands of BTC suddenly transfers funds to an exchange, the price often reacts before anyone even knows who made the move.",
+      author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+    },
+    {
+      slug: "fed-press-conference-xau-usd",
+      title: "How the Fed Chair's Press Conference Moves XAU/USD",
+      excerpt: "Master the Fed Chair's press conference impact on gold. Learn how unscripted comments, tone shifts, and Q&A moments move XAU/USD, with real examples and proven risk management strategies.",
+      category: "Gold (XAUUSD) Analysis",
+      date: "September 16, 2026",
+      updatedAt: "September 16, 2026",
+      readTime: "40 min read",
+      route: "/blog/posts/fed-press-conference-xau-usd",
+      image: { url: "/blog images/blog3/XAUUSD chart showing press conference volatility.png", alt: "XAUUSD gold price chart showing press conference volatility" },
+      content: "The rate decision is just the opening act. When the Federal Open Market Committee announces its rate decision at 2:00 PM Eastern, gold traders get their first taste of volatility — but the real show doesn't begin until 30 minutes later, when the Fed Chair steps to the podium.",
+      author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+    }
+  ];
 
 export const CATEGORIES = ["All", "Forex Education", "Gold (XAUUSD) Analysis", "Bitcoin Trading", "Risk Management", "Trading Psychology", "Technical Analysis", "Broker Reviews"];

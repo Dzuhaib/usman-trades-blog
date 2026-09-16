@@ -135,11 +135,15 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
        url: 'https://images.pexels.com/photos/38877603/pexels-photo-38877603.jpeg?auto=compress&cs=tinysrgb&w=1200',
        alt: 'Gold trading chart with technical analysis indicators and price levels'
      },
-     'how-bitcoin-whale-transactions-affect-price': {
-       url: '/blog images/blog2/pexels-rdne-8369685.jpg',
-       alt: 'Bitcoin whale transaction on trading screen showing large BTC transfer'
-     },
-   };
+'how-bitcoin-whale-transactions-affect-price': {
+        url: '/blog images/blog2/pexels-rdne-8369685.jpg',
+        alt: 'Bitcoin whale transaction on trading screen showing large BTC transfer'
+      },
+      'fed-press-conference-xau-usd': {
+        url: '/blog images/blog3/XAUUSD chart showing press conference volatility.png',
+        alt: 'XAUUSD gold price chart showing press conference volatility'
+      },
+    };
 
 const CATEGORY_IMAGES: Record<string, PexelsImage> = {
   'Forex Education': {
@@ -360,7 +364,8 @@ function getCategoryForSlug(slug: string): string {
    'pip-value-guide': 'Forex Education',
    'compound-growth-trading': 'Risk Management',
  'rsi-macd-moving-averages-xauusd': 'Technical Analysis',
-    'how-bitcoin-whale-transactions-affect-price': 'Bitcoin Trading',
-   };
-  return slugToCategory[slug] || 'default';
+'how-bitcoin-whale-transactions-affect-price': 'Bitcoin Trading',
+    'fed-press-conference-xau-usd': 'Gold (XAUUSD) Analysis',
+    };
+   return slugToCategory[slug] || 'default';
  }
