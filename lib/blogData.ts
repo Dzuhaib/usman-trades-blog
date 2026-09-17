@@ -41,6 +41,7 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
     'fomc-bitcoin': { url: '/blog images/pexels-thales13-38796151.jpg', alt: 'Bitcoin BTC USD price chart on trading screen' },
     'how-bitcoin-whale-transactions-affect-price': { url: '/blog images/blog2/pexels-rdne-8369685.jpg', alt: 'Bitcoin whale transaction on trading screen showing large BTC transfer' },
     'fed-press-conference-xau-usd': { url: '/blog images/blog3/XAUUSD chart showing press conference volatility.png', alt: 'XAUUSD gold price chart showing press conference volatility' },
+    'can-gold-rise-during-high-inflation': { url: '/blog images/blog4/pexels-jakubzerdzicki-27075161.jpg', alt: 'Gold price chart during high inflation on trading screen' },
   };
 
 export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string }[]> = {
@@ -71,9 +72,14 @@ export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string 
         { url: '/blog images/blog3/Gold price action during FOMC events.png', alt: 'Gold price action during FOMC events on trading screen' },
         { url: '/blog images/blog3/Trading desk setup during FOMC events.jpg', alt: 'Trading desk setup during FOMC events with multiple monitors' },
         { url: '/blog images/blog3/USD index and gold correlation chart.png', alt: 'USD index and gold correlation chart showing inverse relationship' },
-        { url: '/blog images/blog3/XAUUSD chart showing press conference volatility.png', alt: 'XAUUSD chart showing press conference volatility and gold price movements' },
-     ],
-   };
+{ url: '/blog images/blog3/XAUUSD chart showing press conference volatility.png', alt: 'XAUUSD chart showing press conference volatility and gold price movements' },
+      ],
+      'can-gold-rise-during-high-inflation': [
+        { url: '/blog images/blog4/pexels-jakubzerdzicki-34482029.jpg', alt: 'Gold bar and inflation data on trading desk' },
+        { url: '/blog images/blog4/pexels-karola-g-5650048.jpg', alt: 'Inflation and gold market analysis chart' },
+        { url: '/blog images/blog4/pexels-markus-winkler-1430818-19867469.jpg', alt: 'Gold price chart during inflation period on trading screen' },
+      ],
+    };
 
 export const BLOG_POSTS: BlogPost[] = [
   {
@@ -346,7 +352,7 @@ export const BLOG_POSTS: BlogPost[] = [
       author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
     },
     {
-      slug: "fed-press-conference-xau-usd",
+slug: "fed-press-conference-xau-usd",
       title: "How the Fed Chair's Press Conference Moves XAU/USD",
       excerpt: "Master the Fed Chair's press conference impact on gold. Learn how unscripted comments, tone shifts, and Q&A moments move XAU/USD, with real examples and proven risk management strategies.",
       category: "Gold (XAUUSD) Analysis",
@@ -355,7 +361,20 @@ export const BLOG_POSTS: BlogPost[] = [
       readTime: "40 min read",
       route: "/blog/posts/fed-press-conference-xau-usd",
       image: { url: "/blog images/blog3/XAUUSD chart showing press conference volatility.png", alt: "XAUUSD gold price chart showing press conference volatility" },
-      content: "The rate decision is just the opening act. When the Federal Open Market Committee announces its rate decision at 2:00 PM Eastern, gold traders get their first taste of volatility — but the real show doesn't begin until 30 minutes later, when the Fed Chair steps to the podium.",
+      content: "The rate decision is just the opening act. When the Federal Open Market Committee announces its rate decision at 2:00 PM Eastern, gold traders get their first taste of volatility.",
+      author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+    },
+    {
+      slug: "can-gold-rise-during-high-inflation",
+      title: "Can Gold Rise During High Inflation?",
+      excerpt: "A comprehensive guide to understanding whether gold can rise during high inflation, covering real interest rates, Federal Reserve policy, the US Dollar, and every inflation scenario XAU/USD traders need to know.",
+      category: "Gold (XAUUSD) Analysis",
+      date: "September 16, 2026",
+      updatedAt: "September 16, 2026",
+      readTime: "55 min read",
+      route: "/blog/posts/can-gold-rise-during-high-inflation",
+      image: { url: "/blog images/blog4/pexels-jakubzerdzicki-27075161.jpg", alt: "Gold price chart during high inflation on trading screen" },
+      content: "Gold and inflation have a complicated relationship. The popular narrative says that when inflation rises, gold rises with it — but the reality on trading screens is often different.",
       author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
     }
   ];

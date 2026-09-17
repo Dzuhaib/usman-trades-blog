@@ -139,11 +139,15 @@ export const SLUG_IMAGES: Record<string, PexelsImage> = {
         url: '/blog images/blog2/pexels-rdne-8369685.jpg',
         alt: 'Bitcoin whale transaction on trading screen showing large BTC transfer'
       },
-      'fed-press-conference-xau-usd': {
-        url: '/blog images/blog3/XAUUSD chart showing press conference volatility.png',
-        alt: 'XAUUSD gold price chart showing press conference volatility'
-      },
-    };
+'fed-press-conference-xau-usd': {
+         url: '/blog images/blog3/XAUUSD chart showing press conference volatility.png',
+         alt: 'XAUUSD gold price chart showing press conference volatility'
+       },
+       'can-gold-rise-during-high-inflation': {
+         url: '/blog images/blog4/pexels-jakubzerdzicki-27075161.jpg',
+         alt: 'Gold price chart during high inflation on trading screen'
+       },
+     };
 
 const CATEGORY_IMAGES: Record<string, PexelsImage> = {
   'Forex Education': {
@@ -365,7 +369,8 @@ function getCategoryForSlug(slug: string): string {
    'compound-growth-trading': 'Risk Management',
  'rsi-macd-moving-averages-xauusd': 'Technical Analysis',
 'how-bitcoin-whale-transactions-affect-price': 'Bitcoin Trading',
-    'fed-press-conference-xau-usd': 'Gold (XAUUSD) Analysis',
-    };
+'fed-press-conference-xau-usd': 'Gold (XAUUSD) Analysis',
+    'can-gold-rise-during-high-inflation': 'Gold (XAUUSD) Analysis',
+     };
    return slugToCategory[slug] || 'default';
  }
