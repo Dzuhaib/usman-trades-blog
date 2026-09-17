@@ -284,7 +284,7 @@ The DXY spikes from 103.5 to 104.2. This further pressures XAU/USD as gold becom
 
 ### Why the First Move May Reverse
 
-Within 15 to 30 minutes, the initial reaction often reverses. Why? Because traders who sold on the headline realize that the hot CPI might also signal that inflation is becoming entrenched, which is fundamentally bullish for gold as a hedge. The Dollar rally fades, yields stabilize, and gold recovers.
+Within 15 to 30 minutes, the initial reaction often reverses. Why? Because traders who sold on the headline see that the hot CPI might also signal that inflation is becoming entrenched, which is fundamentally bullish for gold as a hedge. The Dollar rally fades, yields stabilize, and gold recovers.
 
 ### Importance of Waiting for Confirmation
 
@@ -316,7 +316,7 @@ The MACD provides insight into momentum. A bullish MACD crossover ahead of a coo
 
 ### Moving Averages
 
-The 50-Day and 200-Day moving averages provide dynamic support and resistance. If gold is above the 200-Day moving average when a hot CPI prints, the long-term trend is still bullish, and the dip might be a buying opportunity. If gold is below the 200-Day when a cool CPI prints, the rally might be a selling opportunity.
+The 50-Day and 200-Day moving averages provide shifting support and resistance. If gold is above the 200-Day moving average when a hot CPI prints, the long-term trend is still bullish, and the dip might be a buying opportunity. If gold is below the 200-Day when a cool CPI prints, the rally might be a selling opportunity.
 
 ### Breakouts and False Breakouts
 
@@ -412,7 +412,7 @@ TIPS breakevens, consumer surveys, market-based indicators — what the market e
 GDP, employment data, PMI — a slowing economy can support gold through safe-haven demand even during inflationary periods.
 
 ### Geopolitical Risk
-Wars, sanctions, trade tensions — geopolitical uncertainty adds a safe-haven bid to gold that is separate from the inflation dynamic.
+Wars, sanctions, trade tensions — geopolitical uncertainty adds a safe-haven bid to gold that is separate from the inflation factor.
 
 ### Central-Bank Gold Demand
 Central banks have been the largest buyers of gold in recent years. Monitoring central-bank gold purchases provides insight into institutional demand that is independent of retail trading flows.
@@ -464,7 +464,7 @@ The Fed's response to inflation determines what happens to interest rates and re
 
 ## Related Tools for Position Management
 
-Traders should utilize the following calculators available on Usman Trades to quantify risk when trading XAU/USD around inflation reports:
+Traders should use the following calculators available on Usman Trades to quantify risk when trading XAU/USD around inflation reports:
 
 - **[Calculate your exact cash risk with the Risk Calculator](/tools/risk-calculator)**
 - **[Understand your drawdown recovery with the Drawdown Calculator](/tools/drawdown-calculator)**
