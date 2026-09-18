@@ -75,6 +75,7 @@ export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string 
 { url: '/blog images/blog3/XAUUSD chart showing press conference volatility.png', alt: 'XAUUSD chart showing press conference volatility and gold price movements' },
       ],
       'can-gold-rise-during-high-inflation': [
+        { url: '/blog images/blog4/pexels-jakubzerdzicki-27075161.jpg', alt: 'Gold trading screen showing inflation trends' },
         { url: '/blog images/blog4/pexels-jakubzerdzicki-34482029.jpg', alt: 'Gold bar and inflation data on trading desk' },
         { url: '/blog images/blog4/pexels-karola-g-5650048.jpg', alt: 'Inflation and gold market analysis chart' },
         { url: '/blog images/blog4/pexels-markus-winkler-1430818-19867469.jpg', alt: 'Gold price chart during inflation period on trading screen' },

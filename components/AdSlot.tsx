@@ -1,7 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
-
 export default function AdSlot({
   slot,
   className = '',
@@ -11,14 +9,9 @@ export default function AdSlot({
 }) {
   return (
     <div className={`my-4 mx-auto max-w-[728px] ${className}`}>
-      <ins
-        className="adsbygoogle"
-        style={{ display: 'block' }}
-        data-ad-client="ca-pub-5017133932206570"
-        data-ad-slot={slot}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      />
+      <div className="w-full min-h-[90px] bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-center text-slate-400 text-sm">
+        Advertisement
+      </div>
     </div>
   );
 }
