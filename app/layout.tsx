@@ -78,22 +78,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Google Consent Mode v2 — defaults denied, updated by CookieConsent
-function ConsentModeScript() {
-  const script = `
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', {
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-      analytics_storage: 'denied',
-      wait_for_update: 500
-    });
-  `;
-  return <script dangerouslySetInnerHTML={{ __html: script }} />;
-}
-
 // JSON-LD Structured Data for the entire website
 function WebsiteJsonLd() {
   const jsonLd = {
@@ -130,7 +114,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <head>
-        <ConsentModeScript />
         <WebsiteJsonLd />
       </head>
       <body className="min-h-full flex flex-col bg-white text-primary selection:bg-accent/15 overflow-x-hidden">

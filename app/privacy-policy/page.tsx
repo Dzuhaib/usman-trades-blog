@@ -18,12 +18,12 @@ export default function PrivacyPolicy() {
 
       <section className="space-y-4 text-secondary leading-relaxed">
         <h2 className="text-xl font-bold text-primary">1. Information We Collect</h2>
-        <p>
-          Usman Trades is designed to operate primarily client-side. We do not require account registration, email sign-ups, or personal logins to access our tools or guides.
-        </p>
-        <p>
-          We do collect basic analytical data through server logs and standard cookies to analyze site traffic, monitor loading performance, and deliver relevant advertisements (such as Google AdSense).
-        </p>
+<p>
+           Usman Trades is designed to operate primarily client-side. We do not require account registration, email sign-ups, or personal logins to access our tools or guides.
+         </p>
+         <p>
+           We do collect basic analytical data through server logs and standard cookies to analyze site traffic, monitor loading performance, and improve our website.
+         </p>
       </section>
 
       <section className="space-y-4 text-secondary leading-relaxed">
@@ -34,13 +34,13 @@ export default function PrivacyPolicy() {
       </section>
 
       <section className="space-y-4 text-secondary leading-relaxed">
-        <h2 className="text-xl font-bold text-primary">3. Use of Cookies and Ads</h2>
-        <p>
-          We utilize standard cookies to store basic user preferences (such as language or inputs) and to serve advertisements. Third-party vendors, including Google, use cookies to serve ads based on a user&rsquo;s prior visits to this website or other websites on the Internet.
-        </p>
-        <p>
-          Google&rsquo;s use of advertising cookies enables it and its partners to serve ads to users based on their visit to our site and/or other sites on the Internet. Users may opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-accent underline">Google Ads Settings</a>.
-        </p>
+        <h2 className="text-xl font-bold text-primary">3. Use of Cookies</h2>
+         <p>
+           We utilize standard cookies to store basic user preferences (such as language or inputs). Third-party vendors may use cookies to help understand how visitors use our website over time.
+         </p>
+         <p>
+           You may opt out of certain tracking by adjusting your browser settings or through the cookie consent banner at the bottom of our website.
+         </p>
       </section>
 
       <section className="space-y-4 text-secondary leading-relaxed">

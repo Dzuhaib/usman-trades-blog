@@ -18,9 +18,9 @@ export default function CookiePolicy() {
 
       <section className="space-y-4 text-secondary leading-relaxed">
         <h2 className="text-xl font-bold text-primary">1. What Are Cookies</h2>
-        <p>
-          Cookies are small text files stored on your device (computer or mobile) when you visit our website. They help us understand how you use our site, improve your experience, and serve relevant advertisements.
-        </p>
+<p>
+           Cookies are small text files stored on your device (computer or mobile) when you visit our website. They help us understand how you use our site and improve your experience.
+         </p>
       </section>
 
       <section className="space-y-4 text-secondary leading-relaxed">
@@ -36,23 +36,20 @@ export default function CookiePolicy() {
           <p>We use analytics cookies to understand how visitors interact with our website. These cookies help us track which pages are visited, how long users stay on each page, and where they click. This data helps us improve our educational content and tools.</p>
         </div>
 
-        <div className="space-y-3">
-          <h3 className="font-bold text-slate-900">Advertising Cookies</h3>
-          <p>We use advertising cookies, including Google AdSense cookies, to deliver ads that are relevant to your interests. These cookies track your interactions with ads and help us and our advertising partners serve more targeted advertisements across the internet.</p>
-        </div>
+<div className="space-y-3">
+           <h3 className="font-bold text-slate-900">Advertising Cookies</h3>
+           <p>We may use advertising cookies to help deliver more relevant advertisements. These cookies track your interactions with content to help our advertising partners understand your interests.</p>
+         </div>
       </section>
 
-      <section className="space-y-4 text-secondary leading-relaxed">
-        <h2 className="text-xl font-bold text-primary">3. Third-Party Cookies</h2>
-        <p>
-          Our website may contain cookies from third-party service providers, including Google LLC (for advertising via Google AdSense), and other analytics platforms. These third parties may use this information to build a profile of your interests and show you relevant ads on other websites.
-        </p>
-        <p>
-          Google AdSense uses the DoubleClick cookie to enable Google and our advertising partners to serve ads based on your past visits to this site or other sites on the Internet.
-        </p>
-      </section>
+<section className="space-y-4 text-secondary leading-relaxed">
+         <h2 className="text-xl font-bold text-primary">3. Third-Party Cookies</h2>
+         <p>
+           Our website may contain cookies from third-party service providers. These third parties may use this information to build a profile of your interests and show you relevant content on other websites.
+         </p>
+</section>
 
-      <section className="space-y-4 text-secondary leading-relaxed">
+       <section className="space-y-4 text-secondary leading-relaxed">
         <h2 className="text-xl font-bold text-primary">4. Your Cookie Choices</h2>
         <p>
           You have the right to choose whether to accept or decline cookies. You can set your browser preferences to accept all cookies, notify you when a cookie is issued, or reject all cookies. Please note that disabling essential cookies may prevent our website from functioning correctly.
