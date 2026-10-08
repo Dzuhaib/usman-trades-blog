@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { InstagramIcon, FacebookIcon } from '@/components/SocialIcons';
+import CookieSettingsButton from '@/components/CookieSettingsButton';
 
 const SOCIAL_LINKS = [
   {
@@ -79,10 +80,11 @@ export default function Footer() {
           </p>
           <div className="flex flex-wrap gap-x-8 gap-y-3 justify-center">
             <Link href="/privacy-policy" className="text-[11px] font-bold text-slate-400 hover:text-slate-900 no-underline uppercase tracking-wider transition-colors">Privacy Policy</Link>
-            <Link href="/cookie-policy" className="text-[11px] font-bold text-accent hover:text-slate-900 no-underline uppercase tracking-wider transition-colors">Cookie Policy</Link>
+            <Link href="/cookie-policy" className="text-[11px] font-bold text-slate-400 hover:text-slate-900 no-underline uppercase tracking-wider transition-colors">Cookie Policy</Link>
+            <Link href="/terms-of-service" className="text-[11px] font-bold text-slate-400 hover:text-slate-900 no-underline uppercase tracking-wider transition-colors">Terms</Link>
             <Link href="/editorial-policy" className="text-[11px] font-bold text-slate-400 hover:text-slate-900 no-underline uppercase tracking-wider transition-colors">Editorial Policy</Link>
             <Link href="/disclaimer" className="text-[11px] font-bold text-slate-400 hover:text-slate-900 no-underline uppercase tracking-wider transition-colors">Risk Disclaimer</Link>
-            <Link href="/terms-of-service" className="text-[11px] font-bold text-slate-400 hover:text-slate-900 no-underline uppercase tracking-wider transition-colors">Terms</Link>
+            <CookieSettingsButton />
           </div>
         </div>
         

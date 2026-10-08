@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
+import AdSenseScript from "@/components/AdSenseScript";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -114,8 +115,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <head>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5017133932206570"
-          crossOrigin="anonymous"></script>
         <WebsiteJsonLd />
       </head>
       <body className="min-h-full flex flex-col bg-white text-primary selection:bg-accent/15 overflow-x-hidden">
@@ -124,6 +123,7 @@ export default function RootLayout({
           {children}
         </main>
         <CookieConsent />
+        <AdSenseScript />
         <Footer />
       </body>
     </html>

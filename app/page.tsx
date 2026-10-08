@@ -61,8 +61,8 @@ export default async function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
             <div className="space-y-6 md:space-y-10">
               <div className="inline-flex items-center gap-2.5 bg-accent/10 border border-accent/20 rounded-full px-3 py-1.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span className="text-[11px] md:text-xs uppercase font-black tracking-[0.2em] text-accent">Live Market Data</span>
+                <span className="h-2 w-2 rounded-full bg-accent"></span>
+                <span className="text-[11px] md:text-xs uppercase font-black tracking-[0.2em] text-accent">Math-Based Market Education</span>
               </div>
               <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold font-serif leading-[1.1] tracking-tight text-white">
                 Trade Smarter,{' '}
