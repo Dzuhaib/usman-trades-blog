@@ -1,4 +1,4 @@
-export interface BlogPost {
+﻿export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
@@ -42,6 +42,7 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
     'how-bitcoin-whale-transactions-affect-price': { url: '/blog images/blog2/pexels-rdne-8369685.jpg', alt: 'Bitcoin whale transaction on trading screen showing large BTC transfer' },
     'fed-press-conference-xau-usd': { url: '/blog images/blog3/XAUUSD chart showing press conference volatility.png', alt: 'XAUUSD gold price chart showing press conference volatility' },
     'can-gold-rise-during-high-inflation': { url: '/blog images/blog4/pexels-jakubzerdzicki-27075161.jpg', alt: 'Gold price chart during high inflation on trading screen' },
+   'gold-fibonacci-support-double-bottom': { url: '/blog images/gold-xauusd-price-forecast-4103-support-holds-key-to-next-move.png', alt: 'Gold XAUUSD candlestick chart showing the $4,103 support level holding with bullish and bearish scenarios marked' },
   };
 
 export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string }[]> = {
@@ -80,6 +81,7 @@ export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string 
         { url: '/blog images/blog4/pexels-karola-g-5650048.jpg', alt: 'Inflation and gold market analysis chart' },
         { url: '/blog images/blog4/pexels-markus-winkler-1430818-19867469.jpg', alt: 'Gold price chart during inflation period on trading screen' },
       ],
+      'gold-fibonacci-support-double-bottom': [],
     };
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -124,8 +126,8 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "xau-usd-technical-analysis",
-    title: "Gold/XAU/USD Technical Analysis — Key Support at $4,356 and Resistance at $4,422–$4,447",
-    excerpt: "A comprehensive technical analysis of XAU/USD focusing on the critical $4,356 support and $4,422–$4,447 resistance zones. Learn about moving averages, MACD, Ichimoku Cloud, and Head and Shoulders patterns.",
+    title: "Gold/XAU/USD Technical Analysis â€” Key Support at $4,356 and Resistance at $4,422â€“$4,447",
+    excerpt: "A comprehensive technical analysis of XAU/USD focusing on the critical $4,356 support and $4,422â€“$4,447 resistance zones. Learn about moving averages, MACD, Ichimoku Cloud, and Head and Shoulders patterns.",
     category: "Technical Analysis",
     date: "September 15, 2026",
     updatedAt: "September 15, 2026",
@@ -375,7 +377,20 @@ slug: "fed-press-conference-xau-usd",
       readTime: "55 min read",
       route: "/blog/posts/can-gold-rise-during-high-inflation",
       image: { url: "/blog images/blog4/pexels-jakubzerdzicki-27075161.jpg", alt: "Gold price chart during high inflation on trading screen" },
-      content: "Gold and inflation have a complicated relationship. The popular narrative says that when inflation rises, gold rises with it — but the reality on trading screens is often different.",
+      content: "Gold and inflation have a complicated relationship. The popular narrative says that when inflation rises, gold rises with it â€” but the reality on trading screens is often different.",
+      author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+    },
+    {
+      slug: "gold-fibonacci-support-double-bottom",
+      title: "Gold Fibonacci Support at $4,103: Reading a Failed Breakdown and Bullish Wedge",
+      excerpt: "Gold has held the 78.6% Fibonacci retracement at $4,103 through roughly nine tests. Learn why repeated support tests cut both ways, how the $4,226 trigger resolves the double bottom debate, and how to size a trade when the chart is genuinely ambiguous.",
+      category: "Technical Analysis",
+      date: "October 9, 2026",
+      updatedAt: "October 9, 2026",
+      readTime: "13 min read",
+      route: "/blog/posts/gold-fibonacci-support-double-bottom",
+      image: { url: "/blog images/gold-xauusd-price-forecast-4103-support-holds-key-to-next-move.png", alt: "Gold XAUUSD candlestick chart showing the $4,103 support level holding with bullish and bearish scenarios marked" },
+      content: "Gold has spent roughly nine sessions oscillating around a single price level: $4,103, the 78.6% Fibonacci retracement of the prior advance.",
       author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
     }
   ];

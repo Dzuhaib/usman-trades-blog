@@ -43,8 +43,11 @@ function extractFAQs(content?: string): { q: string; a: string }[] {
   if (!content) return [];
   const faqSection = content.split(/## Frequently Asked Questions/i)[1];
   if (!faqSection) return [];
+  // Stop at the next H2 so trailing sections (Related Tools, Disclaimer, ...)
+  // are not swallowed into the final answer.
+  const faqOnly = faqSection.split(/\n##\s/i)[0];
   const faqs: { q: string; a: string }[] = [];
-  const blocks = faqSection.split(/^### /m).slice(1);
+  const blocks = faqOnly.split(/^### /m).slice(1);
   for (const block of blocks) {
     const lines = block.trim().split('\n');
     const q = lines[0].trim();
