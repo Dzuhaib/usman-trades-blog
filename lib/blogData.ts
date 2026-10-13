@@ -43,6 +43,7 @@ export const BLOG_POST_IMAGES: Record<string, { url: string; alt: string }> = {
     'fed-press-conference-xau-usd': { url: '/blog images/blog3/XAUUSD chart showing press conference volatility.png', alt: 'XAUUSD gold price chart showing press conference volatility' },
     'can-gold-rise-during-high-inflation': { url: '/blog images/blog4/pexels-jakubzerdzicki-27075161.jpg', alt: 'Gold price chart during high inflation on trading screen' },
    'gold-fibonacci-support-double-bottom': { url: '/blog images/gold-xauusd-price-forecast-4103-support-holds-key-to-next-move.png', alt: 'Gold XAUUSD candlestick chart showing the $4,103 support level holding with bullish and bearish scenarios marked' },
+    'gold-price-forecast-october-14-cpi': { url: '/blog images/blog5/cpi-14-oct-gold-4216-resistance-forecast.jpg', alt: 'Gold XAUUSD chart under a magnifying glass on a trading desk ahead of the October 14 US CPI release' },
   };
 
 export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string }[]> = {
@@ -82,6 +83,12 @@ export const BLOG_POST_INLINE_IMAGES: Record<string, { url: string; alt: string 
         { url: '/blog images/blog4/pexels-markus-winkler-1430818-19867469.jpg', alt: 'Gold price chart during inflation period on trading screen' },
       ],
       'gold-fibonacci-support-double-bottom': [],
+      'gold-price-forecast-october-14-cpi': [
+        { url: 'https://images.pexels.com/photos/39228928/pexels-photo-39228928.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Candlestick chart pattern used to read gold support at $4,216 and resistance before the CPI release' },
+        { url: 'https://images.pexels.com/photos/14955941/pexels-photo-14955941.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'US Treasury building in Washington representing Treasury yields as a driver of gold prices' },
+        { url: 'https://images.pexels.com/photos/39733703/pexels-photo-39733703.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Trader pointing at a gold price chart marking the $4,151 to $4,165 support zone before US CPI data' },
+        { url: 'https://images.pexels.com/photos/29336325/pexels-photo-29336325.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Gold bars resting on US dollar bills illustrating the inverse relationship between the dollar and gold prices' },
+      ],
     };
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -391,6 +398,19 @@ slug: "fed-press-conference-xau-usd",
       route: "/blog/posts/gold-fibonacci-support-double-bottom",
       image: { url: "/blog images/gold-xauusd-price-forecast-4103-support-holds-key-to-next-move.png", alt: "Gold XAUUSD candlestick chart showing the $4,103 support level holding with bullish and bearish scenarios marked" },
       content: "Gold has spent roughly nine sessions oscillating around a single price level: $4,103, the 78.6% Fibonacci retracement of the prior advance.",
+      author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
+    },
+    {
+      slug: "gold-price-forecast-october-14-cpi",
+      title: "Can Gold Break $4,216 or Fall Toward $4,100 on October 14? US CPI Forecast for XAU/USD",
+      excerpt: "Gold sits near $4,179 ahead of the September US CPI release on October 14 at 8:30 a.m. ET. Here is the US CPI forecast, the $4,216 and $4,151 key levels, and the three scenarios that decide gold's next move.",
+      category: "Gold (XAUUSD) Analysis",
+      date: "October 13, 2026",
+      updatedAt: "October 13, 2026",
+      readTime: "16 min read",
+      route: "/blog/posts/gold-price-forecast-october-14-cpi",
+      image: { url: "/blog images/blog5/cpi-14-oct-gold-4216-resistance-forecast.jpg", alt: "Gold XAUUSD chart under a magnifying glass on a trading desk ahead of the October 14 US CPI release" },
+      content: "Gold has spent the better part of two weeks clawing its way back from the early October lows, and on October 13 it was trading around $4,179. The September US CPI report on October 14 is the next test.",
       author: { name: "MUHAMMAD USMAN", role: "Senior Market Analyst", bio: "Professional macro trader with 12+ years of experience specializing in XAUUSD and global liquidity cycles." }
     }
   ];
